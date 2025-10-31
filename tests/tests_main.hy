@@ -597,6 +597,27 @@
 
     ; -------------------
 
+    (def:: int -> @ => @
+        ff [x y] (+ x y))
+    (assertm in "ff(x: int, y)" (capture_help ff))
+    (assertm eq ff.__annotations__ {"x" int})
+
+    (def:: @ -> @ => @
+        ff [x y] (+ x y))
+    (assertm in "ff(x, y)" (capture_help ff))
+
+    (def:: @ -> @ => int
+        ff [x y] (+ x y))
+    (assertm in "ff(x, y) -> int" (capture_help ff))
+    (assertm eq ff.__annotations__ {"return" int})
+
+    (def:: @ -> @ -> / -> @ -> #* @ -> #** @ => @
+        [validateF] f_many2 [a b / c #* args #** kwargs] (+ a b c))
+    (assertm eq (f_many2 1 2 3) 6)
+    (assertm in "f_many2(a, b, /, c, *args, **kwargs)" (capture_help f_many2))
+
+    ; -------------------
+
     (def:: (of List int) -> (of Optional float) => (f:: int => float)
         ff [xs t] (defn innerF [n] (+ (get xs n) (if (= t None) 0 t))))
     (assertm in "ff(xs: List[int], t: Optional[float]) -> Callable[[int], float]"

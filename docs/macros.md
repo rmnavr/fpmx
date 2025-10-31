@@ -45,10 +45,12 @@ One possible usage might be defining interfaces (if functions are used in that r
 
 Functions defined with `def::` macro will be annotated by values derived from user-given signature.
 
-Use `->` to separate arguments, and `=>` to mark function return type.
-> Inside `def::` macro, symbols `->` (and `=>`) are recognized just as arguments separators rather than hyrule's macro `->`
+Special symbols are recognized inside signature:
+- `->` separates arguments
+- `=>` marks function return type
+- `@` marks no signature
 
-Special symbols, used in args definition (`/`, `*`, `#*` and `#**`) will be successfully recognized too (see expected syntax below).
+Special hy/python symbols, used in args definition (`/`, `*`, `#*` and `#**`) will be successfully recognized too (see expected syntax below).
 Obviously, their order in signature and their order in function args list should match.
 
 Examples:
@@ -64,22 +66,30 @@ Examples:
     (def:: => int
         f2 [] (print "hello"))
 
+    ; skip annotations for some args:
+    (def:: @ -> int => @
+        f3 [x y] (+ x y))
+
     ; decorators list can be given before function name:
     (def:: int -> int => int
-        [decorator] f3 [a b] (+ a b))
+        [decorator] f4 [a b] (+ a b))
 
     ; complex args example:
     (def:: int -> int -> / -> int -> * -> int -> #** dict => int
-        f4 [a b / c * d #** kwargs] (+ a b c d))
+        f5 [a b / c * d #** kwargs] (+ a b c d))
 
     ; another complex args example:
     (def:: int -> int -> / -> int -> #* int -> #** dict => int
-        f4 [a b / c #* args #** kwargs] (+ a b c))
+        f6 [a b / c #* args #** kwargs] (+ a b c))
+
+    ; syntax for skipping annotations for #* and #** args:
+    (def:: @ -> @ -> / -> @ -> #* @ -> #** @ => @
+        f7 [a b / c #* args #** kwargs] (+ a b c))
 
     ; traditional hy syntax for types applies as usual,
     ; you can even use fptk f:: macro (for example for factories, closures and such)
     (def:: (of List int) -> (of Optional float) => (f:: int => float)
-        ff [xs t] (defn innerF [n] (+ (get xs n) (if (= t None) 0 t))))
+        f8 [xs t] (defn innerF [n] (+ (get xs n) (if (= t None) 0 t))))
 
     ; You can call (help ff) to see that function indeed was annotated correctly
 ```

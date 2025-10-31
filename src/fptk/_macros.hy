@@ -19,7 +19,6 @@
 				 (= (len arg) 2)
 				 (= (type (get arg 1)) hy.models.Integer)))
 		eval_and_compile)
-
 	
 	(-> (defn _isExprWithHeadSymbol ; (head ...)
 			[ #^ hy.models.Expression arg
@@ -186,6 +185,9 @@
     ;                                                       ↑ last_sign_n 
     ; 
 
+    ; @ -> int => float
+    ; symbol @ is instruction to add no signature
+
     ; hy.models.Symbol('int')
     ; hy.models.Symbol('/')
     ; hy.models.Symbol('*')
@@ -231,10 +233,9 @@
               [(get margs i0) (get margs (+ i0 1)) (cut margs (+ i0 2) None)])
         (when (!= (len _sargs) (len _fargs))
               (raise (SyntaxError "number of args in signature does not match with number of function args")))
-        ; build annotations:
+        ; build args annotations:
         (setv _aargs []) 
         (for [[&sarg &farg] (zip _sargs _fargs)]
-                  
             (cond ; * and / case:
                   (or (= &farg '*) (= &sarg '*))
                   (if (= &farg &sarg)
@@ -247,21 +248,31 @@
                   ; #* and #** case:
                   (or (_isUnpackIterableQ &sarg) (_isUnpackIterableQ &farg))
                   (if (and (_isUnpackIterableQ &sarg) (_isUnpackIterableQ &farg))
-                      (_aargs.append `(annotate ~&farg ~(get &sarg 1)))
+                      (if (= (get &sarg 1) '@)
+                          (_aargs.append &farg)
+                          (_aargs.append `(annotate ~&farg ~(get &sarg 1))))
                       (raise (SyntaxError "position of #* in signature does not match with args")))
                   (or (_isUnpackMappingQ &sarg) (_isUnpackMappingQ &farg))
                   (if (and (_isUnpackMappingQ &sarg) (_isUnpackMappingQ &farg))
-                      (_aargs.append `(annotate ~&farg ~(get &sarg 1)))
+                      (if (= (get &sarg 1) '@)
+                          (_aargs.append &farg)
+                          (_aargs.append `(annotate ~&farg ~(get &sarg 1))))
                       (raise (SyntaxError "position of #** in signature does not match with args")))
+                  ; @ case:
+                  (= &sarg '@)
+                  (_aargs.append &farg)
                   ; everything else:
                   True
                   (_aargs.append `(annotate ~&farg ~&sarg))))
+        ; build function return annotation
+        (if (= _sreturn '@)
+            (setv _aret _fname) 
+            (setv _aret `(annotate ~_fname ~_sreturn)))
         ; build function:
         `(defn ~_decorators
-               (annotate ~_fname ~_sreturn)
+               ~_aret
                ~_aargs
                ~@_body))
-
 
 ; _____________________________________________________________________________/ }}}1
 ; f:: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -480,32 +491,6 @@
 	   `(&= ~variable (hy.R.fptk.lns ~@lenses_args)))
 
 ; _____________________________________________________________________________/ }}}1
-
-; [helper] clrz ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    (setv $FORES
-        [ "black" "red" "green" "yellow" "blue"
-          "magenta" "cyan" "white" "light_grey"
-          "dark_grey" "light_red" "light_green"
-          "light_yellow" "light_blue" "light_magenta" "light_cyan"])
-
-    (setv $BACKS
-        [ "on_black" "on_red" "on_green" "on_yellow"
-          "on_blue" "on_magenta" "on_cyan" "on_white"
-          "on_light_grey" "on_dark_grey" "on_light_red" "on_light_green"
-          "on_light_yellow" "on_light_blue" "on_light_magenta" "on_light_cyan"])
-
-    (setv $ATTRS
-        [ "bold" "dark" "underline" "blink" "reverse" "concealed" "strike"])
-
-	(-> (defn clrz [instructions text]
-            (setv fore (hy.I.funcy.last (list (filter (fn [it] (in it $FORES)) instructions )))); may be None
-            (setv back (hy.I.funcy.last (list (filter (fn [it] (in it $BACKS)) instructions )))); may be None
-            (setv attrs (list (filter (fn [it] (in it $ATTRS)) instructions ))); may be []
-            (return (hy.I.termcolor.colored text fore back :attrs attrs)))
-		eval_and_compile)
-
-; _____________________________________________________________________________/ }}}1
 ; assertm, gives_error_typeQ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	(defmacro assertm [op arg1 arg2]
@@ -518,35 +503,38 @@
 	   `(try (assert ~to_test False)
 			 True ; return
 			 (except [eFull Exception]
-					 (print "\nError in"
-                            (clrz ["underline"] ~_test_expr)
+					 (print "------------------------\nError in"
+                            (hy.I.termcolor.colored ~_test_expr None None ["underline"])
                             "|"
-                            (clrz ["red"] (type eFull))
-                            (clrz ["red"] ":")
-                            (clrz ["red"] eFull))
+                            (hy.I.termcolor.colored (type eFull) "red")
+                            (hy.I.termcolor.colored ":" "red")
+                            (hy.I.termcolor.colored eFull "red"))
 					 (setv _outp eFull)
 					 (try ~arg1
-						  (print (clrz ["green"] ">> 1st arg OK:")
-                                 (clrz ["underline"] ~_arg1) "=" ~arg1)
+						  (print (hy.I.termcolor.colored ">> 1st arg OK:" "green")
+                                 (hy.I.termcolor.colored ~_arg1 None None ["underline"])
+                                 "=" ~arg1)
 						  (except [e1 Exception]
-								  (print (clrz ["red"] ">> 1st arg XX:")
-                                         (clrz ["underline"] ~_arg1)
+								  (print (hy.I.termcolor.colored ">> 1st arg XX:" "red")
+                                         (hy.I.termcolor.colored ~_arg1 None None ["underline"])
                                          "|"
-                                         (clrz ["red"] (type e1))
-                                         (clrz ["red"] ":")
-                                         (clrz ["red"] e1))))
+                                         (hy.I.termcolor.colored (type e1) "red")
+                                         (hy.I.termcolor.colored ":" "red")
+                                         (hy.I.termcolor.colored e1 "red"))))
 					 (try ~arg2
-						  (print (clrz ["green"] ">> 2nd arg OK:")
-                                 (clrz ["underline"] ~_arg2) "=" ~arg2)
+						  (print (hy.I.termcolor.colored ">> 2nd arg OK:" "green")
+                                 (hy.I.termcolor.colored ~_arg2 None None ["underline"])
+                                 "=" ~arg2)
 						  (except [e2 Exception]
-								  (print (clrz ["red"] ">> 2nd arg XX:")
-                                         (clrz ["underline"] ~_arg2)
+								  (print (hy.I.termcolor.colored ">> 2nd arg XX:" "red")
+                                         (hy.I.termcolor.colored ~_arg2 None None ["underline"])
                                          "|"
-                                         (clrz ["red"] (type e2))
-                                         (clrz ["red"] ":")
-                                         (clrz ["red"] e2))))
+                                         (hy.I.termcolor.colored (type e2) "red")
+                                         (hy.I.termcolor.colored ":" "red")
+                                         (hy.I.termcolor.colored e2 "red"))))
 					 eFull)))
 
+    ; test:
     ; (assertm eq (div 2 0) (div 1 0))
     ; (assertm eq 1 (div 1 0))
     ; (assertm eq (div 1 0) 1)
