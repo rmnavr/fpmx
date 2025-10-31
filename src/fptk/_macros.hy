@@ -480,6 +480,32 @@
 	   `(&= ~variable (hy.R.fptk.lns ~@lenses_args)))
 
 ; _____________________________________________________________________________/ }}}1
+
+; [helper] clrz ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (setv $FORES
+        [ "black" "red" "green" "yellow" "blue"
+          "magenta" "cyan" "white" "light_grey"
+          "dark_grey" "light_red" "light_green"
+          "light_yellow" "light_blue" "light_magenta" "light_cyan"])
+
+    (setv $BACKS
+        [ "on_black" "on_red" "on_green" "on_yellow"
+          "on_blue" "on_magenta" "on_cyan" "on_white"
+          "on_light_grey" "on_dark_grey" "on_light_red" "on_light_green"
+          "on_light_yellow" "on_light_blue" "on_light_magenta" "on_light_cyan"])
+
+    (setv $ATTRS
+        [ "bold" "dark" "underline" "blink" "reverse" "concealed" "strike"])
+
+	(-> (defn clrz [instructions text]
+            (setv fore (hy.I.funcy.last (list (filter (fn [it] (in it $FORES)) instructions )))); may be None
+            (setv back (hy.I.funcy.last (list (filter (fn [it] (in it $BACKS)) instructions )))); may be None
+            (setv attrs (list (filter (fn [it] (in it $ATTRS)) instructions ))); may be []
+            (return (hy.I.termcolor.colored text fore back :attrs attrs)))
+		eval_and_compile)
+
+; _____________________________________________________________________________/ }}}1
 ; assertm, gives_error_typeQ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	(defmacro assertm [op arg1 arg2]
@@ -492,18 +518,38 @@
 	   `(try (assert ~to_test False)
 			 True ; return
 			 (except [eFull Exception]
-					 (print "Error in" ~_test_expr "|" (type eFull) ":" eFull)
+					 (print "\nError in"
+                            (clrz ["underline"] ~_test_expr)
+                            "|"
+                            (clrz ["red"] (type eFull))
+                            (clrz ["red"] ":")
+                            (clrz ["red"] eFull))
 					 (setv _outp eFull)
 					 (try ~arg1
-						  (print ">>" ~_arg1 "=" ~arg1)
+						  (print (clrz ["green"] ">> 1st arg OK:")
+                                 (clrz ["underline"] ~_arg1) "=" ~arg1)
 						  (except [e1 Exception]
-								  (print ">> Can't calc" ~_arg1 "|" (type e1) ":" e1)))
+								  (print (clrz ["red"] ">> 1st arg XX:")
+                                         (clrz ["underline"] ~_arg1)
+                                         "|"
+                                         (clrz ["red"] (type e1))
+                                         (clrz ["red"] ":")
+                                         (clrz ["red"] e1))))
 					 (try ~arg2
-						  (print ">>" ~_arg2 "=" ~arg2)
+						  (print (clrz ["green"] ">> 2nd arg OK:")
+                                 (clrz ["underline"] ~_arg2) "=" ~arg2)
 						  (except [e2 Exception]
-								  (print ">> Can't calc" ~_arg2 "|" (type e2) ":" e2)))
-								  (print)
-					 eFull )))
+								  (print (clrz ["red"] ">> 2nd arg XX:")
+                                         (clrz ["underline"] ~_arg2)
+                                         "|"
+                                         (clrz ["red"] (type e2))
+                                         (clrz ["red"] ":")
+                                         (clrz ["red"] e2))))
+					 eFull)))
+
+    ; (assertm eq (div 2 0) (div 1 0))
+    ; (assertm eq 1 (div 1 0))
+    ; (assertm eq (div 1 0) 1)
 
 	(defmacro gives_error_typeQ [expr error_type]
 	   `(try ~expr
@@ -512,4 +558,5 @@
 					 (= ~error_type (type e)))))
 
 ; _____________________________________________________________________________/ }}}1
+
 

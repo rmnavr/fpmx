@@ -3,7 +3,7 @@
 
     (export :objects [
         ;; filtering:
-        lfilter fltr1st filter_split lfilter_split 
+        lfilter fltr1st reject lreject filter_split lfilter_split 
         mask_sel lmask_sel mask2idxs idxs2mask
         without lwithout takewhile dropwhile
         bisect_at lbisect_at bisect_by lbisect_by

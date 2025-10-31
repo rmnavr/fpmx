@@ -1,7 +1,7 @@
 from setuptools                 import setup, find_packages
 from setuptools.command.install import install 
 
-proj_version = '0.4.1.dev2'
+proj_version = '0.4.1.dev3'
 
 libs_required = [
     'hy >= 1',
@@ -9,6 +9,7 @@ libs_required = [
     'pydantic >= 2', 
     'lenses >= 1.2.0',
     'funcy >= 2.0',
+    'termcolor >= 3.0'
 ]
 
 # install class ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1

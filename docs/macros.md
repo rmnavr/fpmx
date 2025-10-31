@@ -53,19 +53,26 @@ Obviously, their order in signature and their order in function args list should
 
 Examples:
 ```hy
+    ; basic example:
     (def:: int -> int => int
         f1 [a b] (+ a b))
-    ; which will be expanded to:
+    ; it will be expanded to:
     (defn #^ int f1
         [#^ int a #^ int b] (+ a b))
 
+    ; zero-args function:
+    (def:: => int
+        f2 [] (print "hello"))
+
     ; decorators list can be given before function name:
     (def:: int -> int => int
-        [decorator] f2 [a b] (+ a b))
+        [decorator] f3 [a b] (+ a b))
 
+    ; complex args example:
     (def:: int -> int -> / -> int -> * -> int -> #** dict => int
-        f3 [a b / c * d #** kwargs] (+ a b c d))
+        f4 [a b / c * d #** kwargs] (+ a b c d))
 
+    ; another complex args example:
     (def:: int -> int -> / -> int -> #* int -> #** dict => int
         f4 [a b / c #* args #** kwargs] (+ a b c))
 
