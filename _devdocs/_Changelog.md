@@ -1,8 +1,12 @@
 
 # Version 0.4.2 (11 Nov 2025)
+- changed `timing` from function `timing(f, #* args, #** kwargs)`
+  to macro `(timing expr1 expr2 ...)`
+- added math functions:
+  `floor`, `ceil`, `clip`, `lt0`, `leq0`, `gt0`, `geq0`
 - upd lrange_ to also work on floats
 - added `=>` and `=>>` macros, upd `p:` macro, removed `f>` macro
-- added def:: macro
+- added `def::` macro
 
 # Version 0.4.0 (20 Oct 2025)
 - changed order of args for oflenQ: from `oflenQ(xs,n)` to `oflenQ(n,xs)`

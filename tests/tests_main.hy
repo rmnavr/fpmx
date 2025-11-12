@@ -5,6 +5,8 @@
     (import math)
     (import operator)
 
+    ; FUNCTIONS:
+
 ; apl.hy ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (assertm = (lfilter evenQ [1 2 3 4]) [2 4])
@@ -209,18 +211,18 @@
     (assertm = (count_occurrences 1 [1 2 3 1]) 2)
 
 ; _____________________________________________________________________________/ }}}1
-; benchmark.hy ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; benchmark.hy | MACRO: timing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (setv $F1 "_1.txt")
 
-    (assertm = (type (first (timing apply_n 500 math.sqrt 1E10))) float)
+    (assertm = (type (first (timing (apply_n 500 math.sqrt 1E10)))) float)
     
     ; (assertm = (dt_print "Timer start") None)
     ; (assertm = (dt_print "Timer +1") None)
     ; (assertm = (dt_print "Timer +2") None)
 
 ; _____________________________________________________________________________/ }}}1
-; flow.hy       | MACROS: fm mapm lmapm filter lfilterm , => =>> p: ‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; flow.hy ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (assertm = (identity 30) 30)
 
@@ -240,75 +242,6 @@
     (assertm = ((nested 3 math.sqrt) 256) (math.sqrt (math.sqrt (math.sqrt 256))))
     (assertm = (apply_n 3 math.sqrt  256) (math.sqrt (math.sqrt (math.sqrt 256))))
     (assertm = (apply_n 1 math.sqrt 256) 16)
-
-; ■ p: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
-
-    (assertm = ((p: 0 1)   [[1 2] [3 4]]) 2)
-    (assertm = ((p: [0 1]) [[1 2] [3 4]]) 2)
-    (assertm = ((p: 0 1 (.__add__ 4)) [[1 2] [3 4]]) 6)
-
-    (assertm = (lmap (p:  ((fn [x] x))         ; fn
-                          ((fm it))            ; fm macro
-                          (abs)                ; function
-                          (operator.add 4)     ; function
-                          str                  ; function
-                          (.__contains__ "2")  ; method access
-                          .__class__)          ; attribute access
-                      [1 2 3])
-               (lmap type [True True True]))
-
-; ________________________________________________________________________/ }}}2
-; ■ => =>> ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
-
-    (assertm eq
-        (=> [[1 2] [3 4]]
-            [0 1]               ; get           ; in -> would be error
-            .__class__          ; attr          ; in -> would be (.__class__ HERE) 
-            (.__add__ 3 4)      ; method
-            abs                 ; f
-            (abs)               ; (f)
-            (+ 3)               ; (f arg1)
-            operator.neg        ; lib.f
-            (operator.neg)      ; (lib.f)
-            (operator.add 3)
-            ((fn [x] (+ x 3))))
-        16)
-
-    (assertm eq (=> (dict :a 1 :b 2) "a") 1)    ; string access
-    (assertm eq (=> [[1 2]] 0 0) 1)             ; integer access
-    (assertm eq (=> (dict :a [0 1] :b 2) ["a" 0]) 0)
-    (assertm eq (=> [[1 2]] [(slice None None) 0 0]) 1)
-
-    (assertm eq
-        (=>> [[1 2] [3 4]]
-             [0 1]               ; get           ; in -> would be error
-             .__class__          ; attr          ; in -> would be (.__class__ HERE) 
-             (.__add__ 3 4)      ; method
-             abs                 ; f
-             (abs)               ; (f)
-             (+ 3)               ; (f arg1)
-             operator.neg        ; lib.f
-             (operator.neg)      ; (lib.f)
-             (operator.add 3)
-             ((fn [x] (+ x 3))))
-        16)
-    (assertm eq (=>> (dict :a 1 :b 2) "a") 1)    ; string access
-    (assertm eq (=>> [[1 2]] 0 0) 1)             ; integer access
-    (assertm eq (=>> (dict :a [0 1] :b 2) ["a" 0]) 0)
-    (assertm eq (=>> [[1 2]] [(slice None None) 0 0]) 1)
-
-; ________________________________________________________________________/ }}}2
-; ■ fm, mapm, lmapm, filterm, lfilterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
-
-    (assertm = ((fm ["nothing" %1] (+ %1 %3 1)) 1 2 3) 5)
-    (assertm = ((fm ["nothing" it] (+ it 1)) 3) 4)
-
-    (assertm = (list (mapm (+ it 1) [1 2 3])) [2 3 4])
-    (assertm = (lmapm (+ %1 1) [1 2 3]) [2 3 4])
-    (assertm = (lfilterm (= it True) [1 0 1]) [1 1])
-    (assertm = (list (filterm (= it True) [1 0 1])) [1 1])
-
-; ________________________________________________________________________/ }}}2
 
 ; _____________________________________________________________________________/ }}}1
 ; getters.hy ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -410,57 +343,6 @@
     (assertm = (do (write_to_file "hello" $F1) (read_file $F1)) "hello")
 
 ; _____________________________________________________________________________/ }}}1
-; lens.hy       | MACROS: lns l> l>= &+ &+> ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    (setv idx 3)
-
-    ; lns
-
-    (assertm = (  lns   1   -2   -7   "key"   idx)
-               (. lens [1] [-2] [-7] ["key"] [idx]))
-
-    (assertm = (  lns   .attr)
-               (. lens   attr))
-
-    (assertm = ((  lns  (Each) (set 3)) [1 2 3])
-               ((. lens (Each) (set 3)) [1 2 3]))
-
-    (assertm gives_error_typeQ (lns (+ idx 3)) TypeError)
-
-    (assertm = (  lns  [(+ idx 3)])
-               (. lens [(+ idx 3)]))
-
-    (assertm = ((  lns   1  (mth> .sort))  [[1 2] [3 4]])
-               ((. lens [1] (call "sort")) [[1 2] [3 4]]))
-
-    (assertm = ((  lns   1  (mut>     .copy  :shallow True)) [[1 2] [3 4]])
-               ((. lens [1] (call_mut "copy" :shallow True)) [[1 2] [3 4]]))
-
-    (assertm = ((lns 1 (dndr> / 3)) [1 2 3])
-               ((/ (. lens [1]) 3)  [1 2 3]))
-
-    (assertm = ((lns 1 (dndr>> / 3)) [1 2 3])
-               ((/ 3 (. lens [1]))   [1 2 3]))
-
-    ; l> l>= &+ &+>
-
-    (assertm = (l> [[1 2 3] [4 5 6]]          1  (Each) (modify sqrt))
-               (&  [[1 2 3] [4 5 6]] (. lens [1] (Each) (modify sqrt))))   ; btw & can accept multiple lens
-
-    (assertm = (do (setv xs [[1 2 3] [4 5 6]])
-                   (l>= xs          1  (Each) (modify sqrt))
-                   xs)
-               (do (setv xs [[1 2 3] [4 5 6]])
-                   (&=  xs (. lens [1] (Each) (modify sqrt)))
-                   xs))
-
-    (assertm = ((&+ (  lns   1)  (. lens [2]) (set "here")) [[1 2 3] [4 5 6]])
-               ((&  (. lens [1]) (. lens [2] (set "here"))) [[1 2 3] [4 5 6]]))   ; btw & can accept multiple lens
-
-    (assertm = (&+> [[1 2 3] [4 5 6]] (lns 1) (mut> .sort))
-               ((& (. lens [1] (call_mut "sort"))) [[1 2 3] [4 5 6]]))   ; btw & can accept multiple lens
-
-; _____________________________________________________________________________/ }}}1
 ; mathnlogic.hy ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 ; ■ basic math ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
@@ -474,6 +356,12 @@
     (assertm = (squared -4.5) 20.25)
     (assertm = (reciprocal -2) -0.5)
     (assertm gives_error_typeQ (sqrt -2) ValueError)
+
+    (assertm = (clip 3 1 5) 3)
+    (assertm = (clip 0 1 5) 1)
+    (assertm = (clip 7 1 5) 5)
+    (assertm = (clip 5 1 5) 5)
+    (assertm gives_error_typeQ (clip 5 1 0) ValueError)
 
     (assertm = (dist [0 0] [3 4]) 5)
     (assertm = (hypot 3 4) 5)
@@ -558,6 +446,19 @@
 
     ;
 
+    (assertm = (lt0  -1) True )
+    (assertm = (lt0   0) False)
+    (assertm = (lt0   1) False)
+    (assertm = (gt0  -1) False)
+    (assertm = (gt0   0) False)
+    (assertm = (gt0   1) True )
+    (assertm = (leq0 -1) True )
+    (assertm = (leq0  0) True )
+    (assertm = (leq0  1) False)
+    (assertm = (geq0 -1) False)
+    (assertm = (geq0  0) True )
+    (assertm = (geq0  1) True )
+
     (assertm = (fnot oddQ 2) True)
     (assertm = (fnot eq 1 2) True)
     (assertm = (fnot eq 1 1) False)
@@ -639,10 +540,184 @@
     (assertm = (re_all   "456" "012301230") [])
 
 ; _____________________________________________________________________________/ }}}1
-; testing.hy    | MACROS: assertm, gives_error_typeQ | tested by this file directly lol
-; typing.hy     | MACROS: f:: def:: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; typing.hy ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-; ■ def:: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
+    ; funcs
+
+    (assertm = (noneQ None) True)
+    (assertm = (noneQ 1) False)
+
+    (assertm = (notnoneQ None) False)
+    (assertm = (notnoneQ 1) True)
+
+    (assertm = (oftypeQ str 1) False)
+    (assertm = (oftypeQ int 1) True)
+    (assertm = (oftypeQ str "1") True)
+    (assertm = (oftypeQ int "1") False)
+    (assertm = (oftypeQ type list) True)
+
+    (assertm = (intQ 1.0) False)
+    (assertm = (intQ 1) True)
+
+    (assertm = (numberQ 1.00) True)
+    (assertm = (numberQ "1") False)
+
+    (assertm = (floatQ 1.00) True)
+    (assertm = (floatQ "1") False)
+
+    (assertm = (strQ 1.00) False)
+    (assertm = (strQ "1") True)
+
+    (assertm = (dictQ []) False)
+    (assertm = (dictQ {"x" 2}) True)
+
+    (assertm = (listQ []) True)
+    (assertm = (listQ {"x" 2}) False)
+    (assertm = (listQ []) True)
+    (assertm = (listQ list) False)
+    (assertm = (listQ (list)) True)
+
+    (assertm = (tupleQ #({"x" 2})) True)
+    (assertm = (tupleQ {"x" 2}) False)
+
+    (assertm = (setQ #{1 2 3 3}) True)
+    (assertm = (setQ {"x" 2}) False)
+
+    (assertm = (iteratorQ (map print [1 2 3])) True)
+    (assertm = (iteratorQ (list (map (fn [x] 1) [1 2 3]))) False)
+
+    (assertm = (iterableQ "s") True)
+    (assertm = (iterableQ [1 2 3]) True)
+    (assertm = (iterableQ 1) False)
+    (assertm = (iterableQ {"x" 2}) True)
+
+; _____________________________________________________________________________/ }}}1
+    
+    ; MACROS:
+
+; flow.hy:
+; p: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (assertm = ((p: 0 1)   [[1 2] [3 4]]) 2)
+    (assertm = ((p: [0 1]) [[1 2] [3 4]]) 2)
+    (assertm = ((p: 0 1 (.__add__ 4)) [[1 2] [3 4]]) 6)
+
+    (assertm = (lmap (p:  ((fn [x] x))         ; fn
+                          ((fm it))            ; fm macro
+                          (abs)                ; function
+                          (operator.add 4)     ; function
+                          str                  ; function
+                          (.__contains__ "2")  ; method access
+                          .__class__)          ; attribute access
+                      [1 2 3])
+               (lmap type [True True True]))
+
+; _____________________________________________________________________________/ }}}1
+; => =>> ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (assertm eq
+        (=> [[1 2] [3 4]]
+            [0 1]               ; get           ; in -> would be error
+            .__class__          ; attr          ; in -> would be (.__class__ HERE) 
+            (.__add__ 3 4)      ; method
+            abs                 ; f
+            (abs)               ; (f)
+            (+ 3)               ; (f arg1)
+            operator.neg        ; lib.f
+            (operator.neg)      ; (lib.f)
+            (operator.add 3)
+            ((fn [x] (+ x 3))))
+        16)
+
+    (assertm eq (=> (dict :a 1 :b 2) "a") 1)    ; string access
+    (assertm eq (=> [[1 2]] 0 0) 1)             ; integer access
+    (assertm eq (=> (dict :a [0 1] :b 2) ["a" 0]) 0)
+    (assertm eq (=> [[1 2]] [(slice None None) 0 0]) 1)
+
+    (assertm eq
+        (=>> [[1 2] [3 4]]
+             [0 1]               ; get           ; in -> would be error
+             .__class__          ; attr          ; in -> would be (.__class__ HERE) 
+             (.__add__ 3 4)      ; method
+             abs                 ; f
+             (abs)               ; (f)
+             (+ 3)               ; (f arg1)
+             operator.neg        ; lib.f
+             (operator.neg)      ; (lib.f)
+             (operator.add 3)
+             ((fn [x] (+ x 3))))
+        16)
+    (assertm eq (=>> (dict :a 1 :b 2) "a") 1)    ; string access
+    (assertm eq (=>> [[1 2]] 0 0) 1)             ; integer access
+    (assertm eq (=>> (dict :a [0 1] :b 2) ["a" 0]) 0)
+    (assertm eq (=>> [[1 2]] [(slice None None) 0 0]) 1)
+
+; _____________________________________________________________________________/ }}}1
+; fm, mapm, lmapm, filterm, lfilterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (assertm = ((fm ["nothing" %1] (+ %1 %3 1)) 1 2 3) 5)
+    (assertm = ((fm ["nothing" it] (+ it 1)) 3) 4)
+
+    (assertm = (list (mapm (+ it 1) [1 2 3])) [2 3 4])
+    (assertm = (lmapm (+ %1 1) [1 2 3]) [2 3 4])
+    (assertm = (lfilterm (= it True) [1 0 1]) [1 1])
+    (assertm = (list (filterm (= it True) [1 0 1])) [1 1])
+
+; _____________________________________________________________________________/ }}}1
+; lens.hy:
+; lns l> l>= &+ &+> ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (setv idx 3)
+
+    ; lns
+
+    (assertm = (  lns   1   -2   -7   "key"   idx)
+               (. lens [1] [-2] [-7] ["key"] [idx]))
+
+    (assertm = (  lns   .attr)
+               (. lens   attr))
+
+    (assertm = ((  lns  (Each) (set 3)) [1 2 3])
+               ((. lens (Each) (set 3)) [1 2 3]))
+
+    (assertm gives_error_typeQ (lns (+ idx 3)) TypeError)
+
+    (assertm = (  lns  [(+ idx 3)])
+               (. lens [(+ idx 3)]))
+
+    (assertm = ((  lns   1  (mth> .sort))  [[1 2] [3 4]])
+               ((. lens [1] (call "sort")) [[1 2] [3 4]]))
+
+    (assertm = ((  lns   1  (mut>     .copy  :shallow True)) [[1 2] [3 4]])
+               ((. lens [1] (call_mut "copy" :shallow True)) [[1 2] [3 4]]))
+
+    (assertm = ((lns 1 (dndr> / 3)) [1 2 3])
+               ((/ (. lens [1]) 3)  [1 2 3]))
+
+    (assertm = ((lns 1 (dndr>> / 3)) [1 2 3])
+               ((/ 3 (. lens [1]))   [1 2 3]))
+
+    ; l> l>= &+ &+>
+
+    (assertm = (l> [[1 2 3] [4 5 6]]          1  (Each) (modify sqrt))
+               (&  [[1 2 3] [4 5 6]] (. lens [1] (Each) (modify sqrt))))   ; btw & can accept multiple lens
+
+    (assertm = (do (setv xs [[1 2 3] [4 5 6]])
+                   (l>= xs          1  (Each) (modify sqrt))
+                   xs)
+               (do (setv xs [[1 2 3] [4 5 6]])
+                   (&=  xs (. lens [1] (Each) (modify sqrt)))
+                   xs))
+
+    (assertm = ((&+ (  lns   1)  (. lens [2]) (set "here")) [[1 2 3] [4 5 6]])
+               ((&  (. lens [1]) (. lens [2] (set "here"))) [[1 2 3] [4 5 6]]))   ; btw & can accept multiple lens
+
+    (assertm = (&+> [[1 2 3] [4 5 6]] (lns 1) (mut> .sort))
+               ((& (. lens [1] (call_mut "sort"))) [[1 2 3] [4 5 6]]))   ; btw & can accept multiple lens
+
+; _____________________________________________________________________________/ }}}1
+; typing.hy:
+; def:: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ; incorrect position/number of args always throws errors
     ; and cannot be captured by try/except :( ,
@@ -733,60 +808,14 @@
                 {"a" int "b" int "c" int "args" int "kwargs" dict "return" int})
 
 
-; ________________________________________________________________________/ }}}2
+; _____________________________________________________________________________/ }}}1
+; f:: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (assertm = (f:: int -> int => int) (of Callable [int int] int))
     (assertm = (f:: int -> int -> (of Tuple int str)) (of Callable [int int] (of Tuple int str)))
 
-    ; funcs
-
-    (assertm = (noneQ None) True)
-    (assertm = (noneQ 1) False)
-
-    (assertm = (notnoneQ None) False)
-    (assertm = (notnoneQ 1) True)
-
-    (assertm = (oftypeQ str 1) False)
-    (assertm = (oftypeQ int 1) True)
-    (assertm = (oftypeQ str "1") True)
-    (assertm = (oftypeQ int "1") False)
-    (assertm = (oftypeQ type list) True)
-
-    (assertm = (intQ 1.0) False)
-    (assertm = (intQ 1) True)
-
-    (assertm = (numberQ 1.00) True)
-    (assertm = (numberQ "1") False)
-
-    (assertm = (floatQ 1.00) True)
-    (assertm = (floatQ "1") False)
-
-    (assertm = (strQ 1.00) False)
-    (assertm = (strQ "1") True)
-
-    (assertm = (dictQ []) False)
-    (assertm = (dictQ {"x" 2}) True)
-
-    (assertm = (listQ []) True)
-    (assertm = (listQ {"x" 2}) False)
-    (assertm = (listQ []) True)
-    (assertm = (listQ list) False)
-    (assertm = (listQ (list)) True)
-
-    (assertm = (tupleQ #({"x" 2})) True)
-    (assertm = (tupleQ {"x" 2}) False)
-
-    (assertm = (setQ #{1 2 3 3}) True)
-    (assertm = (setQ {"x" 2}) False)
-
-    (assertm = (iteratorQ (map print [1 2 3])) True)
-    (assertm = (iteratorQ (list (map (fn [x] 1) [1 2 3]))) False)
-
-    (assertm = (iterableQ "s") True)
-    (assertm = (iterableQ [1 2 3]) True)
-    (assertm = (iterableQ 1) False)
-    (assertm = (iterableQ {"x" 2}) True)
-
 ; _____________________________________________________________________________/ }}}1
-    
+; testing.hy:
+; assertm, gives_error_typeQ <- tested by test itself lol
+
 

@@ -1,5 +1,6 @@
 
-    (export :objects [ timing dt_print ])
+    (export :objects [ dt_print ]
+            :macros  [ timing ])
 
     (import  typing [Tuple Any])
     (import hyrule [assoc])
@@ -7,15 +8,9 @@
 
 ; [GROUP] Benchmarking ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    #_ "timing(f, *args, **kwargs) -> (float, Any) | returns tuple of execution time (in s) and result of f(*args, **kwargs)"
-    (defn #^ (of Tuple float Any)
-        timing [f #* args #** kwargs]
-        "calculated f(*args, **kwargs) and returns tuple: (execution time in s, result)"
-        (setv _time_getter hy.I.time.perf_counter)
-        (setv t0 (_time_getter))
-        (setv outp (f #* args #** kwargs))
-        (setv t1 (_time_getter))
-        (return #((- t1 t0) outp)))
+    (require fptk._macros [timing]) #_ "(timing expr1 expr2 ...) -> #(float, Any) | returns time (in seconds) and result of execution of (fn [] expr1 expr2 ...)"
+
+    ;;
 
     #_ "dt_printer(* args, fresh_run=False) | starts timer on fresh run, prints time passed since previous call"
     (defn dt_print

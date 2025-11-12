@@ -2,5 +2,6 @@
 __pycache__/
 build/
 *.~$lock
-*swp.tmp
+*.swp.tmp
+*.swo.tmp
 *.egg-info/

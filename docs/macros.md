@@ -9,7 +9,7 @@ fptk docs:
 
 <!-- Overview ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-# fptk macros
+# full list of fptk macros
 
 Anonymous functions recognizing `it` or `%1`, `%2`, ... as arguments:
 * `fm`
@@ -19,11 +19,11 @@ Anonymous functions recognizing `it` or `%1`, `%2`, ... as arguments:
 Getters and threading macros:
 > fptk macros consistently use `.attr` for attribute access and `(.method)` for method calls.
 > 
-> This is in contrast to hyrule's macro `->` where both `.smth` and `(.smth)` are seen as method calls.
+> This is in contrast with hyrule's macro `->` where both `.smth` and `(.smth)` are seen as method calls.
 * `=>` and `=>>` — macros combining hy `.` and `->` (or `->>`) macros
 * `p:` — pipe of partials
 * `getattrm` — macros like `getattr` but with special syntax
-* `(l)pluckm`
+* `(l)pluckm` — buffed `(l)pluck` from funcy
 
 Haskell-style typing annotations:
 * `f::` — macro for annotating callables
@@ -110,9 +110,9 @@ Examples:
 <!-- __________________________________________________________________________/ }}}1 -->
 
 # Lambdas
-<!-- fm, f>, (l)mapm, (l)filterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+<!-- fm, (l)mapm, (l)filterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-## `fm`, `f>`, `(l)mapm`, `(l)filterm` — macros for writing lambdas
+## `fm`, `(l)mapm`, `(l)filterm` — macros for writing lambdas
 
 Those macros all have same similar arguments recognition:
 - either `it` as a solo-argument
@@ -137,7 +137,7 @@ Macros description:
 
 ; fm will be able to find "it" or "%n" in formatted strings:
 (fm f"value = {it}")        ; -> (fn [it] f"value = {it}")
-; fm will NOT be able to find "it" or "%n" in python code:
+; fm will NOT be able to find "it" or "%n" in py expression:
 (fm (py "print(it)"))       ; -> (fn [] (print it))
 ```
 
@@ -256,7 +256,7 @@ Working example:
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- (l)pluckm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-## `pluckm` and `lpluckm` — unification of lpluck/lpluck_attr funcs from funcy libs
+## `(l)pluckm` — unification of lpluck/lpluck_attr funcs from funcy lib
 
 `pluckm` extends [funcy.pluck](https://funcy.readthedocs.io/en/stable/colls.html#pluck)
 to be able to recognize `(pluckm .attr xs)` syntax for accessing attributes.

@@ -7,13 +7,12 @@
 
 ; _____________________________________________________________________________/ }}}1
 
-; PARSER:
 ; CLASSES ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ; used for creating DEFINED_FUNC as parent module name
     (setv $FPTK_NAME "fptk")
 
-    ; "FPTK Group from VimCells"
+    ; "FPTK Group from VimCells as raw text"
     (defclass [dataclass] FGroup []
         (#^ str name)
         (#^ str raw_content))
@@ -25,9 +24,11 @@
         (setv REQUIRE_MACRO         3)
         (setv NON_IMPORT_INFO       4)
         (setv DEFINED_SETV          5)
-        (setv DEFINED_FUNC          6))
+        (setv DEFINED_FUNC          6)
+        (defn __repr__ [self] (return self.name))
+        (defn __str__  [self] (return self.name)))
 
-    ; "FPTK Entity"
+    ; "deconstructed FPTK Entity — function, macros, etc."
     (defclass [dataclass] FEntity []
         (#^ FEntityKind kind            #_ "IMPORT_FROM_MODULE")
         (#^ str         kind_str        #_ "used only for non-import-info: macro/func/...")
@@ -38,6 +39,8 @@
         (#^ str         descr           #_ "partially applicates"))
 
 ; _____________________________________________________________________________/ }}}1
+
+; PARSER:
 ; hy atoms ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (setv ALPHAS    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
@@ -176,8 +179,12 @@
 
 ; _____________________________________________________________________________/ }}}1
 
+; DECONSTRUCTOR:
+; find fptk entities ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
 ; lmap everywhere is honestly not required, since normally only 1 elem is expected (but hey)
-; find import_module ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+; ■ find import_module ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
     (setv FPTK_IM (+ LPAR "import"
                      (t_orn "_NAME" WORD)
@@ -196,8 +203,8 @@
                            :descr         (remove_quotes %1._DESCR)))
               _IMs))
 
-; _____________________________________________________________________________/ }}}1
-; find import_from_module ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; ________________________________________________________________________/ }}}2
+; ■ find import_from_module ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
     (setv FPTK_IFM (+ LPAR "import"
                       (t_orn "_PARENT_MODULE" WORD)
@@ -221,8 +228,8 @@
                       split_descr))
         (lmap pipe _IFMs))
 
-; _____________________________________________________________________________/ }}}1
-; find import_from_module_as ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; ________________________________________________________________________/ }}}2
+; ■ find import_from_module_as ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
     (setv FPTK_IFMA (+ LPAR "import"
                        (t_orn "_PARENT_MODULE" WORD)
@@ -248,8 +255,8 @@
                       split_descr))
         (lmap pipe _IFMAs))
 
-; _____________________________________________________________________________/ }}}1
-; find require_macro ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; ________________________________________________________________________/ }}}2
+; ■ find require_macro ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
     (setv FPTK_RM  (+ LPAR "require"
                       (t_orn "_PARENT_MODULE" WORD)
@@ -274,8 +281,8 @@
         (lmap pipe _RMs))
 
 
-; _____________________________________________________________________________/ }}}1
-; find non_import_info ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; ________________________________________________________________________/ }}}2
+; ■ find non_import_info ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
     (setv FPTK_NII (+ LPAR "comment" (t_orn "_DESCR" QSTRING) RPAR))
 
@@ -293,8 +300,8 @@
                       split_descr))
         (lmap pipe _NIIs))
 
-; _____________________________________________________________________________/ }}}1
-; find defined_setv ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; ________________________________________________________________________/ }}}2
+; ■ find defined_setv ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
     (setv FPTK_DS   (+ (pp.Optional (+ (pp.Literal "#_") (t_orn "_DESCR" QSTRING)))
                        LPAR "setv"
@@ -313,8 +320,8 @@
                            :descr         (remove_quotes %1._DESCR)))
               _DSs))
 
-; _____________________________________________________________________________/ }}}1
-; find defined_func ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; ________________________________________________________________________/ }}}2
+; ■ find defined_func ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
     (setv FPTK_DF   (+ (pp.Optional (+ (pp.Literal "#_") (t_orn "_DESCR" QSTRING)))
                        LPAR "defn"
@@ -338,8 +345,9 @@
                       split_descr))
         (lmap pipe _DFs))
 
-; _____________________________________________________________________________/ }}}1
-; find all ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; ________________________________________________________________________/ }}}2
+
+; ■ find all (assembly) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
     (setv FPTK_ALL (| (t_orn "_IM"   FPTK_IM  )
                       (t_orn "_IFM"  FPTK_IFM )
@@ -365,9 +373,11 @@
                       (!= &elem._DF   "") (process_DFs   (first &elem)))))
         (flatten _fentities))
 
+; ________________________________________________________________________/ }}}2
+
 ; _____________________________________________________________________________/ }}}1
 
-; PRINTER:
+; LONG TABLE:
 ; entity to str ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (defn #^ str build_prefix [ #^ FEntity fe ]
@@ -419,11 +429,12 @@
 ; _____________________________________________________________________________/ }}}1
 ; printers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
+    ; not used currently:
     (defn gprint
         [ #^ FGroup fgroup ]
         (lprint (group2str_list fgroup)))
 
-    (defn #^ str generate_table
+    (defn #^ str generate_long_table1
         [ #^ str source_file
         ]
         (setv _code       (read_file source_file))
@@ -435,22 +446,21 @@
                                      ))
         (return _outp_table))
 
-    (defn write_doc
+    (defn write_long_doc
         [ #^ str table
           #^ str output_file
           #^ str [printQ False] #_ "will also print table of functions (without header) into stdout"
         ]
-        (setv _outp_all   (sconcat $HEADER "\n```hy\n" table "```"))
-        (write_file _outp_all output_file)
+        (setv _outp_all (sconcat $HEADER_LONG "\n```hy\n" table "```"))
+        (write_to_file _outp_all output_file)
         ;
         (print "File" output_file "written!")
-        (when printQ (print _outp_table)))
+        (when printQ (print _outp_all)))
 
 ; _____________________________________________________________________________/ }}}1
+; MD FILE HEADER_LONG STR ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-; MD FILE HEADER STR ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    (setv $HEADER
+    (setv $HEADER_LONG
 "
 ---
 fptk docs:
@@ -493,6 +503,74 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
 
 
 ; _____________________________________________________________________________/ }}}1
+
+; SHORT TABLE:
+; printers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (defn write_short_doc
+        [ #^ str table
+          #^ str output_file
+          #^ str [printQ False] #_ "will also print table of functions (without header) into stdout"
+        ]
+        (setv _outp_all (sconcat $HEADER_SHORT table))
+        (write_to_file _outp_all output_file)
+        ;
+        (print "File" output_file "written!")
+        (when printQ (print _outp_all)))
+
+    (defn #^ str
+        generate_short_table1
+        [ #^ str source_file
+        ]
+        (setv _code          (read_file source_file))
+        (setv _raw_groups    (find_fgroups _code))
+        (setv _groups_names  (lpluckm .name _raw_groups))
+        (setv _groups_of_fes (lmap find_all _raw_groups)) ; fes = fptk entities
+        ;
+        (setv _groups_of_enames  ; (of Tuple GroupName ListOfFuncsNames ListOfMacroNames)
+            (lmapm [ %1
+                     (lpluckm .name (only_funcs_fes %2))
+                     (lpluckm .name (only_macro_fes %2))
+                     ]
+                   _groups_names
+                   _groups_of_fes)) 
+        ;
+        (setv _lines
+            (lmapm (sconcat "| " (first it) " | "
+                            (str_join (second it) :sep " ") " | "
+                            (str_join (third  it) :sep " ") " |\n"
+                            )
+                   _groups_of_enames))
+        ;
+        (sconcat #* _lines))
+
+    (defn #^ (of List FEntity)
+        only_funcs_fes
+        [ #^ (of List FEntity) fes
+        ]
+        (reject (fn [%fe] (eq_any %fe.kind [FEntityKind.NON_IMPORT_INFO FEntityKind.REQUIRE_MACRO]))
+                fes))
+
+    (defn #^ (of List FEntity)
+        only_macro_fes
+        [ #^ (of List FEntity) fes
+        ]
+        (filter (fn [%fe] (eq %fe.kind FEntityKind.REQUIRE_MACRO))
+                fes))
+
+
+; _____________________________________________________________________________/ }}}1
+; MD FILE HEADER STR ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (setv $HEADER_SHORT
+          "
+| Group | Functions/Types | Macros |
+|-------|-----------------|--------|
+")
+
+; _____________________________________________________________________________/ }}}1
+
+; RUN:
 ; CONFIG ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (setv $SOURCES [ "../../src/fptk/flow.hy"
@@ -507,12 +585,14 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
                      "../../src/fptk/testing.hy"
                    ])
 
-    (setv $OUTPUT "../../docs/functions.md")
+    (setv $OUTPUT_LONG  "../../docs/functions.md")
+    (setv $OUTPUT_SHORT "../../docs/cheetsheet.md")
 
 ; _____________________________________________________________________________/ }}}1
 
-    (setv files_contents (lmap (fn [it] (generate_table it)) $SOURCES))
-    (setv all_files_content (sconcat #* files_contents))
+    (setv _long_table (sconcat #* (lmap generate_long_table1 $SOURCES)))
+    (write_long_doc _long_table $OUTPUT_LONG :printQ False)
 
-    (write_doc all_files_content $OUTPUT :printQ False)
+    (setv _short_table (sconcat #* (lmap generate_short_table1 $SOURCES)))
+    (write_short_doc _short_table $OUTPUT_SHORT :printQ True)
 

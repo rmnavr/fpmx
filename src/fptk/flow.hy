@@ -72,7 +72,6 @@
     #_ "lzip(*iterables) -> List | literally just list(zip(*iterables))"
     (defn lzip [#* iterables] (list (zip #* iterables)))
 
-
     (comment "py | base | map | map(func, *iterables) -> map object |")
     (import funcy     [lmap])       #_ "lmap(f, *seqs) -> List | list version of map"
 

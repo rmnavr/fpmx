@@ -110,16 +110,19 @@
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] APL: iterators and looping ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (import itertools [islice])              #_ "islice(iterable, stop), islice(iterable, start, stop[, step]) | list(islice(inf_range(10), 2)) == [10, 11]"  
     (import itertools [count :as inf_range]) #_ "inf_range(start [, step]) | inf_range(10) -> generator: 10, 11, 12, ..."
-    (import itertools [cycle])               #_ "cycle(p) | cycle('AB') -> A B A B ..."
-    (import itertools [repeat])              #_ "repeat(elem [, n]) | repeat(10,3) -> 10 10 10" 
+
+    (import itertools [islice])              #_ "islice(iterable, start, stop[, step]) | list(islice(inf_range(10), 2)) == [10, 11]"  
 
     #_ "| list version of islice: lislice"
     (defn lislice [#* kwargs] "literally just list(lislice(...))" (list (islice #* kwargs)))
 
+    (import itertools [cycle])               #_ "cycle(p) | cycle('AB') -> A B A B ..."
+
     #_ "lcycle(p, n) -> list | takes first n elems from cycle(p)"
     (defn lcycle [p n] "takes first n elems from cycle(p)" (lislice (cycle p) n))
+
+    (import itertools [repeat])              #_ "repeat(elem [, n]) | repeat(10,3) -> 10 10 10" 
 
     #_ "lrepeat(elem, n) -> list | unlike in repeat, n has to be provided"
     (defn lrepeat [elem n] "literally just list(repeat(elem, n))" (list (repeat elem n)))

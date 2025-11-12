@@ -2,18 +2,20 @@
 ; Import and Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (export :objects [ inc dec sign neg
+                       floor ceil
                        half double squared reciprocal
                        sqrt dist hypot normalize
                        exp log ln log10
                        evenQ oddQ zeroQ negativeQ positiveQ
                        ;
-                       range_ lrange_
+                       range_ lrange_ clip
                        ;
                        pi sin cos tan degrees radians
                        acos asin atan atan2
                        ;
                        and_ or_ not_ is_ xor
                        eq neq gt lt geq leq
+                       gt0 geq0 lt0 leq0
                        matmul div minus
                        dadd dmul lmul smul
                        mul plus sconcat
@@ -23,7 +25,6 @@
                        ;
                        choice randint randfloat rand01
                      ])
-
 
     (import functools [reduce])
     (import operator [mul :as operator_mul])
@@ -38,6 +39,9 @@
     (import operator  [neg])        #_ "neg(n) | = -1 * n"
 
     ;;
+
+    (import math [floor])  #_ "| floor(1.9) = 1"
+    (import math [ceil])   #_ "| ceil(1.1) = 2"
 
     #_ "half(x) | = x/2"
     (defn half       [x] "half(x) = x / 2" (/ x 2))
@@ -96,6 +100,8 @@
 
     #_ "lrange_(start, end, step=1) -> List | range including both ends when possible, also works on fractionals"
     (defn lrange_ [start end [step 1]]
+        "range including both ends when possible,
+         also works on fractionals"
         ;; integers
         (when (and (= (type start) int)
                    (= (type end) int)
@@ -121,6 +127,13 @@
                   :setv candidate (+ start (* &i step))
                   :if   (>= candidate _end)
                   candidate)))
+
+    #_ "clip(x, lower, upper) | clips x to fit in lower <= x <= upper limit"
+    (defn clip [x lower upper]
+        "clips x to fit in lower <= x <= upper limit"
+        (when (< upper lower)
+              (raise (ValueError "can't have lower>upper")))
+        (max lower (min x upper)))
 
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] Math and logic: Trigonometry ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -154,6 +167,18 @@
 
     (import operator [matmul])              #_ "'@' as function"
     (import operator [truediv :as div])     #_ "div(a, b) |"
+
+    #_ "gt0(x) | checks for x > 0"
+    (defn gt0 [x] "checks for x > 0" (> x 0))
+
+    #_ "geq0(x) | x >= 0"
+    (defn geq0 [x] "checks for x >= 0" (>= x 0))
+
+    #_ "lt0(x) | checks for x < 0"
+    (defn lt0 [x] "checks for x < 0" (< x 0))
+
+    #_ "leq0(x) | x <= 0"
+    (defn leq0 [x] "checks for x <= 0" (<= x 0))
 
     #_ "minus(x, y) = x - y |"
     (defn minus [x y] "minux(x, y) = x - y" (- x y))

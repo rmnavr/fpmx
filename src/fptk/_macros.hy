@@ -173,6 +173,19 @@
 
 ; === Macros ===
 
+; Benchmarking:
+; timingm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (defmacro timing [#* exprs]
+        `(do (setv _time_getter hy.I.time.perf_counter)
+             (setv f (fn [] ~@exprs))
+             (setv t0 (_time_getter))
+             (setv outp (f))
+             (setv t1 (_time_getter))
+             #((- t1 t0) outp)))
+
+; _____________________________________________________________________________/ }}}1
+
 ; Typing:
 ; def:: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 

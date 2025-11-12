@@ -111,12 +111,12 @@ DEFN: fptk            | mask2idxs                :: mask2idxs(mask) -> list  ; m
 DEFN: fptk            | idxs2mask                :: idxs2mask(idxs) -> list  ; idxs is non-sorted list of integers like [0 3 2], which will be converted to [1 0 1 1]
 
 === APL: iterators and looping ===
-FROM: itertools       | islice                   :: islice(iterable, stop), islice(iterable, start, stop[, step])  ; list(islice(inf_range(10), 2)) == [10, 11]
 FROM: itertools       | inf_range (<-count)      :: inf_range(start [, step])  ; inf_range(10) -> generator: 10, 11, 12, ...
-FROM: itertools       | cycle                    :: cycle(p)  ; cycle('AB') -> A B A B ...
-FROM: itertools       | repeat                   :: repeat(elem [, n])  ; repeat(10,3) -> 10 10 10
+FROM: itertools       | islice                   :: islice(iterable, start, stop[, step])  ; list(islice(inf_range(10), 2)) == [10, 11]
 DEFN: fptk            | lislice                  ; list version of islice: lislice
+FROM: itertools       | cycle                    :: cycle(p)  ; cycle('AB') -> A B A B ...
 DEFN: fptk            | lcycle                   :: lcycle(p, n) -> list  ; takes first n elems from cycle(p)
+FROM: itertools       | repeat                   :: repeat(elem [, n])  ; repeat(10,3) -> 10 10 10
 DEFN: fptk            | lrepeat                  :: lrepeat(elem, n) -> list  ; unlike in repeat, n has to be provided
 FROM: itertools       | concat (<-chain)         :: concat(*seqs) -> iterator
 DEFN: fptk            | lconcat                  :: lconcat(*seqs) -> list  ; list(concat(*seqs))
@@ -225,6 +225,8 @@ FROM: hyrule          | inc                      :: inc(n)  ; = n + 1
 FROM: hyrule          | dec                      :: dec(n)  ; = n - 1
 FROM: hyrule          | sign                     :: sign(n)  ; will give 0 for n=0
 FROM: operator        | neg                      :: neg(n)  ; = -1 * n
+FROM: math            | floor                    ; floor(1.9) = 1
+FROM: math            | ceil                     ; ceil(1.1) = 2
 DEFN: fptk            | half                     :: half(x)  ; = x/2
 DEFN: fptk            | double                   :: double(x)  ; = x*2
 DEFN: fptk            | squared                  :: squared(x)  ; = pow(x,2)
@@ -246,6 +248,7 @@ DEFN: fptk            | positiveQ                :: positiveQ(x)  ; checks direc
 === Math and logic: Ranges ===
 FROM: hyrule          | range_ (<-thru)          :: range_(start, end=None, step=1) -> List  ; same as range, but with 1-based index
 DEFN: fptk            | lrange_                  :: lrange_(start, end, step=1) -> List  ; range including both ends when possible, also works on fractionals
+DEFN: fptk            | clip                     :: clip(x, lower, upper)  ; clips x to fit in lower <= x <= upper limit
 
 === Math and logic: Trigonometry ===
 FROM: math            | pi                       ; literally just float pi=3.14...
@@ -273,6 +276,10 @@ FROM: operator        | geq (<-ge)               ; greater or equal
 FROM: operator        | leq (<-le)               ; less or equal
 FROM: operator        | matmul                   ; '@' as function
 FROM: operator        | div (<-truediv)          :: div(a, b)
+DEFN: fptk            | gt0                      :: gt0(x)  ; checks for x > 0
+DEFN: fptk            | geq0                     :: geq0(x)  ; x >= 0
+DEFN: fptk            | lt0                      :: lt0(x)  ; checks for x < 0
+DEFN: fptk            | leq0                     :: leq0(x)  ; x <= 0
 DEFN: fptk            | minus                    :: minus(x, y) = x - y
 DEFN: fptk            | dmul                     :: dmul(*args) = arg1 + arg2 + ...  ; 'dunder mul', '*' operator as a function
 DEFN: fptk            | dadd                     :: dadd(*args) = arg1 + arg2 + ...  ; 'dunder add', '+' operator as a function
@@ -331,7 +338,7 @@ MACR: fptk._macros    | l>                       ; macros for working with lens,
 MACR: fptk._macros    | l>=                      ; macros for working with lens, see lens macros docs for details
 
 === Benchmarking ===
-DEFN: fptk            | timing                   :: timing(f, *args, **kwargs) -> (float, Any)  ; returns tuple of execution time (in s) and result of f(*args, **kwargs)
+MACR: fptk._macros    | timing                   :: (timing expr1 expr2 ...) -> #(float, Any)  ; returns time (in seconds) and result of execution of (fn [] expr1 expr2 ...)
 DEFN: fptk            | dt_print                 :: dt_printer(* args, fresh_run=False)  ; starts timer on fresh run, prints time passed since previous call
 
 === Testing ===
