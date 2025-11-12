@@ -9,41 +9,6 @@
 
 ; === Helpers (precompiled functions) ===
 
-; expr type checkers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-	(-> (defn _isNegIntegerExpr ; (_isNegIntegerExpr '(- 3))
-			[ arg
-			]
-			(and (= (type arg) hy.models.Expression)
-				 (= (get arg 0) (hy.models.Symbol "-"))
-				 (= (len arg) 2)
-				 (= (type (get arg 1)) hy.models.Integer)))
-		eval_and_compile)
-	
-	(-> (defn _isExprWithHeadSymbol ; (head ...)
-			[ #^ hy.models.Expression arg
-			  #^ str head
-			]
-			(and (= (type arg) hy.models.Expression)
-				 (= (get arg 0) (hy.models.Symbol head))))
-		eval_and_compile)
-
-	(-> (defn _isUnpackMappingQ  ; #**
-			[ arg
-			]
-			(and (= (type arg)  hy.models.Expression)
-                 (= (get arg 0) (hy.models.Symbol "unpack-mapping"))))
-		eval_and_compile)
-
-	(-> (defn _isUnpackIterableQ  ; #*
-			[ arg
-			]
-			(and (= (type arg)  hy.models.Expression)
-                 (= (get arg 0) (hy.models.Symbol "unpack-iterable"))))
-		eval_and_compile)
-
-; _____________________________________________________________________________/ }}}1
-;
 ; INFO: Dot Macro Expressions ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 (when False
 
@@ -72,6 +37,45 @@
 		'(.mth 1 2)				; dottedMth		; [[. None mth] 1 2]	; ~(partial obj.mth 1 2)
 
 )
+; _____________________________________________________________________________/ }}}1
+; Info on importing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+	; when only importing (import fptk [f>]), f> is required to have fm internally, and it can be called as:
+	; 
+	; -> hy.R.fptk.fm				-> ✗ does not work in dev file
+	;								   ✓ works from outside projs (it is essentially call to installed lib)
+	;								   ✓ this is how it is done in hyrule (I think this is due to their hy_init.hy importing everything)
+	;										 
+	;	 fm							-> [✓ ✗] works from dev file
+	;	 hy.R.fptk_macros.fm		-> [✓ ✗] works from dev file
+	;	 hy.R.fptk.fptk_macros.fm	-> [✗ ✗] does not work anywhere
+
+; _____________________________________________________________________________/ }}}1
+;
+; expr type checkers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+	(-> (defn _isExprWithHeadSymbol ; (head ...)
+			[ #^ hy.models.Expression arg
+			  #^ str head
+			]
+			(and (= (type arg) hy.models.Expression)
+				 (= (get arg 0) (hy.models.Symbol head))))
+		eval_and_compile)
+
+	(-> (defn _isUnpackMappingQ  ; #**
+			[ arg
+			]
+			(and (= (type arg)  hy.models.Expression)
+                 (= (get arg 0) (hy.models.Symbol "unpack-mapping"))))
+		eval_and_compile)
+
+	(-> (defn _isUnpackIterableQ  ; #*
+			[ arg
+			]
+			(and (= (type arg)  hy.models.Expression)
+                 (= (get arg 0) (hy.models.Symbol "unpack-iterable"))))
+		eval_and_compile)
+
 ; _____________________________________________________________________________/ }}}1
 ; .dottedAttr ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
@@ -126,56 +130,50 @@
 		eval_and_compile)
 
 	 ; (_isDottedMth '(.obj obj 1 2))
-	 ; (_extractDottedCall '(.obj obj 1 2))
 
 ; _____________________________________________________________________________/ }}}1
 ;
-; [ARCHIVE] :attr: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; [ARCHIVE] ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	; leftover from lns macro:
-	;
-	;(_isAttrAccess &arg)
-	;(setv (get args &i) (hy.models.Symbol (_extractAttrName &arg)))
+
+        ;(_isAttrAccess &arg)
+        ;(setv (get args &i) (hy.models.Symbol (_extractAttrName &arg)))
 
 	; leftover from pluckm macro:
-	;
-	; (_isAttrAccess indx)
-	; (return `(lpluck_attr ~(_extractAttrName indx) ~iterable)))
 
-	(-> (defn #^ bool
-			_isAttrAccess
-			[ arg
-			]
-			(setv arg_str (str arg))
-			(and (= (type arg) hy.models.Keyword)
-				 (> (len arg_str) 2)
-				 (= (get arg_str (- 1)) ":")))
-		eval_and_compile)
+        ; (_isAttrAccess indx)
+        ; (return `(lpluck_attr ~(_extractAttrName indx) ~iterable)))
 
-	(-> (defn #^ str
-			_extractAttrName
-			[ arg
-			]
-			(cut (str arg) 1 (- 1)))
-		eval_and_compile)
+    ; :attr:
+
+        ;(-> (defn #^ bool
+        ;		_isAttrAccess
+        ;		[ arg
+        ;		]
+        ;		(setv arg_str (str arg))
+        ;		(and (= (type arg) hy.models.Keyword)
+        ;			 (> (len arg_str) 2)
+        ;			 (= (get arg_str (- 1)) ":")))
+        ;	eval_and_compile)
+
+        ;(-> (defn #^ str
+        ;		_extractAttrName
+        ;		[ arg
+        ;		]
+        ;		(cut (str arg) 1 (- 1)))
+        ;	eval_and_compile)
+
+    ; f>
+
+        ;(defmacro f> [lambda_def #* args]
+        ;	(return `((hy.R.fptk.fm ~lambda_def) ~@args)))
 
 ; _____________________________________________________________________________/ }}}1
 
 ; === Macros ===
 
-; Info on importing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-	; when only importing (import fptk [f>]), f> is required to have fm internally, and it can be called as:
-	; 
-	; -> hy.R.fptk.fm				-> ✗ does not work in dev file
-	;								   ✓ works from outside projs (it is essentially call to installed lib)
-	;								   ✓ this is how it is done in hyrule (I think this is due to their hy_init.hy importing everything)
-	;										 
-	;	 fm							-> [✓ ✗] works from dev file
-	;	 hy.R.fptk_macros.fm		-> [✓ ✗] works from dev file
-	;	 hy.R.fptk.fptk_macros.fm	-> [✗ ✗] does not work anywhere
-
-; _____________________________________________________________________________/ }}}1
+; Typing:
 ; def:: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 ; ■ info ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
@@ -285,9 +283,140 @@
 		`(of Callable ~fInputs ~fOutput))
 
 ; _____________________________________________________________________________/ }}}1
+; Lambdas:
+; fm, (l)mapm, (l)filterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+	; recognizes "it" as solo-arg
+	; or %1..%9 as multi args
+	; 
+	; "it" cannot be used together with %i
+	; 
+	; nested fm calls will probably not work as intended
+
+	(defmacro fm [#* exprs]
+		(setv itargs (->> exprs
+						  hy.I.hyrule.flatten
+						  (filter (fn [%x] (= %x 'it)))
+						  sorted))	; example: [hy.models.Symbol('it')]
+		(setv pargs  (->> exprs
+						  hy.I.hyrule.flatten
+						  (filter (fn [%x] (or (= %x '%1) (= %x '%2) (= %x '%3)
+											   (= %x '%4) (= %x '%5) (= %x '%6)
+											   (= %x '%7) (= %x '%8) (= %x '%9))))
+						  sorted))	; example: [hy.models.Symbol('%1'), hy.models.Symbol('%2')]
+		(setv has_pargs (> (len pargs ) 0))
+		(setv has_itarg (> (len itargs) 0))
+		;
+		(when (and has_itarg has_pargs) (raise (SyntaxError "cannot mix 'it' and '%n' syntax in fm macro"))) ; both "it" and "%1"... are found
+		(when has_itarg (return `(fn [it] ~@exprs)))	; only "it" are found
+		(if has_pargs
+			(setv maxN (int (get pargs -1 -1)))		; only "%1"... args are found
+			(setv maxN 0))							; no args are found
+		(setv inputs (lfor n (hy.I.hyrule.thru 1 maxN) (hy.models.Symbol f"%{n}")))
+		(return `(fn [~@inputs] ~@exprs)))
+
+	(defmacro mapm [one_shot_fm #* args]
+		(return `(map (hy.R.fptk.fm ~one_shot_fm) ~@args)))
+
+	(defmacro lmapm [one_shot_fm #* args]
+		(return `(list (map (hy.R.fptk.fm ~one_shot_fm) ~@args))))
+
+	(defmacro filterm [one_shot_fm iterable]
+		(return `(filter (hy.R.fptk.fm ~one_shot_fm) ~iterable)))
+
+	(defmacro lfilterm [one_shot_fm iterable]
+		(return `(list (filter (hy.R.fptk.fm ~one_shot_fm) ~iterable))))
+
+; _____________________________________________________________________________/ }}}1
+; Threaders and getters:
+; =>, =>> ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    ;'3              ; new       hy.models.Integer 
+    ;'"key"          ; new       hy.models.String
+    ;'func           ;           hy.models.Symbol
+    ;'[smth]         ; new       hy.models.List
+    ;'.attr          ; new       _isDottedAttr    _extractDottedAttr
+    ;'(.mth)         ;           _isDottedMth     _extractDottedMth
+    ;'op.neg         ;           _isDottedAccess
+    ;'(op.neg 1 2)   ;           hy.models.Expression
+    ;'(func 1 2)     ;           hy.models.Expression
+
+    (defmacro => [head #* args]
+        (setv outp head)  ; obj
+		(for [&arg args]
+			  (cond ; 1
+                    (= (type &arg) hy.models.Integer)
+					(setv outp `(get ~outp ~&arg))
+                    ; "key"
+                    (= (type &arg) hy.models.String)
+					(setv outp `(get ~outp ~&arg))
+                    ; func
+                    (= (type &arg) hy.models.Symbol)
+					(setv outp `(~&arg ~outp))
+                    ; [3] ["key"]
+                    (= (type &arg) hy.models.List)
+                    (setv outp `(get ~outp ~@&arg))
+                    ; .x 
+					(_isDottedAttr &arg)
+                    (setv outp `(. ~outp ~(_extractDottedAttr &arg)))
+					; (.mth 2 3) 
+					(_isDottedMth &arg)
+                    (do (setv nm (get (_extractDottedMth &arg) "head")) 
+                        (setv ag (get (_extractDottedMth &arg) "args"))
+                        (setv outp `(. ~outp (~nm ~@ag))))
+					; operator.neg 
+					(_isDottedAccess &arg) 
+					(setv outp `(~&arg ~outp))
+					; '(smth arg1 arg2) ; also works for: (op.neg arg1 arg2)
+                    (= (type &arg) hy.models.Expression) ; should be checked almost last, because _isDotted... are Exprs too
+                    (do (setv nm (get &arg 0))
+                        (setv ag (cut &arg 1 None))
+                        (setv outp `(~nm ~outp ~@ag)))
+                    ; normally never executed:
+                    True 
+					(setv outp `(~&arg ~outp))))
+        (return outp))
+
+    (defmacro =>> [head #* args]
+        (setv outp head)  ; obj
+		(for [&arg args]
+			  (cond ; 1
+                    (= (type &arg) hy.models.Integer)
+					(setv outp `(get ~outp ~&arg))
+                    ; "key"
+                    (= (type &arg) hy.models.String)
+					(setv outp `(get ~outp ~&arg))
+                    ; func
+                    (= (type &arg) hy.models.Symbol)
+					(setv outp `(~&arg ~outp))
+                    ; [3] ["key"]
+                    (= (type &arg) hy.models.List)
+                    (setv outp `(get ~outp ~@&arg))
+                    ; .x 
+					(_isDottedAttr &arg)
+                    (setv outp `(. ~outp ~(_extractDottedAttr &arg)))
+					; (.mth 2 3) 
+					(_isDottedMth &arg)
+                    (do (setv nm (get (_extractDottedMth &arg) "head")) 
+                        (setv ag (get (_extractDottedMth &arg) "args"))
+                        (setv outp `(. ~outp (~nm ~@ag))))
+					; operator.neg 
+					(_isDottedAccess &arg) 
+					(setv outp `(~&arg ~outp))
+					; '(smth arg1 arg2) ; also works for: (op.neg arg1 arg2)
+                    (= (type &arg) hy.models.Expression) ; should be checked almost last, because _isDotted... are Exprs too
+                    (do (setv nm (get &arg 0))
+                        (setv ag (cut &arg 1 None))
+                        (setv outp `(~nm ~outp ~@ag)))  ; THIS IS THE ONLY PLACE WHERE IT DIFFERS FROM => LOL
+                    ; normally never executed:
+                    True 
+					(setv outp `(~&arg ~outp))))
+        (return outp))
+
+; _____________________________________________________________________________/ }}}1
 ; p: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-; ■ comment on (.mth 3 4) deconstruction ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
+; ■ comment on (.mth 3 4) reassembly into partial ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
 	; this is how (.mth 3 4) works:
 
@@ -312,9 +441,18 @@
 	(defmacro p: [#* args]
 		(setv pargs [])
 		(for [&arg args]
-			  (cond ; .x  -> (partial flip getattr "x")
+			  (cond ; 1
+                    (= (type &arg) hy.models.Integer)
+					(pargs.append `(hy.I.funcy.partial (fn [x] (get x ~&arg))))
+                    ; "key"
+                    (= (type &arg) hy.models.String)
+					(pargs.append `(hy.I.funcy.partial (fn [x] (get x ~&arg))))
+                    ; [3] ["key"]
+                    (= (type &arg) hy.models.List)
+                    (pargs.append `(hy.I.funcy.partial (fn [x] (get x ~@&arg))))
+                    ; .x  -> (partial flip getattr "x")
 					(_isDottedAttr &arg)
-					(pargs.append `(hy.I.funcy.partial (fn [f x y] (f y x)) getattr ~(str (_extractDottedAttr &arg))))
+					(pargs.append `(hy.I.funcy.partial (fn [x] (getattr x ~(str (_extractDottedAttr &arg))))))
 					; operator.neg
 					(_isDottedAccess &arg)
 					(pargs.append `(hy.I.funcy.partial ~&arg))
@@ -324,19 +462,20 @@
 											~(str (get (_extractDottedMth &arg) "head")))) ; -> mth)
 						(pargs.append `(hy.I.funcy.partial (fn [%args %mth] (%mth (unpack_iterable	%args)))
 												[~@(get (_extractDottedMth &arg) "args")])))
-					; abs -> (partial abs)
+					; function -> (partial function)
 					(= (type &arg) hy.models.Symbol)
 					(pargs.append `(hy.I.funcy.partial ~&arg))
-					; (fn/fm ...) -> no change
-					(or (_isExprWithHeadSymbol &arg "fn")
-						(_isExprWithHeadSymbol &arg "fm")
-						(_isExprWithHeadSymbol &arg "f>"))
-					(pargs.append &arg)
-					; (func 1 2) -> (partial func 1 2)
+                    ;
+					; <removed> ; (fn/fm ...) -> no change
+					; <removed> ; (or (_isExprWithHeadSymbol &arg "fn")
+					; <removed> ;	  (_isExprWithHeadSymbol &arg "fm")
+					; <removed> ; (pargs.append &arg)
+                    ;
+					; (func 1 2)       -> (partial func 1 2)
 					; (operator.add 3) -> (partial operator.add 3)
 					(= (type &arg) hy.models.Expression)
 					(pargs.append `(hy.I.funcy.partial ~@(cut &arg 0 None)))
-					; (etc ...) -> (partial etc ...)
+					; normally should never be called:
 					True
 					(pargs.append `(hy.I.funcy.partial ~&arg))))
 	   `(hy.I.funcy.rcompose ~@pargs))
@@ -375,55 +514,7 @@
 				  (return `(getattr ~iterable ~indx ~default)))))
 
 ; _____________________________________________________________________________/ }}}1
-; fm, f>, (l)mapm, (l)filterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-	; recognizes "it" as solo-arg
-	; or %1..%9 as multi args
-	; 
-	; "it" cannot be used together with %i
-	; 
-	; nested fm calls will probably not work as intended
-
-	(defmacro fm [expr]
-		(import hyrule [flatten thru])
-		;
-		(setv itargs (->> expr
-						  flatten
-						  (filter (fn [%x] (= %x 'it)))
-						  sorted))	; example: [hy.models.Symbol('it')]
-		(setv pargs  (->> expr
-						  flatten
-						  (filter (fn [%x] (or (= %x '%1) (= %x '%2) (= %x '%3)
-											   (= %x '%4) (= %x '%5) (= %x '%6)
-											   (= %x '%7) (= %x '%8) (= %x '%9))))
-						  sorted))	; example: [hy.models.Symbol('%1'), hy.models.Symbol('%2')]
-		(setv has_pargs (> (len pargs ) 0))
-		(setv has_itarg (> (len itargs) 0))
-		;
-		(when (and has_itarg has_pargs) (raise (SyntaxError "cannot mix 'it' and '%n' syntax in fm macro"))) ; both "it" and "%1"... are found
-		(when has_itarg (return `(fn [it] ~expr)))	; only "it" are found
-		(if has_pargs
-			(setv maxN (int (get pargs -1 -1)))		; only "%1"... args are found
-			(setv maxN 0))							; no args are found
-		(setv inputs (lfor n (thru 1 maxN) (hy.models.Symbol f"%{n}")))
-		(return `(fn [~@inputs] ~expr)))
-
-	(defmacro f> [lambda_def #* args]
-		(return `((hy.R.fptk.fm ~lambda_def) ~@args)))
-
-	(defmacro mapm [one_shot_fm #* args]
-		(return `(map (hy.R.fptk.fm ~one_shot_fm) ~@args)))
-
-	(defmacro lmapm [one_shot_fm #* args]
-		(return `(list (map (hy.R.fptk.fm ~one_shot_fm) ~@args))))
-
-	(defmacro filterm [one_shot_fm iterable]
-		(return `(filter (hy.R.fptk.fm ~one_shot_fm) ~iterable)))
-
-	(defmacro lfilterm [one_shot_fm iterable]
-		(return `(list (filter (hy.R.fptk.fm ~one_shot_fm) ~iterable))))
-
-; _____________________________________________________________________________/ }}}1
+; Lens:
 ; lns ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	(defmacro lns [#* macro_args]
@@ -438,9 +529,6 @@
 				  ; .attr -> attr
 				  (_isDottedAttr &arg)
 				  (setv (get args &i) (_extractDottedAttr &arg))
-				  ; (-1) -> [(- 1)]
-				  (_isNegIntegerExpr &arg)
-				  (setv (get args &i) [&arg])
 				  ; (mth> f 1) -> (call "f" 1)
 				  (_isExprWithHeadSymbol &arg "mth>")
 				  (setv (get args &i) `(call ~(str (_extractDottedAttr (get &arg 1)))
@@ -491,6 +579,7 @@
 	   `(&= ~variable (hy.R.fptk.lns ~@lenses_args)))
 
 ; _____________________________________________________________________________/ }}}1
+; Tests:
 ; assertm, gives_error_typeQ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	(defmacro assertm [op arg1 arg2]
@@ -546,5 +635,6 @@
 					 (= ~error_type (type e)))))
 
 ; _____________________________________________________________________________/ }}}1
+
 
 

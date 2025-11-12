@@ -7,23 +7,38 @@ fptk docs:
 4. [Result type](https://github.com/rmnavr/fptk/blob/main/docs/resultM.md)
 ---
 
-<!-- Intro ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+<!-- Overview ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 # fptk macros
 
-This doc will cover following macros:
+Anonymous functions recognizing `it` or `%1`, `%2`, ... as arguments:
+* `fm`
+* `(l)mapm`
+* `(l)filterm`
+
+Getters and threading macros:
+> fptk macros consistently use `.attr` for attribute access and `(.method)` for method calls.
+> 
+> This is in contrast to hyrule's macro `->` where both `.smth` and `(.smth)` are seen as method calls.
+* `=>` and `=>>` — macros combining hy `.` and `->` (or `->>`) macros
+* `p:` — pipe of partials
+* `getattrm` — macros like `getattr` but with special syntax
+* `(l)pluckm`
+
+Haskell-style typing annotations:
 * `f::` — macro for annotating callables
 * `def::` — macros for annotating functions via haskell-style signature
-* `fm`, `f>`, `(l)mapm`, `(l)filterm` — anonymous functions with special syntax for arguments
-* `p:` — pipe of partials
-* `(l)pluckm` — getter for collection of collections
-* `getattrm` — same as getattr, but with small syntax tweak
-* `assertm`, `gives_error_typeQ` — macros for testing code
+
+Testing:
+* `assertm`
+* `gives_error_typeQ`
 
 There are also lens related macros described in separate doc
 ([Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)).
 
 <!-- __________________________________________________________________________/ }}}1 -->
+
+# Typing
 <!-- f:: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 ## `f::` — macros for annotating Callables
@@ -32,11 +47,9 @@ Expanded into `Callable` annotation (with args and return types).
 One possible usage might be defining interfaces (if functions are used in that role).
 
 ```hy
-(setv ICaller (f:: int -> int => (of Tuple int str)))
-; equivalent py-code: ICaller = Callable[[int, int], Tuple[int, str]]
+(setv ICaller (f:: int -> int -> float => (of Tuple int str)))
+; equivalent py-code: ICaller = Callable[[int, int, float], Tuple[int, str]]
 ```
-
-> Inside `f::` macro, symbols `->` (and `=>`) are recognized just as arguments separators rather than hyrule's macro `->`
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- def:: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
@@ -95,6 +108,8 @@ Examples:
 ```
 
 <!-- __________________________________________________________________________/ }}}1 -->
+
+# Lambdas
 <!-- fm, f>, (l)mapm, (l)filterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 ## `fm`, `f>`, `(l)mapm`, `(l)filterm` — macros for writing lambdas
@@ -106,7 +121,6 @@ Those macros all have same similar arguments recognition:
 
 Macros description:
 - `fm` defines lambda
-- `f>` defines and immediately applicates lambda
 - `mapm` and `lmapm` are both `map` that require lambda-syntax
 - `filterm` and `lfilterm` are both `filter` that require lambda-syntax
 
@@ -114,19 +128,85 @@ Macros description:
 (fm (* it 2))               ; -> (fn [it] (* it 2))
 (fm (* it %1 2))            ; -> will give error (can't mix "it" with "%1")
 
-(f> (* %1 %2 10) 3 4)       ; -> ((fn [%1 %2] (* %1 %2 10) 3 4)
+; Just as original fn, fm will also work correctly with non-() forms:
+(fm abs)                    ; -> (fn [] abs)
+(fm [%1 (str %2)])          ; -> (fn [%1 %2] [%1 (str %2)])
+
+; Just as original fn, fm will also work correctly with multiforms:
+(fm (print it) it)          ; -> (fn [it] (print it) it)
+```
+
+Macros `(l)mapm` and `(l)filterm` can only contain one form in place of function:
+```hy
 (mapm (pow %1 2) [1 2 3])   ; -> (map (fn [%1] (pow %1 2)) [1 2 3])
 (lmapm (pow %1 2) [1 2 3])  ; -> (list (map (fn [%1] (pow %1 2)) [1 2 3]))
 (filterm (> it 1) [1 2 3])  ; -> (filter (fn [it] (> it 1)) [1 2 3])
 (lfilterm (> %1 1) [1 2 3]) ; -> (list (filter (fn [%1] (> %1 1)) [1 2 3]))
 
-; notice that fm  generate 0-arg lambdas if no arg ("it" or "%1" and such) is provided,
-; thus making such use of (l)mapm and (l)filterm incorrect:
-(lmapm abs [1 2 3])         ; -> (list (map (fn [] abs) [1 2 3]))
+; this will not work:
+(mapm (print it) it [1 2 3])
+; use this instead:
+(mapm (do (print it) it) [1 2 3])
 
-; Just as original fn, fm will also work correctly with non-() forms:
-(fm abs)                    ; -> (fn [] abs)
-(fm [%1 (str %2)])          ; -> (fn [%1 %2] [%1 (str %2)])
+; notice that fm generates 0-arg lambdas if no arg ("it" or "%1" and such) is provided,
+; thus making following use of (l)mapm and (l)filterm formally correct, but useless:
+(mapm abs [1 2 3])          ; -> (map (fn [] abs) [1 2 3])
+; in such cases use basic map instead:
+(map abs [1 2 3])
+```
+
+<!-- __________________________________________________________________________/ }}}1 -->
+
+# Threaders and getters
+
+Macros in this group consistently use syntax `.attr` for attribute access
+and `(.method)` for method calls.
+
+<!-- => and =>> ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+
+## `=>` and `=>>` — buffed threaders
+
+Macro `=>` (`=>>`) combines functions of `.` and `->` (`=>>`) macros by:
+* recognizing [NEW] syntax elements ("new" with regard to basic syntax of `->`/`->>`)
+* [MOD]ifying .attr/.mth syntax of `->` (`->>`) 
+
+```hy
+; SLOT is position where arg will be placed
+
+(=>  obj
+     -2                   ; [NEW] integer | expanded to: (get SLOT -2)
+     "key"                ; [NEW] string  | expanded to: (get SLOT "key")
+     [0 "key"]            ; [NEW] list    | expanded to: (get SLOT 0 "key")
+     .attr                ; [MOD]         | expanded to: SLOT.attr
+     (.mth a1 a2 ...)     ;               | expanded to: (.mth SLOT a1 a2 ...)
+     function             ;               | expanded to: (function SLOT)
+     (function a1 a2 ...) ;               | expanded to: (function SLOT a1 a2 ...)
+     ((fn [x] (* x 2)))   ;               | expanded to: ((fn [x] (* x 2)) SLOT)
+     )
+
+(=>> obj
+     -2                   ; same as for =>
+     "key"                ; same as for =>
+     [0 "key"]            ; same as for =>
+     .attr                ; same as for =>
+     (.mth a1 a2 ...)     ; [MOD] | expanded to: (.mth SLOT a1 a2 ...) | see note below
+     function             ;       | expanded to: (function SLOT)
+     (function a1 a2)     ;       | expanded to: (function a1 a2 SLOT)
+     ((fn [x] (* x 2)))   ;       | expanded to: ((fn [x] (* x 2)) SLOT)
+     )
+```
+
+Notice that `=>>` has modified behaviour (compared to `->>`) when it sees `(.mth a1 a2 ...)`:
+```hy
+(->> obj (.mth a1 a2))    ; expanded to: (a1.mth a2 obj) 
+; this doesn't seem very usefull;
+; moreover, following syntax achieves the same result:
+(->> obj (a1.mth a2))     ; expanded to: (a1.mth a2 obj)
+
+; for this reason =>> works differently:
+(=>> obj (.mth a1 a2))    ; expanded to: (obj.mth a1 a2)
+; you also retain original usage if needed:
+(=>> obj (a1.mth a2))     ; expanded to: (a1.mth a2 ojb)
 ```
 
 <!-- __________________________________________________________________________/ }}}1 -->
@@ -134,16 +214,30 @@ Macros description:
 
 ## `p:` — pipe of partials
 
-Works similar to hyrule `->` macro, but accepts only callables and does not need to be called immediately.
+`p:` has syntax similar to `=>>` macro, but does not need to be called immediately.
 Internally piping is implemented via partial application with [funcy.partial](https://funcy.readthedocs.io/en/stable/funcs.html#partial).
 
-Example:
 ```hy
+; SLOT is position where arg will be placed
+
+(p: -2                   ; integer | equiv to: (get SLOT -2)
+    "key"                ; string  | equiv to: (get SLOT "key")
+    [0 "key"]            ; list    | equiv to: (get SLOT 0 "key")
+    .attr                ;         | equiv to: SLOT.attr
+    (.mth a1 a2 ...)     ;         | equiv to: (SLOT.mth a1 a2 ...)
+    function             ;         | equiv to: (function SLOT)
+    (function a1 a2)     ;         | equiv to: (function a1 a2 SLOT)
+    ((fn [x] (* x 2)))   ;         | equiv to: ((fn [x] (* x 2)) SLOT)
+    )
+```
+
+Working example:
+```hy
+(import operator)
 (setv x 4)
                                      ; after application to x will produce at each step:
 (setv pipe (p: operator.neg          ; -4
-               (fn [x] x)            ; -4     // fn can be used with p:
-               (fm it)               ; -4     // fm-macro can be used with p:
+               ((fm it))             ; -4     // fm-macro can be used with p:
                (abs)                 ; 4
                (operator.add 4)      ; 8
                str                   ; '8'
@@ -154,32 +248,27 @@ Example:
 (print (pipe x))                     ; returns <class 'bool'>
 ```
 
-Notice that unlike in `->` macro, `.attr` is seen as attribute access rather than method call.
-This is also in accordance with `.attr` usage inside another fptk macros.
-
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- (l)pluckm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 ## `pluckm` and `lpluckm` — unification of lpluck/lpluck_attr funcs from funcy libs
 
 `pluckm` extends [funcy.pluck](https://funcy.readthedocs.io/en/stable/colls.html#pluck)
-to be able to recognize `(pluckm .attr)` syntax for accessing attributes.
+to be able to recognize `(pluckm .attr xs)` syntax for accessing attributes.
 
 `lpluckm` is just calling list on top of `pluckm`.
 
-Reason for adding such syntax is the following:
-* In hy original syntax `.attr` is the way to access attribute, not `"attr"` (how lpluck_attr does it)
-* Attribute's names are rarely passed as parameter (it may be considered anti-pattern)
-
 ```hy
 ; .attr syntax expands to lpluck_attr:
-(pluckm .attr cs)   ; (pluck_attr "attr" cs)
-; [!] notice that .attr syntax can't pass attr as argument,
-;     use (lpluck_attr "attr" cs) instead
+(pluckm .attr xs)   ; (pluck_attr "attr" xs)
 
 ; everything else is expanded to lpluck:
 (pluckm (+ i 3) xs) ; (pluck (+ i 3) xs)
 (pluckm "key" xs)   ; (pluck "key" xs)
+
+; to pass attr as string, use basic pluck_attr:
+(pluck_attr "attr" cs) 
+
 ```
 
 <!-- __________________________________________________________________________/ }}}1 -->
@@ -187,8 +276,7 @@ Reason for adding such syntax is the following:
 
 ## `getattrm`
 
-The only thing this macros does is allowing `.attr` syntax for getattr
-(to be more consistent with fptk syntax):
+The only thing this macros does is allowing `.attr` syntax for getattr:
 
 ```hy
 (getattrm Point "x")     ; -> (getattr Point "x")
@@ -196,6 +284,8 @@ The only thing this macros does is allowing `.attr` syntax for getattr
 ```
 
 <!-- __________________________________________________________________________/ }}}1 -->
+
+# Testing
 <!-- assertm, gives_error_typeQ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 ## `assertm`

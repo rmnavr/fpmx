@@ -1,4 +1,4 @@
 
-    (require fptk [f> assertm])
+    (require fptk [lmapm assertm])
 
-    (assertm = (f> (+ 3 it) 3) 6)
+    (assertm = (lmapm (+ 3 it) [1 2]) [4 5])

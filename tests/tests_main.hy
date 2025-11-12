@@ -220,7 +220,7 @@
     ; (assertm = (dt_print "Timer +2") None)
 
 ; _____________________________________________________________________________/ }}}1
-; flow.hy       | MACROS: p: fm f> mapm lmapm filter lfilterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; flow.hy       | MACROS: fm mapm lmapm filter lfilterm , => =>> p: ‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (assertm = (identity 30) 30)
 
@@ -243,26 +243,65 @@
 
 ; ■ p: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-    (assertm = (lmap (p: (fn [x] x)           ; fn
-                         (fm it)              ; fm macro
-                         (abs)                ; function
-                         (operator.add 4)     ; function
-                         str                  ; function
-                         (.__contains__ "2")  ; method access
-                         .__class__)          ; attribute access
+    (assertm = ((p: 0 1)   [[1 2] [3 4]]) 2)
+    (assertm = ((p: [0 1]) [[1 2] [3 4]]) 2)
+    (assertm = ((p: 0 1 (.__add__ 4)) [[1 2] [3 4]]) 6)
+
+    (assertm = (lmap (p:  ((fn [x] x))         ; fn
+                          ((fm it))            ; fm macro
+                          (abs)                ; function
+                          (operator.add 4)     ; function
+                          str                  ; function
+                          (.__contains__ "2")  ; method access
+                          .__class__)          ; attribute access
                       [1 2 3])
                (lmap type [True True True]))
 
 ; ________________________________________________________________________/ }}}2
-; ■ fm, f>, mapm, lmapm, filterm, lfilterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
+; ■ => =>> ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-    (assertm = ((fm (+ %1 %3 1)) 1 2 3) 5)
-    (assertm = ((fm (+ it 1)) 3) 4)
+    (assertm eq
+        (=> [[1 2] [3 4]]
+            [0 1]               ; get           ; in -> would be error
+            .__class__          ; attr          ; in -> would be (.__class__ HERE) 
+            (.__add__ 3 4)      ; method
+            abs                 ; f
+            (abs)               ; (f)
+            (+ 3)               ; (f arg1)
+            operator.neg        ; lib.f
+            (operator.neg)      ; (lib.f)
+            (operator.add 3)
+            ((fn [x] (+ x 3))))
+        16)
 
-    (assertm = (as-> 4 it (f> (* it it) it) (neg it)) -16)
+    (assertm eq (=> (dict :a 1 :b 2) "a") 1)    ; string access
+    (assertm eq (=> [[1 2]] 0 0) 1)             ; integer access
+    (assertm eq (=> (dict :a [0 1] :b 2) ["a" 0]) 0)
+    (assertm eq (=> [[1 2]] [(slice None None) 0 0]) 1)
 
-    (assertm = (f> (+ %1 %3 1) 1 2 3) 5)
-    (assertm = (f> (+ it 1) 3) 4)
+    (assertm eq
+        (=>> [[1 2] [3 4]]
+             [0 1]               ; get           ; in -> would be error
+             .__class__          ; attr          ; in -> would be (.__class__ HERE) 
+             (.__add__ 3 4)      ; method
+             abs                 ; f
+             (abs)               ; (f)
+             (+ 3)               ; (f arg1)
+             operator.neg        ; lib.f
+             (operator.neg)      ; (lib.f)
+             (operator.add 3)
+             ((fn [x] (+ x 3))))
+        16)
+    (assertm eq (=>> (dict :a 1 :b 2) "a") 1)    ; string access
+    (assertm eq (=>> [[1 2]] 0 0) 1)             ; integer access
+    (assertm eq (=>> (dict :a [0 1] :b 2) ["a" 0]) 0)
+    (assertm eq (=>> [[1 2]] [(slice None None) 0 0]) 1)
+
+; ________________________________________________________________________/ }}}2
+; ■ fm, mapm, lmapm, filterm, lfilterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
+
+    (assertm = ((fm ["nothing" %1] (+ %1 %3 1)) 1 2 3) 5)
+    (assertm = ((fm ["nothing" it] (+ it 1)) 3) 4)
 
     (assertm = (list (mapm (+ it 1) [1 2 3])) [2 3 4])
     (assertm = (lmapm (+ %1 1) [1 2 3]) [2 3 4])
@@ -377,7 +416,7 @@
 
     ; lns
 
-    (assertm = (  lns   1   -2 (- 7)  "key"   idx)
+    (assertm = (  lns   1   -2   -7   "key"   idx)
                (. lens [1] [-2] [-7] ["key"] [idx]))
 
     (assertm = (  lns   .attr)

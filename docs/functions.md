@@ -55,6 +55,8 @@ MACR: hyrule          | as->
 MACR: hyrule          | doto                     ; mutating
 FROM: funcy           | partial                  ; applicator
 FROM: funcy           | rpartial                 ; applicator
+MACR: fptk._macros    | =>                       ; unification of dot-macro and ->
+MACR: fptk._macros    | =>>                      ; unification of dot-macro and ->>
 MACR: fptk._macros    | p:                       ; aplicator, pipe of partials
 FROM: funcy           | compose                  :: compose(f1, f2, ..., fn)  ; = f1(f2(..fn(***))) ; applicator
 FROM: funcy           | rcompose                 :: rcompose(f1, f2, ..., fn)  ; = fn(..(f2(f1(***)))) ; applicator
@@ -64,7 +66,6 @@ DEFN: fptk            | flip                     :: flip(f, a, b) = f(b, a)  ; c
 
 === FP: threading ===
 MACR: fptk._macros    | fm                       :: (fm (* it 3))  ; anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'
-MACR: fptk._macros    | f>                       :: (f> (* %1 %2) 3 4)  ; calculate anonymous function (with fm-syntax)
 INFO: py              | zip /base/               :: zip(*iterables) -> zip object
 DEFN: fptk            | lzip                     :: lzip(*iterables) -> List  ; literally just list(zip(*iterables))
 INFO: py              | map /base/               :: map(func, *iterables) -> map object

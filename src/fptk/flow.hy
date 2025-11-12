@@ -10,10 +10,8 @@
                        nested apply_n
                      ]
             :macros  [ case branch unless lif as-> -> ->> doto do_n list_n
-                       p:                       ; fptk macros
-                       fm f>                    ; fptk macros
-                       mapm lmapm               ; fptk macros
-                       filterm lfilterm         ; fptk macros
+                       => =>> p:                        ; fptk macros
+                       fm mapm lmapm filterm lfilterm   ; fptk macros
                      ])
 
     (require hyrule [comment])
@@ -25,7 +23,7 @@
     (comment "hy | base | if   | (if check true false)          | ")
     (comment "hy | base | cond | (cond check1 do1 ... true doT) | ")
 
-    (require hyrule [case])   
+    (require hyrule [case])
     (require hyrule [branch])
     (require hyrule [unless])
     (require hyrule [lif])
@@ -43,6 +41,9 @@
 
     (import  funcy  [partial])      #_ "| applicator"
     (import  funcy  [rpartial])     #_ "| applicator"
+
+    (require fptk._macros [=>])     #_ "| unification of dot-macro and ->"
+    (require fptk._macros [=>>])    #_ "| unification of dot-macro and ->>"
     (require fptk._macros [p:])     #_ "| aplicator, pipe of partials"
 
     (import  funcy  [compose])      #_ "compose(f1, f2, ..., fn) | = f1(f2(..fn(***))) ; applicator"
@@ -65,10 +66,9 @@
 ; [GROUP] FP: threading ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (require fptk._macros [fm])       #_ "(fm (* it 3)) | anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'"
-    (require fptk._macros [f>])       #_ "(f> (* %1 %2) 3 4) | calculate anonymous function (with fm-syntax)"
 
     (comment "py | base | zip | zip(*iterables) -> zip object |")
-    
+
     #_ "lzip(*iterables) -> List | literally just list(zip(*iterables))"
     (defn lzip [#* iterables] (list (zip #* iterables)))
 

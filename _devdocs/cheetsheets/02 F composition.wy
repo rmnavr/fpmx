@@ -1,46 +1,68 @@
 
     import fptk * , require fptk *
 
-    ; Overview of main combinators that should kind of combine good between themselves:
-    ; • ->/->> 
-    ; • lmap
-    ; • p: 
-    ; • partial, flip, pflip
-    ; • f>
+; Overview ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    ; INFO:
-    ; flip and partial will only work with ->>
+    .
+    -> ->>
+    p:
+    lmap
 
-    defclass [dataclass] Point []
-        #^ float x #^ float y
-        defn getX [self] : return self.x
+    func                ; with args
+    partial pflip flip  
+    fn fm f>
 
-    ; .getX in ->/->> is always a method call, not arg-get
-    ->  3 (Point 4)  .getX  print
-    ->> 4 (Point 3) (.getX) print
-    ->> 3 (mul 4) (flip div 7) print
+    . obj [1] "key" attr (.method)
+    get cut slice
+    getattr getattrm
 
-    ; anonymous functions:
-    ->> 3 ((fn [it] (mul it 3))) print
-    ->> 3 ((fm (mul it 3))) print
-    ->> 3 (f> (mul it 3)) print
+; _____________________________________________________________________________/ }}}1
 
-    ; lmap/partial:
-    ->> [3 4 5] : lmap  (partial mul 3) :: print
-    ->> [3 4 5] : lmapm (mul it 3)      :: print
+    obj.attr
+    (obj.meth arg1)
+    (.meth obj arg1)
+    (. obj meth arg1)
+    . obj [1] ["key"] attr (meth arg1)
 
-    ; pipe of partials:
-    setv pipe
-        (p: neg
-            (fn [x] x)
-            (fm it)
-            (abs)
-            (plus 4)
-            str
-            (.__contains__ "8") ; method call
-            .__class__)         ; attr access
+    ->  obj (get #_ slot 0)
+            (flip nth #_ slot 0)
+            .attr
+            (getattr #_ slot "attr")
+            (getattrm #_ slot .attr)
+            (.meth #_ slot arg1)
+            func
+            (div #_ slot 3)
+            : (partial div 3) #_ slot
+            : (partial lmap plus) #_ slot
+            : (p> abs neg) #_ slot
+            : (fm (+ %1 %2 %3)) #_ slot arg2 arg3
+            (->  #_ slot abs)           ; essentially achieves nothing
+            (->> #_ slot abs)           ; yes, will work as ->>, which is good
 
-    ->> [3 4 5] : lmap pipe         :: print
-    ->> [3 4 5] : lmapm (pipe it)   :: print
-    ->> [3 4 5] : lmap (p: abs neg) :: print
+    ->> obj : (fm (get it 0))           ; get is macro, can't use flip with it
+            (nth 0 #_ slot)
+            .attr
+            (flip getattr "attr" #_ slot)
+            : (fm (getattrm it .attr))  ; getattrm is macro, can't use flip with it
+            (.meth arg1 #_ slot)        ; same as (arg1.meth #_ slot), so no use
+            func
+            (div 3 #_ slot)
+            (partial div 3 #_ slot)
+            (lmap plus #_ slot)
+            (p> abs neg) #_ slot
+            (fm (+ %1 %2 %3)) arg1 arg2 #_ slot
+            (->  xs #_ slot)            ; doesn't seem usable
+            (->> xs #_ slot)            ; doesn't seem usable
+
+    p:      (nth 0 #_ slot)                 
+            (flip getattr "attr" #_ slot)   
+            .attr (.meth #_ slot arg1)
+            func (func arg1 #_ slot) (flip func arg2 #_ slot)
+            (lmap abs #_ slot)
+            ((p> abs neg) #_ slot)
+            (fn [x y] (sconcat x "2")) (fm (sconcat it "3")) (f> (sconcat it "3")) 
+
+    ;TODO
+    =>
+    =>>
 
