@@ -14,10 +14,6 @@
 	- lbisect_by: option to include/exclude first found; negation in f in unclear
 	- strip/lstrip/rstrip should also pass kwargs and such
 
-	macros:
-	- fm: is nesting working? 
-	- fm: is combining with as-> working?
-
 	• 1-based-indexing:
 		- with dicts
 		- range, lrange, range_, lrange_
@@ -30,10 +26,12 @@
 // New functions ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	apl:
-		+ funcy.interpose (str_join is for strings), inteleave (x1y2z3), interpose (x-y-z) // flatten(zip(..)) is enough?
+		+ funcy.interpose (str_join is for strings)
+		  inteleave (x1y2z3)
+		  interpose (x-y-z)
 		+ enlengthen_list
 		+ append, prepend, insert
-		+ [1 2 3] [a b c] -> [1 2 3 a] [b c]
+		+ [1 2 3] [a b c] -> [1 2 3 a] [b c] ; to_left, to_right
 	    + (flatten xs :level 3)
 		+ dedup
 		+ count_occurrences -> count_by, count_reps, count_elem

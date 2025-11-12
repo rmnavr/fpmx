@@ -420,7 +420,7 @@
                     (= (type &arg) hy.models.Expression) ; should be checked almost last, because _isDotted... are Exprs too
                     (do (setv nm (get &arg 0))
                         (setv ag (cut &arg 1 None))
-                        (setv outp `(~nm ~outp ~@ag)))  ; THIS IS THE ONLY PLACE WHERE IT DIFFERS FROM => LOL
+                        (setv outp `(~nm ~@ag ~outp)))  ; THIS IS THE ONLY PLACE WHERE IT DIFFERS FROM => LOL
                     ; normally never executed:
                     True 
 					(setv outp `(~&arg ~outp))))

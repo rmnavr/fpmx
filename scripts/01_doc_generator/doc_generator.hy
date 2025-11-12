@@ -607,3 +607,6 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
     (setv _short_table (sconcat #* (lmap generate_short_table1 $SOURCES)))
     (write_short_doc _short_table $OUTPUT_SHORT :printQ False)
 
+    ; <span title="Your tooltip message">[`Hover over me!`](#riba)</span>
+
+

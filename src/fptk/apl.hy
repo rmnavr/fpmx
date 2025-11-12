@@ -205,15 +205,15 @@
           keep_border =True  will keep elements with pred(elem)=True
           merge_border=True  will cut only at first of a sequence of pred(elem)=True elems 
           #
-          in the example below oddQ is function that gives True for odd numbers,
+          in the example below evenQ is function that gives True for odd numbers,
           that is cuts will happen at elems=1
           #
                                                  #  keep_b merge_b
                                                  #  ------ -------
-          lmulticut_by(oddQ, [1, 0, 1, 1, 0, 0, 1], True , True ) # -> [[1, 0], [1, 1, 0, 0], [1]]
-          lmulticut_by(oddQ, [1, 0, 1, 1, 0, 0, 1], True , False) # -> [[1, 0], [1], [1, 0, 0], [1]]
-          lmulticut_by(oddQ, [1, 0, 1, 1, 0, 0, 1], False, True ) # -> [[0], [0, 0]]
-          lmulticut_by(oddQ, [1, 0, 1, 1, 0, 0, 1], False, False) # -> [[0], [], [0, 0], []]
+          lmulticut_by(evenQ, [0, 1, 0, 0, 1, 1, 0], True , True ) # -> [[0, 1], [0, 0, 1, 1], [0]]
+          lmulticut_by(evenQ, [0, 1, 0, 0, 1, 1, 0], True , False) # -> [[0, 1], [0], [0, 1, 1], [0]]
+          lmulticut_by(evenQ, [0, 1, 0, 0, 1, 1, 0], False, True ) # -> [[1], [1, 1]]
+          lmulticut_by(evenQ, [0, 1, 0, 0, 1, 1, 0], False, False) # -> [[1], [], [1, 1], []]
         "
         (when (= (len seq) 0) (return []))
         (setv _newLists [])
