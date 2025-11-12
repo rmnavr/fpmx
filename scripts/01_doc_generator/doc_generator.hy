@@ -458,7 +458,7 @@
         (when printQ (print _outp_all)))
 
 ; _____________________________________________________________________________/ }}}1
-; MD FILE HEADER_LONG STR ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; MD FILE HEADER_LONG STR ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (setv $HEADER_LONG
 "
@@ -505,6 +505,29 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
 ; _____________________________________________________________________________/ }}}1
 
 ; SHORT TABLE:
+; helpers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (defn #^ str
+        grave_wrap
+        [ #^ str text
+        ]
+        f"`{text}`")
+
+    (defn #^ (of List FEntity)
+        only_funcs_fes
+        [ #^ (of List FEntity) fes
+        ]
+        (reject (fn [%fe] (eq_any %fe.kind [FEntityKind.NON_IMPORT_INFO FEntityKind.REQUIRE_MACRO]))
+                fes))
+
+    (defn #^ (of List FEntity)
+        only_macro_fes
+        [ #^ (of List FEntity) fes
+        ]
+        (filter (fn [%fe] (eq %fe.kind FEntityKind.REQUIRE_MACRO))
+                fes))
+
+; _____________________________________________________________________________/ }}}1
 ; printers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (defn write_short_doc
@@ -529,9 +552,8 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
         ;
         (setv _groups_of_enames  ; (of Tuple GroupName ListOfFuncsNames ListOfMacroNames)
             (lmapm [ %1
-                     (lpluckm .name (only_funcs_fes %2))
-                     (lpluckm .name (only_macro_fes %2))
-                     ]
+                     (lmap grave_wrap (lpluckm .name (only_funcs_fes %2)))
+                     (lmap grave_wrap (lpluckm .name (only_macro_fes %2))) ]
                    _groups_names
                    _groups_of_fes)) 
         ;
@@ -544,22 +566,11 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
         ;
         (sconcat #* _lines))
 
-    (defn #^ (of List FEntity)
-        only_funcs_fes
-        [ #^ (of List FEntity) fes
-        ]
-        (reject (fn [%fe] (eq_any %fe.kind [FEntityKind.NON_IMPORT_INFO FEntityKind.REQUIRE_MACRO]))
-                fes))
-
-    (defn #^ (of List FEntity)
-        only_macro_fes
-        [ #^ (of List FEntity) fes
-        ]
-        (filter (fn [%fe] (eq %fe.kind FEntityKind.REQUIRE_MACRO))
-                fes))
-
 
 ; _____________________________________________________________________________/ }}}1
+
+
+
 ; MD FILE HEADER STR ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (setv $HEADER_SHORT
@@ -594,5 +605,5 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
     (write_long_doc _long_table $OUTPUT_LONG :printQ False)
 
     (setv _short_table (sconcat #* (lmap generate_short_table1 $SOURCES)))
-    (write_short_doc _short_table $OUTPUT_SHORT :printQ True)
+    (write_short_doc _short_table $OUTPUT_SHORT :printQ False)
 
