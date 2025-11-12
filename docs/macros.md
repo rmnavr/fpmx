@@ -115,7 +115,7 @@ Examples:
 ## `fm`, `f>`, `(l)mapm`, `(l)filterm` — macros for writing lambdas
 
 Those macros all have same similar arguments recognition:
-- eather `it` as a solo-argument
+- either `it` as a solo-argument
 - or `%i` for multi-arguments (from `%1` to `%9`)
 - those 2 approaches cannot be mixed
 
@@ -134,6 +134,11 @@ Macros description:
 
 ; Just as original fn, fm will also work correctly with multiforms:
 (fm (print it) it)          ; -> (fn [it] (print it) it)
+
+; fm will be able to find "it" or "%n" in formatted strings:
+(fm f"value = {it}")        ; -> (fn [it] f"value = {it}")
+; fm will NOT be able to find "it" or "%n" in python code:
+(fm (py "print(it)"))       ; -> (fn [] (print it))
 ```
 
 Macros `(l)mapm` and `(l)filterm` can only contain one form in place of function:
@@ -144,9 +149,9 @@ Macros `(l)mapm` and `(l)filterm` can only contain one form in place of function
 (lfilterm (> %1 1) [1 2 3]) ; -> (list (filter (fn [%1] (> %1 1)) [1 2 3]))
 
 ; this will not work:
-(mapm (print it) it [1 2 3])
-; use this instead:
-(mapm (do (print it) it) [1 2 3])
+(mapm (print it) it [1 2 3])        ; Syntax error
+; use "do" instead:
+(mapm (do (print it) it) [1 2 3])   ; (map (fn [it] (do (print it) (it))) [1 2 3])
 
 ; notice that fm generates 0-arg lambdas if no arg ("it" or "%1" and such) is provided,
 ; thus making following use of (l)mapm and (l)filterm formally correct, but useless:

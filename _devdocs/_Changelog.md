@@ -1,5 +1,7 @@
 
-# Version 0.5.0 (in the process)
+# Version 0.4.2 (11 Nov 2025)
+- upd lrange_ to also work on floats
+- added `=>` and `=>>` macros, upd `p:` macro, removed `f>` macro
 - added def:: macro
 
 # Version 0.4.0 (20 Oct 2025)

@@ -7,6 +7,8 @@
                        exp log ln log10
                        evenQ oddQ zeroQ negativeQ positiveQ
                        ;
+                       range_ lrange_
+                       ;
                        pi sin cos tan degrees radians
                        acos asin atan atan2
                        ;
@@ -86,6 +88,39 @@
 
     #_ "positiveQ(x) | checks directly via (> x 0)"
     (defn positiveQ [x] "checks literally if x > 0" (> x 0))
+
+; _____________________________________________________________________________/ }}}1
+; [GROUP] Math and logic: Ranges ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (import hyrule [thru :as range_]) #_ "range_(start, end=None, step=1) -> List | same as range, but with 1-based index"
+
+    #_ "lrange_(start, end, step=1) -> List | range including both ends when possible, also works on fractionals"
+    (defn lrange_ [start end [step 1]]
+        ;; integers
+        (when (and (= (type start) int)
+                   (= (type end) int)
+                   (= (type step) int))
+              (return (list (range_ start end step))))
+        ;;
+        (when (= step 0) (raise (ZeroDivisionError "step must be != 0")))
+        (setv n (round (py "(end-start)/step + 1")))
+        ;; floats for start<end
+        (when (< start end)
+              (setv _end (+ end (abs (/ start 1E13))))
+              (return
+                  (lfor &i (range_ 0 n)
+                        :setv candidate (+ start (* &i step))
+                        :if   (<= candidate _end)
+                        candidate)))
+        ;; floats for start=end
+        (when (= start end) (return [start]))
+        ;; floats for start>end
+        (setv _end (- end (abs (/ start 1E13))))
+        (return
+            (lfor &i (range_ 0 n) ;; here n<0
+                  :setv candidate (+ start (* &i step))
+                  :if   (>= candidate _end)
+                  candidate)))
 
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] Math and logic: Trigonometry ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1

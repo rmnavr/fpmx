@@ -39,6 +39,8 @@
             (->  #_ slot abs)           ; essentially achieves nothing
             (->> #_ slot abs)           ; yes, will work as ->>, which is good
 
+            ; for unpacking use: ((fm (plus #* it))
+
     ->> obj : (fm (get it 0))           ; get is macro, can't use flip with it
             (nth 0 #_ slot)
             .attr

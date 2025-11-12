@@ -163,8 +163,6 @@ DEFN: fptk            | take                     :: take(n, seq) -> List  ; take
 DEFN: fptk            | pick                     :: pick(ns, seq) -> List  ; throws error if some of ns doesn't exist; ns can be list of ints or dict keys
 
 === Getters: one based index ===
-FROM: hyrule          | range_ (<-thru)          :: range_(start, end=None, step=1) -> List  ; same as range, but with 1-based index
-DEFN: fptk            | lrange_                  :: lrange_(start, end=None, step=1) -> List  ; list version of range_
 DEFN: fptk            | get_                     :: get_(seq, *ns) -> elem  ; same as get, but with 1-based index (will throw error for n=0)
 DEFN: fptk            | nth_                     :: nth_(n, seq) -> Optional elem  ; same as nth, but with 1-based index; will return None for n=0
 DEFN: fptk            | slice_                   :: slice_(start, end, step=None)  ; similar to slice, but with 1-based index; will throw error for start=0 or end=0
@@ -244,6 +242,10 @@ FROM: funcy           | oddQ (<-odd)             :: oddQ(x)
 DEFN: fptk            | zeroQ                    :: zeroQ(x)  ; checks directly via (= x 0)
 DEFN: fptk            | negativeQ                :: negativeQ(x)  ; checks directly via (< x 0)
 DEFN: fptk            | positiveQ                :: positiveQ(x)  ; checks directly via (> x 0)
+
+=== Math and logic: Ranges ===
+FROM: hyrule          | range_ (<-thru)          :: range_(start, end=None, step=1) -> List  ; same as range, but with 1-based index
+DEFN: fptk            | lrange_                  :: lrange_(start, end, step=1) -> List  ; range including both ends when possible, also works on fractionals
 
 === Math and logic: Trigonometry ===
 FROM: math            | pi                       ; literally just float pi=3.14...

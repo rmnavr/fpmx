@@ -7,7 +7,7 @@
                        drop take pick
                        pluck lpluck pluck_attr lpluck_attr
                        ;
-                       range_ lrange_ get_ nth_ slice_ cut_
+                       get_ nth_ slice_ cut_
                      ]
             :macros  [ ncut
                        pluckm    ; fptk macros
@@ -87,11 +87,6 @@
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] Getters: one based index ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (import hyrule [thru :as range_])      #_ "range_(start, end=None, step=1) -> List | same as range, but with 1-based index"
-
-    #_ "lrange_(start, end=None, step=1) -> List | list version of range_"
-    (defn lrange_ [start [end None] [step 1]]
-        (list (range_ start end step)))
 
     #_ "get_(seq, *ns) -> elem | same as get, but with 1-based index (will throw error for n=0)"
     (defn get_ [seq #* ns]

@@ -1,7 +1,7 @@
 
 ; This is local version of github.com/rmnavr/fptk lib.
 ; It's purpose is to have stable fptk inside other projects until fptk reaches stable version.
-; This file was generated from local git version: 0.4.2
+; This file was generated from local git version: 0.4.3.dev1
 
 ; [F] flow ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
@@ -1797,8 +1797,6 @@
 					 (= ~error_type (type e)))))
 
 ; ________________________________________________________________________/ }}}2
-
-
 
 
 ; _____________________________________________________________________________/ }}}1
