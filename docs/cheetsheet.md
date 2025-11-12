@@ -1,3 +1,7 @@
+#gus
+
+<span title="Your tooltip message">[`Hover over me!`](#riba)</span>
+
 
 | Group | Functions/Types | Macros |
 |-------|-----------------|--------|
@@ -26,3 +30,7 @@
 | Lens | `lens` | `lns` `&+` `&+>` `l>` `l>=` |
 | Benchmarking | `dt_print` | `timing` |
 | Testing |  | `assertm` `gives_error_typeQ` |
+
+#riba
+
+ololo
