@@ -1,4 +1,4 @@
-#gus
+# gus
 
 <span title="Your tooltip message">[`Hover over me!`](#riba)</span>
 
@@ -31,6 +31,6 @@
 | Benchmarking | `dt_print` | `timing` |
 | Testing |  | `assertm` `gives_error_typeQ` |
 
-#riba
+# riba
 
 ololo
