@@ -92,9 +92,9 @@
 
     (setv ICOMMENT     (pp.Forward))
     (setv ANNOTATION   (pp.Forward))
-    (setv QEXPR        (pp.Forward)); [ ... ]
-    (setv SEXPR        (pp.Forward)); ( ... ) #( ... )
-    (setv CEXPR        (pp.Forward)); { ... } #{ ... }
+    (setv QEXPR        (pp.Forward))           ; [ ... ]
+    (setv SEXPR        (pp.Forward))           ; ( ... ) #( ... )
+    (setv CEXPR        (pp.Forward))           ; { ... } #{ ... }
 
     (setv ATOM         (|  OCOMMENT
                            ICOMMENT
@@ -377,11 +377,11 @@
 
 ; ________________________________________________________________________/ }}}2
 
-    (def:: FGroup => DFGroup
-        deconstruct_fgroup
-        [ fgroup]
-        (DFGroup :name fgroup.name
-                :fentities (find_fentities fgroup)))
+    def:: FGroup => DFGroup
+       \deconstruct_fgroup
+        L\ fgroup
+        DFGroup :name      fgroup.name
+                :fentities : find_fentities fgroup
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -513,69 +513,69 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
 ; Short table:
 ; helper selectors ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (def:: (of List FEntity) => (of List FEntity)
-        only_funcs_fentities
-        [ fes]
-        (lreject
-            (fm (eq_any it.kind [ FEntityKind.NON_IMPORT_INFO
-                                  FEntityKind.REQUIRE_MACRO  ]))
-            fes))
+    def:: (of List FEntity) => (of List FEntity)
+       \only_funcs_fentities
+        L\ fes
+        lreject
+            fm : eq_any it.kind [ FEntityKind.NON_IMPORT_INFO
+                                  FEntityKind.REQUIRE_MACRO  ]
+           \fes
 
-    (def:: (of List FEntity) => (of List FEntity)
-        only_macro_fentities
-        [ fes]
-        (lfilter
-            (fm (eq it.kind FEntityKind.REQUIRE_MACRO))
-            fes))
+    def:: (of List FEntity) => (of List FEntity)
+       \only_macro_fentities
+        L\ fes
+        lfilter
+            fm : eq it.kind FEntityKind.REQUIRE_MACRO
+           \fes
 
 ; _____________________________________________________________________________/ }}}1
 ; constructors ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (def:: DFGroup => str
-        dfgroup_to_short_table_line
-        [ dfgroup]
+    def:: DFGroup => str
+       \dfgroup_to_short_table_line
+        L\ dfgroup
         ;
-        (setv column1 dfgroup.name); group name
+        setv column1   dfgroup.name ; group name
         ;
-        (setv fentities dfgroup.fentities)
-        (setv column2; functions
-            (str_join :sep " "
-                     (lmap fentity_to_hoverable (only_funcs_fentities fentities))))
-        (setv column3; macros
-            (str_join :sep " "
-                     (lmap fentity_to_hoverable (only_macro_fentities fentities))))
+        setv fentities dfgroup.fentities
+        setv column2 ; functions
+            str_join :sep " "
+                     lmap fentity_to_hoverable (only_funcs_fentities fentities)
+        setv column3 ; macros
+            str_join :sep " "
+                     lmap fentity_to_hoverable (only_macro_fentities fentities)
         ;
-        (return f"| {column1} | {column2} | {column3} |"))
+        return f"| {column1} | {column2} | {column3} |"
 
-    (def:: FEntity => str
-        fentity_to_hoverable
-        [ fentity]
-        (setv title fentity.name)
-        (setv tooltip
-            (cond
-                (and (eq fentity.signature "") (eq fentity.descr ""))
+    def:: FEntity => str
+       \fentity_to_hoverable
+        L\ fentity
+        setv title       fentity.name
+        setv tooltip
+            cond
+                and : eq fentity.signature "" :: eq fentity.descr ""
                 ""
-                (eq fentity.signature "")
-                fentity.descr
-                (eq fentity.descr "")
-                (sconcat ":: " fentity.signature " ::")
-                True
-                (sconcat ":: " fentity.signature " :: " fentity.descr)))
-        (setv target_link (sconcat "#" fentity.name))
-        (return f"<span title=\"{tooltip}\">[`{title}`]({target_link})</span>"))
+                eq fentity.signature ""
+               \fentity.descr
+                eq fentity.descr ""
+                sconcat ":: " fentity.signature " ::"
+               \True
+                sconcat ":: " fentity.signature " :: " fentity.descr
+        setv target_link : sconcat "#" fentity.name
+        return f"<span title=\"{tooltip}\">[`{title}`]({target_link})</span>"
 
 ; _____________________________________________________________________________/ }}}1
 ; assembly ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (def:: str => str
-        generate_short_table
-        [ code]
-        (=>> code
-            (find_fgroups)
-            (lmap deconstruct_fgroup)
-            (lmap dfgroup_to_short_table_line)
-            (str_join :sep "\n")
-            (sconcat $HEADER_SHORT "\n")))
+    def:: str => str
+       \generate_short_table
+        L\ code
+        =>> code
+            find_fgroups
+            lmap deconstruct_fgroup
+            lmap dfgroup_to_short_table_line
+            str_join :sep "\n"
+            sconcat $HEADER_SHORT "\n"
 
 ; _____________________________________________________________________________/ }}}1
 ; MD FILE HEADER_SHORT STR ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -609,69 +609,70 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
 
 ; constructors ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (def:: FEntity => str
-        fentity_to_md_title
-        [ fentity]
-        (setv title (sconcat "# " fentity.name))
-        (setv card (fentity2card fentity))
-        (return f"{title}\n\n```hy\n{card}\n```"))
+    def:: FEntity => str
+       \fentity_to_md_title
+        L\ fentity
+        setv title : sconcat "# " fentity.name
+        setv card  : fentity2card fentity
+        return f"{title}\n\n```hy\n{card}\n```"
 
-    (def:: FEntity => str
-        fentity2card
-        [ fe]
-        (setv line1
-            (case fe.kind
-                 FEntityKind.IMPORT_MODULE
-                 (sconcat "FULL MODULE | " fe.name)
-                 FEntityKind.IMPORT_FROM_MODULE
-                 (sconcat "FROM: " fe.parent_module " | " fe.name)
-                 FEntityKind.IMPORT_FROM_MODULE_AS
-                 (sconcat "FROM: " fe.parent_module " | " fe.name " (<-" fe.org_name ")")
-                 FEntityKind.REQUIRE_MACRO
-                 (sconcat "MACR: " fe.parent_module " | " fe.name)
-                 FEntityKind.NON_IMPORT_INFO
-                 (sconcat "INFO: " fe.parent_module " | " fe.name " /" fe.kind_str "/")
-                 FEntityKind.DEFINED_SETV
-                 (sconcat "SETV: " fe.parent_module " | " fe.name)
-                 FEntityKind.DEFINED_FUNC
-                 (sconcat "DEFN: " fe.parent_module " | " fe.name)))
-        (setv line2 (build_card_tail fe))
-        (return (sconcat line1 line2)))
+    def:: FEntity => str
+       \fentity2card
+        L\ fe
+        setv line1
+            case fe.kind
+                \FEntityKind.IMPORT_MODULE
+                 sconcat "FULL MODULE | " fe.name
+                \FEntityKind.IMPORT_FROM_MODULE
+                 sconcat "FROM: " fe.parent_module " | " fe.name
+                \FEntityKind.IMPORT_FROM_MODULE_AS
+                 sconcat "FROM: " fe.parent_module " | " fe.name " (<-" fe.org_name ")"
+                \FEntityKind.REQUIRE_MACRO
+                 sconcat "MACR: " fe.parent_module " | " fe.name 
+                \FEntityKind.NON_IMPORT_INFO
+                 sconcat "INFO: " fe.parent_module " | " fe.name " /" fe.kind_str "/"
+                \FEntityKind.DEFINED_SETV
+                 sconcat "SETV: " fe.parent_module " | " fe.name
+                \FEntityKind.DEFINED_FUNC
+                 sconcat "DEFN: " fe.parent_module " | " fe.name
+        setv line2 : build_card_tail fe
+        return : sconcat line1 line2
 
-    (def:: FEntity => str
-        build_card_tail
-        [ fentity]
-        (cond
-            (and (eq fentity.signature "") (eq fentity.descr ""))
+    def:: FEntity => str
+       \build_card_tail
+        L\ fentity
+        cond
+            and : eq fentity.signature "" :: eq fentity.descr ""
             ""
-            (eq fentity.signature "")
-            (sconcat "\n" fentity.descr)
-            (eq fentity.descr "")
-            (sconcat "\n:: " fentity.signature)
-            True
-            (sconcat "\n:: " fentity.signature "\n" fentity.descr)))
+            eq fentity.signature ""
+            sconcat "\n" fentity.descr
+            eq fentity.descr ""
+            sconcat "\n:: " fentity.signature
+           \True
+            sconcat "\n:: " fentity.signature "\n" fentity.descr
 
 ; _____________________________________________________________________________/ }}}1
 ; assembly ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (def:: str => str
-        generate_md_entries_for_each_entity
-        [ code]
-        (=>> code
-            (find_fgroups)
-            (lmap deconstruct_fgroup)
-            (lpluckm .fentities)
-            (flatten)
-            (lmap fentity_to_md_title)
-            (str_join :sep "\n\n")))
+    def:: str => str
+       \generate_md_entries_for_each_entity
+        L\ code
+        =>> code
+            find_fgroups
+            lmap deconstruct_fgroup
+            lpluckm .fentities
+            flatten
+            lmap fentity_to_md_title
+            str_join :sep "\n\n"
 
 ; _____________________________________________________________________________/ }}}1
 
-    (setv _code (str_join :sep "\n" (lmap read_file $SOURCES)))
+    setv _code $ str_join :sep "\n" : lmap read_file $SOURCES
 
-    (setv _short_table (generate_short_table _code))
-    (setv _md_headers (generate_md_entries_for_each_entity _code))
+    setv _short_table : generate_short_table _code
+    setv _md_headers  : generate_md_entries_for_each_entity _code
 
-    (write_to_file
-        (sconcat _short_table "\n\n\n" _md_headers)
-        $TARGET_SHORT_FILE)
+    write_to_file 
+        sconcat _short_table "\n\n\n" _md_headers
+       \$TARGET_SHORT_FILE
+
