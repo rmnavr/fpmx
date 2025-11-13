@@ -634,6 +634,10 @@
     (assertm eq (=> (dict :a [0 1] :b 2) ["a" 0]) 0)
     (assertm eq (=> [[1 2]] [(slice None None) 0 0]) 1)
 
+    (assertm eq (=> 3 (div 6)) (div 3 6))
+
+    ; ====================
+
     (assertm eq
         (=>> [[1 2] [3 4]]
              [0 1]               ; get           ; in -> would be error
@@ -651,6 +655,8 @@
     (assertm eq (=>> [[1 2]] 0 0) 1)             ; integer access
     (assertm eq (=>> (dict :a [0 1] :b 2) ["a" 0]) 0)
     (assertm eq (=>> [[1 2]] [(slice None None) 0 0]) 1)
+
+    (assertm eq (=>> 3 (div 6)) (div 6 3))
 
 ; _____________________________________________________________________________/ }}}1
 ; fm, mapm, lmapm, filterm, lfilterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1

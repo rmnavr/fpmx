@@ -1,4 +1,5 @@
 
+; uses ACTUAL fptk, because needs to extract help strings
 ; Imports ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (import  pyparsing :as pp)
@@ -387,10 +388,8 @@
 
 ; _____________________________________________________________________________/ }}}1
 
-; Long table (old):
-; Old ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-; ■ entity to str ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
+; Long table:
+; entity to str ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (defn #^ str build_prefix [ #^ FEntity fe ]
         (setv signature (if (= fe.signature "")
@@ -427,8 +426,8 @@
               FEntityKind.DEFINED_FUNC
               (sconcat "DEFN: " (pad1 fe.parent_module) " | " (pad2 fe.name) (build_prefix fe))))
 
-; ________________________________________________________________________/ }}}2
-; ■ group to str ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
+; _____________________________________________________________________________/ }}}1
+; group to str ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (defn #^ (of List str)
         group2str_list [ #^ FGroup fgroup ]
@@ -438,8 +437,8 @@
                          (find_fentities fgroup))
                    "" ]))
 
-; ________________________________________________________________________/ }}}2
-; ■ printers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
+; _____________________________________________________________________________/ }}}1
+; printers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ; not used currently:
     (defn gprint
@@ -461,54 +460,6 @@
         [ #^ str table
         ]
         (sconcat $HEADER_LONG "\n```hy\n" table "```"))
-
-; ________________________________________________________________________/ }}}2
-
-; ■ MD FILE HEADER_LONG STR ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
-
-    (setv $HEADER_LONG
-"
----
-fptk docs:
-1. You are here -> [Functions and modules](https://github.com/rmnavr/fptk/blob/main/docs/functions.md)
-2. [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md)
-3. [Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)
-4. [Result type](https://github.com/rmnavr/fptk/blob/main/docs/resultM.md)
----
-
-# Auto-generated full list of FPTK entities (except macros)
-
-## Legend
-
-List below has format:
-```hy
-=== Group name 1 ===
-TYPE source_lib | func_or_class_name :: signature ; description
-TYPE source_lib | func_or_class_name :: signature ; description
-
-=== Group name 2 ===
-...
-```
-
-Column `TYPE` shows if things are simple imports/reimports: ...
-```hy
-FULL MODULE  | sys          ; (import sys)
-FROM: math   | ln (<-log)   ; (import math [log :as ln])
-MACR: hyrule | of           ; (require hyrule [of])
-INFO: hy     | cut /macro/  ; shows info on hy/py functions/macro (which are already always in main context); given just for big picture
-```
-
-... or fptk-defined entities:
-```hy
-SETV: fptk   | StrictNumber ; entity defined internally via (setv ...)
-DEFN: fptk   | third        ; entity defined internally via (defn ...)
-```
-
-## List of fptk entities
-")
-
-
-; ________________________________________________________________________/ }}}2
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -672,14 +623,61 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
 ; Run:
 ; CONST STRs ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    setv $HEADER1  "Cheetsheet"
-    setv $HEADER2  "Detailed descriptions"
-    setv $BACKLINK f"[go up](#{$HEADER1})"
+; ■ HEADER_LONG ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
+
+    (setv $HEADER_LONG
+"
+---
+fptk docs:
+1. You are here -> [Functions and modules](https://github.com/rmnavr/fptk/blob/main/docs/functions.md)
+2. [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md)
+3. [Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)
+4. [Result type](https://github.com/rmnavr/fptk/blob/main/docs/resultM.md)
+---
+
+# Auto-generated full list of FPTK entities (except macros)
+
+## Legend
+
+List below has format:
+```hy
+=== Group name 1 ===
+TYPE source_lib | func_or_class_name :: signature ; description
+TYPE source_lib | func_or_class_name :: signature ; description
+
+=== Group name 2 ===
+...
+```
+
+Column `TYPE` shows if things are simple imports/reimports: ...
+```hy
+FULL MODULE  | sys          ; (import sys)
+FROM: math   | ln (<-log)   ; (import math [log :as ln])
+MACR: hyrule | of           ; (require hyrule [of])
+INFO: hy     | cut /macro/  ; shows info on hy/py functions/macro (which are already always in main context); given just for big picture
+```
+
+... or fptk-defined entities:
+```hy
+SETV: fptk   | StrictNumber ; entity defined internally via (setv ...)
+DEFN: fptk   | third        ; entity defined internally via (defn ...)
+```
+
+## List of fptk entities
+")
+
+
+; ________________________________________________________________________/ }}}2
 
     setv $SHORT_TABLE_HEADER
          "
 | Group | Functions/Types | Macros |
 |-------|-----------------|--------|"
+
+    setv $HEADER1  "Cheetsheet"
+    setv $HEADER2  "Detailed descriptions"
+    setv $BACKLINK f"[go up](#{$HEADER1})"
+
 
     setv $ASCII_NAMES_TABLE
         C            ; name                     ; link
@@ -718,6 +716,14 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
 ; _____________________________________________________________________________/ }}}1
 
     setv _code $ str_join :sep "\n" : lmap read_file $SOURCES
+
+    ; long table:
+
+    write_to_file 
+        generate_long_doc _code
+       \$TARGET_SHORT_FILE
+
+    ; short table + md blocks:
 
     setv _short_table : generate_short_table _code
     setv _md_headers  : generate_md_blocks _code
