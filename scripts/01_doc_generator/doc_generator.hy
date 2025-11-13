@@ -1,10 +1,12 @@
 
-
 ; Imports ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (import  pyparsing :as pp)
-    (import  _fptk_local *)
-    (require _fptk_local *)
+    (import  fptk *)
+    (require fptk *)
+
+    (import io)
+    (import contextlib)
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -385,8 +387,8 @@
 
 ; _____________________________________________________________________________/ }}}1
 
-; Long table:
-; Long Table (old) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; Long table (old):
+; Old ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 ; ■ entity to str ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
@@ -581,66 +583,40 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
             (sconcat $SHORT_TABLE_HEADER "\n")))
 
 ; _____________________________________________________________________________/ }}}1
-; CONST STRs ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (setv $HEADER1 "Cheetsheet")
-    (setv $HEADER2 "Detailed descriptions")
-    (setv $BACKLINK "[go up](#{$HEADER1})")
-
-    (setv $SHORT_TABLE_HEADER
-         "
-| Group | Functions/Types | Macros |
-|-------|-----------------|--------|")
-
-    (setv $ASCII_NAMES_TABLE
-        { ; name                     ; link
-            "->" #("hyruleThreading1"       "hyruleThreading1")
-            "->>" #("hyruleThreading2"       "hyruleThreading2")
-            "as->" #("hyruleThreading3"       "hyruleThreading3")
-            "doto" #("hyruleThreading4"       "hyruleThreading4")
-            "=>" #("FPTKThreading1"         "FPTKThreading1")
-            "=>>" #("FPTKThreading2"         "FPTKThreading2")
-            "p:" #("PipeOfPartials"         "PipeOfPartials")
-            "f::" #("Annotator1"             "Annotator1")
-            "def::" #("Annotator2"             "Annotator2")
-            "&+" #("Lens operator1"         "Lens-operator1")
-            "&+>" #("Lens operator2"         "Lens-operator2")
-            "l>" #("Lens operator3"         "Lens-operator3")
-            "l>=" #("Lens operator4"         "Lens-operator4")})
-
-; _____________________________________________________________________________/ }}}1
-
-; Run:
-; USER CONFIG ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    (setv $SOURCES [ "../../src/fptk/flow.hy"
-                     "../../src/fptk/apl.hy"
-                     "../../src/fptk/getters.hy"
-                     "../../src/fptk/typing.hy"
-                     "../../src/fptk/mathnlogic.hy"
-                     "../../src/fptk/strings.hy"
-                     "../../src/fptk/IO.hy"
-                     "../../src/fptk/lens.hy"
-                     "../../src/fptk/benchmark.hy"
-                     "../../src/fptk/testing.hy"
-                   ])
-
-    (setv $TARGET_LONG_FILE  "../../docs/functions.md" )
-    (setv $TARGET_SHORT_FILE "../../docs/cheetsheet.md")
-
-; _____________________________________________________________________________/ }}}1
-
+; MD blocks (##title + short-card + help):
 ; constructors ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (def:: str => str
+        capture_help
+        [ function_name_as_str]
+        (setv f (get globals [function_name_as_str]))
+        (setv output (io.StringIO))
+        (with [s (contextlib.redirect_stdout output)]
+             (help f))
+        (return (output.getvalue)))
 
     (def:: FEntity => str
         fentity_to_md_title
         [ fentity]
+        ;
         (setv title
             (if (in fentity.name $ASCII_NAMES_TABLE)
                  (sconcat "## " (get $ASCII_NAMES_TABLE fentity.name 0))
                  (sconcat "## " fentity.name)))
+        ;
         (setv card (fentity2card fentity))
-        (return f"{title}\n\n```hy\n{card}\n```"))
+        ;
+        (try
+            (setv help_string
+                (=> fentity.name
+                   (capture_help)
+                   (strip)))
+            (except [e Exception] (setv help_string "")))
+        ;
+        (if (eq help_string "")
+             (return f"{title}\n\n{$BACKLINK}\n\n```hy\n{card}\n```")
+             (return f"{title}\n\n{$BACKLINK}\n\n```hy\n{card}\n```\n\n```hy\n{help_string}\n```")))
 
     (def:: FEntity => str
         fentity2card
@@ -681,8 +657,9 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
 ; assembly ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (def:: str => str
-        generate_md_entries_for_each_entity
+        generate_md_blocks
         [ code]
+        "fgroup.name(s) are not used"
         (=>> code
             (find_fgroups)
             (lmap deconstruct_fgroup)
@@ -693,11 +670,59 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
 
 ; _____________________________________________________________________________/ }}}1
 
+; Run:
+; CONST STRs ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (setv $HEADER1 "Cheetsheet")
+    (setv $HEADER2 "Detailed descriptions")
+    (setv $BACKLINK f"[go up](#{$HEADER1})")
+
+    (setv $SHORT_TABLE_HEADER
+         "
+| Group | Functions/Types | Macros |
+|-------|-----------------|--------|")
+
+    (setv $ASCII_NAMES_TABLE
+        { ; name                     ; link
+            "->" #("hyruleThreading1"       "hyruleThreading1")
+            "->>" #("hyruleThreading2"       "hyruleThreading2")
+            "as->" #("hyruleThreading3"       "hyruleThreading3")
+            "doto" #("hyruleThreading4"       "hyruleThreading4")
+            "=>" #("FPTKThreading1"         "FPTKThreading1")
+            "=>>" #("FPTKThreading2"         "FPTKThreading2")
+            "p:" #("PipeOfPartials"         "PipeOfPartials")
+            "f::" #("Annotator1"             "Annotator1")
+            "def::" #("Annotator2"             "Annotator2")
+            "&+" #("Lens operator1"         "Lens-operator1")
+            "&+>" #("Lens operator2"         "Lens-operator2")
+            "l>" #("Lens operator3"         "Lens-operator3")
+            "l>=" #("Lens operator4"         "Lens-operator4")})
+
+; _____________________________________________________________________________/ }}}1
+; USER CONFIG ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (setv $SOURCES [ "../../src/fptk/flow.hy"
+                     "../../src/fptk/apl.hy"
+                     "../../src/fptk/getters.hy"
+                     "../../src/fptk/typing.hy"
+                     "../../src/fptk/mathnlogic.hy"
+                     "../../src/fptk/strings.hy"
+                     "../../src/fptk/IO.hy"
+                     "../../src/fptk/lens.hy"
+                     "../../src/fptk/benchmark.hy"
+                     "../../src/fptk/testing.hy"
+                   ])
+
+    (setv $TARGET_LONG_FILE  "../../docs/functions.md" )
+    (setv $TARGET_SHORT_FILE "../../docs/cheetsheet.md")
+
+; _____________________________________________________________________________/ }}}1
+
     (setv _code (str_join :sep "\n" (lmap read_file $SOURCES)))
 
     (setv _short_table (generate_short_table _code))
-    (setv _md_headers (generate_md_entries_for_each_entity _code))
+    (setv _md_headers (generate_md_blocks _code))
 
     (write_to_file
-        f"# {$HEADER1}\n\n{_short_table}\n\n{_md_headers}"
+        f"# {$HEADER1}\n\n{_short_table}\n\n# {$HEADER2}\n\n{_md_headers}"
         $TARGET_SHORT_FILE)
