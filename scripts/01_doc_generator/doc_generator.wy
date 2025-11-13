@@ -589,11 +589,10 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
 
     def:: str => str
        \capture_help
-        L\ function_name_as_str
-        setv f : get globals [function_name_as_str]
+        L\ function_name
         setv output : io.StringIO
         with L s (contextlib.redirect_stdout output)
-             help f
+             help function_name
         return : output.getvalue
 
     def:: FEntity => str
@@ -608,7 +607,10 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
         setv card  : fentity2card fentity
         ;
         try
-            setv help_string : => fentity.name capture_help strip
+            setv help_string 
+                => (globals) [fentity.name]
+                   capture_help
+                   strip
             except [e Exception] : setv help_string ""
         ;
         if : eq help_string ""
