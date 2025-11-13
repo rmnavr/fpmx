@@ -58,7 +58,7 @@
         (funcy_lwithout seq #* items))
 
     (import funcy [takewhile]) #_ "takewhile([pred, ] seq) | yields elems of seq as long as they pass pred"
-    (import funcy [dropwhile]) #_ "dropwhile([pred, ] seq) | mirror of dropwhile"
+    (import funcy [dropwhile]) #_ "dropwhile([pred, ] seq) | mirror of takewhile"
 
     (import funcy [split      :as filter_split])  #_ "filter_split(pred, seq) -> passed, rejected |"
     (import funcy [lsplit     :as lfilter_split]) #_ "lfilter_split(pred,seq) -> passed, rejected | list version of filter_split"

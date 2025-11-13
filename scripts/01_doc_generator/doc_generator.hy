@@ -1,4 +1,5 @@
 
+; uses ACTUAL fptk, because needs to extract help strings
 ; Imports ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (import  pyparsing :as pp)
@@ -571,23 +572,30 @@
         fentity2card
         [ fe]
         (setv line1
+            (if (eq fe.kind FEntityKind.IMPORT_FROM_MODULE_AS)
+                 f"Name: {fe.name} (= {fe.parent_module}.{fe.org_name})"
+                 f"Name: {fe.name}"))
+        (setv line2
             (case fe.kind
                  FEntityKind.IMPORT_MODULE
-                 (sconcat "FULL MODULE | " fe.name)
-                 FEntityKind.IMPORT_FROM_MODULE
-                 (sconcat "FROM: " fe.parent_module " | " fe.name)
-                 FEntityKind.IMPORT_FROM_MODULE_AS
-                 (sconcat "FROM: " fe.parent_module " | " fe.name " (<-" fe.org_name ")")
-                 FEntityKind.REQUIRE_MACRO
-                 (sconcat "MACR: " fe.parent_module " | " fe.name)
+                 "Kind: Full Module"
                  FEntityKind.NON_IMPORT_INFO
-                 (sconcat "INFO: " fe.parent_module " | " fe.name " /" fe.kind_str "/")
+                 f"Kind: Info only | {fe.parent_module} | {fe.name} /{fe.kind_str}/"
+                 ;
+                 FEntityKind.IMPORT_FROM_MODULE
+                 f"Kind: Reimport from [{fe.parent_module}]"
+                 FEntityKind.IMPORT_FROM_MODULE_AS
+                 f"Kind: Reimport"
+                 FEntityKind.REQUIRE_MACRO
+                 (if (eq fe.parent_module $FPTK_MACRO_LIB)
+                      "Kind: FPTK Macro"
+                      f"Kind: Macro from [{fe.parent_module}]")
                  FEntityKind.DEFINED_SETV
-                 (sconcat "SETV: " fe.parent_module " | " fe.name)
+                 "Kind: FPTK original"
                  FEntityKind.DEFINED_FUNC
-                 (sconcat "DEFN: " fe.parent_module " | " fe.name)))
-        (setv line2 (build_card_tail fe))
-        (return (sconcat line1 line2)))
+                 "Kind: FPTK original"))
+        (setv tail (build_card_tail fe))
+        (return (sconcat line1 "\n" line2 tail)))
 
     (def:: FEntity => str
         build_card_tail
@@ -596,11 +604,12 @@
             (and (eq fentity.signature "") (eq fentity.descr ""))
             ""
             (eq fentity.signature "")
-            (sconcat "\n" fentity.descr)
+            (sconcat "\nInfo: " fentity.descr)
             (eq fentity.descr "")
-            (sconcat "\n:: " fentity.signature)
+            (sconcat "\nSgnt: " fentity.signature)
             True
-            (sconcat "\n:: " fentity.signature "\n" fentity.descr)))
+            (sconcat "\nSgnt: " fentity.signature
+                    "\nInfo: " fentity.descr)))
 
 ; _____________________________________________________________________________/ }}}1
 ; assembly ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -614,6 +623,7 @@
             (lmap deconstruct_fgroup)
             (lpluckm .fentities)
             (flatten)
+            (lreject (fm (eq it.kind FEntityKind.NON_IMPORT_INFO)))
             (lmap fentity_to_md_title)
             (str_join :sep "\n\n")))
 
@@ -676,6 +686,7 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
     (setv $HEADER1 "Cheetsheet")
     (setv $HEADER2 "Detailed descriptions")
     (setv $BACKLINK f"[go up](#{$HEADER1})")
+    (setv $FPTK_MACRO_LIB "fptk._macros")
 
 
     (setv $ASCII_NAMES_TABLE

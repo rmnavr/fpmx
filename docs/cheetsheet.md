@@ -7,7 +7,7 @@
 | FP: Composition | <span title=":: constantly(val) :: constantly(30) is FUNCTION that always return val no matter the arguments">[`constantly`](#constantly)</span> <span title="identity(n) -> n">[`identity`](#identity)</span> <span title="applicator">[`partial`](#partial)</span> <span title="applicator">[`rpartial`](#rpartial)</span> <span title=":: compose(f1, f2, ..., fn) :: = f1(f2(..fn(***))) ; applicator">[`compose`](#compose)</span> <span title=":: rcompose(f1, f2, ..., fn) :: = fn(..(f2(f1(***)))) ; applicator">[`rcompose`](#rcompose)</span> <span title=":: ljuxt(*fs) :: = [f1, f2, ...](***) ; applicator">[`ljuxt`](#ljuxt)</span> <span title=":: pflip(f, a) :: applicator for function f(a,b) of 2 args; example: pflip(div, 4)(1) == 0.25">[`pflip`](#pflip)</span> <span title=":: flip(f, a, b) = f(b, a) :: calls f with flipped args">[`flip`](#flip)</span> | <span title="">[`->`](#hyruleThreading1)</span> <span title="">[`->>`](#hyruleThreading2)</span> <span title="">[`as->`](#hyruleThreading3)</span> <span title="mutating">[`doto`](#hyruleThreading4)</span> <span title="unification of dot-macro and ->">[`=>`](#FPTKThreading1)</span> <span title="unification of dot-macro and ->>">[`=>>`](#FPTKThreading2)</span> <span title="aplicator, pipe of partials">[`p:`](#PipeOfPartials)</span> |
 | FP: threading | <span title=":: lzip(*iterables) -> List :: literally just list(zip(*iterables))">[`lzip`](#lzip)</span> <span title=":: lmap(f, *seqs) -> List :: list version of map">[`lmap`](#lmap)</span> <span title=":: starmap(function, iterable) ::">[`starmap`](#starmap)</span> <span title=":: lstarmap(function, iterable) -> list :: list version of starmap">[`lstarmap`](#lstarmap)</span> <span title=":: reduce(function, sequence[, initial]) -> value :: theory: reduce + monoid = binary-function for free becomes n-arg-function">[`reduce`](#reduce)</span> <span title=":: reductions(f, seq [, acc]) -> generator :: returns sequence of intermetidate values of reduce(f, seq, acc)">[`reductions`](#reductions)</span> <span title=":: lreductions(f, seq [, acc]) -> list :: list version of reductions">[`lreductions`](#lreductions)</span> <span title=":: sums(seq [, acc]) -> generator :: reductions with addition function">[`sums`](#sums)</span> <span title=":: lsums(seq [, acc]) -> list :: list version of sums">[`lsums`](#lsums)</span> <span title=":: product(iterable, /, *, start=1) :: product([2, 3, 5]) = 30">[`product`](#product)</span> | <span title=":: (fm (* it 3)) :: anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'">[`fm`](#fm)</span> <span title="same as map, but expects fm-syntax for func">[`mapm`](#mapm)</span> <span title="same as lmap, but expects fm-syntax for func">[`lmapm`](#lmapm)</span> |
 | FP: n-applicators | <span title=":: nested(n, f) :: applicator f(...(f(***)))">[`nested`](#nested)</span> <span title=":: apply_n(n, f, *args, **kwargs) :: f(f(f(...f(*args, **kwargs))">[`apply_n`](#apply_n)</span> | <span title=":: (do_n   n #* body) -> None :: expands to ~ (do body body body ...)">[`do_n`](#do_n)</span> <span title=":: (list_n n #* body) -> List ::">[`list_n`](#list_n)</span> |
-| APL: filtering | <span title=":: lfilter(pred, seq) -> List :: funcy list version of extended filter">[`lfilter`](#lfilter)</span> <span title=":: fltr1st(f, seq) -> Optional elem :: returns first found element (or None)">[`fltr1st`](#fltr1st)</span> <span title=":: reject(pred, seq)-> iterator :: same as filter, but checks for False">[`reject`](#reject)</span> <span title=":: lreject(pred, seq) -> List :: list version of reject">[`lreject`](#lreject)</span> <span title=":: without(items, seq) -> generator :: subtracts items from seq (as a sets)">[`without`](#without)</span> <span title=":: lwithout(items, seq) -> list :: list version of reject">[`lwithout`](#lwithout)</span> <span title=":: takewhile([pred, ] seq) :: yields elems of seq as long as they pass pred">[`takewhile`](#takewhile)</span> <span title=":: dropwhile([pred, ] seq) :: mirror of dropwhile">[`dropwhile`](#dropwhile)</span> <span title=":: filter_split(pred, seq) -> passed, rejected ::">[`filter_split`](#filter_split)</span> <span title=":: lfilter_split(pred,seq) -> passed, rejected :: list version of filter_split">[`lfilter_split`](#lfilter_split)</span> <span title=":: bisect_at(n, seq) -> start, tail :: len of start will = n, works only with n>=0">[`bisect_at`](#bisect_at)</span> <span title=":: lbisect_at(n, seq) -> start, tail :: list version of bisect_at, but also for n<0, abs(n) will be len of tail">[`lbisect_at`](#lbisect_at)</span> <span title=":: bisect_by(pred, seq) -> taken, dropped :: similar to (takewhile, dropwhile)">[`bisect_by`](#bisect_by)</span> <span title=":: lbisect_by(pred, seq) -> taken, dropped :: list version of lbisect">[`lbisect_by`](#lbisect_by)</span> <span title=":: mask_sel('abc', [1,0,1]) -> iterator: 'a', 'c' ::">[`mask_sel`](#mask_sel)</span> <span title=":: lmask_sel(data, selectors) -> list ::">[`lmask_sel`](#lmask_sel)</span> <span title=":: mask2idxs(mask) -> list :: mask is list like [1 0 1 0] or [True False True False], which will be converted to [0 2]">[`mask2idxs`](#mask2idxs)</span> <span title=":: idxs2mask(idxs) -> list :: idxs is non-sorted list of integers like [0 3 2], which will be converted to [1 0 1 1]">[`idxs2mask`](#idxs2mask)</span> | <span title=":: (filterm f xs) :: same as filter, but expects fm-syntax for func">[`filterm`](#filterm)</span> <span title=":: (lfilterm f xs) :: list version of lfilterm">[`lfilterm`](#lfilterm)</span> |
+| APL: filtering | <span title=":: lfilter(pred, seq) -> List :: funcy list version of extended filter">[`lfilter`](#lfilter)</span> <span title=":: fltr1st(f, seq) -> Optional elem :: returns first found element (or None)">[`fltr1st`](#fltr1st)</span> <span title=":: reject(pred, seq)-> iterator :: same as filter, but checks for False">[`reject`](#reject)</span> <span title=":: lreject(pred, seq) -> List :: list version of reject">[`lreject`](#lreject)</span> <span title=":: without(items, seq) -> generator :: subtracts items from seq (as a sets)">[`without`](#without)</span> <span title=":: lwithout(items, seq) -> list :: list version of reject">[`lwithout`](#lwithout)</span> <span title=":: takewhile([pred, ] seq) :: yields elems of seq as long as they pass pred">[`takewhile`](#takewhile)</span> <span title=":: dropwhile([pred, ] seq) :: mirror of takewhile">[`dropwhile`](#dropwhile)</span> <span title=":: filter_split(pred, seq) -> passed, rejected ::">[`filter_split`](#filter_split)</span> <span title=":: lfilter_split(pred,seq) -> passed, rejected :: list version of filter_split">[`lfilter_split`](#lfilter_split)</span> <span title=":: bisect_at(n, seq) -> start, tail :: len of start will = n, works only with n>=0">[`bisect_at`](#bisect_at)</span> <span title=":: lbisect_at(n, seq) -> start, tail :: list version of bisect_at, but also for n<0, abs(n) will be len of tail">[`lbisect_at`](#lbisect_at)</span> <span title=":: bisect_by(pred, seq) -> taken, dropped :: similar to (takewhile, dropwhile)">[`bisect_by`](#bisect_by)</span> <span title=":: lbisect_by(pred, seq) -> taken, dropped :: list version of lbisect">[`lbisect_by`](#lbisect_by)</span> <span title=":: mask_sel('abc', [1,0,1]) -> iterator: 'a', 'c' ::">[`mask_sel`](#mask_sel)</span> <span title=":: lmask_sel(data, selectors) -> list ::">[`lmask_sel`](#lmask_sel)</span> <span title=":: mask2idxs(mask) -> list :: mask is list like [1 0 1 0] or [True False True False], which will be converted to [0 2]">[`mask2idxs`](#mask2idxs)</span> <span title=":: idxs2mask(idxs) -> list :: idxs is non-sorted list of integers like [0 3 2], which will be converted to [1 0 1 1]">[`idxs2mask`](#idxs2mask)</span> | <span title=":: (filterm f xs) :: same as filter, but expects fm-syntax for func">[`filterm`](#filterm)</span> <span title=":: (lfilterm f xs) :: list version of lfilterm">[`lfilterm`](#lfilterm)</span> |
 | APL: iterators and looping | <span title=":: inf_range(start [, step]) :: inf_range(10) -> generator: 10, 11, 12, ...">[`inf_range`](#inf_range)</span> <span title=":: islice(iterable, start, stop[, step]) :: list(islice(inf_range(10), 2)) == [10, 11]">[`islice`](#islice)</span> <span title="list version of islice: lislice">[`lislice`](#lislice)</span> <span title=":: cycle(p) :: cycle('AB') -> A B A B ...">[`cycle`](#cycle)</span> <span title=":: lcycle(p, n) -> list :: takes first n elems from cycle(p)">[`lcycle`](#lcycle)</span> <span title=":: repeat(elem [, n]) :: repeat(10,3) -> 10 10 10">[`repeat`](#repeat)</span> <span title=":: lrepeat(elem, n) -> list :: unlike in repeat, n has to be provided">[`lrepeat`](#lrepeat)</span> <span title=":: concat(*seqs) -> iterator ::">[`concat`](#concat)</span> <span title=":: lconcat(*seqs) -> list :: list(concat(*seqs))">[`lconcat`](#lconcat)</span> <span title=":: cat(seqs) :: non-variadic version of concat">[`cat`](#cat)</span> <span title=":: lcat(seqs) :: non-variadic version of concat">[`lcat`](#lcat)</span> <span title=":: mapcat(f, *seqs) :: maps, then concatenates">[`mapcat`](#mapcat)</span> <span title=":: lmapcat(f, *seqs) :: maps, then concatenates">[`lmapcat`](#lmapcat)</span> <span title=":: pairwise(seq) -> iterator :: supposed to be used in loops, will produce no elems for seq with len <= 1">[`pairwise`](#pairwise)</span> <span title=":: with_prev(seq, fill=None) -> iterator :: supposed to be used in loops">[`with_prev`](#with_prev)</span> <span title=":: with_next(seq, fill=None) -> iterator :: supposed to be used in loops">[`with_next`](#with_next)</span> |  |
 | APL: working with lists | <span title=":: flatten(coll) :: flattens to the bottom, non-mutating">[`flatten`](#flatten)</span> <span title=":: lprint(seq, sep=None) :: prints every elem of seq on new line">[`lprint`](#lprint)</span> <span title=":: lreversed(sequence) :: list version of reversed">[`lreversed`](#lreversed)</span> <span title=":: partition(n, seq, *, step=None, tail=False) -> generator :: splits seq to lists of len n, tail=True will allow including fewer than n items">[`partition`](#partition)</span> <span title=":: lpartition(n, seq, *, step=None, tail=False) -> List :: simply list(partition(...))">[`lpartition`](#lpartition)</span> <span title=":: partition_by(f, seq) -> iterator of iterators :: splits when f(item) change">[`partition_by`](#partition_by)</span> <span title=":: lpartition_by(f,seq) -> list of lists :: list(partition_by(...))">[`lpartition_by`](#lpartition_by)</span> <span title=":: lmulticut_by(pred, seq, keep_border=True, merge_border=False) -> list :: cut at pred(elem)==True elems">[`lmulticut_by`](#lmulticut_by)</span> |  |
 | APL: counting | <span title=":: count_occurrences(elem, seq) -> int :: rename of list.count method">[`count_occurrences`](#count_occurrences)</span> |  |
@@ -31,30 +31,13 @@
 
 # Detailed descriptions
 
-## if
-
-[go up](#Cheetsheet)
-
-```hy
-INFO: hy | if /base/
-:: (if check true false)
-```
-
-## cond
-
-[go up](#Cheetsheet)
-
-```hy
-INFO: hy | cond /base/
-:: (cond check1 do1 ... true doT)
-```
-
 ## case
 
 [go up](#Cheetsheet)
 
 ```hy
-MACR: hyrule | case
+Name: case
+Kind: Macro from [hyrule]
 ```
 
 ## branch
@@ -62,7 +45,8 @@ MACR: hyrule | case
 [go up](#Cheetsheet)
 
 ```hy
-MACR: hyrule | branch
+Name: branch
+Kind: Macro from [hyrule]
 ```
 
 ## unless
@@ -70,7 +54,8 @@ MACR: hyrule | branch
 [go up](#Cheetsheet)
 
 ```hy
-MACR: hyrule | unless
+Name: unless
+Kind: Macro from [hyrule]
 ```
 
 ## lif
@@ -78,7 +63,8 @@ MACR: hyrule | unless
 [go up](#Cheetsheet)
 
 ```hy
-MACR: hyrule | lif
+Name: lif
+Kind: Macro from [hyrule]
 ```
 
 ## constantly
@@ -86,9 +72,10 @@ MACR: hyrule | lif
 [go up](#Cheetsheet)
 
 ```hy
-FROM: hyrule | constantly
-:: constantly(val)
-constantly(30) is FUNCTION that always return val no matter the arguments
+Name: constantly
+Kind: Reimport from [hyrule]
+Sgnt: constantly(val)
+Info: constantly(30) is FUNCTION that always return val no matter the arguments
 ```
 
 ```hy
@@ -108,8 +95,9 @@ constantly(value)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | identity
-identity(n) -> n
+Name: identity
+Kind: Reimport from [funcy]
+Info: identity(n) -> n
 ```
 
 ```hy
@@ -124,7 +112,8 @@ identity(x)
 [go up](#Cheetsheet)
 
 ```hy
-MACR: hyrule | ->
+Name: ->
+Kind: Macro from [hyrule]
 ```
 
 ## hyruleThreading2
@@ -132,7 +121,8 @@ MACR: hyrule | ->
 [go up](#Cheetsheet)
 
 ```hy
-MACR: hyrule | ->>
+Name: ->>
+Kind: Macro from [hyrule]
 ```
 
 ## hyruleThreading3
@@ -140,7 +130,8 @@ MACR: hyrule | ->>
 [go up](#Cheetsheet)
 
 ```hy
-MACR: hyrule | as->
+Name: as->
+Kind: Macro from [hyrule]
 ```
 
 ## hyruleThreading4
@@ -148,8 +139,9 @@ MACR: hyrule | as->
 [go up](#Cheetsheet)
 
 ```hy
-MACR: hyrule | doto
-mutating
+Name: doto
+Kind: Macro from [hyrule]
+Info: mutating
 ```
 
 ## partial
@@ -157,8 +149,9 @@ mutating
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | partial
-applicator
+Name: partial
+Kind: Reimport from [funcy]
+Info: applicator
 ```
 
 ```hy
@@ -224,8 +217,9 @@ class partial(builtins.object)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | rpartial
-applicator
+Name: rpartial
+Kind: Reimport from [funcy]
+Info: applicator
 ```
 
 ```hy
@@ -241,8 +235,9 @@ rpartial(func, *args, **kwargs)
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | =>
-unification of dot-macro and ->
+Name: =>
+Kind: FPTK Macro
+Info: unification of dot-macro and ->
 ```
 
 ## FPTKThreading2
@@ -250,8 +245,9 @@ unification of dot-macro and ->
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | =>>
-unification of dot-macro and ->>
+Name: =>>
+Kind: FPTK Macro
+Info: unification of dot-macro and ->>
 ```
 
 ## PipeOfPartials
@@ -259,8 +255,9 @@ unification of dot-macro and ->>
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | p:
-aplicator, pipe of partials
+Name: p:
+Kind: FPTK Macro
+Info: aplicator, pipe of partials
 ```
 
 ## compose
@@ -268,9 +265,10 @@ aplicator, pipe of partials
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | compose
-:: compose(f1, f2, ..., fn)
-= f1(f2(..fn(***))) ; applicator
+Name: compose
+Kind: Reimport from [funcy]
+Sgnt: compose(f1, f2, ..., fn)
+Info: = f1(f2(..fn(***))) ; applicator
 ```
 
 ```hy
@@ -285,9 +283,10 @@ compose(*fs)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | rcompose
-:: rcompose(f1, f2, ..., fn)
-= fn(..(f2(f1(***)))) ; applicator
+Name: rcompose
+Kind: Reimport from [funcy]
+Sgnt: rcompose(f1, f2, ..., fn)
+Info: = fn(..(f2(f1(***)))) ; applicator
 ```
 
 ```hy
@@ -302,9 +301,10 @@ rcompose(*fs)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | ljuxt
-:: ljuxt(*fs)
-= [f1, f2, ...](***) ; applicator
+Name: ljuxt
+Kind: Reimport from [funcy]
+Sgnt: ljuxt(*fs)
+Info: = [f1, f2, ...](***) ; applicator
 ```
 
 ```hy
@@ -320,9 +320,10 @@ ljuxt(*fs)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | pflip
-:: pflip(f, a)
-applicator for function f(a,b) of 2 args; example: pflip(div, 4)(1) == 0.25
+Name: pflip
+Kind: FPTK original
+Sgnt: pflip(f, a)
+Info: applicator for function f(a,b) of 2 args; example: pflip(div, 4)(1) == 0.25
 ```
 
 ```hy
@@ -338,9 +339,10 @@ pflip(f, a)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | flip
-:: flip(f, a, b) = f(b, a)
-calls f with flipped args
+Name: flip
+Kind: FPTK original
+Sgnt: flip(f, a, b) = f(b, a)
+Info: calls f with flipped args
 ```
 
 ```hy
@@ -355,18 +357,10 @@ flip(f, a, b)
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | fm
-:: (fm (* it 3))
-anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'
-```
-
-## zip
-
-[go up](#Cheetsheet)
-
-```hy
-INFO: py | zip /base/
-:: zip(*iterables) -> zip object
+Name: fm
+Kind: FPTK Macro
+Sgnt: (fm (* it 3))
+Info: anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'
 ```
 
 ## lzip
@@ -374,9 +368,10 @@ INFO: py | zip /base/
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lzip
-:: lzip(*iterables) -> List
-literally just list(zip(*iterables))
+Name: lzip
+Kind: FPTK original
+Sgnt: lzip(*iterables) -> List
+Info: literally just list(zip(*iterables))
 ```
 
 ```hy
@@ -385,23 +380,15 @@ Help on function lzip in module fptk.flow:
 lzip(*iterables)
 ```
 
-## map
-
-[go up](#Cheetsheet)
-
-```hy
-INFO: py | map /base/
-:: map(func, *iterables) -> map object
-```
-
 ## lmap
 
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | lmap
-:: lmap(f, *seqs) -> List
-list version of map
+Name: lmap
+Kind: Reimport from [funcy]
+Sgnt: lmap(f, *seqs) -> List
+Info: list version of map
 ```
 
 ```hy
@@ -417,8 +404,9 @@ lmap(f, *seqs)
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | mapm
-same as map, but expects fm-syntax for func
+Name: mapm
+Kind: FPTK Macro
+Info: same as map, but expects fm-syntax for func
 ```
 
 ## lmapm
@@ -426,8 +414,9 @@ same as map, but expects fm-syntax for func
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | lmapm
-same as lmap, but expects fm-syntax for func
+Name: lmapm
+Kind: FPTK Macro
+Info: same as lmap, but expects fm-syntax for func
 ```
 
 ## starmap
@@ -435,8 +424,9 @@ same as lmap, but expects fm-syntax for func
 [go up](#Cheetsheet)
 
 ```hy
-FROM: itertools | starmap
-:: starmap(function, iterable)
+Name: starmap
+Kind: Reimport from [itertools]
+Sgnt: starmap(function, iterable)
 ```
 
 ```hy
@@ -473,9 +463,10 @@ class starmap(builtins.object)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lstarmap
-:: lstarmap(function, iterable) -> list
-list version of starmap
+Name: lstarmap
+Kind: FPTK original
+Sgnt: lstarmap(function, iterable) -> list
+Info: list version of starmap
 ```
 
 ```hy
@@ -490,9 +481,10 @@ lstarmap(function, iterable)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: functools | reduce
-:: reduce(function, sequence[, initial]) -> value
-theory: reduce + monoid = binary-function for free becomes n-arg-function
+Name: reduce
+Kind: Reimport from [functools]
+Sgnt: reduce(function, sequence[, initial]) -> value
+Info: theory: reduce + monoid = binary-function for free becomes n-arg-function
 ```
 
 ```hy
@@ -514,9 +506,10 @@ reduce(...)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | reductions
-:: reductions(f, seq [, acc]) -> generator
-returns sequence of intermetidate values of reduce(f, seq, acc)
+Name: reductions
+Kind: Reimport from [funcy]
+Sgnt: reductions(f, seq [, acc]) -> generator
+Info: returns sequence of intermetidate values of reduce(f, seq, acc)
 ```
 
 ```hy
@@ -531,9 +524,10 @@ reductions(f, seq, acc=EMPTY)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | lreductions
-:: lreductions(f, seq [, acc]) -> list
-list version of reductions
+Name: lreductions
+Kind: Reimport from [funcy]
+Sgnt: lreductions(f, seq [, acc]) -> list
+Info: list version of reductions
 ```
 
 ```hy
@@ -548,9 +542,10 @@ lreductions(f, seq, acc=EMPTY)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | sums
-:: sums(seq [, acc]) -> generator
-reductions with addition function
+Name: sums
+Kind: Reimport from [funcy]
+Sgnt: sums(seq [, acc]) -> generator
+Info: reductions with addition function
 ```
 
 ```hy
@@ -565,9 +560,10 @@ sums(seq, acc=EMPTY)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | lsums
-:: lsums(seq [, acc]) -> list
-list version of sums
+Name: lsums
+Kind: Reimport from [funcy]
+Sgnt: lsums(seq [, acc]) -> list
+Info: list version of sums
 ```
 
 ```hy
@@ -582,9 +578,10 @@ lsums(seq, acc=EMPTY)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | product (<-prod)
-:: product(iterable, /, *, start=1)
-product([2, 3, 5]) = 30
+Name: product (= math.prod)
+Kind: Reimport
+Sgnt: product(iterable, /, *, start=1)
+Info: product([2, 3, 5]) = 30
 ```
 
 ```hy
@@ -605,9 +602,10 @@ prod(iterable, /, *, start=1)
 [go up](#Cheetsheet)
 
 ```hy
-MACR: hyrule | do_n
-:: (do_n   n #* body) -> None
-expands to ~ (do body body body ...)
+Name: do_n
+Kind: Macro from [hyrule]
+Sgnt: (do_n   n #* body) -> None
+Info: expands to ~ (do body body body ...)
 ```
 
 ## list_n
@@ -615,8 +613,9 @@ expands to ~ (do body body body ...)
 [go up](#Cheetsheet)
 
 ```hy
-MACR: hyrule | list_n
-:: (list_n n #* body) -> List
+Name: list_n
+Kind: Macro from [hyrule]
+Sgnt: (list_n n #* body) -> List
 ```
 
 ## nested
@@ -624,9 +623,10 @@ MACR: hyrule | list_n
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | nested
-:: nested(n, f)
-applicator f(...(f(***)))
+Name: nested
+Kind: FPTK original
+Sgnt: nested(n, f)
+Info: applicator f(...(f(***)))
 ```
 
 ```hy
@@ -641,9 +641,10 @@ nested(n, f)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | apply_n
-:: apply_n(n, f, *args, **kwargs)
-f(f(f(...f(*args, **kwargs))
+Name: apply_n
+Kind: FPTK original
+Sgnt: apply_n(n, f, *args, **kwargs)
+Info: f(f(f(...f(*args, **kwargs))
 ```
 
 ```hy
@@ -657,24 +658,15 @@ apply_n(n, f, *args, **kwargs)
     n=1 is simply f(args, kwargs)
 ```
 
-## filter
-
-[go up](#Cheetsheet)
-
-```hy
-INFO: py | filter /base/
-:: filter(function or None, iterable) -> filter object
-when f=None, checks if elems are True
-```
-
 ## lfilter
 
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | lfilter
-:: lfilter(pred, seq) -> List
-funcy list version of extended filter
+Name: lfilter
+Kind: Reimport from [funcy]
+Sgnt: lfilter(pred, seq) -> List
+Info: funcy list version of extended filter
 ```
 
 ```hy
@@ -690,9 +682,10 @@ lfilter(pred, seq)
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | filterm
-:: (filterm f xs)
-same as filter, but expects fm-syntax for func
+Name: filterm
+Kind: FPTK Macro
+Sgnt: (filterm f xs)
+Info: same as filter, but expects fm-syntax for func
 ```
 
 ## lfilterm
@@ -700,9 +693,10 @@ same as filter, but expects fm-syntax for func
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | lfilterm
-:: (lfilterm f xs)
-list version of lfilterm
+Name: lfilterm
+Kind: FPTK Macro
+Sgnt: (lfilterm f xs)
+Info: list version of lfilterm
 ```
 
 ## fltr1st
@@ -710,9 +704,10 @@ list version of lfilterm
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | fltr1st
-:: fltr1st(f, seq) -> Optional elem
-returns first found element (or None)
+Name: fltr1st
+Kind: FPTK original
+Sgnt: fltr1st(f, seq) -> Optional elem
+Info: returns first found element (or None)
 ```
 
 ```hy
@@ -727,9 +722,10 @@ fltr1st(function, iterable)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | reject (<-remove)
-:: reject(pred, seq)-> iterator
-same as filter, but checks for False
+Name: reject (= funcy.remove)
+Kind: Reimport
+Sgnt: reject(pred, seq)-> iterator
+Info: same as filter, but checks for False
 ```
 
 ```hy
@@ -744,9 +740,10 @@ remove(pred, seq)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | lreject (<-lremove)
-:: lreject(pred, seq) -> List
-list version of reject
+Name: lreject (= funcy.lremove)
+Kind: Reimport
+Sgnt: lreject(pred, seq) -> List
+Info: list version of reject
 ```
 
 ```hy
@@ -761,9 +758,10 @@ lremove(pred, seq)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | without
-:: without(items, seq) -> generator
-subtracts items from seq (as a sets)
+Name: without
+Kind: FPTK original
+Sgnt: without(items, seq) -> generator
+Info: subtracts items from seq (as a sets)
 ```
 
 ```hy
@@ -778,9 +776,10 @@ without(items, seq)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lwithout
-:: lwithout(items, seq) -> list
-list version of reject
+Name: lwithout
+Kind: FPTK original
+Sgnt: lwithout(items, seq) -> list
+Info: list version of reject
 ```
 
 ```hy
@@ -795,9 +794,10 @@ lwithout(items, seq)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | takewhile
-:: takewhile([pred, ] seq)
-yields elems of seq as long as they pass pred
+Name: takewhile
+Kind: Reimport from [funcy]
+Sgnt: takewhile([pred, ] seq)
+Info: yields elems of seq as long as they pass pred
 ```
 
 ```hy
@@ -813,9 +813,10 @@ takewhile(pred, seq=EMPTY)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | dropwhile
-:: dropwhile([pred, ] seq)
-mirror of dropwhile
+Name: dropwhile
+Kind: Reimport from [funcy]
+Sgnt: dropwhile([pred, ] seq)
+Info: mirror of takewhile
 ```
 
 ```hy
@@ -831,8 +832,9 @@ dropwhile(pred, seq=EMPTY)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | filter_split (<-split)
-:: filter_split(pred, seq) -> passed, rejected
+Name: filter_split (= funcy.split)
+Kind: Reimport
+Sgnt: filter_split(pred, seq) -> passed, rejected
 ```
 
 ```hy
@@ -848,9 +850,10 @@ split(pred, seq)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | lfilter_split (<-lsplit)
-:: lfilter_split(pred,seq) -> passed, rejected
-list version of filter_split
+Name: lfilter_split (= funcy.lsplit)
+Kind: Reimport
+Sgnt: lfilter_split(pred,seq) -> passed, rejected
+Info: list version of filter_split
 ```
 
 ```hy
@@ -866,9 +869,10 @@ lsplit(pred, seq)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | bisect_at (<-split_at)
-:: bisect_at(n, seq) -> start, tail
-len of start will = n, works only with n>=0
+Name: bisect_at (= funcy.split_at)
+Kind: Reimport
+Sgnt: bisect_at(n, seq) -> start, tail
+Info: len of start will = n, works only with n>=0
 ```
 
 ```hy
@@ -884,9 +888,10 @@ split_at(n, seq)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lbisect_at
-:: lbisect_at(n, seq) -> start, tail
-list version of bisect_at, but also for n<0, abs(n) will be len of tail
+Name: lbisect_at
+Kind: FPTK original
+Sgnt: lbisect_at(n, seq) -> start, tail
+Info: list version of bisect_at, but also for n<0, abs(n) will be len of tail
 ```
 
 ```hy
@@ -903,9 +908,10 @@ lbisect_at(n, seq)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | bisect_by (<-split_by)
-:: bisect_by(pred, seq) -> taken, dropped
-similar to (takewhile, dropwhile)
+Name: bisect_by (= funcy.split_by)
+Kind: Reimport
+Sgnt: bisect_by(pred, seq) -> taken, dropped
+Info: similar to (takewhile, dropwhile)
 ```
 
 ```hy
@@ -921,9 +927,10 @@ split_by(pred, seq)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | lbisect_by (<-lsplit_by)
-:: lbisect_by(pred, seq) -> taken, dropped
-list version of lbisect
+Name: lbisect_by (= funcy.lsplit_by)
+Kind: Reimport
+Sgnt: lbisect_by(pred, seq) -> taken, dropped
+Info: list version of lbisect
 ```
 
 ```hy
@@ -939,8 +946,9 @@ lsplit_by(pred, seq)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: itertools | mask_sel (<-compress)
-:: mask_sel('abc', [1,0,1]) -> iterator: 'a', 'c'
+Name: mask_sel (= itertools.compress)
+Kind: Reimport
+Sgnt: mask_sel('abc', [1,0,1]) -> iterator: 'a', 'c'
 ```
 
 ```hy
@@ -980,8 +988,9 @@ class compress(builtins.object)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lmask_sel
-:: lmask_sel(data, selectors) -> list
+Name: lmask_sel
+Kind: FPTK original
+Sgnt: lmask_sel(data, selectors) -> list
 ```
 
 ```hy
@@ -996,9 +1005,10 @@ lmask_sel(data, selectors)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | mask2idxs
-:: mask2idxs(mask) -> list
-mask is list like [1 0 1 0] or [True False True False], which will be converted to [0 2]
+Name: mask2idxs
+Kind: FPTK original
+Sgnt: mask2idxs(mask) -> list
+Info: mask is list like [1 0 1 0] or [True False True False], which will be converted to [0 2]
 ```
 
 ```hy
@@ -1013,9 +1023,10 @@ mask2idxs(mask)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | idxs2mask
-:: idxs2mask(idxs) -> list
-idxs is non-sorted list of integers like [0 3 2], which will be converted to [1 0 1 1]
+Name: idxs2mask
+Kind: FPTK original
+Sgnt: idxs2mask(idxs) -> list
+Info: idxs is non-sorted list of integers like [0 3 2], which will be converted to [1 0 1 1]
 ```
 
 ```hy
@@ -1031,9 +1042,10 @@ idxs2mask(idxs, bools=False)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: itertools | inf_range (<-count)
-:: inf_range(start [, step])
-inf_range(10) -> generator: 10, 11, 12, ...
+Name: inf_range (= itertools.count)
+Kind: Reimport
+Sgnt: inf_range(start [, step])
+Info: inf_range(10) -> generator: 10, 11, 12, ...
 ```
 
 ```hy
@@ -1080,9 +1092,10 @@ class count(builtins.object)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: itertools | islice
-:: islice(iterable, start, stop[, step])
-list(islice(inf_range(10), 2)) == [10, 11]
+Name: islice
+Kind: Reimport from [itertools]
+Sgnt: islice(iterable, start, stop[, step])
+Info: list(islice(inf_range(10), 2)) == [10, 11]
 ```
 
 ```hy
@@ -1128,8 +1141,9 @@ class islice(builtins.object)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lislice
-list version of islice: lislice
+Name: lislice
+Kind: FPTK original
+Info: list version of islice: lislice
 ```
 
 ```hy
@@ -1144,9 +1158,10 @@ lislice(*kwargs)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: itertools | cycle
-:: cycle(p)
-cycle('AB') -> A B A B ...
+Name: cycle
+Kind: Reimport from [itertools]
+Sgnt: cycle(p)
+Info: cycle('AB') -> A B A B ...
 ```
 
 ```hy
@@ -1186,9 +1201,10 @@ class cycle(builtins.object)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lcycle
-:: lcycle(p, n) -> list
-takes first n elems from cycle(p)
+Name: lcycle
+Kind: FPTK original
+Sgnt: lcycle(p, n) -> list
+Info: takes first n elems from cycle(p)
 ```
 
 ```hy
@@ -1203,9 +1219,10 @@ lcycle(p, n)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: itertools | repeat
-:: repeat(elem [, n])
-repeat(10,3) -> 10 10 10
+Name: repeat
+Kind: Reimport from [itertools]
+Sgnt: repeat(elem [, n])
+Info: repeat(10,3) -> 10 10 10
 ```
 
 ```hy
@@ -1248,9 +1265,10 @@ class repeat(builtins.object)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lrepeat
-:: lrepeat(elem, n) -> list
-unlike in repeat, n has to be provided
+Name: lrepeat
+Kind: FPTK original
+Sgnt: lrepeat(elem, n) -> list
+Info: unlike in repeat, n has to be provided
 ```
 
 ```hy
@@ -1265,8 +1283,9 @@ lrepeat(elem, n)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: itertools | concat (<-chain)
-:: concat(*seqs) -> iterator
+Name: concat (= itertools.chain)
+Kind: Reimport
+Sgnt: concat(*seqs) -> iterator
 ```
 
 ```hy
@@ -1317,9 +1336,10 @@ class chain(builtins.object)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lconcat
-:: lconcat(*seqs) -> list
-list(concat(*seqs))
+Name: lconcat
+Kind: FPTK original
+Sgnt: lconcat(*seqs) -> list
+Info: list(concat(*seqs))
 ```
 
 ```hy
@@ -1334,9 +1354,10 @@ lconcat(*seqs)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | cat
-:: cat(seqs)
-non-variadic version of concat
+Name: cat
+Kind: Reimport from [funcy]
+Sgnt: cat(seqs)
+Info: non-variadic version of concat
 ```
 
 ```hy
@@ -1351,9 +1372,10 @@ from_iterable(iterable, /) method of builtins.type instance
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | lcat
-:: lcat(seqs)
-non-variadic version of concat
+Name: lcat
+Kind: Reimport from [funcy]
+Sgnt: lcat(seqs)
+Info: non-variadic version of concat
 ```
 
 ```hy
@@ -1368,9 +1390,10 @@ lcat(seqs)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | mapcat
-:: mapcat(f, *seqs)
-maps, then concatenates
+Name: mapcat
+Kind: Reimport from [funcy]
+Sgnt: mapcat(f, *seqs)
+Info: maps, then concatenates
 ```
 
 ```hy
@@ -1385,9 +1408,10 @@ mapcat(f, *seqs)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | lmapcat
-:: lmapcat(f, *seqs)
-maps, then concatenates
+Name: lmapcat
+Kind: Reimport from [funcy]
+Sgnt: lmapcat(f, *seqs)
+Info: maps, then concatenates
 ```
 
 ```hy
@@ -1402,9 +1426,10 @@ lmapcat(f, *seqs)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | pairwise
-:: pairwise(seq) -> iterator
-supposed to be used in loops, will produce no elems for seq with len <= 1
+Name: pairwise
+Kind: Reimport from [funcy]
+Sgnt: pairwise(seq) -> iterator
+Info: supposed to be used in loops, will produce no elems for seq with len <= 1
 ```
 
 ```hy
@@ -1419,9 +1444,10 @@ pairwise(seq)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | with_prev
-:: with_prev(seq, fill=None) -> iterator
-supposed to be used in loops
+Name: with_prev
+Kind: Reimport from [funcy]
+Sgnt: with_prev(seq, fill=None) -> iterator
+Info: supposed to be used in loops
 ```
 
 ```hy
@@ -1436,9 +1462,10 @@ with_prev(seq, fill=None)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | with_next
-:: with_next(seq, fill=None) -> iterator
-supposed to be used in loops
+Name: with_next
+Kind: Reimport from [funcy]
+Sgnt: with_next(seq, fill=None) -> iterator
+Info: supposed to be used in loops
 ```
 
 ```hy
@@ -1453,9 +1480,10 @@ with_next(seq, fill=None)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: hyrule | flatten
-:: flatten(coll)
-flattens to the bottom, non-mutating
+Name: flatten
+Kind: Reimport from [hyrule]
+Sgnt: flatten(coll)
+Info: flattens to the bottom, non-mutating
 ```
 
 ```hy
@@ -1487,9 +1515,10 @@ flatten(coll)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lprint
-:: lprint(seq, sep=None)
-prints every elem of seq on new line
+Name: lprint
+Kind: FPTK original
+Sgnt: lprint(seq, sep=None)
+Info: prints every elem of seq on new line
 ```
 
 ```hy
@@ -1500,23 +1529,15 @@ lprint(seq, sep=None)
     with sep='---' (or some other) will print sep between seq elems
 ```
 
-## reversed
-
-[go up](#Cheetsheet)
-
-```hy
-INFO: py | reversed /base/
-:: reversed(sequence) -> iterator
-```
-
 ## lreversed
 
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lreversed
-:: lreversed(sequence)
-list version of reversed
+Name: lreversed
+Kind: FPTK original
+Sgnt: lreversed(sequence)
+Info: list version of reversed
 ```
 
 ```hy
@@ -1530,9 +1551,10 @@ lreversed(sequence)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | partition
-:: partition(n, seq, *, step=None, tail=False) -> generator
-splits seq to lists of len n, tail=True will allow including fewer than n items
+Name: partition
+Kind: FPTK original
+Sgnt: partition(n, seq, *, step=None, tail=False) -> generator
+Info: splits seq to lists of len n, tail=True will allow including fewer than n items
 ```
 
 ```hy
@@ -1550,9 +1572,10 @@ partition(n, seq, *, step=None, tail=False)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lpartition
-:: lpartition(n, seq, *, step=None, tail=False) -> List
-simply list(partition(...))
+Name: lpartition
+Kind: FPTK original
+Sgnt: lpartition(n, seq, *, step=None, tail=False) -> List
+Info: simply list(partition(...))
 ```
 
 ```hy
@@ -1570,9 +1593,10 @@ lpartition(n, seq, *, step=None, tail=False)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | partition_by
-:: partition_by(f, seq) -> iterator of iterators
-splits when f(item) change
+Name: partition_by
+Kind: Reimport from [funcy]
+Sgnt: partition_by(f, seq) -> iterator of iterators
+Info: splits when f(item) change
 ```
 
 ```hy
@@ -1587,9 +1611,10 @@ partition_by(f, seq)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | lpartition_by
-:: lpartition_by(f,seq) -> list of lists
-list(partition_by(...))
+Name: lpartition_by
+Kind: Reimport from [funcy]
+Sgnt: lpartition_by(f,seq) -> list of lists
+Info: list(partition_by(...))
 ```
 
 ```hy
@@ -1604,9 +1629,10 @@ lpartition_by(f, seq)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lmulticut_by
-:: lmulticut_by(pred, seq, keep_border=True, merge_border=False) -> list
-cut at pred(elem)==True elems
+Name: lmulticut_by
+Kind: FPTK original
+Sgnt: lmulticut_by(pred, seq, keep_border=True, merge_border=False) -> list
+Info: cut at pred(elem)==True elems
 ```
 
 ```hy
@@ -1634,9 +1660,10 @@ lmulticut_by(pred, seq: list, keep_border=True, merge_border=False) -> List[list
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | count_occurrences
-:: count_occurrences(elem, seq) -> int
-rename of list.count method
+Name: count_occurrences
+Kind: FPTK original
+Sgnt: count_occurrences(elem, seq) -> int
+Info: rename of list.count method
 ```
 
 ```hy
@@ -1645,34 +1672,15 @@ Help on function count_occurrences in module fptk.apl:
 count_occurrences(elem, seq)
 ```
 
-## .
-
-[go up](#Cheetsheet)
-
-```hy
-INFO: hy | . /macro/
-:: (. xs [n1] [n2] ...) -> xs[n1][n2]...
-throws error when not found
-```
-
-## get
-
-[go up](#Cheetsheet)
-
-```hy
-INFO: hy | get /macro/
-:: (get xs n #* keys) -> xs[n][key1]...
-throws error when not found
-```
-
 ## nth
 
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | nth
-:: nth(n, seq) -> Optional elem
-0-based index; works also with dicts
+Name: nth
+Kind: Reimport from [funcy]
+Sgnt: nth(n, seq) -> Optional elem
+Info: 0-based index; works also with dicts
 ```
 
 ```hy
@@ -1682,34 +1690,15 @@ nth(n, seq)
     Returns nth item in the sequence or None if no such item exists.
 ```
 
-## slice
-
-[go up](#Cheetsheet)
-
-```hy
-INFO: py | slice /base/
-:: (slice start end step)
-returns empty list when not found
-```
-
-## cut
-
-[go up](#Cheetsheet)
-
-```hy
-INFO: hy | cut /macro/
-:: (cut xs start end step) -> (get xs (slice start end step)) -> List
-returns empty list when none found
-```
-
 ## assoc
 
 [go up](#Cheetsheet)
 
 ```hy
-FROM: hyrule | assoc
-:: assoc(xs, k1, v1, k2, v2, ...) -> None
-≈ (setv (get xs k1) v1 (get xs k2) v2) ; also possible: (assoc xs :x 1)
+Name: assoc
+Kind: Reimport from [hyrule]
+Sgnt: assoc(xs, k1, v1, k2, v2, ...) -> None
+Info: ≈ (setv (get xs k1) v1 (get xs k2) v2) ; also possible: (assoc xs :x 1)
 ```
 
 ```hy
@@ -1743,7 +1732,8 @@ assoc(coll, *kvs, **kwargs)
 [go up](#Cheetsheet)
 
 ```hy
-MACR: hyrule | ncut
+Name: ncut
+Kind: Macro from [hyrule]
 ```
 
 ## first
@@ -1751,8 +1741,9 @@ MACR: hyrule | ncut
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | first
-:: first(seq) -> Optional elem
+Name: first
+Kind: Reimport from [funcy]
+Sgnt: first(seq) -> Optional elem
 ```
 
 ```hy
@@ -1768,8 +1759,9 @@ first(seq)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | second
-:: second(seq) -> Optional elem
+Name: second
+Kind: Reimport from [funcy]
+Sgnt: second(seq) -> Optional elem
 ```
 
 ```hy
@@ -1785,8 +1777,9 @@ second(seq)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | third
-:: third(seq) -> Optional elem
+Name: third
+Kind: FPTK original
+Sgnt: third(seq) -> Optional elem
 ```
 
 ```hy
@@ -1800,8 +1793,9 @@ third(seq)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | fourth
-:: fourth(seq) -> Optional elem
+Name: fourth
+Kind: FPTK original
+Sgnt: fourth(seq) -> Optional elem
 ```
 
 ```hy
@@ -1815,8 +1809,9 @@ fourth(seq)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | beforelast
-:: beforelast(seq) -> Optional elem
+Name: beforelast
+Kind: FPTK original
+Sgnt: beforelast(seq) -> Optional elem
 ```
 
 ```hy
@@ -1830,8 +1825,9 @@ beforelast(seq)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | last
-:: last(seq) -> Optional elem
+Name: last
+Kind: Reimport from [funcy]
+Sgnt: last(seq) -> Optional elem
 ```
 
 ```hy
@@ -1847,9 +1843,10 @@ last(seq)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | rest
-:: rest(seq) -> List
-drops 1st elem of list
+Name: rest
+Kind: FPTK original
+Sgnt: rest(seq) -> List
+Info: drops 1st elem of list
 ```
 
 ```hy
@@ -1864,9 +1861,10 @@ rest(seq)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | butlast
-:: butlast(seq) -> List
-drops last elem of list
+Name: butlast
+Kind: FPTK original
+Sgnt: butlast(seq) -> List
+Info: drops last elem of list
 ```
 
 ```hy
@@ -1881,9 +1879,10 @@ butlast(seq)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | drop
-:: drop(n, seq) -> List
-drops n>=0 elems from start of the list; when n<0, drops from end of the list
+Name: drop
+Kind: FPTK original
+Sgnt: drop(n, seq) -> List
+Info: drops n>=0 elems from start of the list; when n<0, drops from end of the list
 ```
 
 ```hy
@@ -1898,9 +1897,10 @@ drop(n, seq)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | take
-:: take(n, seq) -> List
-takes n elems from start; when n<0, takes from end of the list
+Name: take
+Kind: FPTK original
+Sgnt: take(n, seq) -> List
+Info: takes n elems from start; when n<0, takes from end of the list
 ```
 
 ```hy
@@ -1915,9 +1915,10 @@ take(n, seq)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | pick
-:: pick(ns, seq) -> List
-throws error if some of ns doesn't exist; ns can be list of ints or dict keys
+Name: pick
+Kind: FPTK original
+Sgnt: pick(ns, seq) -> List
+Info: throws error if some of ns doesn't exist; ns can be list of ints or dict keys
 ```
 
 ```hy
@@ -1934,9 +1935,10 @@ pick(ns, seq)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | get_
-:: get_(seq, *ns) -> elem
-same as get, but with 1-based index (will throw error for n=0)
+Name: get_
+Kind: FPTK original
+Sgnt: get_(seq, *ns) -> elem
+Info: same as get, but with 1-based index (will throw error for n=0)
 ```
 
 ```hy
@@ -1954,9 +1956,10 @@ get_(seq, *ns)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | nth_
-:: nth_(n, seq) -> Optional elem
-same as nth, but with 1-based index; will return None for n=0
+Name: nth_
+Kind: FPTK original
+Sgnt: nth_(n, seq) -> Optional elem
+Info: same as nth, but with 1-based index; will return None for n=0
 ```
 
 ```hy
@@ -1973,9 +1976,10 @@ nth_(n, seq)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | slice_
-:: slice_(start, end, step=None)
-similar to slice, but with 1-based index; will throw error for start=0 or end=0
+Name: slice_
+Kind: FPTK original
+Sgnt: slice_(start, end, step=None)
+Info: similar to slice, but with 1-based index; will throw error for start=0 or end=0
 ```
 
 ```hy
@@ -1992,9 +1996,10 @@ slice_(start, end, step=None)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | cut_
-:: cut_(seq, start, end, step=None) -> List
-similar to cut, but with 1-based index; will throw error for start=0 or end=0
+Name: cut_
+Kind: FPTK original
+Sgnt: cut_(seq, start, end, step=None) -> List
+Info: similar to cut, but with 1-based index; will throw error for start=0 or end=0
 ```
 
 ```hy
@@ -2005,24 +2010,15 @@ cut_(seq, start, end, step=None)
     - will throw error when start=0 or end=0
 ```
 
-## getattr
-
-[go up](#Cheetsheet)
-
-```hy
-INFO: py | getattr /base/
-:: getattr(object, name[, default]) -> value
-arg name should be given as str
-```
-
 ## getattrm
 
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | getattrm
-:: (getattrm Object 'attr') (getattrm Object .attr)
-accepts fptk-style .attr syntax
+Name: getattrm
+Kind: FPTK Macro
+Sgnt: (getattrm Object 'attr') (getattrm Object .attr)
+Info: accepts fptk-style .attr syntax
 ```
 
 ## pluck
@@ -2030,9 +2026,10 @@ accepts fptk-style .attr syntax
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | pluck
-:: pluck(key, mappings) -> generator
-gets same key (or idx) from every mapping, mappings can be lists of lists/dicts/etc.
+Name: pluck
+Kind: Reimport from [funcy]
+Sgnt: pluck(key, mappings) -> generator
+Info: gets same key (or idx) from every mapping, mappings can be lists of lists/dicts/etc.
 ```
 
 ```hy
@@ -2047,8 +2044,9 @@ pluck(key, mappings)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | lpluck
-:: lpluck(key, mappings) -> list
+Name: lpluck
+Kind: Reimport from [funcy]
+Sgnt: lpluck(key, mappings) -> list
 ```
 
 ```hy
@@ -2063,9 +2061,10 @@ lpluck(key, mappings)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | pluck_attr
-:: pluck_attr(attr, objects) -> generator
-attr should be given as str
+Name: pluck_attr
+Kind: Reimport from [funcy]
+Sgnt: pluck_attr(attr, objects) -> generator
+Info: attr should be given as str
 ```
 
 ```hy
@@ -2080,9 +2079,10 @@ pluck_attr(attr, objects)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | lpluck_attr
-:: lpluck_attr(attr, objects) -> list
-list version of pluck_attr
+Name: lpluck_attr
+Kind: Reimport from [funcy]
+Sgnt: lpluck_attr(attr, objects) -> list
+Info: list version of pluck_attr
 ```
 
 ```hy
@@ -2097,9 +2097,10 @@ lpluck_attr(attr, objects)
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | pluckm
-:: (pluckm n xs) (pluckm key ys) (pluckm .attr zs)
-accepts fptk-style .arg syntax
+Name: pluckm
+Kind: FPTK Macro
+Sgnt: (pluckm n xs) (pluckm key ys) (pluckm .attr zs)
+Info: accepts fptk-style .arg syntax
 ```
 
 ## lpluckm
@@ -2107,8 +2108,9 @@ accepts fptk-style .arg syntax
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | lpluckm
-list version of pluckm
+Name: lpluckm
+Kind: FPTK Macro
+Info: list version of pluckm
 ```
 
 ## of
@@ -2116,8 +2118,9 @@ list version of pluckm
 [go up](#Cheetsheet)
 
 ```hy
-MACR: hyrule | of
-example: (of List int) which is equiv to py-code: List[int]
+Name: of
+Kind: Macro from [hyrule]
+Info: example: (of List int) which is equiv to py-code: List[int]
 ```
 
 ## Annotator1
@@ -2125,8 +2128,9 @@ example: (of List int) which is equiv to py-code: List[int]
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | f::
-example: (f:: int -> int => (of Tuple int str)) -> Callable[[int, int], Tuple[int,str]]
+Name: f::
+Kind: FPTK Macro
+Info: example: (f:: int -> int => (of Tuple int str)) -> Callable[[int, int], Tuple[int,str]]
 ```
 
 ## Annotator2
@@ -2134,8 +2138,9 @@ example: (f:: int -> int => (of Tuple int str)) -> Callable[[int, int], Tuple[in
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | def::
-define function with signature; example: (def:: int -> int -> float fdivide [x y] (/ x y))
+Name: def::
+Kind: FPTK Macro
+Info: define function with signature; example: (def:: int -> int -> float fdivide [x y] (/ x y))
 ```
 
 ## dataclass
@@ -2143,7 +2148,8 @@ define function with signature; example: (def:: int -> int -> float fdivide [x y
 [go up](#Cheetsheet)
 
 ```hy
-FROM: dataclasses | dataclass
+Name: dataclass
+Kind: Reimport from [dataclasses]
 ```
 
 ```hy
@@ -2170,7 +2176,8 @@ dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_has
 [go up](#Cheetsheet)
 
 ```hy
-FROM: enum | Enum
+Name: Enum
+Kind: Reimport from [enum]
 ```
 
 ```hy
@@ -2206,7 +2213,8 @@ class Enum(builtins.object)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: typing | List
+Name: List
+Kind: Reimport from [typing]
 ```
 
 ```hy
@@ -2221,7 +2229,8 @@ List = typing.List
 [go up](#Cheetsheet)
 
 ```hy
-FROM: typing | Tuple
+Name: Tuple
+Kind: Reimport from [typing]
 ```
 
 ```hy
@@ -2242,7 +2251,8 @@ Tuple = typing.Tuple
 [go up](#Cheetsheet)
 
 ```hy
-FROM: typing | TypedDict
+Name: TypedDict
+Kind: Reimport from [typing]
 ```
 
 ```hy
@@ -2296,7 +2306,8 @@ TypedDict(typename, fields=None, /, *, total=True, **kwargs)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: typing | Dict
+Name: Dict
+Kind: Reimport from [typing]
 ```
 
 ```hy
@@ -2311,7 +2322,8 @@ Dict = typing.Dict
 [go up](#Cheetsheet)
 
 ```hy
-FROM: typing | Union
+Name: Union
+Kind: Reimport from [typing]
 ```
 
 ```hy
@@ -2349,7 +2361,8 @@ Union = typing.Union
 [go up](#Cheetsheet)
 
 ```hy
-FROM: typing | Generator
+Name: Generator
+Kind: Reimport from [typing]
 ```
 
 ```hy
@@ -2364,7 +2377,8 @@ Generator = typing.Generator
 [go up](#Cheetsheet)
 
 ```hy
-FROM: typing | Any
+Name: Any
+Kind: Reimport from [typing]
 ```
 
 ```hy
@@ -2387,7 +2401,8 @@ Any = typing.Any
 [go up](#Cheetsheet)
 
 ```hy
-FROM: typing | Optional
+Name: Optional
+Kind: Reimport from [typing]
 ```
 
 ```hy
@@ -2404,7 +2419,8 @@ Optional = typing.Optional
 [go up](#Cheetsheet)
 
 ```hy
-FROM: typing | Callable
+Name: Callable
+Kind: Reimport from [typing]
 ```
 
 ```hy
@@ -2426,7 +2442,8 @@ Callable = typing.Callable
 [go up](#Cheetsheet)
 
 ```hy
-FROM: typing | Literal
+Name: Literal
+Kind: Reimport from [typing]
 ```
 
 ```hy
@@ -2459,7 +2476,8 @@ Literal = typing.Literal
 [go up](#Cheetsheet)
 
 ```hy
-FROM: typing | Type
+Name: Type
+Kind: Reimport from [typing]
 ```
 
 ```hy
@@ -2494,7 +2512,8 @@ Type = typing.Type
 [go up](#Cheetsheet)
 
 ```hy
-FROM: typing | TypeVar
+Name: TypeVar
+Kind: Reimport from [typing]
 ```
 
 ```hy
@@ -2614,7 +2633,8 @@ class TypeVar(_Final, _Immutable, _TypeVarLike)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: typing | Generic
+Name: Generic
+Kind: Reimport from [typing]
 ```
 
 ```hy
@@ -2656,7 +2676,8 @@ class Generic(builtins.object)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | noneQ (<-isnone)
+Name: noneQ (= funcy.isnone)
+Kind: Reimport
 ```
 
 ```hy
@@ -2670,7 +2691,8 @@ isnone(x)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | notnoneQ (<-notnone)
+Name: notnoneQ (= funcy.notnone)
+Kind: Reimport
 ```
 
 ```hy
@@ -2684,9 +2706,10 @@ notnone(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | oftypeQ
-:: oftypeQ(tp, x)
-checks directly via (= (type x) tp)
+Name: oftypeQ
+Kind: FPTK original
+Sgnt: oftypeQ(tp, x)
+Info: checks directly via (= (type x) tp)
 ```
 
 ```hy
@@ -2701,9 +2724,10 @@ oftypeQ(tp, x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | intQ
-:: intQ(x)
-checks literally if type(x) == int, will also work with StrictInt from pydantic
+Name: intQ
+Kind: FPTK original
+Sgnt: intQ(x)
+Info: checks literally if type(x) == int, will also work with StrictInt from pydantic
 ```
 
 ```hy
@@ -2718,9 +2742,10 @@ intQ(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | floatQ
-:: floatQ(x)
-checks literally if type(x) == float, will also work with StrictFloat from pydantic
+Name: floatQ
+Kind: FPTK original
+Sgnt: floatQ(x)
+Info: checks literally if type(x) == float, will also work with StrictFloat from pydantic
 ```
 
 ```hy
@@ -2735,9 +2760,10 @@ floatQ(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | numberQ
-:: numberQ(x)
-checks for intQ or floatQ, will also work with StrictInt/StrictFloat from pydantic
+Name: numberQ
+Kind: FPTK original
+Sgnt: numberQ(x)
+Info: checks for intQ or floatQ, will also work with StrictInt/StrictFloat from pydantic
 ```
 
 ```hy
@@ -2752,9 +2778,10 @@ numberQ(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | strQ
-:: strQ(x)
-checks literally if type(x) == str, will also work with StrictStr from pydantic
+Name: strQ
+Kind: FPTK original
+Sgnt: strQ(x)
+Info: checks literally if type(x) == str, will also work with StrictStr from pydantic
 ```
 
 ```hy
@@ -2769,9 +2796,10 @@ strQ(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | dictQ
-:: dictQ(x)
-checks literally if type(x) == dict
+Name: dictQ
+Kind: FPTK original
+Sgnt: dictQ(x)
+Info: checks literally if type(x) == dict
 ```
 
 ```hy
@@ -2786,9 +2814,10 @@ dictQ(x)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | listQ (<-is_list)
-:: listQ(value)
-checks if value is list
+Name: listQ (= funcy.is_list)
+Kind: Reimport
+Sgnt: listQ(value)
+Info: checks if value is list
 ```
 
 ```hy
@@ -2802,9 +2831,10 @@ Help on function <lambda> in module funcy.types:
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | tupleQ (<-is_tuple)
-:: tupleQ(value)
-checks if value is tuple
+Name: tupleQ (= funcy.is_tuple)
+Kind: Reimport
+Sgnt: tupleQ(value)
+Info: checks if value is tuple
 ```
 
 ```hy
@@ -2818,9 +2848,10 @@ Help on function <lambda> in module funcy.types:
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | setQ (<-is_set)
-:: setQ(value)
-checks if value is set
+Name: setQ (= funcy.is_set)
+Kind: Reimport
+Sgnt: setQ(value)
+Info: checks if value is set
 ```
 
 ```hy
@@ -2834,9 +2865,10 @@ Help on function <lambda> in module funcy.types:
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | iteratorQ (<-is_iter)
-:: iteratorQ(value)
-checks if value is iterator
+Name: iteratorQ (= funcy.is_iter)
+Kind: Reimport
+Sgnt: iteratorQ(value)
+Info: checks if value is iterator
 ```
 
 ```hy
@@ -2850,9 +2882,10 @@ Help on function <lambda> in module funcy.types:
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | iterableQ (<-iterable)
-:: iterableQ(value)
-checks if value is iterable
+Name: iterableQ (= funcy.iterable)
+Kind: Reimport
+Sgnt: iterableQ(value)
+Info: checks if value is iterable
 ```
 
 ```hy
@@ -2866,7 +2899,8 @@ Help on function <lambda> in module funcy.types:
 [go up](#Cheetsheet)
 
 ```hy
-FROM: pydantic | BaseModel
+Name: BaseModel
+Kind: Reimport from [pydantic]
 ```
 
 ```hy
@@ -3344,8 +3378,9 @@ class BaseModel(builtins.object)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: pydantic | StrictInt
-will be still of int type, but will perform strict typecheck when variable is created
+Name: StrictInt
+Kind: Reimport from [pydantic]
+Info: will be still of int type, but will perform strict typecheck when variable is created
 ```
 
 ```hy
@@ -3621,8 +3656,9 @@ Annotated = class int(object)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: pydantic | StrictStr
-will be still of str type, but will perform strict typecheck when variable is created
+Name: StrictStr
+Kind: Reimport from [pydantic]
+Info: will be still of str type, but will perform strict typecheck when variable is created
 ```
 
 ```hy
@@ -4049,8 +4085,9 @@ Annotated = class str(object)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: pydantic | StrictFloat
-will be still of float type, but will perform strict typecheck when variable is created
+Name: StrictFloat
+Kind: Reimport from [pydantic]
+Info: will be still of float type, but will perform strict typecheck when variable is created
 ```
 
 ```hy
@@ -4263,8 +4300,9 @@ Annotated = class float(object)
 [go up](#Cheetsheet)
 
 ```hy
-SETV: fptk | StrictNumber
-Union of StrictInt and StrictFloat
+Name: StrictNumber
+Kind: FPTK original
+Info: Union of StrictInt and StrictFloat
 ```
 
 ```hy
@@ -4302,8 +4340,9 @@ Union = typing.Union
 [go up](#Cheetsheet)
 
 ```hy
-FROM: pydantic | validate_call
-decorator for type-checking func args
+Name: validate_call
+Kind: Reimport from [pydantic]
+Info: decorator for type-checking func args
 ```
 
 ```hy
@@ -4331,8 +4370,9 @@ validate_call(func: 'AnyCallableT | None' = None, /, *, config: 'ConfigDict | No
 [go up](#Cheetsheet)
 
 ```hy
-SETV: fptk | validateF
-same as validate_call but with option validate_return=True set (thus validating args and return type)
+Name: validateF
+Kind: FPTK original
+Info: same as validate_call but with option validate_return=True set (thus validating args and return type)
 ```
 
 ```hy
@@ -4346,9 +4386,10 @@ validate(function: 'AnyCallableT') -> 'AnyCallableT'
 [go up](#Cheetsheet)
 
 ```hy
-FROM: hyrule | inc
-:: inc(n)
-= n + 1
+Name: inc
+Kind: Reimport from [hyrule]
+Sgnt: inc(n)
+Info: = n + 1
 ```
 
 ```hy
@@ -4363,9 +4404,10 @@ inc(n)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: hyrule | dec
-:: dec(n)
-= n - 1
+Name: dec
+Kind: Reimport from [hyrule]
+Sgnt: dec(n)
+Info: = n - 1
 ```
 
 ```hy
@@ -4380,9 +4422,10 @@ dec(n)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: hyrule | sign
-:: sign(n)
-will give 0 for n=0
+Name: sign
+Kind: Reimport from [hyrule]
+Sgnt: sign(n)
+Info: will give 0 for n=0
 ```
 
 ```hy
@@ -4408,9 +4451,10 @@ sign(x)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: operator | neg
-:: neg(n)
-= -1 * n
+Name: neg
+Kind: Reimport from [operator]
+Sgnt: neg(n)
+Info: = -1 * n
 ```
 
 ```hy
@@ -4425,8 +4469,9 @@ neg(a, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | floor
-floor(1.9) = 1
+Name: floor
+Kind: Reimport from [math]
+Info: floor(1.9) = 1
 ```
 
 ```hy
@@ -4443,8 +4488,9 @@ floor(x, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | ceil
-ceil(1.1) = 2
+Name: ceil
+Kind: Reimport from [math]
+Info: ceil(1.1) = 2
 ```
 
 ```hy
@@ -4461,9 +4507,10 @@ ceil(x, /)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | half
-:: half(x)
-= x/2
+Name: half
+Kind: FPTK original
+Sgnt: half(x)
+Info: = x/2
 ```
 
 ```hy
@@ -4478,9 +4525,10 @@ half(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | double
-:: double(x)
-= x*2
+Name: double
+Kind: FPTK original
+Sgnt: double(x)
+Info: = x*2
 ```
 
 ```hy
@@ -4495,9 +4543,10 @@ double(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | squared
-:: squared(x)
-= pow(x,2)
+Name: squared
+Kind: FPTK original
+Sgnt: squared(x)
+Info: = pow(x,2)
 ```
 
 ```hy
@@ -4512,9 +4561,10 @@ squared(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | reciprocal
-:: reciprocal(x)
-= 1/x ; throws error for x=0
+Name: reciprocal
+Kind: FPTK original
+Sgnt: reciprocal(x)
+Info: = 1/x ; throws error for x=0
 ```
 
 ```hy
@@ -4529,9 +4579,10 @@ reciprocal(x)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | sqrt
-:: sqrt(n)
-= √n
+Name: sqrt
+Kind: Reimport from [math]
+Sgnt: sqrt(n)
+Info: = √n
 ```
 
 ```hy
@@ -4546,9 +4597,10 @@ sqrt(x, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | dist
-:: dist(p, q) -> float
-≈ √((px-qx)² + (py-qy)² ...)
+Name: dist
+Kind: Reimport from [math]
+Sgnt: dist(p, q) -> float
+Info: ≈ √((px-qx)² + (py-qy)² ...)
 ```
 
 ```hy
@@ -4569,9 +4621,10 @@ dist(p, q, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | hypot
-:: hypot(*coordinates)
-= √(x² + y² + ...)
+Name: hypot
+Kind: Reimport from [math]
+Sgnt: hypot(*coordinates)
+Info: = √(x² + y² + ...)
 ```
 
 ```hy
@@ -4599,9 +4652,10 @@ hypot(...)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | normalize
-:: normalize(xs) -> xs
-will throw error for zero-len vector
+Name: normalize
+Kind: FPTK original
+Sgnt: normalize(xs) -> xs
+Info: will throw error for zero-len vector
 ```
 
 ```hy
@@ -4620,8 +4674,9 @@ normalize(xs)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | exp
-:: exp(x)
+Name: exp
+Kind: Reimport from [math]
+Sgnt: exp(x)
 ```
 
 ```hy
@@ -4636,8 +4691,9 @@ exp(x, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | log
-:: log(x, base=math.e)
+Name: log
+Kind: Reimport from [math]
+Sgnt: log(x, base=math.e)
 ```
 
 ```hy
@@ -4655,9 +4711,10 @@ log(...)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | ln
-:: ln(x)
-= math.log(x, math.e) ; coexists with log for clarity
+Name: ln
+Kind: FPTK original
+Sgnt: ln(x)
+Info: = math.log(x, math.e) ; coexists with log for clarity
 ```
 
 ```hy
@@ -4671,8 +4728,9 @@ ln(x)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | log10
-:: log10(x)
+Name: log10
+Kind: Reimport from [math]
+Sgnt: log10(x)
 ```
 
 ```hy
@@ -4687,8 +4745,9 @@ log10(x, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | evenQ (<-even)
-:: evenQ(x)
+Name: evenQ (= funcy.even)
+Kind: Reimport
+Sgnt: evenQ(x)
 ```
 
 ```hy
@@ -4702,8 +4761,9 @@ even(x)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | oddQ (<-odd)
-:: oddQ(x)
+Name: oddQ (= funcy.odd)
+Kind: Reimport
+Sgnt: oddQ(x)
 ```
 
 ```hy
@@ -4717,9 +4777,10 @@ odd(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | zeroQ
-:: zeroQ(x)
-checks directly via (= x 0)
+Name: zeroQ
+Kind: FPTK original
+Sgnt: zeroQ(x)
+Info: checks directly via (= x 0)
 ```
 
 ```hy
@@ -4734,9 +4795,10 @@ zeroQ(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | negativeQ
-:: negativeQ(x)
-checks directly via (< x 0)
+Name: negativeQ
+Kind: FPTK original
+Sgnt: negativeQ(x)
+Info: checks directly via (< x 0)
 ```
 
 ```hy
@@ -4751,9 +4813,10 @@ negativeQ(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | positiveQ
-:: positiveQ(x)
-checks directly via (> x 0)
+Name: positiveQ
+Kind: FPTK original
+Sgnt: positiveQ(x)
+Info: checks directly via (> x 0)
 ```
 
 ```hy
@@ -4768,9 +4831,10 @@ positiveQ(x)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: hyrule | range_ (<-thru)
-:: range_(start, end=None, step=1) -> List
-same as range, but with 1-based index
+Name: range_ (= hyrule.thru)
+Kind: Reimport
+Sgnt: range_(start, end=None, step=1) -> List
+Info: same as range, but with 1-based index
 ```
 
 ```hy
@@ -4794,9 +4858,10 @@ thru(a, b=None, step=1)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lrange_
-:: lrange_(start, end, step=1) -> List
-range including both ends when possible, also works on fractionals
+Name: lrange_
+Kind: FPTK original
+Sgnt: lrange_(start, end, step=1) -> List
+Info: range including both ends when possible, also works on fractionals
 ```
 
 ```hy
@@ -4812,9 +4877,10 @@ lrange_(start, end, step=1)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | clip
-:: clip(x, lower, upper)
-clips x to fit in lower <= x <= upper limit
+Name: clip
+Kind: FPTK original
+Sgnt: clip(x, lower, upper)
+Info: clips x to fit in lower <= x <= upper limit
 ```
 
 ```hy
@@ -4829,8 +4895,9 @@ clip(x, lower, upper)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | pi
-literally just float pi=3.14...
+Name: pi
+Kind: Reimport from [math]
+Info: literally just float pi=3.14...
 ```
 
 ```hy
@@ -5043,9 +5110,10 @@ class float(object)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | sin
-:: sin(x)
-x is in radians
+Name: sin
+Kind: Reimport from [math]
+Sgnt: sin(x)
+Info: x is in radians
 ```
 
 ```hy
@@ -5060,9 +5128,10 @@ sin(x, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | cos
-:: cos(x)
-x is in radians
+Name: cos
+Kind: Reimport from [math]
+Sgnt: cos(x)
+Info: x is in radians
 ```
 
 ```hy
@@ -5077,9 +5146,10 @@ cos(x, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | tan
-:: tan(x)
-x is in radians, will give smth like 1.6E+16 for x = pi
+Name: tan
+Kind: Reimport from [math]
+Sgnt: tan(x)
+Info: x is in radians, will give smth like 1.6E+16 for x = pi
 ```
 
 ```hy
@@ -5094,9 +5164,10 @@ tan(x, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | degrees
-:: degrees(x)
-x in radians is converted to degrees
+Name: degrees
+Kind: Reimport from [math]
+Sgnt: degrees(x)
+Info: x in radians is converted to degrees
 ```
 
 ```hy
@@ -5111,9 +5182,10 @@ degrees(x, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | radians
-:: radians(x)
-x in degrees is converted to radians
+Name: radians
+Kind: Reimport from [math]
+Sgnt: radians(x)
+Info: x in degrees is converted to radians
 ```
 
 ```hy
@@ -5128,9 +5200,10 @@ radians(x, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | acos
-:: acos(x)
-x is in radians, result is between 0 and pi
+Name: acos
+Kind: Reimport from [math]
+Sgnt: acos(x)
+Info: x is in radians, result is between 0 and pi
 ```
 
 ```hy
@@ -5147,9 +5220,10 @@ acos(x, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | asin
-:: asin(x)
-x is in radians, result is between -pi/2 and pi/2
+Name: asin
+Kind: Reimport from [math]
+Sgnt: asin(x)
+Info: x is in radians, result is between -pi/2 and pi/2
 ```
 
 ```hy
@@ -5166,9 +5240,10 @@ asin(x, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | atan
-:: asin(x)
-x is in radians, result is between -pi/2 and pi/2
+Name: atan
+Kind: Reimport from [math]
+Sgnt: asin(x)
+Info: x is in radians, result is between -pi/2 and pi/2
 ```
 
 ```hy
@@ -5185,9 +5260,10 @@ atan(x, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: math | atan2
-:: atan2(y, x)
-both signs are considered
+Name: atan2
+Kind: Reimport from [math]
+Sgnt: atan2(y, x)
+Info: both signs are considered
 ```
 
 ```hy
@@ -5204,8 +5280,9 @@ atan2(y, x, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: operator | and_
-'and' as function
+Name: and_
+Kind: Reimport from [operator]
+Info: 'and' as function
 ```
 
 ```hy
@@ -5220,8 +5297,9 @@ and_(a, b, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: operator | or_
-'or' as function
+Name: or_
+Kind: Reimport from [operator]
+Info: 'or' as function
 ```
 
 ```hy
@@ -5236,8 +5314,9 @@ or_(a, b, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: operator | not_
-'not' as function
+Name: not_
+Kind: Reimport from [operator]
+Info: 'not' as function
 ```
 
 ```hy
@@ -5252,8 +5331,9 @@ not_(a, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: operator | is_
-'is' as function
+Name: is_
+Kind: Reimport from [operator]
+Info: 'is' as function
 ```
 
 ```hy
@@ -5268,7 +5348,8 @@ is_(a, b, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: operator | xor
+Name: xor
+Kind: Reimport from [operator]
 ```
 
 ```hy
@@ -5283,8 +5364,9 @@ xor(a, b, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: operator | eq
-equal
+Name: eq
+Kind: Reimport from [operator]
+Info: equal
 ```
 
 ```hy
@@ -5299,8 +5381,9 @@ eq(a, b, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: operator | neq (<-ne)
-non-equal
+Name: neq (= operator.ne)
+Kind: Reimport
+Info: non-equal
 ```
 
 ```hy
@@ -5315,8 +5398,9 @@ ne(a, b, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: operator | gt
-greater than
+Name: gt
+Kind: Reimport from [operator]
+Info: greater than
 ```
 
 ```hy
@@ -5331,8 +5415,9 @@ gt(a, b, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: operator | lt
-less than
+Name: lt
+Kind: Reimport from [operator]
+Info: less than
 ```
 
 ```hy
@@ -5347,8 +5432,9 @@ lt(a, b, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: operator | geq (<-ge)
-greater or equal
+Name: geq (= operator.ge)
+Kind: Reimport
+Info: greater or equal
 ```
 
 ```hy
@@ -5363,8 +5449,9 @@ ge(a, b, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: operator | leq (<-le)
-less or equal
+Name: leq (= operator.le)
+Kind: Reimport
+Info: less or equal
 ```
 
 ```hy
@@ -5379,8 +5466,9 @@ le(a, b, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: operator | matmul
-'@' as function
+Name: matmul
+Kind: Reimport from [operator]
+Info: '@' as function
 ```
 
 ```hy
@@ -5395,8 +5483,9 @@ matmul(a, b, /)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: operator | div (<-truediv)
-:: div(a, b)
+Name: div (= operator.truediv)
+Kind: Reimport
+Sgnt: div(a, b)
 ```
 
 ```hy
@@ -5411,9 +5500,10 @@ truediv(a, b, /)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | gt0
-:: gt0(x)
-checks for x > 0
+Name: gt0
+Kind: FPTK original
+Sgnt: gt0(x)
+Info: checks for x > 0
 ```
 
 ```hy
@@ -5428,9 +5518,10 @@ gt0(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | geq0
-:: geq0(x)
-x >= 0
+Name: geq0
+Kind: FPTK original
+Sgnt: geq0(x)
+Info: x >= 0
 ```
 
 ```hy
@@ -5445,9 +5536,10 @@ geq0(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lt0
-:: lt0(x)
-checks for x < 0
+Name: lt0
+Kind: FPTK original
+Sgnt: lt0(x)
+Info: checks for x < 0
 ```
 
 ```hy
@@ -5462,9 +5554,10 @@ lt0(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | leq0
-:: leq0(x)
-x <= 0
+Name: leq0
+Kind: FPTK original
+Sgnt: leq0(x)
+Info: x <= 0
 ```
 
 ```hy
@@ -5479,8 +5572,9 @@ leq0(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | minus
-:: minus(x, y) = x - y
+Name: minus
+Kind: FPTK original
+Sgnt: minus(x, y) = x - y
 ```
 
 ```hy
@@ -5495,9 +5589,10 @@ minus(x, y)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | dmul
-:: dmul(*args) = arg1 + arg2 + ...
-'dunder mul', '*' operator as a function
+Name: dmul
+Kind: FPTK original
+Sgnt: dmul(*args) = arg1 + arg2 + ...
+Info: 'dunder mul', '*' operator as a function
 ```
 
 ```hy
@@ -5513,9 +5608,10 @@ dmul(*args)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | dadd
-:: dadd(*args) = arg1 + arg2 + ...
-'dunder add', '+' operator as a function
+Name: dadd
+Kind: FPTK original
+Sgnt: dadd(*args) = arg1 + arg2 + ...
+Info: 'dunder add', '+' operator as a function
 ```
 
 ```hy
@@ -5531,9 +5627,10 @@ dadd(*args)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lmul
-:: lmul(*args) = arg1 * arg2 * ...
-rename of * operator, underlines usage for list
+Name: lmul
+Kind: FPTK original
+Sgnt: lmul(*args) = arg1 * arg2 * ...
+Info: rename of * operator, underlines usage for list
 ```
 
 ```hy
@@ -5549,9 +5646,10 @@ lmul(*args)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | smul
-:: smul(*args) = arg1 * arg2 * ...
-rename of * operator, underlines usage for string
+Name: smul
+Kind: FPTK original
+Sgnt: smul(*args) = arg1 * arg2 * ...
+Info: rename of * operator, underlines usage for string
 ```
 
 ```hy
@@ -5567,9 +5665,10 @@ smul(*args)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | mul
-:: mul(*args)
-multiplication as a monoid (will not give error when used with 0 or 1 args)
+Name: mul
+Kind: FPTK original
+Sgnt: mul(*args)
+Info: multiplication as a monoid (will not give error when used with 0 or 1 args)
 ```
 
 ```hy
@@ -5586,9 +5685,10 @@ mul(*args)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | plus
-:: plus(*args)
-addition as a monoid (will not give error when used with 0 or 1 args)
+Name: plus
+Kind: FPTK original
+Sgnt: plus(*args)
+Info: addition as a monoid (will not give error when used with 0 or 1 args)
 ```
 
 ```hy
@@ -5604,9 +5704,10 @@ plus(*args)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | sconcat
-:: sconcat(*args)
-string concantenation as a monoid (will not give error when used with 0 or 1 args)
+Name: sconcat
+Kind: FPTK original
+Sgnt: sconcat(*args)
+Info: string concantenation as a monoid (will not give error when used with 0 or 1 args)
 ```
 
 ```hy
@@ -5623,9 +5724,10 @@ sconcat(*args)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | fnot
-:: fnot(f, *args, **kwargs)
-= not(f(*args, **kwargs))
+Name: fnot
+Kind: FPTK original
+Sgnt: fnot(f, *args, **kwargs)
+Info: = not(f(*args, **kwargs))
 ```
 
 ```hy
@@ -5640,9 +5742,10 @@ fnot(f, *args, **kwargs)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | eq_any
-:: eq_any(x, values)
-= (or (eq x value1) (eq x value2) ...)
+Name: eq_any
+Kind: FPTK original
+Sgnt: eq_any(x, values)
+Info: = (or (eq x value1) (eq x value2) ...)
 ```
 
 ```hy
@@ -5657,9 +5760,10 @@ eq_any(x, values)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | on
-:: on(f, check, x, y)
-example: (on len eq xs ys) -> (eq (len xs) (len yx))
+Name: on
+Kind: FPTK original
+Sgnt: on(f, check, x, y)
+Info: example: (on len eq xs ys) -> (eq (len xs) (len yx))
 ```
 
 ```hy
@@ -5675,9 +5779,10 @@ on(f, check, x, y)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | all_fs
-:: all_fs(fs, *args, **kwargs)
-checks if all f(*args, **kwargs) are True
+Name: all_fs
+Kind: FPTK original
+Sgnt: all_fs(fs, *args, **kwargs)
+Info: checks if all f(*args, **kwargs) are True
 ```
 
 ```hy
@@ -5692,9 +5797,10 @@ all_fs(fs, *args, **kwargs)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | any_fs
-:: any_fs(fs, *args, **kwargs)
-checks if any of f(*args, **kwargs) is True
+Name: any_fs
+Kind: FPTK original
+Sgnt: any_fs(fs, *args, **kwargs)
+Info: checks if any of f(*args, **kwargs) is True
 ```
 
 ```hy
@@ -5709,9 +5815,10 @@ any_fs(fs, *args, **kwargs)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | trueQ
-:: trueQ(x)
-checks directly via (= x True)
+Name: trueQ
+Kind: FPTK original
+Sgnt: trueQ(x)
+Info: checks directly via (= x True)
 ```
 
 ```hy
@@ -5726,9 +5833,10 @@ trueQ(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | falseQ
-:: falseQ(x)
-checks directly via (= x False)
+Name: falseQ
+Kind: FPTK original
+Sgnt: falseQ(x)
+Info: checks directly via (= x False)
 ```
 
 ```hy
@@ -5743,9 +5851,10 @@ falseQ(x)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | oflenQ
-:: oflenQ(n, xs)
-checks directly via (= (len xs) n)
+Name: oflenQ
+Kind: FPTK original
+Sgnt: oflenQ(n, xs)
+Info: checks directly via (= (len xs) n)
 ```
 
 ```hy
@@ -5760,9 +5869,10 @@ oflenQ(n, xs)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | zerolenQ
-:: zerolenQ(xs)
-checks directly via (= (len xs) 0)
+Name: zerolenQ
+Kind: FPTK original
+Sgnt: zerolenQ(xs)
+Info: checks directly via (= (len xs) 0)
 ```
 
 ```hy
@@ -5777,9 +5887,10 @@ zerolenQ(xs)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: random | choice
-:: choice(seq) -> Elem
-throws error for empty list
+Name: choice
+Kind: Reimport from [random]
+Sgnt: choice(seq) -> Elem
+Info: throws error for empty list
 ```
 
 ```hy
@@ -5794,9 +5905,10 @@ choice(seq) method of random.Random instance
 [go up](#Cheetsheet)
 
 ```hy
-FROM: random | randint
-:: randint(a, b) -> int
-returns random integer in range [a, b] including both end points
+Name: randint
+Kind: Reimport from [random]
+Sgnt: randint(a, b) -> int
+Info: returns random integer in range [a, b] including both end points
 ```
 
 ```hy
@@ -5811,9 +5923,10 @@ randint(a, b) method of random.Random instance
 [go up](#Cheetsheet)
 
 ```hy
-FROM: random | randfloat (<-uniform)
-:: randfloat(a, b) -> float
-range is [a, b) or [a, b] depending on rounding
+Name: randfloat (= random.uniform)
+Kind: Reimport
+Sgnt: randfloat(a, b) -> float
+Info: range is [a, b) or [a, b] depending on rounding
 ```
 
 ```hy
@@ -5828,9 +5941,10 @@ uniform(a, b) method of random.Random instance
 [go up](#Cheetsheet)
 
 ```hy
-FROM: random | rand01 (<-random)
-:: rand01() -> float
-generates random number in interval [0, 1)
+Name: rand01 (= random.random)
+Kind: Reimport
+Sgnt: rand01() -> float
+Info: generates random number in interval [0, 1)
 ```
 
 ```hy
@@ -5845,9 +5959,10 @@ random() method of random.Random instance
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | strlen
-:: strlen(text)
-rename of len, underlines usage on strings
+Name: strlen
+Kind: FPTK original
+Sgnt: strlen(text)
+Info: rename of len, underlines usage on strings
 ```
 
 ```hy
@@ -5862,9 +5977,10 @@ strlen(text)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | str_join
-:: str_join(ss, sep='')
-rearrangement of funcy.str_join, ss is seq of strings
+Name: str_join
+Kind: FPTK original
+Sgnt: str_join(ss, sep='')
+Info: rearrangement of funcy.str_join, ss is seq of strings
 ```
 
 ```hy
@@ -5879,9 +5995,10 @@ str_join(ss, sep='')
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lowercase
-:: lowercase(string)
-str.lower method as a function
+Name: lowercase
+Kind: FPTK original
+Sgnt: lowercase(string)
+Info: str.lower method as a function
 ```
 
 ```hy
@@ -5896,9 +6013,10 @@ lowercase(string: str) -> str
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | strip
-:: strip(string, chars=None)
-str.strip method as a function
+Name: strip
+Kind: FPTK original
+Sgnt: strip(string, chars=None)
+Info: str.strip method as a function
 ```
 
 ```hy
@@ -5914,9 +6032,10 @@ strip(string: str, chars=None) -> str
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | lstrip
-:: lstrip(string, chars=None)
-str.lstrip method as a function
+Name: lstrip
+Kind: FPTK original
+Sgnt: lstrip(string, chars=None)
+Info: str.lstrip method as a function
 ```
 
 ```hy
@@ -5931,9 +6050,10 @@ lstrip(string: str, chars=None) -> str
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | rstrip
-:: rstrip(string, chars=None)
-str.rstrip method as a function
+Name: rstrip
+Kind: FPTK original
+Sgnt: rstrip(string, chars=None)
+Info: str.rstrip method as a function
 ```
 
 ```hy
@@ -5948,9 +6068,10 @@ rstrip(string: str, chars=None) -> str
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | enlengthen
-:: enlengthen(string, target_len, char=' ', on_tail=True)
-adds char to string until target_len reached
+Name: enlengthen
+Kind: FPTK original
+Sgnt: enlengthen(string, target_len, char=' ', on_tail=True)
+Info: adds char to string until target_len reached
 ```
 
 ```hy
@@ -5970,8 +6091,9 @@ enlengthen(target_len: int, string: str, char: str = ' ', on_tail: bool = True, 
 [go up](#Cheetsheet)
 
 ```hy
-FROM: re | re_sub (<-sub)
-:: re_sub(rpattern, replacement, string, count=0, flags=0)
+Name: re_sub (= re.sub)
+Kind: Reimport
+Sgnt: re_sub(rpattern, replacement, string, count=0, flags=0)
 ```
 
 ```hy
@@ -5991,8 +6113,9 @@ sub(pattern, repl, string, count=0, flags=0)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: re | re_split (<-split)
-:: re_split(rpattern, string)
+Name: re_split (= re.split)
+Kind: Reimport
+Sgnt: re_split(rpattern, string)
 ```
 
 ```hy
@@ -6013,9 +6136,10 @@ split(pattern, string, maxsplit=0, flags=0)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | re_find
-:: re_find(rpattern, string, flags=0) -> str
-returns first found
+Name: re_find
+Kind: Reimport from [funcy]
+Sgnt: re_find(rpattern, string, flags=0) -> str
+Info: returns first found
 ```
 
 ```hy
@@ -6031,9 +6155,10 @@ re_find(regex, s, flags=0)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | re_test
-:: re_test(rpattern, string, ...) -> bool
-tests if string has match (not neccessarily whole string)
+Name: re_test
+Kind: Reimport from [funcy]
+Sgnt: re_test(rpattern, string, ...) -> bool
+Info: tests if string has match (not neccessarily whole string)
 ```
 
 ```hy
@@ -6048,8 +6173,9 @@ re_test(regex, s, flags=0)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: funcy | re_all
-:: re_all(rpattern, string, ...) -> List
+Name: re_all
+Kind: Reimport from [funcy]
+Sgnt: re_all(rpattern, string, ...) -> List
 ```
 
 ```hy
@@ -6064,9 +6190,10 @@ re_all(regex, s, flags=0)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: os.path | file_existsQ (<-exists)
-:: file_existsQ(filename)
-also works on folders
+Name: file_existsQ (= os.path.exists)
+Kind: Reimport
+Sgnt: file_existsQ(filename)
+Info: also works on folders
 ```
 
 ```hy
@@ -6081,8 +6208,9 @@ exists(path)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: os.path | fileQ (<-isfile)
-:: fileQ(filename)
+Name: fileQ (= os.path.isfile)
+Kind: Reimport
+Sgnt: fileQ(filename)
 ```
 
 ```hy
@@ -6097,8 +6225,9 @@ isfile(path)
 [go up](#Cheetsheet)
 
 ```hy
-FROM: os.path | dirQ (<-isdir)
-:: dirQ(filename)
+Name: dirQ (= os.path.isdir)
+Kind: Reimport
+Sgnt: dirQ(filename)
 ```
 
 ```hy
@@ -6113,9 +6242,10 @@ isdir(s)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | read_file
-:: read_file(file_name, encoding='utf-8') -> str
-returns whole file content
+Name: read_file
+Kind: FPTK original
+Sgnt: read_file(file_name, encoding='utf-8') -> str
+Info: returns whole file content
 ```
 
 ```hy
@@ -6130,9 +6260,10 @@ read_file(file_name: str, encoding: str = 'utf-8')
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | write_to_file
-:: write_file(text, file_name, mode='w', encoding='utf-8')
-modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation
+Name: write_to_file
+Kind: FPTK original
+Sgnt: write_file(text, file_name, mode='w', encoding='utf-8')
+Info: modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation
 ```
 
 ```hy
@@ -6153,8 +6284,9 @@ write_to_file(text: str, file_name: str, mode: str = 'w', encoding: str = 'utf-8
 [go up](#Cheetsheet)
 
 ```hy
-FROM: lenses | lens
-main object of lenses library (for working with immutable structures)
+Name: lens
+Kind: Reimport from [lenses]
+Info: main object of lenses library (for working with immutable structures)
 ```
 
 ```hy
@@ -6168,8 +6300,9 @@ UnboundLens(TrivialIso())
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | lns
-macros for working with lens, see lens macros docs for details
+Name: lns
+Kind: FPTK Macro
+Info: macros for working with lens, see lens macros docs for details
 ```
 
 ## Lens operator1
@@ -6177,8 +6310,9 @@ macros for working with lens, see lens macros docs for details
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | &+
-macros for working with lens, see lens macros docs for details
+Name: &+
+Kind: FPTK Macro
+Info: macros for working with lens, see lens macros docs for details
 ```
 
 ## Lens operator2
@@ -6186,8 +6320,9 @@ macros for working with lens, see lens macros docs for details
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | &+>
-macros for working with lens, see lens macros docs for details
+Name: &+>
+Kind: FPTK Macro
+Info: macros for working with lens, see lens macros docs for details
 ```
 
 ## Lens operator3
@@ -6195,8 +6330,9 @@ macros for working with lens, see lens macros docs for details
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | l>
-macros for working with lens, see lens macros docs for details
+Name: l>
+Kind: FPTK Macro
+Info: macros for working with lens, see lens macros docs for details
 ```
 
 ## Lens operator4
@@ -6204,8 +6340,9 @@ macros for working with lens, see lens macros docs for details
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | l>=
-macros for working with lens, see lens macros docs for details
+Name: l>=
+Kind: FPTK Macro
+Info: macros for working with lens, see lens macros docs for details
 ```
 
 ## timing
@@ -6213,9 +6350,10 @@ macros for working with lens, see lens macros docs for details
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | timing
-:: (timing expr1 expr2 ...) -> #(float, Any)
-returns time (in seconds) and result of execution of (fn [] expr1 expr2 ...)
+Name: timing
+Kind: FPTK Macro
+Sgnt: (timing expr1 expr2 ...) -> #(float, Any)
+Info: returns time (in seconds) and result of execution of (fn [] expr1 expr2 ...)
 ```
 
 ## dt_print
@@ -6223,9 +6361,10 @@ returns time (in seconds) and result of execution of (fn [] expr1 expr2 ...)
 [go up](#Cheetsheet)
 
 ```hy
-DEFN: fptk | dt_print
-:: dt_printer(* args, fresh_run=False)
-starts timer on fresh run, prints time passed since previous call
+Name: dt_print
+Kind: FPTK original
+Sgnt: dt_printer(* args, fresh_run=False)
+Info: starts timer on fresh run, prints time passed since previous call
 ```
 
 ```hy
@@ -6246,9 +6385,10 @@ dt_print(*args, fresh_run=False, last_T=[None])
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | assertm
-:: (assertm op arg1 arg2)
-tests if (op arg1 arg2), for example (= 1 1)
+Name: assertm
+Kind: FPTK Macro
+Sgnt: (assertm op arg1 arg2)
+Info: tests if (op arg1 arg2), for example (= 1 1)
 ```
 
 ## gives_error_typeQ
@@ -6256,6 +6396,7 @@ tests if (op arg1 arg2), for example (= 1 1)
 [go up](#Cheetsheet)
 
 ```hy
-MACR: fptk._macros | gives_error_typeQ
-example: (assertm gives_error_typeQ (get [1] 2) IndexError)
+Name: gives_error_typeQ
+Kind: FPTK Macro
+Info: example: (assertm gives_error_typeQ (get [1] 2) IndexError)
 ```
