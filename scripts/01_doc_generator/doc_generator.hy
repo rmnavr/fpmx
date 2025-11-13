@@ -561,7 +561,10 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
                 (sconcat ":: " fentity.signature " ::")
                 True
                 (sconcat ":: " fentity.signature " :: " fentity.descr)))
-        (setv target_link (sconcat "#" fentity.name))
+        (setv target_link
+            (if (in fentity.name $ASCII_NAMES_TABLE)
+                 (sconcat "#" (get $ASCII_NAMES_TABLE fentity.name 1))
+                 (sconcat "#" fentity.name)))
         (return f"<span title=\"{tooltip}\">[`{title}`]({target_link})</span>"))
 
 ; _____________________________________________________________________________/ }}}1
@@ -575,15 +578,35 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
             (lmap deconstruct_fgroup)
             (lmap dfgroup_to_short_table_line)
             (str_join :sep "\n")
-            (sconcat $HEADER_SHORT "\n")))
+            (sconcat $SHORT_TABLE_HEADER "\n")))
 
 ; _____________________________________________________________________________/ }}}1
-; MD FILE HEADER_SHORT STR ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; CONST STRs ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (setv $HEADER_SHORT
-          "
+    (setv $HEADER1 "Cheetsheet")
+    (setv $HEADER2 "Detailed descriptions")
+    (setv $BACKLINK "[go up](#{$HEADER1})")
+
+    (setv $SHORT_TABLE_HEADER
+         "
 | Group | Functions/Types | Macros |
 |-------|-----------------|--------|")
+
+    (setv $ASCII_NAMES_TABLE
+        { ; name                     ; link
+            "->" #("hyrule threading1 ->"   "hyrule-threading1")
+            "->>" #("hyrule threading2 ->>"  "hyrule-threading2")
+            "as->" #("hyrule threading3 as->" "hyrule-threading3")
+            "doto" #("hyrule threading4 doto" "hyrule-threading4")
+            "=>" #("FPTK threading1 =>"     "FPTK-threading1")
+            "=>>" #("FPTK threading2 =>>"    "FPTK-threading2")
+            "p:" #("Pipe of partials p:"    "Pipe-of-partials")
+            "f::" #("Annotator1 f::"         "Annotator1")
+            "def::" #("Annotator2 def::"       "Annotator2")
+            "&+" #("Lens operator1 &+"      "Lens-operator1")
+            "&+>" #("Lens operator2 &+>"     "Lens-operator2")
+            "l>" #("Lens operator3 l>"      "Lens-operator3")
+            "l>=" #("Lens operator4 l>="     "Lens-operator4")})
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -612,7 +635,10 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
     (def:: FEntity => str
         fentity_to_md_title
         [ fentity]
-        (setv title (sconcat "# " fentity.name))
+        (setv title
+            (if (in fentity.name $ASCII_NAMES_TABLE)
+                 (sconcat "## " (get $ASCII_NAMES_TABLE fentity.name 0))
+                 (sconcat "## " fentity.name)))
         (setv card (fentity2card fentity))
         (return f"{title}\n\n```hy\n{card}\n```"))
 
@@ -673,5 +699,5 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
     (setv _md_headers (generate_md_entries_for_each_entity _code))
 
     (write_to_file
-        (sconcat _short_table "\n\n\n" _md_headers)
+        f"# {$HEADER1}\n\n{_short_table}\n\n{_md_headers}"
         $TARGET_SHORT_FILE)
