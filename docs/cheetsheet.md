@@ -4,7 +4,7 @@
 | Group | Functions/Types | Macros |
 |-------|-----------------|--------|
 | FP: Control flow |  | <span title="">[`case`](#case)</span> <span title="">[`branch`](#branch)</span> <span title="">[`unless`](#unless)</span> <span title="">[`lif`](#lif)</span> |
-| FP: Composition | <span title=":: constantly(val) :: constantly(30) is FUNCTION that always return val no matter the arguments">[`constantly`](#constantly)</span> <span title="identity(n) -> n">[`identity`](#identity)</span> <span title="applicator">[`partial`](#partial)</span> <span title="applicator">[`rpartial`](#rpartial)</span> <span title=":: compose(f1, f2, ..., fn) :: = f1(f2(..fn(***))) ; applicator">[`compose`](#compose)</span> <span title=":: rcompose(f1, f2, ..., fn) :: = fn(..(f2(f1(***)))) ; applicator">[`rcompose`](#rcompose)</span> <span title=":: ljuxt(*fs) :: = [f1, f2, ...](***) ; applicator">[`ljuxt`](#ljuxt)</span> <span title=":: pflip(f, a) :: applicator for function f(a,b) of 2 args; example: pflip(div, 4)(1) == 0.25">[`pflip`](#pflip)</span> <span title=":: flip(f, a, b) = f(b, a) :: calls f with flipped args">[`flip`](#flip)</span> | <span title="">[`->`](#hyruleThreading1)</span> <span title="">[`->>`](#hyruleThreading2----)</span> <span title="">[`as->`](#hyruleThreading3)</span> <span title="mutating">[`doto`](#hyruleThreading4)</span> <span title="unification of dot-macro and ->">[`=>`](#FPTKThreading1)</span> <span title="unification of dot-macro and ->>">[`=>>`](#FPTKThreading2)</span> <span title="aplicator, pipe of partials">[`p:`](#Pipeofpartials)</span> |
+| FP: Composition | <span title=":: constantly(val) :: constantly(30) is FUNCTION that always return val no matter the arguments">[`constantly`](#constantly)</span> <span title="identity(n) -> n">[`identity`](#identity)</span> <span title="applicator">[`partial`](#partial)</span> <span title="applicator">[`rpartial`](#rpartial)</span> <span title=":: compose(f1, f2, ..., fn) :: = f1(f2(..fn(***))) ; applicator">[`compose`](#compose)</span> <span title=":: rcompose(f1, f2, ..., fn) :: = fn(..(f2(f1(***)))) ; applicator">[`rcompose`](#rcompose)</span> <span title=":: ljuxt(*fs) :: = [f1, f2, ...](***) ; applicator">[`ljuxt`](#ljuxt)</span> <span title=":: pflip(f, a) :: applicator for function f(a,b) of 2 args; example: pflip(div, 4)(1) == 0.25">[`pflip`](#pflip)</span> <span title=":: flip(f, a, b) = f(b, a) :: calls f with flipped args">[`flip`](#flip)</span> | <span title="">[`->`](#hyruleThreading1)</span> <span title="">[`->>`](#hyruleThreading2)</span> <span title="">[`as->`](#hyruleThreading3)</span> <span title="mutating">[`doto`](#hyruleThreading4)</span> <span title="unification of dot-macro and ->">[`=>`](#FPTKThreading1)</span> <span title="unification of dot-macro and ->>">[`=>>`](#FPTKThreading2)</span> <span title="aplicator, pipe of partials">[`p:`](#PipeOfPartials)</span> |
 | FP: threading | <span title=":: lzip(*iterables) -> List :: literally just list(zip(*iterables))">[`lzip`](#lzip)</span> <span title=":: lmap(f, *seqs) -> List :: list version of map">[`lmap`](#lmap)</span> <span title=":: starmap(function, iterable) ::">[`starmap`](#starmap)</span> <span title=":: lstarmap(function, iterable) -> list :: list version of starmap">[`lstarmap`](#lstarmap)</span> <span title=":: reduce(function, sequence[, initial]) -> value :: theory: reduce + monoid = binary-function for free becomes n-arg-function">[`reduce`](#reduce)</span> <span title=":: reductions(f, seq [, acc]) -> generator :: returns sequence of intermetidate values of reduce(f, seq, acc)">[`reductions`](#reductions)</span> <span title=":: lreductions(f, seq [, acc]) -> list :: list version of reductions">[`lreductions`](#lreductions)</span> <span title=":: sums(seq [, acc]) -> generator :: reductions with addition function">[`sums`](#sums)</span> <span title=":: lsums(seq [, acc]) -> list :: list version of sums">[`lsums`](#lsums)</span> <span title=":: product(iterable, /, *, start=1) :: product([2, 3, 5]) = 30">[`product`](#product)</span> | <span title=":: (fm (* it 3)) :: anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'">[`fm`](#fm)</span> <span title="same as map, but expects fm-syntax for func">[`mapm`](#mapm)</span> <span title="same as lmap, but expects fm-syntax for func">[`lmapm`](#lmapm)</span> |
 | FP: n-applicators | <span title=":: nested(n, f) :: applicator f(...(f(***)))">[`nested`](#nested)</span> <span title=":: apply_n(n, f, *args, **kwargs) :: f(f(f(...f(*args, **kwargs))">[`apply_n`](#apply_n)</span> | <span title=":: (do_n   n #* body) -> None :: expands to ~ (do body body body ...)">[`do_n`](#do_n)</span> <span title=":: (list_n n #* body) -> List ::">[`list_n`](#list_n)</span> |
 | APL: filtering | <span title=":: lfilter(pred, seq) -> List :: funcy list version of extended filter">[`lfilter`](#lfilter)</span> <span title=":: fltr1st(f, seq) -> Optional elem :: returns first found element (or None)">[`fltr1st`](#fltr1st)</span> <span title=":: reject(pred, seq)-> iterator :: same as filter, but checks for False">[`reject`](#reject)</span> <span title=":: lreject(pred, seq) -> List :: list version of reject">[`lreject`](#lreject)</span> <span title=":: without(items, seq) -> generator :: subtracts items from seq (as a sets)">[`without`](#without)</span> <span title=":: lwithout(items, seq) -> list :: list version of reject">[`lwithout`](#lwithout)</span> <span title=":: takewhile([pred, ] seq) :: yields elems of seq as long as they pass pred">[`takewhile`](#takewhile)</span> <span title=":: dropwhile([pred, ] seq) :: mirror of dropwhile">[`dropwhile`](#dropwhile)</span> <span title=":: filter_split(pred, seq) -> passed, rejected ::">[`filter_split`](#filter_split)</span> <span title=":: lfilter_split(pred,seq) -> passed, rejected :: list version of filter_split">[`lfilter_split`](#lfilter_split)</span> <span title=":: bisect_at(n, seq) -> start, tail :: len of start will = n, works only with n>=0">[`bisect_at`](#bisect_at)</span> <span title=":: lbisect_at(n, seq) -> start, tail :: list version of bisect_at, but also for n<0, abs(n) will be len of tail">[`lbisect_at`](#lbisect_at)</span> <span title=":: bisect_by(pred, seq) -> taken, dropped :: similar to (takewhile, dropwhile)">[`bisect_by`](#bisect_by)</span> <span title=":: lbisect_by(pred, seq) -> taken, dropped :: list version of lbisect">[`lbisect_by`](#lbisect_by)</span> <span title=":: mask_sel('abc', [1,0,1]) -> iterator: 'a', 'c' ::">[`mask_sel`](#mask_sel)</span> <span title=":: lmask_sel(data, selectors) -> list ::">[`lmask_sel`](#lmask_sel)</span> <span title=":: mask2idxs(mask) -> list :: mask is list like [1 0 1 0] or [True False True False], which will be converted to [0 2]">[`mask2idxs`](#mask2idxs)</span> <span title=":: idxs2mask(idxs) -> list :: idxs is non-sorted list of integers like [0 3 2], which will be converted to [1 0 1 1]">[`idxs2mask`](#idxs2mask)</span> | <span title=":: (filterm f xs) :: same as filter, but expects fm-syntax for func">[`filterm`](#filterm)</span> <span title=":: (lfilterm f xs) :: list version of lfilterm">[`lfilterm`](#lfilterm)</span> |
@@ -88,19 +88,19 @@ identity(n) -> n
 MACR: hyrule | ->
 ```
 
-## hyruleThreading2 ->>
+## hyruleThreading2
 
 ```hy
 MACR: hyrule | ->>
 ```
 
-## hyruleThreading3 as->
+## hyruleThreading3
 
 ```hy
 MACR: hyrule | as->
 ```
 
-## hyruleThreading4 doto
+## hyruleThreading4
 
 ```hy
 MACR: hyrule | doto
@@ -121,21 +121,21 @@ FROM: funcy | rpartial
 applicator
 ```
 
-## FPTKThreading1 =>
+## FPTKThreading1
 
 ```hy
 MACR: fptk._macros | =>
 unification of dot-macro and ->
 ```
 
-## FPTKThreading2 =>>
+## FPTKThreading2
 
 ```hy
 MACR: fptk._macros | =>>
 unification of dot-macro and ->>
 ```
 
-## Pipeofpartials p:
+## PipeOfPartials
 
 ```hy
 MACR: fptk._macros | p:
@@ -935,14 +935,14 @@ MACR: hyrule | of
 example: (of List int) which is equiv to py-code: List[int]
 ```
 
-## Annotator1 f::
+## Annotator1
 
 ```hy
 MACR: fptk._macros | f::
 example: (f:: int -> int => (of Tuple int str)) -> Callable[[int, int], Tuple[int,str]]
 ```
 
-## Annotator2 def::
+## Annotator2
 
 ```hy
 MACR: fptk._macros | def::
@@ -1901,28 +1901,28 @@ MACR: fptk._macros | lns
 macros for working with lens, see lens macros docs for details
 ```
 
-## Lens operator1 &+
+## Lens operator1
 
 ```hy
 MACR: fptk._macros | &+
 macros for working with lens, see lens macros docs for details
 ```
 
-## Lens operator2 &+>
+## Lens operator2
 
 ```hy
 MACR: fptk._macros | &+>
 macros for working with lens, see lens macros docs for details
 ```
 
-## Lens operator3 l>
+## Lens operator3
 
 ```hy
 MACR: fptk._macros | l>
 macros for working with lens, see lens macros docs for details
 ```
 
-## Lens operator4 l>=
+## Lens operator4
 
 ```hy
 MACR: fptk._macros | l>=

@@ -594,19 +594,19 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
 
     (setv $ASCII_NAMES_TABLE
         { ; name                     ; link
-            "->" #("hyruleThreading1"    "hyruleThreading1")
-            "->>" #("hyruleThreading2 ->>"   "hyruleThreading2----")
-            "as->" #("hyruleThreading3 as->"  "hyruleThreading3")
-            "doto" #("hyruleThreading4 doto"  "hyruleThreading4")
-            "=>" #("FPTKThreading1 =>"      "FPTKThreading1")
-            "=>>" #("FPTKThreading2 =>>"     "FPTKThreading2")
-            "p:" #("Pipeofpartials p:"      "Pipeofpartials")
-            "f::" #("Annotator1 f::"         "Annotator1")
-            "def::" #("Annotator2 def::"       "Annotator2")
-            "&+" #("Lens operator1 &+"      "Lens-operator1")
-            "&+>" #("Lens operator2 &+>"     "Lens-operator2")
-            "l>" #("Lens operator3 l>"      "Lens-operator3")
-            "l>=" #("Lens operator4 l>="     "Lens-operator4")})
+            "->" #("hyruleThreading1"       "hyruleThreading1")
+            "->>" #("hyruleThreading2"       "hyruleThreading2")
+            "as->" #("hyruleThreading3"       "hyruleThreading3")
+            "doto" #("hyruleThreading4"       "hyruleThreading4")
+            "=>" #("FPTKThreading1"         "FPTKThreading1")
+            "=>>" #("FPTKThreading2"         "FPTKThreading2")
+            "p:" #("PipeOfPartials"         "PipeOfPartials")
+            "f::" #("Annotator1"             "Annotator1")
+            "def::" #("Annotator2"             "Annotator2")
+            "&+" #("Lens operator1"         "Lens-operator1")
+            "&+>" #("Lens operator2"         "Lens-operator2")
+            "l>" #("Lens operator3"         "Lens-operator3")
+            "l>=" #("Lens operator4"         "Lens-operator4")})
 
 ; _____________________________________________________________________________/ }}}1
 
