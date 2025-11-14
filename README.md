@@ -66,8 +66,8 @@ Tested with:
 
 ## Documentation
 
-1. [Functions and modules](https://github.com/rmnavr/fptk/blob/main/docs/functions.md) — auto-generated table with concise description for each entity
-2. [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md) — detailed description of every fptk macro (except lens-related macros)
+1. [Cheetsheet](https://github.com/rmnavr/fptk/blob/main/docs/cheetsheet.md) — list of all fptk entities with descriptions 
+2. [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md) — description of every fptk macro (except lens-related macros)
 3. [Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md) — macros that simplify lens definition/application/composition
 4. [Result type](https://github.com/rmnavr/fptk/blob/main/docs/resultM.md) — API of fptk implementation of Result type
 

@@ -1,43 +1,4 @@
 
----
-fptk docs:
-1. You are here -> [Functions and modules](https://github.com/rmnavr/fptk/blob/main/docs/functions.md)
-2. [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md)
-3. [Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)
-4. [Result type](https://github.com/rmnavr/fptk/blob/main/docs/resultM.md)
----
-
-# Auto-generated full list of FPTK entities (except macros)
-
-## Legend
-
-List below has format:
-```hy
-=== Group name 1 ===
-TYPE source_lib | func_or_class_name :: signature ; description
-TYPE source_lib | func_or_class_name :: signature ; description
-
-=== Group name 2 ===
-...
-```
-
-Column `TYPE` shows if things are simple imports/reimports: ...
-```hy
-FULL MODULE  | sys          ; (import sys)
-FROM: math   | ln (<-log)   ; (import math [log :as ln])
-MACR: hyrule | of           ; (require hyrule [of])
-INFO: hy     | cut /macro/  ; shows info on hy/py functions/macro (which are already always in main context); given just for big picture
-```
-
-... or fptk-defined entities:
-```hy
-SETV: fptk   | StrictNumber ; entity defined internally via (setv ...)
-DEFN: fptk   | third        ; entity defined internally via (defn ...)
-```
-
-## List of fptk entities
-
-```hy
 === FP: Control flow ===
 INFO: hy              | if /base/                :: (if check true false)
 INFO: hy              | cond /base/              :: (cond check1 do1 ... true doT)
@@ -98,7 +59,7 @@ FROM: funcy           | lreject (<-lremove)      :: lreject(pred, seq) -> List  
 DEFN: fptk            | without                  :: without(items, seq) -> generator  ; subtracts items from seq (as a sets)
 DEFN: fptk            | lwithout                 :: lwithout(items, seq) -> list  ; list version of reject
 FROM: funcy           | takewhile                :: takewhile([pred, ] seq)  ; yields elems of seq as long as they pass pred
-FROM: funcy           | dropwhile                :: dropwhile([pred, ] seq)  ; mirror of dropwhile
+FROM: funcy           | dropwhile                :: dropwhile([pred, ] seq)  ; mirror of takewhile
 FROM: funcy           | filter_split (<-split)   :: filter_split(pred, seq) -> passed, rejected
 FROM: funcy           | lfilter_split (<-lsplit) :: lfilter_split(pred,seq) -> passed, rejected  ; list version of filter_split
 FROM: funcy           | bisect_at (<-split_at)   :: bisect_at(n, seq) -> start, tail  ; len of start will = n, works only with n>=0
@@ -345,4 +306,3 @@ DEFN: fptk            | dt_print                 :: dt_printer(* args, fresh_run
 MACR: fptk._macros    | assertm                  :: (assertm op arg1 arg2)  ; tests if (op arg1 arg2), for example (= 1 1)
 MACR: fptk._macros    | gives_error_typeQ        ; example: (assertm gives_error_typeQ (get [1] 2) IndexError)
 
-```

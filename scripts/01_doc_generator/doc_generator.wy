@@ -391,7 +391,7 @@
 ; Long table:
 ; entity to str ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (defn #^ str build_prefix [ #^ FEntity fe ]
+    (defn #^ str build_postfix [ #^ FEntity fe ]
         (setv signature (if (= fe.signature "")
                             ""
                             (sconcat " :: " fe.signature " ")))
@@ -400,31 +400,31 @@
                             (sconcat " ; " fe.descr) ))
         (return (sconcat signature descr)))
 
-    (defn entity2str [ #^ FEntity fe ]
+    (defn fentity2str [ #^ FEntity fe ]
         (setv pad1 (fm (pad_string %1 15)))
         (setv pad2 (fm (pad_string %1 24)))
         ;
         (case fe.kind
               ;
               FEntityKind.IMPORT_MODULE
-              (sconcat "FULL MODULE           | " (pad2 fe.name) (build_prefix fe))
+              (sconcat "FULL MODULE           | " (pad2 fe.name) (build_postfix fe))
               ;
               FEntityKind.IMPORT_FROM_MODULE
-              (sconcat "FROM: " (pad1 fe.parent_module) " | " (pad2 fe.name) (build_prefix fe))
+              (sconcat "FROM: " (pad1 fe.parent_module) " | " (pad2 fe.name) (build_postfix fe))
               ;
               FEntityKind.IMPORT_FROM_MODULE_AS
-              (sconcat "FROM: " (pad1 fe.parent_module) " | " (pad2 (sconcat fe.name " (<-" fe.org_name ")")) (build_prefix fe))
+              (sconcat "FROM: " (pad1 fe.parent_module) " | " (pad2 (sconcat fe.name " (<-" fe.org_name ")")) (build_postfix fe))
               ;
               FEntityKind.REQUIRE_MACRO
-              (sconcat "MACR: " (pad1 fe.parent_module) " | " (pad2 fe.name) (build_prefix fe))
+              (sconcat "MACR: " (pad1 fe.parent_module) " | " (pad2 fe.name) (build_postfix fe))
               ;
               FEntityKind.NON_IMPORT_INFO
-              (sconcat "INFO: " (pad1 fe.parent_module) " | " (pad2 (sconcat fe.name " /" fe.kind_str "/")) (build_prefix fe))
+              (sconcat "INFO: " (pad1 fe.parent_module) " | " (pad2 (sconcat fe.name " /" fe.kind_str "/")) (build_postfix fe))
               ;
               FEntityKind.DEFINED_SETV
-              (sconcat "SETV: " (pad1 fe.parent_module) " | " (pad2 fe.name) (build_prefix fe))
+              (sconcat "SETV: " (pad1 fe.parent_module) " | " (pad2 fe.name) (build_postfix fe))
               FEntityKind.DEFINED_FUNC
-              (sconcat "DEFN: " (pad1 fe.parent_module) " | " (pad2 fe.name) (build_prefix fe))))
+              (sconcat "DEFN: " (pad1 fe.parent_module) " | " (pad2 fe.name) (build_postfix fe))))
 
 ; _____________________________________________________________________________/ }}}1
 ; group to str ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -432,13 +432,13 @@
     (defn #^ (of List str)
         group2str_list [ #^ FGroup fgroup ]
         (flatten [ (sconcat "=== " fgroup.name " ===")
-                   (lmap (p: entity2str
+                   (lmap (p: fentity2str
                              rstrip) ; rstrip removes possible spaces on the right (to not invoke «next line» in *.md)
                          (find_fentities fgroup))
                    "" ]))
 
 ; _____________________________________________________________________________/ }}}1
-; printers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; constructors ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ; not used currently:
     (defn gprint
@@ -455,11 +455,6 @@
                                      (flip sconcat "\n")
                                      ))
         (return _outp_table))
-
-    (defn generate_long_doc
-        [ #^ str table
-        ]
-        (sconcat $HEADER_LONG "\n```hy\n" table "```"))
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -536,7 +531,7 @@
 ; _____________________________________________________________________________/ }}}1
 
 ; MD blocks (##title + short-card + help):
-; constructors ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; helpers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     def:: str => str
        \capture_help
@@ -545,6 +540,9 @@
         with L s (contextlib.redirect_stdout output)
              help function_name
         return : output.getvalue
+
+; _____________________________________________________________________________/ }}}1
+; constructors ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     def:: FEntity => str
        \fentity_to_md_title
@@ -558,13 +556,12 @@
         setv card  : fentity2card fentity
         ;
         try
-            setv help_string 
-                => (globals) [fentity.name]
-                   capture_help
-                   strip
-            except [e Exception] : setv help_string ""
+            if : in fentity.name $SUPPRESS_HELP
+                 setv help_string None
+                 setv help_string : => (globals) [fentity.name] capture_help strip
+            except [e Exception] : setv help_string None
         ;
-        if : eq help_string ""
+        if : noneQ help_string
              return f"{title}\n\n{$BACKLINK}\n\n```hy\n{card}\n```"
              return f"{title}\n\n{$BACKLINK}\n\n```hy\n{card}\n```\n\n```hy\n{help_string}\n```"
 
@@ -632,18 +629,11 @@
 ; Run:
 ; CONST STRs ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
+    ; not used currently:
 ; ■ HEADER_LONG ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
     (setv $HEADER_LONG
-"
----
-fptk docs:
-1. You are here -> [Functions and modules](https://github.com/rmnavr/fptk/blob/main/docs/functions.md)
-2. [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md)
-3. [Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)
-4. [Result type](https://github.com/rmnavr/fptk/blob/main/docs/resultM.md)
----
-
+        sconcat $CONTENTS "
 # Auto-generated full list of FPTK entities (except macros)
 
 ## Legend
@@ -678,19 +668,38 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
 
 ; ________________________________________________________________________/ }}}2
 
+    setv $CONTENTS "
+---
+fptk docs:
+1. You are here -> [Cheetsheet](https://github.com/rmnavr/fptk/blob/main/docs/cheetsheet.md)
+2. [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md)
+3. [Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)
+4. [Result type](https://github.com/rmnavr/fptk/blob/main/docs/resultM.md)
+---
+"
+
     setv $SHORT_TABLE_HEADER
          "
 | Group | Functions/Types | Macros |
 |-------|-----------------|--------|"
+
 
     setv $HEADER1        "Cheetsheet"
     setv $HEADER2        "Detailed descriptions"
     setv $BACKLINK       f"[go up](#{$HEADER1})"
     setv $FPTK_MACRO_LIB "fptk._macros"
 
+; _____________________________________________________________________________/ }}}1
+; REPLACEMENTS ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    ; for this functions help-card will not be printed
+    ; (like because for StrictNumber it will give help on Union, which is useless)
+    setv $SUPPRESS_HELP
+        L   "listQ" "tupleQ" "setQ" "iteratorQ" "iterableQ"
+            "StrictNumber" "validateF"
 
     setv $ASCII_NAMES_TABLE
-        C            ; name                     ; link
+        C            ; md header                ; link
             "->"     #("hyruleThreading1"       "hyruleThreading1")
             "->>"    #("hyruleThreading2"       "hyruleThreading2")
             "as->"   #("hyruleThreading3"       "hyruleThreading3")
@@ -700,7 +709,7 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
             "p:"     #("PipeOfPartials"         "PipeOfPartials")
             "f::"    #("Annotator1"             "Annotator1")
             "def::"  #("Annotator2"             "Annotator2")
-            "&+"     #("Lens operator1"         "Lens-operator1")
+            "&+"     #("Lens operator1"         "Lens-operator1") ; works!
             "&+>"    #("Lens operator2"         "Lens-operator2")
             "l>"     #("Lens operator3"         "Lens-operator3")
             "l>="    #("Lens operator4"         "Lens-operator4")
@@ -720,25 +729,31 @@ DEFN: fptk   | third        ; entity defined internally via (defn ...)
                      "../../src/fptk/testing.hy"
                    ])
 
-    (setv $TARGET_LONG_FILE  "../../docs/functions.md" )
+    (setv $TARGET_LONG_FILE  "../../_devdocs/doctable (autogenerated).hy" )
     (setv $TARGET_SHORT_FILE "../../docs/cheetsheet.md")
 
 ; _____________________________________________________________________________/ }}}1
+; RUN ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     setv _code $ str_join :sep "\n" : lmap read_file $SOURCES
 
     ; long table:
 
-    write_to_file 
-        generate_long_doc _code
-       \$TARGET_SHORT_FILE
+        setv _long_table : generate_long_table _code 
+
+        write_to_file 
+            f"\n{_long_table}"
+           \$TARGET_LONG_FILE
 
     ; short table + md blocks:
 
-    setv _short_table : generate_short_table _code
-    setv _md_headers  : generate_md_blocks _code
+        setv _short_table : generate_short_table _code
+        setv _md_headers  : generate_md_blocks _code
 
-    write_to_file 
-        f"# {$HEADER1}\n\n{_short_table}\n\n# {$HEADER2}\n\n{_md_headers}"
-       \$TARGET_SHORT_FILE
+        write_to_file 
+            f"{$CONTENTS}\n# {$HEADER1}\n\n{_short_table}\n\n# {$HEADER2}\n\n{_md_headers}"
+           \$TARGET_SHORT_FILE
+
+
+; _____________________________________________________________________________/ }}}1
 

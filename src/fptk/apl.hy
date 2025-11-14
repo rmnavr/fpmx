@@ -205,8 +205,8 @@
           keep_border =True  will keep elements with pred(elem)=True
           merge_border=True  will cut only at first of a sequence of pred(elem)=True elems 
           #
-          in the example below evenQ is function that gives True for odd numbers,
-          that is cuts will happen at elems=1
+          in the example below evenQ is function that gives True for even numbers,
+          that is cuts will happen at elems=0
           #
                                                  #  keep_b merge_b
                                                  #  ------ -------

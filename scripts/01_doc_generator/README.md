@@ -3,19 +3,12 @@
 
 # FPTK Doc Generator
 
-Purpose of **FPTK Doc Generator** is to auto-generate short doc table of most
-fptk funcs/classes with short description like:
+Purpose of **FPTK Doc Generator** is to auto-generate 2 different documents:
+1. Cheetsheet + detailed description (for `/docs`)
+   > Doesn't output `(comment "lib | kind | name | sgntr | descr ")` entities
+2. Table of detailed one-liners (for `/_devdocs`)
 
-```hy
-=== Group name 1 ===
-TYPE source_lib | entity_name   :: signature ; description
-TYPE source_lib | entity_name   :: signature ; description
-
-=== Group name 2 ===
-...
-```
-
-Simply run `doc_generator.hy` file to generate this table.
+Simply run `doc_generator.hy` file to generate both documents.
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Recognition: Grouping ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
@@ -25,7 +18,7 @@ Simply run `doc_generator.hy` file to generate this table.
 For generator to work, fptk files in `src` need to use special syntax.
 
 Below, "signature" and "description" are arbitrary texts.
-The only rule they must follow is to use `|` symbol only as separator (see examples below). 
+The only rule they must follow is to use `|` symbol only as separator (see examples below).
 
 ## Grouping
 

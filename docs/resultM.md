@@ -1,7 +1,7 @@
 
 ---
 fptk docs:
-1. [Functions and modules](https://github.com/rmnavr/fptk/blob/main/docs/functions.md)
+1. [Cheetsheet](https://github.com/rmnavr/fptk/blob/main/docs/cheetsheet.md)
 2. [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md)
 3. [Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)
 4. You are here -> [Result type](https://github.com/rmnavr/fptk/blob/main/docs/resultM.md)
