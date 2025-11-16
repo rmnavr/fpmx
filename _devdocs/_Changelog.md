@@ -1,5 +1,8 @@
 
-# Version 0.4.2 (11 Nov 2025)
+# cur dev version
+- `f>` is back lol and `=>`/`p:` has special recognition for it (while `=>>` basic recognition works ok)
+
+# Version 0.4.4 (14 Nov 2025)
 - changed `timing` from function `timing(f, #* args, #** kwargs)`
   to macro `(timing expr1 expr2 ...)`
 - added math functions:

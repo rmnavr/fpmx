@@ -1,56 +1,88 @@
 
-// Polishing topics ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+// [+] doc_gen ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	- typecheck: with = or is, or type or smth?
-	- correctly pass through extra args/kwargs (in partial and such)
-	- iterator/generator/list/lazy (do not falsly consume iterators and such)
-	- consistent namings of args
-	- macro: hygensims
+	+ Remove requirement for `;;` comments to have double-semicolon
+	+ Enhance recognition of if `#_ "comment"` belongs to prev `(import ...)` or next `(defn ...)`
+	+ BUG: docgen should not find values in ;; (setv ...) JFK
 
 // ____________________________________________________________________________/ }}}1
-// Bugs/Todos ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+// fptk ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	- rest returns iterator, drop returns list, wtf
-	- lbisect_by: option to include/exclude first found; negation in f in unclear
-	- strip/lstrip/rstrip should also pass kwargs and such
+	=>/=>> macro:
+		- (=> Point .x.val (.x.val)) test/implement
 
-	• 1-based-indexing:
-		- with dicts
-		- range, lrange, range_, lrange_
-		- assoc_
-		- pick_
-		- slice_/cut_ with 1 arg ?
-		+ ncut_ ?
+	resultM:
+		+ resultM is with __future__ currently?
+		+ resultM — to dot-API?
+		+ resultM non-working with Polars and such -> turn off annotations?
 
-// ____________________________________________________________________________/ }}}1
-// New functions ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+	other:
+		+ include clrz (also works with non-lists)
+		+ upd lns macros/docs (recognize 1 "key" or not?)
 
-	apl:
-		+ funcy.interpose (str_join is for strings)
-		  inteleave (x1y2z3)
-		  interpose (x-y-z)
-		+ enlengthen_list
-		+ append, prepend, insert
-		+ [1 2 3] [a b c] -> [1 2 3 a] [b c] ; to_left, to_right
+	big upds:
+		- split to: core, pydantic/termcolor/etc.
+		? remove funcy dependency
+
+	docs:
+		- actually usable examples in docs for =>/p:
+
+	lists:
+		+ funcy.interpose (str_join is for strings), inteleave (x1y2z3), interpose (x-y-z)
 	    + (flatten xs :level 3)
+		+ variadic: append, prepend, insert
+		+ enlengthen_list
+		+ [1 2 3] [a b c] -> [1 2 3 a] [b c] ; to_left, to_right
 		+ dedup
 		+ count_occurrences -> count_by, count_reps, count_elem
-	    + (on_each f xs) -> None
-	      // as map but actually calcs
-	      // as lmap, but no result is returned
-	    + applicators actually apply:
-	      + juxt				-> apply_juxt		
-	      + compose/rcompose	-> apply_compose
-	      + nested				-> apply_nested		-> apply_n
+        + swap lcycle args order ?
+
+	fix:
+		+ lprint: when on non-iterable, print normally
+		- rest returns iterator, drop returns list, wtf
+		- lbisect_by: option to include/exclude first found; negation in f in unclear
+		- strip/lstrip/rstrip should also pass kwargs and such
+	    - typecheck: with = or is, or type or smth?
+		- test: macro: hygensims
+
+	dataclass:
+		+ replace (upd 1+ field)
+
+	dicts:
+		+ dkeys, dvalues, ditems
+		+ add/substract
 
 	getters:
-		+ getattr obj arg1 arg2
-		+ attrget arg obj
-		+ dataclass: replace (upd one field)
-		+ add/substract lists/dictionaries
+        - pick_ assoc_, slice_ cut_ with 1 arg, ncut_
+        - looks like cut_ is bad? no?
+		- with dicts
 
-	debug:
-		+ funcy.tap, ltap (listprint), tee
+    + (defn validationOFF [f] 
+          (defn wrapper [#* args #** kwargs]
+                (return (f #* args #** kwargs)))
+          (return wrapper))
+
+	benchmarking:
+		+ see: funcy.tap, ltap (listprint), tee
+	    - tap_result 
+		- tap_timing
+        + dt_print with no print?
 
 // ____________________________________________________________________________/ }}}1
+
+	······························
+
+	Current:
+
+		=>/=>>
+			- specially recognized:
+			  - #> #>> unpackers
+			  - yes, i want f> (implement as standalone macro, but specially recognized by =>/=>>/p:)
+			- check if n is int and key is str lol? or remove completely? (same for lens)
+
+		docs
+			- range_/lrange_ -> upd placement and description
+			- f> is back (also in =>, =>>, p:)
+			- include resultM in tables (maybe via reimport module)
+
 

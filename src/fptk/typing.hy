@@ -16,9 +16,9 @@
 
 ; [GROUP] Typing: Base ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (require hyrule [of])         #_ "| example: (of List int) which is equiv to py-code: List[int]"
-    (require fptk._macros [f::])  #_ "| example: (f:: int -> int => (of Tuple int str)) -> Callable[[int, int], Tuple[int,str]]"
-    (require fptk._macros [def::])  #_ "| define function with signature; example: (def:: int -> int -> float fdivide [x y] (/ x y))"
+    (require hyrule [of])           #_ "| example: (of List int) which is equiv to py-code: List[int]"
+    (require fptk._macros [f::])    #_ "| example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]"
+    (require fptk._macros [def::])  #_ "| define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))"
 
     (import dataclasses [dataclass])
     (import enum        [Enum])

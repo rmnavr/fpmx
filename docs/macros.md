@@ -11,30 +11,34 @@ fptk docs:
 
 # full list of fptk macros
 
-Anonymous functions recognizing `it` or `%1`, `%2`, ... as arguments:
-* `fm`
-* `(l)mapm`
-* `(l)filterm`
-
-Getters and threading macros:
-> fptk macros consistently use `.attr` for attribute access and `(.method)` for method calls.
-> 
-> This is in contrast with hyrule's macro `->` where both `.smth` and `(.smth)` are seen as method calls.
-* `=>` and `=>>` — macros combining hy `.` and `->` (or `->>`) macros
-* `p:` — pipe of partials
-* `getattrm` — macros like `getattr` but with special syntax
-* `(l)pluckm` — buffed `(l)pluck` from funcy
-
-Haskell-style typing annotations:
-* `f::` — macro for annotating callables
-* `def::` — macros for annotating functions via haskell-style signature
-
-Testing:
-* `assertm`
-* `gives_error_typeQ`
-
-There are also lens related macros described in separate doc
-([Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)).
+fptk offers following macros:
+* Anonymous functions recognizing `it` or `%1`, `%2`, ... as arguments:
+  * `fm`
+  * `f>`
+  * `(l)mapm`
+  * `(l)filterm`
+* Getters and threading macros:
+  > fptk macros consistently use `.attr` for attribute access and `(.method)` for method calls.
+  >
+  > This is in contrast with hyrule's macro `->` where both `.smth` and `(.smth)` are seen as method calls.
+  * `=>` and `=>>` — macros combining hy `.` and `->` (or `->>`) macros
+  * `p:` — pipe of partials
+  * `getattrm` — macros like `getattr` but with special syntax
+  * `(l)pluckm` — buffed `(l)pluck` from funcy
+* Haskell-style typing annotations:
+  * `f::` — macro for annotating callables
+  * `def::` — macros for annotating functions via haskell-style signature
+* Macros for testing:
+  * `assertm`
+  * `gives_error_typeQ`
+* Lens-related macros:
+  > they are described in separate doc
+  > ([Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)).
+  * `lns`
+  * `&+`
+  * `&+>`
+  * `l>`
+  * `l>=`
 
 <!-- __________________________________________________________________________/ }}}1 -->
 
@@ -110,9 +114,9 @@ Examples:
 <!-- __________________________________________________________________________/ }}}1 -->
 
 # Lambdas
-<!-- fm, (l)mapm, (l)filterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+<!-- fm, f>, (l)mapm, (l)filterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-## `fm`, `(l)mapm`, `(l)filterm` — macros for writing lambdas
+## `fm`, `f>`, `(l)mapm`, `(l)filterm` — macros for writing lambdas
 
 Those macros all have same similar arguments recognition:
 - either `it` as a solo-argument
@@ -121,6 +125,7 @@ Those macros all have same similar arguments recognition:
 
 Macros description:
 - `fm` defines lambda
+- `f>` defines and immediately applicates lambda (see threading macros for more usage examples)
 - `mapm` and `lmapm` are both `map` that require lambda-syntax
 - `filterm` and `lfilterm` are both `filter` that require lambda-syntax
 
@@ -140,6 +145,12 @@ Macros description:
 ; fm will NOT be able to find "it" or "%n" in py expression:
 (fm (py "print(it)"))       ; -> (fn [] (print it))
 ```
+
+```hy
+; f> works only with single form, use "do" for mutliforms:
+(f> (do (print it) it) 3)   ; -> ((fn [it] (print it) it) 3)
+```
+
 
 Macros `(l)mapm` and `(l)filterm` can only contain one form in place of function:
 ```hy
@@ -173,10 +184,12 @@ and `(.method)` for method calls.
 
 Macro `=>` (`=>>`) combines functions of `.` and `->` (`=>>`) macros by:
 * recognizing [NEW] syntax elements ("new" with regard to basic syntax of `->`/`->>`)
-* [MOD]ifying .attr/.mth syntax of `->` (`->>`) 
+* [MOD]ifying .attr/.mth syntax of `->` (`->>`)
 
 ```hy
-; SLOT is position where arg will be placed
+; - SLOT is position where arg will be placed
+; - notice that when => sees "-2" it sees it as integer,
+;   but "n" (even if n==-2) will be seen as function
 
 (=>  obj
      -2                   ; [NEW] integer | expanded to: (get SLOT -2)
@@ -187,6 +200,7 @@ Macro `=>` (`=>>`) combines functions of `.` and `->` (`=>>`) macros by:
      function             ;               | expanded to: (function SLOT)
      (function a1 a2 ...) ;               | expanded to: (function SLOT a1 a2 ...)
      ((fn [x] (* x 2)))   ;               | expanded to: ((fn [x] (* x 2)) SLOT)
+     (f> (* it 2))        ;               | expanded to: ((fn [it] (* it 2)) SLOT) | *see note below
      )
 
 (=>> obj
@@ -194,25 +208,40 @@ Macro `=>` (`=>>`) combines functions of `.` and `->` (`=>>`) macros by:
      "key"                ; same as for =>
      [0 "key"]            ; same as for =>
      .attr                ; same as for =>
-     (.mth a1 a2 ...)     ; [MOD] | expanded to: (.mth SLOT a1 a2 ...) | see note below
+     (.mth a1 a2 ...)     ; [MOD] | expanded to: (.mth SLOT a1 a2 ...) | *see note below
      function             ;       | expanded to: (function SLOT)
      (function a1 a2)     ;       | expanded to: (function a1 a2 SLOT)
      ((fn [x] (* x 2)))   ;       | expanded to: ((fn [x] (* x 2)) SLOT)
+     (f> (* it 2))        ;       | expanded to: ((fn [it] (* it 2)) SLOT)
      )
 ```
 
-Notice that `=>>` has modified behaviour (compared to `->>`) when it sees `(.mth a1 a2 ...)`:
-```hy
-(->> obj (.mth a1 a2))    ; expanded to: (a1.mth a2 obj) 
-; this doesn't seem very usefull;
-; moreover, following syntax achieves the same result:
-(->> obj (a1.mth a2))     ; expanded to: (a1.mth a2 obj)
+Notice there are 2 exceptions to standard behaviours:
 
-; for this reason =>> works differently:
-(=>> obj (.mth a1 a2))    ; expanded to: (obj.mth a1 a2)
-; you also retain original usage if needed:
-(=>> obj (a1.mth a2))     ; expanded to: (a1.mth a2 ojb)
-```
+1. when `=>` sees `(f> ...)`:
+
+   ```hy
+   (-> obj (f> (* it 2))     ; expanded to: (f> obj (* it 2))
+   ; this generates incorrect f> macro
+
+   ; for this reason => works differently:
+   (=> obj (f> (* it 2))     ; expanded to: (f> (* it 2) obj)
+   ```
+
+2. when `=>>` sees `(.mth a1 a2 ...)`:
+
+   ```hy
+   (->> obj (.mth a1 a2))    ; expanded to: (a1.mth a2 obj)
+   ; this doesn't seem very usefull;
+   ; moreover, following syntax achieves the same result:
+   (->> obj (a1.mth a2))     ; expanded to: (a1.mth a2 obj)
+
+   ; for this reason =>> works differently:
+   (=>> obj (.mth a1 a2))    ; expanded to: (obj.mth a1 a2)
+   ; you also retain original usage if needed:
+   (=>> obj (a1.mth a2))     ; expanded to: (a1.mth a2 ojb)
+   ```
+
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- p: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
@@ -233,6 +262,7 @@ Internally piping is implemented via partial application with [funcy.partial](ht
     function             ;         | equiv to: (function SLOT)
     (function a1 a2)     ;         | equiv to: (function a1 a2 SLOT)
     ((fn [x] (* x 2)))   ;         | equiv to: ((fn [x] (* x 2)) SLOT)
+    (f> (* it 2))        ;         | equiv to: ((fn [it] (* it 2)) SLOT)
     )
 ```
 
@@ -242,7 +272,8 @@ Working example:
 (setv x 4)
                                      ; after application to x will produce at each step:
 (setv pipe (p: operator.neg          ; -4
-               ((fm it))             ; -4     // fm-macro can be used with p:
+               ((fm it))             ; -4     // fm macro can be used with p:
+               (f> it)               ; -4     // f> macro can be used with p:
                (abs)                 ; 4
                (operator.add 4)      ; 8
                str                   ; '8'
@@ -272,7 +303,7 @@ to be able to recognize `(pluckm .attr xs)` syntax for accessing attributes.
 (pluckm "key" xs)   ; (pluck "key" xs)
 
 ; to pass attr as string, use basic pluck_attr:
-(pluck_attr "attr" cs) 
+(pluck_attr "attr" cs)
 
 ```
 

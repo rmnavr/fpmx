@@ -174,7 +174,7 @@
 ; === Macros ===
 
 ; Benchmarking:
-; timingm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; timing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (defmacro timing [#* exprs]
         `(do (setv _time_getter hy.I.time.perf_counter)
@@ -299,13 +299,6 @@
 ; Lambdas:
 ; fm, (l)mapm, (l)filterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	; recognizes "it" as solo-arg
-	; or %1..%9 as multi args
-	; 
-	; "it" cannot be used together with %i
-	; 
-	; nested fm calls will probably not work as intended
-
 	(defmacro fm [#* exprs]
 		(setv itargs (->> exprs
 						  hy.I.hyrule.flatten
@@ -328,6 +321,9 @@
 		(setv inputs (lfor n (hy.I.hyrule.thru 1 maxN) (hy.models.Symbol f"%{n}")))
 		(return `(fn [~@inputs] ~@exprs)))
 
+	(defmacro f> [one_shot_fm #* args]
+		(return `((hy.R.fptk.fm ~one_shot_fm) ~@args)))
+
 	(defmacro mapm [one_shot_fm #* args]
 		(return `(map (hy.R.fptk.fm ~one_shot_fm) ~@args)))
 
@@ -346,13 +342,16 @@
 
     ;'3              ; new       hy.models.Integer 
     ;'"key"          ; new       hy.models.String
-    ;'func           ;           hy.models.Symbol
     ;'[smth]         ; new       hy.models.List
+    ;
+    ;'func           ;           hy.models.Symbol
     ;'.attr          ; new       _isDottedAttr    _extractDottedAttr
     ;'(.mth)         ;           _isDottedMth     _extractDottedMth
     ;'op.neg         ;           _isDottedAccess
     ;'(op.neg 1 2)   ;           hy.models.Expression
     ;'(func 1 2)     ;           hy.models.Expression
+    ;
+    ;'(f> (print it)); special recognition: =>> doesn't require special; => places args at the end (i.e. not right after f>)
 
     (defmacro => [head #* args]
         (setv outp head)  ; obj
@@ -380,6 +379,11 @@
 					; operator.neg 
 					(_isDottedAccess &arg) 
 					(setv outp `(~&arg ~outp))
+                    ; (f> (print it))
+                    (_isExprWithHeadSymbol &arg "f>")
+                    (do (setv nm (get &arg 0))
+                        (setv ag (cut &arg 1 None))
+                        (setv outp `(~nm ~@ag ~outp)))  
 					; '(smth arg1 arg2) ; also works for: (op.neg arg1 arg2)
                     (= (type &arg) hy.models.Expression) ; should be checked almost last, because _isDotted... are Exprs too
                     (do (setv nm (get &arg 0))
@@ -420,7 +424,7 @@
                     (= (type &arg) hy.models.Expression) ; should be checked almost last, because _isDotted... are Exprs too
                     (do (setv nm (get &arg 0))
                         (setv ag (cut &arg 1 None))
-                        (setv outp `(~nm ~@ag ~outp)))  ; THIS IS THE ONLY PLACE WHERE IT DIFFERS FROM => LOL
+                        (setv outp `(~nm ~@ag ~outp)))  
                     ; normally never executed:
                     True 
 					(setv outp `(~&arg ~outp))))
@@ -478,12 +482,11 @@
 					; function -> (partial function)
 					(= (type &arg) hy.models.Symbol)
 					(pargs.append `(hy.I.funcy.partial ~&arg))
-                    ;
-					; <removed> ; (fn/fm ...) -> no change
-					; <removed> ; (or (_isExprWithHeadSymbol &arg "fn")
-					; <removed> ;	  (_isExprWithHeadSymbol &arg "fm")
-					; <removed> ; (pargs.append &arg)
-                    ;
+                    ; f>
+					(_isExprWithHeadSymbol &arg "f>") 
+					(do (setv body (get &arg 1))
+                        (setv ags  (cut &arg 2 None))
+                        (pargs.append `(hy.I.funcy.partial (hy.R.fptk.fm ~body) ~@ags)))
 					; (func 1 2)       -> (partial func 1 2)
 					; (operator.add 3) -> (partial operator.add 3)
 					(= (type &arg) hy.models.Expression)

@@ -10,8 +10,8 @@
                        nested apply_n
                      ]
             :macros  [ case branch unless lif as-> -> ->> doto do_n list_n
-                       => =>> p:                        ; fptk macros
-                       fm mapm lmapm filterm lfilterm   ; fptk macros
+                       => =>> p:                            ; fptk macros
+                       fm f> mapm lmapm filterm lfilterm    ; fptk macros
                      ])
 
     (require hyrule [comment])
@@ -66,6 +66,7 @@
 ; [GROUP] FP: threading ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (require fptk._macros [fm])       #_ "(fm (* it 3)) | anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'"
+    (require fptk._macros [f>])       #_ "(f> (* it 3) 4) | anonymous function with fm syntax, immediately applicates args"
 
     (comment "py | base | zip | zip(*iterables) -> zip object |")
 
