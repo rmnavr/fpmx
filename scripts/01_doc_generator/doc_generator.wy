@@ -706,6 +706,7 @@ fptk docs:
 			"doto"	 #: "hyruleThreading4"	"hyruleThreading4"
 			"=>"	 #: "FPTKThreading1"	"FPTKThreading1"
 			"=>>"	 #: "FPTKThreading2"	"FPTKThreading2"
+			"f>"	 #: "LambdaWithAppl"	"LambdaWithAppl"
 			"p:"	 #: "PipeOfPartials"	"PipeOfPartials"
 			"f::"	 #: "Annotator1"		"Annotator1"
 			"def::"  #: "Annotator2"		"Annotator2"

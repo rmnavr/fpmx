@@ -27,6 +27,7 @@ DEFN: fptk            | flip                     :: flip(f, a, b) = f(b, a)  ; c
 
 === FP: threading ===
 MACR: fptk._macros    | fm                       :: (fm (* it 3))  ; anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'
+MACR: fptk._macros    | f>                       :: (f> (* it 3) 4)  ; anonymous function with fm syntax, immediately applicates args
 INFO: py              | zip /base/               :: zip(*iterables) -> zip object
 DEFN: fptk            | lzip                     :: lzip(*iterables) -> List  ; literally just list(zip(*iterables))
 INFO: py              | map /base/               :: map(func, *iterables) -> map object
@@ -141,8 +142,8 @@ MACR: fptk._macros    | lpluckm                  ; list version of pluckm
 
 === Typing: Base ===
 MACR: hyrule          | of                       ; example: (of List int) which is equiv to py-code: List[int]
-MACR: fptk._macros    | f::                      ; example: (f:: int -> int => (of Tuple int str)) -> Callable[[int, int], Tuple[int,str]]
-MACR: fptk._macros    | def::                    ; define function with signature; example: (def:: int -> int -> float fdivide [x y] (/ x y))
+MACR: fptk._macros    | f::                      ; example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]
+MACR: fptk._macros    | def::                    ; define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))
 FROM: dataclasses     | dataclass
 FROM: enum            | Enum
 FROM: typing          | List
