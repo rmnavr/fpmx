@@ -252,7 +252,9 @@ Notice there are 2 exceptions to standard behaviours:
 Internally piping is implemented via partial application with [funcy.partial](https://funcy.readthedocs.io/en/stable/funcs.html#partial).
 
 ```hy
-; SLOT is position where arg will be placed
+; - SLOT is position where arg will be placed
+; - notice that when p: sees "-2" it sees it as integer,
+;   but "n" (even if n==-2) will be seen as function
 
 (p: -2                   ; integer | equiv to: (get SLOT -2)
     "key"                ; string  | equiv to: (get SLOT "key")
@@ -337,7 +339,7 @@ Checks if `(op arg1 arg2)` returns True and also:
    - False when check is False
    - Error object when check was not able to be calculated
 
-```
+```hy
 (assertm = (+ 1 2) (- 3 10))
 ; Error in '(= (+ 1 2) (- 3 10)) | <class 'AssertionError'> : False
 ; >> '(+ 1 2) = 3

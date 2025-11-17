@@ -74,12 +74,6 @@
 
 	Current:
 
-		=>/=>>
-			- specially recognized:
-			  - #> #>> unpackers
-			  - yes, i want f> (implement as standalone macro, but specially recognized by =>/=>>/p:)
-			- check if n is int and key is str lol? or remove completely? (same for lens)
-
 		docs
 			- range_/lrange_ -> upd placement and description
 			- f> is back (also in =>, =>>, p:)
