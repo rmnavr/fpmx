@@ -21,5 +21,5 @@
     (require fptk.testing    *)
     (require fptk.typing     *)
 
-    (import fptk.monads.resultM *)
+    (import fptk.monads *) ; imports from /monads/__init_hy__.hy
 

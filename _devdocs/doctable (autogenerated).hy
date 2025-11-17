@@ -307,3 +307,16 @@ DEFN: fptk            | dt_print                 :: dt_printer(* args, fresh_run
 MACR: fptk._macros    | assertm                  :: (assertm op arg1 arg2)  ; tests if (op arg1 arg2), for example (= 1 1)
 MACR: fptk._macros    | gives_error_typeQ        ; example: (assertm gives_error_typeQ (get [1] 2) IndexError)
 
+=== Monad: Result ===
+FROM: fptk.monads.resultM | Result                   ; Result monad. Should be used in annotations only
+FROM: fptk.monads.resultM | Success                  ; Success container of Result monad
+FROM: fptk.monads.resultM | Failure                  ; Failure container of Result monad
+FROM: fptk.monads.resultM | successQ                 :: successQ(result) -> bool  ; throws error when used not on Result type
+FROM: fptk.monads.resultM | failureQ                 :: failureQ(result) -> bool  ; throws error when used not on Result type
+FROM: fptk.monads.resultM | mapR                     :: mapR(result, pureF1, pureF2, ...) -> Result  ; apply pure function to value stored in Success, do nothing for Failure
+FROM: fptk.monads.resultM | bindR                    :: bindR(result, mF1, mF2, ...) -> Result  ; apply monadic (f :: val -> Result) to Success, do nothing for Failure
+FROM: fptk.monads.resultM | unwrapR                  ; returns contained Success value or throws error when not Success
+FROM: fptk.monads.resultM | unwrapR_or               ; returns contained Success value or falls back to default
+FROM: fptk.monads.resultM | unwrapE                  ; returns contained Failure value or throws error when not Failure
+FROM: fptk.monads.resultM | unwrapE_or               ; returns contained Failure value or falls back to default
+
