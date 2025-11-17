@@ -72,11 +72,6 @@
 
 	······························
 
-	Current:
-
-		docs
-			- range_/lrange_ -> upd placement and description
-			- f> is back (also in =>, =>>, p:)
-			- include resultM in tables (maybe via reimport module)
+	- range_/lrange_ -> upd placement and description
 
 

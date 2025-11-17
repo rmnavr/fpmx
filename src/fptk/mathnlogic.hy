@@ -2,13 +2,11 @@
 ; Import and Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (export :objects [ inc dec sign neg
-                       floor ceil
+                       floor ceil clip
                        half double squared reciprocal
                        sqrt dist hypot normalize
                        exp log ln log10
                        evenQ oddQ zeroQ negativeQ positiveQ
-                       ;
-                       range_ lrange_ clip
                        ;
                        pi sin cos tan degrees radians
                        acos asin atan atan2
@@ -42,6 +40,13 @@
 
     (import math [floor])  #_ "| floor(1.9) = 1"
     (import math [ceil])   #_ "| ceil(1.1) = 2"
+
+    #_ "clip(x, lower, upper) | clips x to fit in lower <= x <= upper limit"
+    (defn clip [x lower upper]
+        "clips x to fit in lower <= x <= upper limit"
+        (when (< upper lower)
+              (raise (ValueError "can't have lower>upper")))
+        (max lower (min x upper)))
 
     #_ "half(x) | = x/2"
     (defn half       [x] "half(x) = x / 2" (/ x 2))
@@ -94,48 +99,6 @@
     (defn positiveQ [x] "checks literally if x > 0" (> x 0))
 
 ; _____________________________________________________________________________/ }}}1
-; [GROUP] Math and logic: Ranges ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    (import hyrule [thru :as range_]) #_ "range_(start, end=None, step=1) -> List | same as range, but with 1-based index"
-
-    #_ "lrange_(start, end, step=1) -> List | range including both ends when possible, also works on fractionals"
-    (defn lrange_ [start end [step 1]]
-        "range including both ends when possible,
-         also works on fractionals"
-        ;; integers
-        (when (and (= (type start) int)
-                   (= (type end) int)
-                   (= (type step) int))
-              (return (list (range_ start end step))))
-        ;;
-        (when (= step 0) (raise (ZeroDivisionError "step must be != 0")))
-        (setv n (round (py "(end-start)/step + 1")))
-        ;; floats for start<end
-        (when (< start end)
-              (setv _end (+ end (abs (/ start 1E13))))
-              (return
-                  (lfor &i (range_ 0 n)
-                        :setv candidate (+ start (* &i step))
-                        :if   (<= candidate _end)
-                        candidate)))
-        ;; floats for start=end
-        (when (= start end) (return [start]))
-        ;; floats for start>end
-        (setv _end (- end (abs (/ start 1E13))))
-        (return
-            (lfor &i (range_ 0 n) ;; here n<0
-                  :setv candidate (+ start (* &i step))
-                  :if   (>= candidate _end)
-                  candidate)))
-
-    #_ "clip(x, lower, upper) | clips x to fit in lower <= x <= upper limit"
-    (defn clip [x lower upper]
-        "clips x to fit in lower <= x <= upper limit"
-        (when (< upper lower)
-              (raise (ValueError "can't have lower>upper")))
-        (max lower (min x upper)))
-
-; _____________________________________________________________________________/ }}}1
 ; [GROUP] Math and logic: Trigonometry ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (import math [pi])      #_ "| literally just float pi=3.14..."
@@ -182,6 +145,10 @@
 
     #_ "minus(x, y) = x - y |"
     (defn minus [x y] "minux(x, y) = x - y" (- x y))
+
+
+; _____________________________________________________________________________/ }}}1
+; [GROUP] Math and logic: Dunders and Monoids ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ;; =========================================================================
     ;; dunders
@@ -241,6 +208,7 @@
         ;; lconcat (list on itertools.chain) is a monoid on lists too
 
 ; _____________________________________________________________________________/ }}}1
+
 ; [GROUP] Math and logic: Logic checks ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     #_ "fnot(f, *args, **kwargs) | = not(f(*args, **kwargs)) "

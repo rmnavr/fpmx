@@ -7,7 +7,7 @@
                        drop take pick
                        pluck lpluck pluck_attr lpluck_attr
                        ;
-                       get_ nth_ slice_ cut_
+                       get_ nth_ slice_ cut_ range_ lrange_
                      ]
             :macros  [ ncut
                        pluckm    ; fptk macros
@@ -87,7 +87,6 @@
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] Getters: one based index ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-
     #_ "get_(seq, *ns) -> elem | same as get, but with 1-based index (will throw error for n=0)"
     (defn get_ [seq #* ns]
         " same as hy get macro, but with 1-based index,
@@ -142,6 +141,38 @@
           - will throw error when start=0 or end=0
         "
         (get seq (slice_ start end step)))
+
+    (import hyrule [thru :as range_]) #_ "range_(start, end=None, step=1) -> List | same as range, but with 1-based index"
+
+    #_ "lrange_(start, end, step=1) -> List | range including both ends when possible, also works on fractionals"
+    (defn lrange_ [start end [step 1]]
+        "range including both ends when possible,
+         also works on fractionals"
+        ;; integers
+        (when (and (= (type start) int)
+                   (= (type end) int)
+                   (= (type step) int))
+              (return (list (range_ start end step))))
+        ;;
+        (when (= step 0) (raise (ZeroDivisionError "step must be != 0")))
+        (setv n (round (py "(end-start)/step + 1")))
+        ;; floats for start<end
+        (when (< start end)
+              (setv _end (+ end (abs (/ start 1E13))))
+              (return
+                  (lfor &i (range_ 0 n)
+                        :setv candidate (+ start (* &i step))
+                        :if   (<= candidate _end)
+                        candidate)))
+        ;; floats for start=end
+        (when (= start end) (return [start]))
+        ;; floats for start>end
+        (setv _end (- end (abs (/ start 1E13))))
+        (return
+            (lfor &i (range_ 0 n) ;; here n<0
+                  :setv candidate (+ start (* &i step))
+                  :if   (>= candidate _end)
+                  candidate)))
 
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] Getters: keys and attrs ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
