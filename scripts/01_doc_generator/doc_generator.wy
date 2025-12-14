@@ -685,7 +685,6 @@ fptk docs:
 | Group | Functions/Types | Macros |
 |-------|-----------------|--------|"
 
-
 	setv $HEADER1		 "Cheetsheet"
 	setv $HEADER2		 "Detailed descriptions"
 	setv $BACKLINK		 f"[go up](#{$HEADER1})"
