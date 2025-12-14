@@ -36,6 +36,7 @@ fptk docs:
 | Lens | <span title="main object of lenses library (for working with immutable structures)">[`lens`](#lens)</span> | <span title="macros for working with lens, see lens macros docs for details">[`lns`](#lns)</span> <span title="macros for working with lens, see lens macros docs for details">[`&+`](#Lens-operator1)</span> <span title="macros for working with lens, see lens macros docs for details">[`&+>`](#Lens-operator2)</span> <span title="macros for working with lens, see lens macros docs for details">[`l>`](#Lens-operator3)</span> <span title="macros for working with lens, see lens macros docs for details">[`l>=`](#Lens-operator4)</span> |
 | Benchmarking | <span title=":: dt_printer(* args, fresh_run=False) :: starts timer on fresh run, prints time passed since previous call">[`dt_print`](#dt_print)</span> | <span title=":: (timing expr1 expr2 ...) -> #(float, Any) :: returns time (in seconds) and result of execution of (fn [] expr1 expr2 ...)">[`timing`](#timing)</span> |
 | Testing |  | <span title=":: (assertm op arg1 arg2) :: tests if (op arg1 arg2), for example (= 1 1)">[`assertm`](#assertm)</span> <span title="example: (assertm gives_error_typeQ (get [1] 2) IndexError)">[`gives_error_typeQ`](#gives_error_typeQ)</span> |
+| Monad: Maybe | <span title="Maybe monad. Should be used in annotations only">[`Maybe`](#Maybe)</span> <span title="Just container of Maybe monad">[`Just`](#Just)</span> <span title="Nothing of Maybe monad">[`Nothing`](#Nothing)</span> <span title=":: justQ(maybeValue) -> bool :: throws error when used not on Maybe type">[`justQ`](#justQ)</span> <span title=":: justQ(maybeValue) -> bool :: throws error when used not on Maybe type">[`nothingQ`](#nothingQ)</span> <span title=":: mapM(maybeVal, pureF1, pureF2, ...) -> Maybe :: apply pure function to value stored in Maybe, do nothing for Nothing">[`mapM`](#mapM)</span> <span title=":: bindM(maybeVal, mF1, mF2, ...) -> Maybe :: apply monadic (f :: val -> maybe) to Just, do nothing for Nothing">[`bindM`](#bindM)</span> <span title="returns contained Just value or throws error when not Just">[`unwrapM`](#unwrapM)</span> <span title="returns contained Just value or falls back to default">[`unwrapM_or`](#unwrapM_or)</span> |  |
 | Monad: Result | <span title="Result monad. Should be used in annotations only">[`Result`](#Result)</span> <span title="Success container of Result monad">[`Success`](#Success)</span> <span title="Failure container of Result monad">[`Failure`](#Failure)</span> <span title=":: successQ(result) -> bool :: throws error when used not on Result type">[`successQ`](#successQ)</span> <span title=":: failureQ(result) -> bool :: throws error when used not on Result type">[`failureQ`](#failureQ)</span> <span title=":: mapR(result, pureF1, pureF2, ...) -> Result :: apply pure function to value stored in Success, do nothing for Failure">[`mapR`](#mapR)</span> <span title=":: bindR(result, mF1, mF2, ...) -> Result :: apply monadic (f :: val -> Result) to Success, do nothing for Failure">[`bindR`](#bindR)</span> <span title="returns contained Success value or throws error when not Success">[`unwrapR`](#unwrapR)</span> <span title="returns contained Success value or falls back to default">[`unwrapR_or`](#unwrapR_or)</span> <span title="returns contained Failure value or throws error when not Failure">[`unwrapE`](#unwrapE)</span> <span title="returns contained Failure value or falls back to default">[`unwrapE_or`](#unwrapE_or)</span> |  |
 
 # Detailed descriptions
@@ -93,7 +94,7 @@ Help on function constantly in module hyrule.misc:
 constantly(value)
     Return a constant function, which ignores its arguments and always
     returns ``value``. ::
-
+    
       (setv answer (constantly 42))
       (answer)           ; => 42
       (answer 1 :foo 2)  ; => 42
@@ -167,61 +168,56 @@ Info: applicator
 Help on class partial in module functools:
 
 class partial(builtins.object)
- |  partial(func, /, *args, **keywords)
- |
- |  Create a new function with partial application of the given arguments
- |  and keywords.
- |
+ |  partial(func, *args, **keywords) - new function with partial application
+ |  of the given arguments and keywords.
+ |  
  |  Methods defined here:
- |
+ |  
  |  __call__(self, /, *args, **kwargs)
  |      Call self as a function.
- |
+ |  
  |  __delattr__(self, name, /)
  |      Implement delattr(self, name).
- |
- |  __get__(self, instance, owner=None, /)
- |      Return an attribute of instance, which is of type owner.
- |
+ |  
  |  __getattribute__(self, name, /)
  |      Return getattr(self, name).
- |
- |  __reduce__(self, /)
+ |  
+ |  __reduce__(...)
  |      Helper for pickle.
- |
+ |  
  |  __repr__(self, /)
  |      Return repr(self).
- |
+ |  
  |  __setattr__(self, name, value, /)
  |      Implement setattr(self, name, value).
- |
- |  __setstate__(self, object, /)
- |
+ |  
+ |  __setstate__(...)
+ |  
  |  ----------------------------------------------------------------------
  |  Class methods defined here:
- |
- |  __class_getitem__(object, /)
+ |  
+ |  __class_getitem__(...) from builtins.type
  |      See PEP 585
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Static methods defined here:
- |
- |  __new__(*args, **kwargs)
+ |  
+ |  __new__(*args, **kwargs) from builtins.type
  |      Create and return a new object.  See help(type) for accurate signature.
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Data descriptors defined here:
- |
+ |  
  |  __dict__
- |
+ |  
  |  __vectorcalloffset__
- |
+ |  
  |  args
  |      tuple of arguments to future partial calls
- |
+ |  
  |  func
  |      function object to use in future partial calls
- |
+ |  
  |  keywords
  |      dictionary of keyword arguments to future partial calls
 ```
@@ -459,27 +455,27 @@ Help on class starmap in module itertools:
 
 class starmap(builtins.object)
  |  starmap(function, iterable, /)
- |
+ |  
  |  Return an iterator whose values are returned from the function evaluated with an argument tuple taken from the given sequence.
- |
+ |  
  |  Methods defined here:
- |
+ |  
  |  __getattribute__(self, name, /)
  |      Return getattr(self, name).
- |
+ |  
  |  __iter__(self, /)
  |      Implement iter(self).
- |
+ |  
  |  __next__(self, /)
  |      Implement next(self).
- |
- |  __reduce__(self, /)
+ |  
+ |  __reduce__(...)
  |      Return state information for pickling.
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Static methods defined here:
- |
- |  __new__(*args, **kwargs)
+ |  
+ |  __new__(*args, **kwargs) from builtins.type
  |      Create and return a new object.  See help(type) for accurate signature.
 ```
 
@@ -516,16 +512,14 @@ Info: theory: reduce + monoid = binary-function for free becomes n-arg-function
 Help on built-in function reduce in module _functools:
 
 reduce(...)
-    reduce(function, iterable[, initial], /) -> value
-
-    Apply a function of two arguments cumulatively to the items of an iterable, from left to right.
-
-    This effectively reduces the iterable to a single value.  If initial is present,
-    it is placed before the items of the iterable in the calculation, and serves as
-    a default when the iterable is empty.
-
-    For example, reduce(lambda x, y: x+y, [1, 2, 3, 4, 5])
-    calculates ((((1 + 2) + 3) + 4) + 5).
+    reduce(function, iterable[, initial]) -> value
+    
+    Apply a function of two arguments cumulatively to the items of a sequence
+    or iterable, from left to right, so as to reduce the iterable to a single
+    value.  For example, reduce(lambda x, y: x+y, [1, 2, 3, 4, 5]) calculates
+    ((((1+2)+3)+4)+5).  If initial is present, it is placed before the items
+    of the iterable in the calculation, and serves as a default when the
+    iterable is empty.
 ```
 
 ## reductions
@@ -616,9 +610,9 @@ Help on built-in function prod in module math:
 
 prod(iterable, /, *, start=1)
     Calculate the product of all the elements in the input iterable.
-
+    
     The default start value for the product is 1.
-
+    
     When the iterable is empty, return the start value.  This function is
     intended specifically for use with numeric values and may reject
     non-numeric types.
@@ -681,7 +675,7 @@ apply_n(n, f, *args, **kwargs)
     applies f to args and kwargs,
     than applies f to result of prev application,
     and this is repeated in total for n times,
-
+    
     n=1 is simply f(args, kwargs)
 ```
 
@@ -983,30 +977,30 @@ Help on class compress in module itertools:
 
 class compress(builtins.object)
  |  compress(data, selectors)
- |
+ |  
  |  Return data elements corresponding to true selector elements.
- |
+ |  
  |  Forms a shorter iterator from selected data elements using the selectors to
  |  choose the data elements.
- |
+ |  
  |  Methods defined here:
- |
+ |  
  |  __getattribute__(self, name, /)
  |      Return getattr(self, name).
- |
+ |  
  |  __iter__(self, /)
  |      Implement iter(self).
- |
+ |  
  |  __next__(self, /)
  |      Implement next(self).
- |
- |  __reduce__(self, /)
+ |  
+ |  __reduce__(...)
  |      Return state information for pickling.
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Static methods defined here:
- |
- |  __new__(*args, **kwargs)
+ |  
+ |  __new__(*args, **kwargs) from builtins.type
  |      Create and return a new object.  See help(type) for accurate signature.
 ```
 
@@ -1082,19 +1076,19 @@ flatten(coll)
     Recurisvely collect all the elements and subelements of ``coll``,
     depth-first, and return them in a single list. :hy:func:`coll?` is used to
     decide whether objects should be descended into. ::
-
-
+    
+    
       (flatten ["foo" #(1 2) [1 [2 3] 4] "bar"])
         ; => ["foo" 1 2 1 2 3 4 "bar"]
-
+    
     Since iteration is used to collect the elements of ``coll``, dictionaries
     are reduced to lists of keys::
-
+    
       (flatten [{"a" 1  "b" 2} {"c" 3  "d" 4}])
         ; => ["a" "b" "c" "d"]
-
+    
     If ``coll`` isn't a collection at all, it's returned in a singleton list::
-
+    
       (flatten "hello")
         ; => ["hello"]
 ```
@@ -1231,7 +1225,7 @@ lmulticut_by(pred, seq: list, keep_border=True, merge_border=False) -> List[list
     cuts at elems which give pred(elem)=True
     #
     keep_border =True  will keep elements with pred(elem)=True
-    merge_border=True  will cut only at first of a sequence of pred(elem)=True elems
+    merge_border=True  will cut only at first of a sequence of pred(elem)=True elems 
     #
     in the example below evenQ is function that gives True for even numbers,
     that is cuts will happen at elems=0
@@ -1295,19 +1289,19 @@ Help on function assoc in module hyrule.collections:
 
 assoc(coll, *kvs, **kwargs)
     Associate key-value pairs by assigning to elements of ``coll``. Thus, ::
-
+    
       (assoc coll  k1 v1  k2 v2  k3 v3)
-
+    
     is equivalent to ::
-
+    
       (setv (get coll k1) v1)
       (setv (get coll k2) v2)
       (setv (get coll k3) v3)
-
+    
     except ``coll`` is evaluated exactly once. Notice that this implies
     the return value is ``None``, not ``coll`` or one of the newly
     assigned elements.
-
+    
     Keyword arguments work like positional arguments with the keyword
     used as a string key, subject to Hy's usual mangling rules. Thus,
     ``(assoc coll :foo-bar 1)`` is equivalent to ``(assoc coll "foo_bar"
@@ -1617,7 +1611,7 @@ thru(a, b=None, step=1)
     A doubly inclusive version of :py:class:`range`. It takes the same
     arguments as ``range``, but includes the endpoint (given a
     compatible start point and step size). ::
-
+    
       (list (thru 3))
         ; => [0 1 2 3]
       (list (thru 0 10 2))
@@ -1790,33 +1784,20 @@ Kind: Reimport from [dataclasses]
 ```hy
 Help on function dataclass in module dataclasses:
 
-dataclass(
-    cls=None,
-    /,
-    *,
-    init=True,
-    repr=True,
-    eq=True,
-    order=False,
-    unsafe_hash=False,
-    frozen=False,
-    match_args=True,
-    kw_only=False,
-    slots=False,
-    weakref_slot=False
-)
-    Add dunder methods based on the fields defined in the class.
-
+dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False)
+    Returns the same class as was passed in, with dunder methods
+    added based on the fields defined in the class.
+    
     Examines PEP 526 __annotations__ to determine fields.
-
-    If init is true, an __init__() method is added to the class. If repr
-    is true, a __repr__() method is added. If order is true, rich
+    
+    If init is true, an __init__() method is added to the class. If
+    repr is true, a __repr__() method is added. If order is true, rich
     comparison dunder methods are added. If unsafe_hash is true, a
-    __hash__() method is added. If frozen is true, fields may not be
-    assigned to after instance creation. If match_args is true, the
-    __match_args__ tuple is added. If kw_only is true, then by default
-    all fields are keyword-only. If slots is true, a new class with a
-    __slots__ attribute is returned.
+    __hash__() method function is added. If frozen is true, fields may
+    not be assigned to after instance creation. If match_args is true,
+    the __match_args__ tuple is added. If kw_only is true, then by
+    default all fields are keyword-only. If slots is true, an
+    __slots__ attribute is added.
 ```
 
 ## Enum
@@ -1832,95 +1813,26 @@ Kind: Reimport from [enum]
 Help on class Enum in module enum:
 
 class Enum(builtins.object)
- |  Enum(
- |      new_class_name,
- |      /,
- |      names,
- |      *,
- |      module=None,
- |      qualname=None,
- |      type=None,
- |      start=1,
- |      boundary=None
- |  )
- |
- |  Create a collection of name/value pairs.
- |
- |  Example enumeration:
- |
- |  >>> class Color(Enum):
- |  ...     RED = 1
- |  ...     BLUE = 2
- |  ...     GREEN = 3
- |
- |  Access them by:
- |
- |  - attribute access:
- |
- |    >>> Color.RED
- |    <Color.RED: 1>
- |
- |  - value lookup:
- |
- |    >>> Color(1)
- |    <Color.RED: 1>
- |
- |  - name lookup:
- |
- |    >>> Color['RED']
- |    <Color.RED: 1>
- |
- |  Enumerations can be iterated over, and know how many members they have:
- |
- |  >>> len(Color)
- |  3
- |
- |  >>> list(Color)
- |  [<Color.RED: 1>, <Color.BLUE: 2>, <Color.GREEN: 3>]
- |
- |  Methods can be added to enumerations, and members can have their own
- |  attributes -- see the documentation for details.
- |
- |  Static methods defined here:
- |
- |  __new__(cls, value)
- |      Create and return a new object.  See help(type) for accurate signature.
- |
- |  ----------------------------------------------------------------------
+ |  Enum(value, names=None, *, module=None, qualname=None, type=None, start=1)
+ |  
+ |  Generic enumeration.
+ |  
+ |  Derive from this class to define new enumerations.
+ |  
  |  Data descriptors defined here:
- |
+ |  
  |  name
  |      The name of the Enum member.
- |
+ |  
  |  value
  |      The value of the Enum member.
- |
+ |  
  |  ----------------------------------------------------------------------
- |  Static methods inherited from EnumType:
- |
- |  __contains__(value)
- |      Return True if `value` is in `cls`.
- |
- |      `value` is in `cls` if:
- |      1) `value` is a member of `cls`, or
- |      2) `value` is the value of one of the `cls`'s members.
- |      3) `value` is a pseudo-member (flags)
- |
- |  __getitem__(name)
- |      Return the member matching `name`.
- |
- |  __iter__()
- |      Return members in definition order.
- |
- |  __len__()
- |      Return the number of members (no aliases)
- |
- |  ----------------------------------------------------------------------
- |  Readonly properties inherited from EnumType:
- |
+ |  Readonly properties inherited from EnumMeta:
+ |  
  |  __members__
  |      Returns a mapping of member name->value.
- |
+ |      
  |      This mapping lists all enum members, including aliases. Note that this
  |      is a read-only view of the internal mapping.
 ```
@@ -1954,14 +1866,12 @@ Kind: Reimport from [typing]
 Help on _TupleType in module typing:
 
 Tuple = typing.Tuple
-    Deprecated alias to builtins.tuple.
-
-    Tuple[X, Y] is the cross-product type of X and Y.
-
+    Tuple type; Tuple[X, Y] is the cross-product type of X and Y.
+    
     Example: Tuple[T1, T2] is a tuple of two elements corresponding
     to type variables T1 and T2.  Tuple[int, float, str] is a tuple
     of an int, a float and a string.
-
+    
     To specify a variable-length tuple of homogeneous type, use Tuple[T, ...].
 ```
 
@@ -1977,59 +1887,47 @@ Kind: Reimport from [typing]
 ```hy
 Help on function TypedDict in module typing:
 
-TypedDict(typename, fields=<sentinel>, /, *, total=True)
+TypedDict(typename, fields=None, /, *, total=True, **kwargs)
     A simple typed namespace. At runtime it is equivalent to a plain dict.
-
-    TypedDict creates a dictionary type such that a type checker will expect all
+    
+    TypedDict creates a dictionary type that expects all of its
     instances to have a certain set of keys, where each key is
     associated with a value of a consistent type. This expectation
-    is not checked at runtime.
-
+    is not checked at runtime but is only enforced by type checkers.
     Usage::
-
-        >>> class Point2D(TypedDict):
-        ...     x: int
-        ...     y: int
-        ...     label: str
-        ...
-        >>> a: Point2D = {'x': 1, 'y': 2, 'label': 'good'}  # OK
-        >>> b: Point2D = {'z': 3, 'label': 'bad'}           # Fails type check
-        >>> Point2D(x=1, y=2, label='first') == dict(x=1, y=2, label='first')
-        True
-
-    The type info can be accessed via the Point2D.__annotations__ dict, and
-    the Point2D.__required_keys__ and Point2D.__optional_keys__ frozensets.
-    TypedDict supports an additional equivalent form::
-
-        Point2D = TypedDict('Point2D', {'x': int, 'y': int, 'label': str})
-
-    By default, all keys must be present in a TypedDict. It is possible
-    to override this by specifying totality::
-
-        class Point2D(TypedDict, total=False):
+    
+        class Point2D(TypedDict):
             x: int
             y: int
-
-    This means that a Point2D TypedDict can have any of the keys omitted. A type
+            label: str
+    
+        a: Point2D = {'x': 1, 'y': 2, 'label': 'good'}  # OK
+        b: Point2D = {'z': 3, 'label': 'bad'}           # Fails type check
+    
+        assert Point2D(x=1, y=2, label='first') == dict(x=1, y=2, label='first')
+    
+    The type info can be accessed via the Point2D.__annotations__ dict, and
+    the Point2D.__required_keys__ and Point2D.__optional_keys__ frozensets.
+    TypedDict supports two additional equivalent forms::
+    
+        Point2D = TypedDict('Point2D', x=int, y=int, label=str)
+        Point2D = TypedDict('Point2D', {'x': int, 'y': int, 'label': str})
+    
+    By default, all keys must be present in a TypedDict. It is possible
+    to override this by specifying totality.
+    Usage::
+    
+        class point2D(TypedDict, total=False):
+            x: int
+            y: int
+    
+    This means that a point2D TypedDict can have any of the keys omitted.A type
     checker is only expected to support a literal False or True as the value of
     the total argument. True is the default, and makes all items defined in the
     class body be required.
-
-    The Required and NotRequired special forms can also be used to mark
-    individual keys as being required or not required::
-
-        class Point2D(TypedDict):
-            x: int               # the "x" key must always be present (Required is the default)
-            y: NotRequired[int]  # the "y" key can be omitted
-
-    See PEP 655 for more details on Required and NotRequired.
-
-    The ReadOnly special form can be used
-    to mark individual keys as immutable for type checkers::
-
-        class DatabaseUser(TypedDict):
-            id: ReadOnly[int]  # the "id" key must not be modified
-            username: str      # the "username" key can be changed
+    
+    The class syntax is only supported in Python 3.6+, while two other
+    syntax forms work for Python 2.7 and 3.2+
 ```
 
 ## Dict
@@ -2062,31 +1960,27 @@ Help on _SpecialForm in module typing:
 
 Union = typing.Union
     Union type; Union[X, Y] means either X or Y.
-
-    On Python 3.10 and higher, the | operator
-    can also be used to denote unions;
-    X | Y means the same thing to the type checker as Union[X, Y].
-
-    To define a union, use e.g. Union[int, str]. Details:
+    
+    To define a union, use e.g. Union[int, str].  Details:
     - The arguments must be types and there must be at least one.
     - None as an argument is a special case and is replaced by
       type(None).
     - Unions of unions are flattened, e.g.::
-
-        assert Union[Union[int, str], float] == Union[int, str, float]
-
+    
+        Union[Union[int, str], float] == Union[int, str, float]
+    
     - Unions of a single argument vanish, e.g.::
-
-        assert Union[int] == int  # The constructor actually returns int
-
+    
+        Union[int] == int  # The constructor actually returns int
+    
     - Redundant arguments are skipped, e.g.::
-
-        assert Union[int, str, int] == Union[int, str]
-
+    
+        Union[int, str, int] == Union[int, str]
+    
     - When comparing unions, the argument order is ignored, e.g.::
-
-        assert Union[int, str] == Union[str, int]
-
+    
+        Union[int, str] == Union[str, int]
+    
     - You cannot subclass or instantiate a union.
     - You can use Optional[X] as a shorthand for Union[X, None].
 ```
@@ -2117,34 +2011,18 @@ Kind: Reimport from [typing]
 ```
 
 ```hy
-Help on class Any in module typing:
+Help on _SpecialForm in module typing:
 
-class Any(builtins.object)
- |  Any(*args, **kwargs)
- |
- |  Special type indicating an unconstrained type.
- |
- |  - Any is compatible with every type.
- |  - Any assumed to have all methods.
- |  - All values assumed to be instances of Any.
- |
- |  Note that all the above statements are true from the point of view of
- |  static type checkers. At runtime, Any should not be used with instance
- |  checks.
- |
- |  Static methods defined here:
- |
- |  __new__(cls, *args, **kwargs)
- |      Create and return a new object.  See help(type) for accurate signature.
- |
- |  ----------------------------------------------------------------------
- |  Data descriptors defined here:
- |
- |  __dict__
- |      dictionary for instance variables
- |
- |  __weakref__
- |      list of weak references to the object
+Any = typing.Any
+    Special type indicating an unconstrained type.
+    
+    - Any is compatible with every type.
+    - Any assumed to have all methods.
+    - All values assumed to be instances of Any.
+    
+    Note that all the above statements are true from the point of view of
+    static type checkers. At runtime, Any should not be used with instance
+    or class checks.
 ```
 
 ## Optional
@@ -2160,6 +2038,8 @@ Kind: Reimport from [typing]
 Help on _SpecialForm in module typing:
 
 Optional = typing.Optional
+    Optional type.
+    
     Optional[X] is equivalent to Union[X, None].
 ```
 
@@ -2176,17 +2056,13 @@ Kind: Reimport from [typing]
 Help on _CallableType in module typing:
 
 Callable = typing.Callable
-    Deprecated alias to collections.abc.Callable.
-
-    Callable[[int], str] signifies a function that takes a single
-    parameter of type int and returns a str.
-
+    Callable type; Callable[[int], str] is a function of (int) -> str.
+    
     The subscription syntax must always be used with exactly two
-    values: the argument list and the return type.
-    The argument list must be a list of types, a ParamSpec,
-    Concatenate or ellipsis. The return type must be a single type.
-
-    There is no syntax to indicate optional or keyword arguments;
+    values: the argument list and the return type.  The argument list
+    must be a list of types or ellipsis; the return type must be a single type.
+    
+    There is no syntax to indicate optional or keyword arguments,
     such function types are rarely used as callback types.
 ```
 
@@ -2200,25 +2076,25 @@ Kind: Reimport from [typing]
 ```
 
 ```hy
-Help on _TypedCacheSpecialForm in module typing:
+Help on _LiteralSpecialForm in module typing:
 
 Literal = typing.Literal
     Special typing form to define literal types (a.k.a. value types).
-
+    
     This form can be used to indicate to type checkers that the corresponding
     variable or function parameter has a value equivalent to the provided
-    literal (or one of several literals)::
-
-        def validate_simple(data: Any) -> Literal[True]:  # always returns True
-            ...
-
-        MODE = Literal['r', 'rb', 'w', 'wb']
-        def open_helper(file: str, mode: MODE) -> str:
-            ...
-
-        open_helper('/some/path', 'r')  # Passes type check
-        open_helper('/other/path', 'typo')  # Error in type checker
-
+    literal (or one of several literals):
+    
+      def validate_simple(data: Any) -> Literal[True]:  # always returns True
+          ...
+    
+      MODE = Literal['r', 'rb', 'w', 'wb']
+      def open_helper(file: str, mode: MODE) -> str:
+          ...
+    
+      open_helper('/some/path', 'r')  # Passes type check
+      open_helper('/other/path', 'typo')  # Error in type checker
+    
     Literal[...] cannot be subclassed. At runtime, an arbitrary value
     is allowed as type argument to Literal[...], but type checkers may
     impose restrictions.
@@ -2237,26 +2113,26 @@ Kind: Reimport from [typing]
 Help on _SpecialGenericAlias in module typing:
 
 Type = typing.Type
-    Deprecated alias to builtins.type.
-
-    builtins.type or typing.Type can be used to annotate class objects.
+    A special construct usable to annotate class objects.
+    
     For example, suppose we have the following classes::
-
-        class User: ...  # Abstract base for User classes
-        class BasicUser(User): ...
-        class ProUser(User): ...
-        class TeamUser(User): ...
-
+    
+      class User: ...  # Abstract base for User classes
+      class BasicUser(User): ...
+      class ProUser(User): ...
+      class TeamUser(User): ...
+    
     And a function that takes a class argument that's a subclass of
     User and returns an instance of the corresponding class::
-
-        def new_user[U](user_class: Type[U]) -> U:
-            user = user_class()
-            # (Here we could write the user object to a database)
-            return user
-
-        joe = new_user(BasicUser)
-
+    
+      U = TypeVar('U', bound=User)
+      def new_user(user_class: Type[U]) -> U:
+          user = user_class()
+          # (Here we could write the user object to a database)
+          return user
+    
+      joe = new_user(BasicUser)
+    
     At this point the type checker knows that joe has type BasicUser.
 ```
 
@@ -2272,93 +2148,113 @@ Kind: Reimport from [typing]
 ```hy
 Help on class TypeVar in module typing:
 
-class TypeVar(builtins.object)
+class TypeVar(_Final, _Immutable, _TypeVarLike)
+ |  TypeVar(name, *constraints, bound=None, covariant=False, contravariant=False)
+ |  
  |  Type variable.
- |
- |  The preferred way to construct a type variable is via the dedicated
- |  syntax for generic functions, classes, and type aliases::
- |
- |      class Sequence[T]:  # T is a TypeVar
- |          ...
- |
- |  This syntax can also be used to create bound and constrained type
- |  variables::
- |
- |      # S is a TypeVar bound to str
- |      class StrSequence[S: str]:
- |          ...
- |
- |      # A is a TypeVar constrained to str or bytes
- |      class StrOrBytesSequence[A: (str, bytes)]:
- |          ...
- |
- |  Type variables can also have defaults:
- |
- |      class IntDefault[T = int]:
- |          ...
- |
- |  However, if desired, reusable type variables can also be constructed
- |  manually, like so::
- |
- |     T = TypeVar('T')  # Can be anything
- |     S = TypeVar('S', bound=str)  # Can be any subtype of str
- |     A = TypeVar('A', str, bytes)  # Must be exactly str or bytes
- |     D = TypeVar('D', default=int)  # Defaults to int
- |
+ |  
+ |  Usage::
+ |  
+ |    T = TypeVar('T')  # Can be anything
+ |    A = TypeVar('A', str, bytes)  # Must be str or bytes
+ |  
  |  Type variables exist primarily for the benefit of static type
  |  checkers.  They serve as the parameters for generic types as well
- |  as for generic function and type alias definitions.
- |
- |  The variance of type variables is inferred by type checkers when they
- |  are created through the type parameter syntax and when
- |  ``infer_variance=True`` is passed. Manually created type variables may
- |  be explicitly marked covariant or contravariant by passing
- |  ``covariant=True`` or ``contravariant=True``. By default, manually
- |  created type variables are invariant. See PEP 484 and PEP 695 for more
- |  details.
- |
+ |  as for generic function definitions.  See class Generic for more
+ |  information on generic types.  Generic functions work as follows:
+ |  
+ |    def repeat(x: T, n: int) -> List[T]:
+ |        '''Return a list containing n references to x.'''
+ |        return [x]*n
+ |  
+ |    def longest(x: A, y: A) -> A:
+ |        '''Return the longest of two strings.'''
+ |        return x if len(x) >= len(y) else y
+ |  
+ |  The latter example's signature is essentially the overloading
+ |  of (str, str) -> str and (bytes, bytes) -> bytes.  Also note
+ |  that if the arguments are instances of some subclass of str,
+ |  the return type is still plain str.
+ |  
+ |  At runtime, isinstance(x, T) and issubclass(C, T) will raise TypeError.
+ |  
+ |  Type variables defined with covariant=True or contravariant=True
+ |  can be used to declare covariant or contravariant generic types.
+ |  See PEP 484 for more details. By default generic types are invariant
+ |  in all type variables.
+ |  
+ |  Type variables can be introspected. e.g.:
+ |  
+ |    T.__name__ == 'T'
+ |    T.__constraints__ == ()
+ |    T.__covariant__ == False
+ |    T.__contravariant__ = False
+ |    A.__constraints__ == (str, bytes)
+ |  
+ |  Note that only type variables defined in global scope can be pickled.
+ |  
+ |  Method resolution order:
+ |      TypeVar
+ |      _Final
+ |      _Immutable
+ |      _TypeVarLike
+ |      builtins.object
+ |  
  |  Methods defined here:
- |
- |  __mro_entries__(self, object, /)
- |
- |  __or__(self, value, /)
- |      Return self|value.
- |
- |  __reduce__(self, /)
- |      Helper for pickle.
- |
- |  __repr__(self, /)
- |      Return repr(self).
- |
- |  __ror__(self, value, /)
- |      Return value|self.
- |
- |  __typing_prepare_subst__(self, alias, args, /)
- |
- |  __typing_subst__(self, arg, /)
- |
- |  has_default(self, /)
- |
- |  ----------------------------------------------------------------------
- |  Static methods defined here:
- |
- |  __new__(*args, **kwargs)
- |      Create and return a new object.  See help(type) for accurate signature.
- |
+ |  
+ |  __init__(self, name, *constraints, bound=None, covariant=False, contravariant=False)
+ |      Initialize self.  See help(type(self)) for accurate signature.
+ |  
  |  ----------------------------------------------------------------------
  |  Data descriptors defined here:
- |
+ |  
  |  __bound__
- |
+ |  
  |  __constraints__
- |
+ |  
  |  __contravariant__
- |
+ |  
  |  __covariant__
- |
- |  __default__
- |
- |  __infer_variance__
+ |  
+ |  __dict__
+ |      dictionary for instance variables (if defined)
+ |  
+ |  ----------------------------------------------------------------------
+ |  Class methods inherited from _Final:
+ |  
+ |  __init_subclass__(*args, **kwds) from builtins.type
+ |      This method is called when a class is subclassed.
+ |      
+ |      The default implementation does nothing. It may be
+ |      overridden to extend subclasses.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data descriptors inherited from _Final:
+ |  
+ |  __weakref__
+ |      list of weak references to the object (if defined)
+ |  
+ |  ----------------------------------------------------------------------
+ |  Methods inherited from _Immutable:
+ |  
+ |  __copy__(self)
+ |  
+ |  __deepcopy__(self, memo)
+ |  
+ |  ----------------------------------------------------------------------
+ |  Methods inherited from _TypeVarLike:
+ |  
+ |  __or__(self, right)
+ |      Return self|value.
+ |  
+ |  __reduce__(self)
+ |      Helper for pickle.
+ |  
+ |  __repr__(self)
+ |      Return repr(self).
+ |  
+ |  __ror__(self, left)
+ |      Return value|self.
 ```
 
 ## Generic
@@ -2375,41 +2271,33 @@ Help on class Generic in module typing:
 
 class Generic(builtins.object)
  |  Abstract base class for generic types.
- |
- |  On Python 3.12 and newer, generic classes implicitly inherit from
- |  Generic when they declare a parameter list after the class's name::
- |
- |      class Mapping[KT, VT]:
- |          def __getitem__(self, key: KT) -> VT:
- |              ...
- |          # Etc.
- |
- |  On older versions of Python, however, generic classes have to
- |  explicitly inherit from Generic.
- |
- |  After a class has been declared to be generic, it can then be used as
- |  follows::
- |
- |      def lookup_name[KT, VT](mapping: Mapping[KT, VT], key: KT, default: VT) -> VT:
- |          try:
- |              return mapping[key]
- |          except KeyError:
- |              return default
- |
+ |  
+ |  A generic type is typically declared by inheriting from
+ |  this class parameterized with one or more type variables.
+ |  For example, a generic mapping type might be defined as::
+ |  
+ |    class Mapping(Generic[KT, VT]):
+ |        def __getitem__(self, key: KT) -> VT:
+ |            ...
+ |        # Etc.
+ |  
+ |  This class can then be used as follows::
+ |  
+ |    def lookup_name(mapping: Mapping[KT, VT], key: KT, default: VT) -> VT:
+ |        try:
+ |            return mapping[key]
+ |        except KeyError:
+ |            return default
+ |  
  |  Class methods defined here:
- |
- |  __class_getitem__(...)
- |      Parameterizes a generic class.
- |
- |      At least, parameterizing a generic class is the *main* thing this
- |      method does. For example, for some generic class `Foo`, this is called
- |      when we do `Foo[int]` - there, with `cls=Foo` and `params=int`.
- |
- |      However, note that this method is also called when defining generic
- |      classes in the first place with `class Foo[T]: ...`.
- |
- |  __init_subclass__(...)
- |      Function to initialize subclasses.
+ |  
+ |  __class_getitem__(params) from builtins.type
+ |  
+ |  __init_subclass__(*args, **kwargs) from builtins.type
+ |      This method is called when a class is subclassed.
+ |      
+ |      The default implementation does nothing. It may be
+ |      overridden to extend subclasses.
 ```
 
 ## noneQ
@@ -2619,17 +2507,17 @@ Help on class BaseModel in module pydantic.main:
 
 class BaseModel(builtins.object)
  |  BaseModel(**data: 'Any') -> 'None'
- |
+ |  
  |  !!! abstract "Usage Documentation"
  |      [Models](../concepts/models.md)
- |
+ |  
  |  A base class for creating Pydantic models.
- |
+ |  
  |  Attributes:
  |      __class_vars__: The names of the class variables defined on the model.
  |      __private_attributes__: Metadata about the private attributes of the model.
  |      __signature__: The synthesized `__init__` [`Signature`][inspect.Signature] of the model.
- |
+ |  
  |      __pydantic_complete__: Whether model building is completed, or if there are still undefined fields.
  |      __pydantic_core_schema__: The core schema of the model.
  |      __pydantic_custom_init__: Whether the model has a custom `__init__` function.
@@ -2642,176 +2530,127 @@ class BaseModel(builtins.object)
  |      __pydantic_root_model__: Whether the model is a [`RootModel`][pydantic.root_model.RootModel].
  |      __pydantic_serializer__: The `pydantic-core` `SchemaSerializer` used to dump instances of the model.
  |      __pydantic_validator__: The `pydantic-core` `SchemaValidator` used to validate instances of the model.
- |
+ |  
  |      __pydantic_fields__: A dictionary of field names and their corresponding [`FieldInfo`][pydantic.fields.FieldInfo] objects.
  |      __pydantic_computed_fields__: A dictionary of computed field names and their corresponding [`ComputedFieldInfo`][pydantic.fields.ComputedFieldInfo] objects.
- |
+ |  
  |      __pydantic_extra__: A dictionary containing extra values, if [`extra`][pydantic.config.ConfigDict.extra]
  |          is set to `'allow'`.
  |      __pydantic_fields_set__: The names of fields explicitly set during instantiation.
  |      __pydantic_private__: Values of private attributes set on the model instance.
- |
+ |  
  |  Methods defined here:
- |
+ |  
  |  __copy__(self) -> 'Self'
  |      Returns a shallow copy of the model.
- |
+ |  
  |  __deepcopy__(self, memo: 'dict[int, Any] | None' = None) -> 'Self'
  |      Returns a deep copy of the model.
- |
+ |  
  |  __delattr__(self, item: 'str') -> 'Any'
  |      Implement delattr(self, name).
- |
+ |  
  |  __eq__(self, other: 'Any') -> 'bool'
  |      Return self==value.
- |
+ |  
  |  __getattr__(self, item: 'str') -> 'Any'
- |
+ |  
  |  __getstate__(self) -> 'dict[Any, Any]'
- |      Helper for pickle.
- |
+ |  
  |  __init__(self, /, **data: 'Any') -> 'None'
  |      Create a new model by parsing and validating input data from keyword arguments.
- |
+ |      
  |      Raises [`ValidationError`][pydantic_core.ValidationError] if the input data cannot be
  |      validated to form a valid model.
- |
+ |      
  |      `self` is explicitly positional-only to allow `self` as a field name.
- |
+ |  
  |  __iter__(self) -> 'TupleGenerator'
  |      So `dict(model)` works.
- |
- |  __pretty__(self, fmt: 'typing.Callable[[Any], Any]', **kwargs: 'Any') -> 'typing.Generator[Any, None, None]' from pydantic._internal._repr.Representation
+ |  
+ |  __pretty__(self, fmt: 'Callable[[Any], Any]', **kwargs: 'Any') -> 'Generator[Any]'
  |      Used by devtools (https://python-devtools.helpmanual.io/) to pretty print objects.
- |
+ |  
  |  __replace__(self, **changes: 'Any') -> 'Self'
  |      # Because we make use of `@dataclass_transform()`, `__replace__` is already synthesized by
  |      # type checkers, so we define the implementation in this `if not TYPE_CHECKING:` block:
- |
+ |  
  |  __repr__(self) -> 'str'
  |      Return repr(self).
- |
+ |  
  |  __repr_args__(self) -> '_repr.ReprArgs'
- |
- |  __repr_name__(self) -> 'str' from pydantic._internal._repr.Representation
+ |  
+ |  __repr_name__(self) -> 'str'
  |      Name of the instance's class, used in __repr__.
- |
- |  __repr_recursion__(self, object: 'Any') -> 'str' from pydantic._internal._repr.Representation
+ |  
+ |  __repr_recursion__(self, object: 'Any') -> 'str'
  |      Returns the string representation of a recursive object.
- |
- |  __repr_str__(self, join_str: 'str') -> 'str' from pydantic._internal._repr.Representation
- |
- |  __rich_repr__(self) -> 'RichReprResult' from pydantic._internal._repr.Representation
+ |  
+ |  __repr_str__(self, join_str: 'str') -> 'str'
+ |  
+ |  __rich_repr__(self) -> 'RichReprResult'
  |      Used by Rich (https://rich.readthedocs.io/en/stable/pretty.html) to pretty print objects.
- |
+ |  
  |  __setattr__(self, name: 'str', value: 'Any') -> 'None'
  |      Implement setattr(self, name, value).
- |
+ |  
  |  __setstate__(self, state: 'dict[Any, Any]') -> 'None'
- |
+ |  
  |  __str__(self) -> 'str'
  |      Return str(self).
- |
- |  copy(
- |      self,
- |      *,
- |      include: 'AbstractSetIntStr | MappingIntStrAny | None' = None,
- |      exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None,
- |      update: 'Dict[str, Any] | None' = None,
- |      deep: 'bool' = False
- |  ) -> 'Self'
+ |  
+ |  copy(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'
  |      Returns a copy of the model.
- |
+ |      
  |      !!! warning "Deprecated"
  |          This method is now deprecated; use `model_copy` instead.
- |
+ |      
  |      If you need `include` or `exclude`, use:
- |
+ |      
  |      ```python {test="skip" lint="skip"}
  |      data = self.model_dump(include=include, exclude=exclude, round_trip=True)
  |      data = {**data, **(update or {})}
  |      copied = self.model_validate(data)
  |      ```
- |
+ |      
  |      Args:
  |          include: Optional set or mapping specifying which fields to include in the copied model.
  |          exclude: Optional set or mapping specifying which fields to exclude in the copied model.
  |          update: Optional dictionary of field-value pairs to override field values in the copied model.
  |          deep: If True, the values of fields that are Pydantic models will be deep-copied.
- |
+ |      
  |      Returns:
  |          A copy of the model with included, excluded and updated fields as specified.
- |
- |  dict(
- |      self,
- |      *,
- |      include: 'IncEx | None' = None,
- |      exclude: 'IncEx | None' = None,
- |      by_alias: 'bool' = False,
- |      exclude_unset: 'bool' = False,
- |      exclude_defaults: 'bool' = False,
- |      exclude_none: 'bool' = False
- |  ) -> 'Dict[str, Any]'
- |
- |  json(
- |      self,
- |      *,
- |      include: 'IncEx | None' = None,
- |      exclude: 'IncEx | None' = None,
- |      by_alias: 'bool' = False,
- |      exclude_unset: 'bool' = False,
- |      exclude_defaults: 'bool' = False,
- |      exclude_none: 'bool' = False,
- |      encoder: 'Callable[[Any], Any] | None' = PydanticUndefined,
- |      models_as_dict: 'bool' = PydanticUndefined,
- |      **dumps_kwargs: 'Any'
- |  ) -> 'str'
- |
- |  model_copy(
- |      self,
- |      *,
- |      update: 'Mapping[str, Any] | None' = None,
- |      deep: 'bool' = False
- |  ) -> 'Self'
+ |  
+ |  dict(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'
+ |  
+ |  json(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'
+ |  
+ |  model_copy(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'
  |      !!! abstract "Usage Documentation"
- |          [`model_copy`](../concepts/serialization.md#model_copy)
- |
+ |          [`model_copy`](../concepts/models.md#model-copy)
+ |      
  |      Returns a copy of the model.
- |
+ |      
  |      !!! note
  |          The underlying instance's [`__dict__`][object.__dict__] attribute is copied. This
  |          might have unexpected side effects if you store anything in it, on top of the model
  |          fields (e.g. the value of [cached properties][functools.cached_property]).
- |
+ |      
  |      Args:
  |          update: Values to change/add in the new model. Note: the data is not validated
  |              before creating the new model. You should trust this data.
  |          deep: Set to `True` to make a deep copy of the model.
- |
+ |      
  |      Returns:
  |          New model instance.
- |
- |  model_dump(
- |      self,
- |      *,
- |      mode: "Literal['json', 'python'] | str" = 'python',
- |      include: 'IncEx | None' = None,
- |      exclude: 'IncEx | None' = None,
- |      context: 'Any | None' = None,
- |      by_alias: 'bool | None' = None,
- |      exclude_unset: 'bool' = False,
- |      exclude_defaults: 'bool' = False,
- |      exclude_none: 'bool' = False,
- |      round_trip: 'bool' = False,
- |      warnings: "bool | Literal['none', 'warn', 'error']" = True,
- |      fallback: 'Callable[[Any], Any] | None' = None,
- |      serialize_as_any: 'bool' = False
- |  ) -> 'dict[str, Any]'
+ |  
+ |  model_dump(self, *, mode: "Literal['json', 'python'] | str" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: "bool | Literal['none', 'warn', 'error']" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False) -> 'dict[str, Any]'
  |      !!! abstract "Usage Documentation"
- |          [`model_dump`](../concepts/serialization.md#modelmodel_dump)
- |
+ |          [`model_dump`](../concepts/serialization.md#python-mode)
+ |      
  |      Generate a dictionary representation of the model, optionally specifying which fields to include or exclude.
- |
+ |      
  |      Args:
  |          mode: The mode in which `to_python` should run.
  |              If mode is 'json', the output will only contain JSON serializable types.
@@ -2823,39 +2662,29 @@ class BaseModel(builtins.object)
  |          exclude_unset: Whether to exclude fields that have not been explicitly set.
  |          exclude_defaults: Whether to exclude fields that are set to their default value.
  |          exclude_none: Whether to exclude fields that have a value of `None`.
+ |          exclude_computed_fields: Whether to exclude computed fields.
+ |              While this can be useful for round-tripping, it is usually recommended to use the dedicated
+ |              `round_trip` parameter instead.
  |          round_trip: If True, dumped values should be valid as input for non-idempotent types such as Json[T].
  |          warnings: How to handle serialization errors. False/"none" ignores them, True/"warn" logs errors,
  |              "error" raises a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError].
  |          fallback: A function to call when an unknown value is encountered. If not provided,
  |              a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError] error is raised.
  |          serialize_as_any: Whether to serialize fields with duck-typing serialization behavior.
- |
+ |      
  |      Returns:
  |          A dictionary representation of the model.
- |
- |  model_dump_json(
- |      self,
- |      *,
- |      indent: 'int | None' = None,
- |      include: 'IncEx | None' = None,
- |      exclude: 'IncEx | None' = None,
- |      context: 'Any | None' = None,
- |      by_alias: 'bool | None' = None,
- |      exclude_unset: 'bool' = False,
- |      exclude_defaults: 'bool' = False,
- |      exclude_none: 'bool' = False,
- |      round_trip: 'bool' = False,
- |      warnings: "bool | Literal['none', 'warn', 'error']" = True,
- |      fallback: 'Callable[[Any], Any] | None' = None,
- |      serialize_as_any: 'bool' = False
- |  ) -> 'str'
+ |  
+ |  model_dump_json(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: "bool | Literal['none', 'warn', 'error']" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False) -> 'str'
  |      !!! abstract "Usage Documentation"
- |          [`model_dump_json`](../concepts/serialization.md#modelmodel_dump_json)
- |
+ |          [`model_dump_json`](../concepts/serialization.md#json-mode)
+ |      
  |      Generates a JSON representation of the model using Pydantic's `to_json` method.
- |
+ |      
  |      Args:
  |          indent: Indentation to use in the JSON output. If None is passed, the output will be compact.
+ |          ensure_ascii: If `True`, the output is guaranteed to have all incoming non-ASCII characters escaped.
+ |              If `False` (the default), these characters will be output as-is.
  |          include: Field(s) to include in the JSON output.
  |          exclude: Field(s) to exclude from the JSON output.
  |          context: Additional context to pass to the serializer.
@@ -2863,38 +2692,33 @@ class BaseModel(builtins.object)
  |          exclude_unset: Whether to exclude fields that have not been explicitly set.
  |          exclude_defaults: Whether to exclude fields that are set to their default value.
  |          exclude_none: Whether to exclude fields that have a value of `None`.
+ |          exclude_computed_fields: Whether to exclude computed fields.
+ |              While this can be useful for round-tripping, it is usually recommended to use the dedicated
+ |              `round_trip` parameter instead.
  |          round_trip: If True, dumped values should be valid as input for non-idempotent types such as Json[T].
  |          warnings: How to handle serialization errors. False/"none" ignores them, True/"warn" logs errors,
  |              "error" raises a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError].
  |          fallback: A function to call when an unknown value is encountered. If not provided,
  |              a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError] error is raised.
  |          serialize_as_any: Whether to serialize fields with duck-typing serialization behavior.
- |
+ |      
  |      Returns:
  |          A JSON string representation of the model.
- |
+ |  
  |  model_post_init(self, context: 'Any', /) -> 'None'
  |      Override this method to perform additional initialization after `__init__` and `model_construct`.
  |      This is useful if you want to do some validation that requires the entire model to be initialized.
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Class methods defined here:
- |
- |  __class_getitem__(typevar_values: 'type[Any] | tuple[type[Any], ...]') -> 'type[BaseModel] | _forward_ref.PydanticRecursiveRef'
- |
- |  __get_pydantic_core_schema__(
- |      source: 'type[BaseModel]',
- |      handler: 'GetCoreSchemaHandler',
- |      /
- |  ) -> 'CoreSchema'
- |
- |  __get_pydantic_json_schema__(
- |      core_schema: 'CoreSchema',
- |      handler: 'GetJsonSchemaHandler',
- |      /
- |  ) -> 'JsonSchemaValue'
+ |  
+ |  __class_getitem__(typevar_values: 'type[Any] | tuple[type[Any], ...]') -> 'type[BaseModel] | _forward_ref.PydanticRecursiveRef' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  __get_pydantic_core_schema__(source: 'type[BaseModel]', handler: 'GetCoreSchemaHandler', /) -> 'CoreSchema' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  __get_pydantic_json_schema__(core_schema: 'CoreSchema', handler: 'GetJsonSchemaHandler', /) -> 'JsonSchemaValue' from pydantic._internal._model_construction.ModelMetaclass
  |      Hook into generating the model's JSON schema.
- |
+ |      
  |      Args:
  |          core_schema: A `pydantic-core` CoreSchema.
  |              You can ignore this argument and call the handler with a new CoreSchema,
@@ -2906,269 +2730,245 @@ class BaseModel(builtins.object)
  |              Since this gets called by `BaseModel.model_json_schema` you can override the
  |              `schema_generator` argument to that function to change JSON schema generation globally
  |              for a type.
- |
+ |      
  |      Returns:
  |          A JSON schema, as a Python object.
- |
- |  __pydantic_init_subclass__(**kwargs: 'Any') -> 'None'
+ |  
+ |  __pydantic_init_subclass__(**kwargs: 'Any') -> 'None' from pydantic._internal._model_construction.ModelMetaclass
  |      This is intended to behave just like `__init_subclass__`, but is called by `ModelMetaclass`
- |      only after the class is actually fully initialized. In particular, attributes like `model_fields` will
- |      be present when this is called.
- |
+ |      only after basic class initialization is complete. In particular, attributes like `model_fields` will
+ |      be present when this is called, but forward annotations are not guaranteed to be resolved yet,
+ |      meaning that creating an instance of the class may fail.
+ |      
  |      This is necessary because `__init_subclass__` will always be called by `type.__new__`,
  |      and it would require a prohibitively large refactor to the `ModelMetaclass` to ensure that
  |      `type.__new__` was called in such a manner that the class would already be sufficiently initialized.
- |
+ |      
  |      This will receive the same `kwargs` that would be passed to the standard `__init_subclass__`, namely,
- |      any kwargs passed to the class definition that aren't used internally by pydantic.
- |
+ |      any kwargs passed to the class definition that aren't used internally by Pydantic.
+ |      
  |      Args:
  |          **kwargs: Any keyword arguments passed to the class definition that aren't used internally
- |              by pydantic.
- |
- |  construct(_fields_set: 'set[str] | None' = None, **values: 'Any') -> 'Self'
- |
- |  from_orm(obj: 'Any') -> 'Self'
- |
- |  model_construct(_fields_set: 'set[str] | None' = None, **values: 'Any') -> 'Self'
+ |              by Pydantic.
+ |      
+ |      Note:
+ |          You may want to override [`__pydantic_on_complete__()`][pydantic.main.BaseModel.__pydantic_on_complete__]
+ |          instead, which is called once the class and its fields are fully initialized and ready for validation.
+ |  
+ |  __pydantic_on_complete__() -> 'None' from pydantic._internal._model_construction.ModelMetaclass
+ |      This is called once the class and its fields are fully initialized and ready to be used.
+ |      
+ |      This typically happens when the class is created (just before
+ |      [`__pydantic_init_subclass__()`][pydantic.main.BaseModel.__pydantic_init_subclass__] is called on the superclass),
+ |      except when forward annotations are used that could not immediately be resolved.
+ |      In that case, it will be called later, when the model is rebuilt automatically or explicitly using
+ |      [`model_rebuild()`][pydantic.main.BaseModel.model_rebuild].
+ |  
+ |  construct(_fields_set: 'set[str] | None' = None, **values: 'Any') -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  from_orm(obj: 'Any') -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  model_construct(_fields_set: 'set[str] | None' = None, **values: 'Any') -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
  |      Creates a new instance of the `Model` class with validated data.
- |
+ |      
  |      Creates a new model setting `__dict__` and `__pydantic_fields_set__` from trusted or pre-validated data.
  |      Default values are respected, but no other validation is performed.
- |
+ |      
  |      !!! note
  |          `model_construct()` generally respects the `model_config.extra` setting on the provided model.
  |          That is, if `model_config.extra == 'allow'`, then all extra passed values are added to the model instance's `__dict__`
  |          and `__pydantic_extra__` fields. If `model_config.extra == 'ignore'` (the default), then all extra passed values are ignored.
  |          Because no validation is performed with a call to `model_construct()`, having `model_config.extra == 'forbid'` does not result in
  |          an error if extra values are passed, but they will be ignored.
- |
+ |      
  |      Args:
  |          _fields_set: A set of field names that were originally explicitly set during instantiation. If provided,
  |              this is directly used for the [`model_fields_set`][pydantic.BaseModel.model_fields_set] attribute.
  |              Otherwise, the field names from the `values` argument will be used.
  |          values: Trusted or pre-validated data dictionary.
- |
+ |      
  |      Returns:
  |          A new instance of the `Model` class with validated data.
- |
- |  model_json_schema(
- |      by_alias: 'bool' = True,
- |      ref_template: 'str' = '#/$defs/{model}',
- |      schema_generator: 'type[GenerateJsonSchema]' = <class 'pydantic.json_schema.GenerateJsonSchema'>,
- |      mode: 'JsonSchemaMode' = 'validation'
- |  ) -> 'dict[str, Any]'
+ |  
+ |  model_json_schema(by_alias: 'bool' = True, ref_template: 'str' = '#/$defs/{model}', schema_generator: 'type[GenerateJsonSchema]' = <class 'pydantic.json_schema.GenerateJsonSchema'>, mode: 'JsonSchemaMode' = 'validation', *, union_format: "Literal['any_of', 'primitive_type_array']" = 'any_of') -> 'dict[str, Any]' from pydantic._internal._model_construction.ModelMetaclass
  |      Generates a JSON schema for a model class.
- |
+ |      
  |      Args:
  |          by_alias: Whether to use attribute aliases or not.
  |          ref_template: The reference template.
+ |          union_format: The format to use when combining schemas from unions together. Can be one of:
+ |      
+ |              - `'any_of'`: Use the [`anyOf`](https://json-schema.org/understanding-json-schema/reference/combining#anyOf)
+ |              keyword to combine schemas (the default).
+ |              - `'primitive_type_array'`: Use the [`type`](https://json-schema.org/understanding-json-schema/reference/type)
+ |              keyword as an array of strings, containing each type of the combination. If any of the schemas is not a primitive
+ |              type (`string`, `boolean`, `null`, `integer` or `number`) or contains constraints/metadata, falls back to
+ |              `any_of`.
  |          schema_generator: To override the logic used to generate the JSON schema, as a subclass of
  |              `GenerateJsonSchema` with your desired modifications
  |          mode: The mode in which to generate the schema.
- |
+ |      
  |      Returns:
  |          The JSON schema for the given model class.
- |
- |  model_parametrized_name(params: 'tuple[type[Any], ...]') -> 'str'
+ |  
+ |  model_parametrized_name(params: 'tuple[type[Any], ...]') -> 'str' from pydantic._internal._model_construction.ModelMetaclass
  |      Compute the class name for parametrizations of generic classes.
- |
+ |      
  |      This method can be overridden to achieve a custom naming scheme for generic BaseModels.
- |
+ |      
  |      Args:
  |          params: Tuple of types of the class. Given a generic class
  |              `Model` with 2 type variables and a concrete model `Model[str, int]`,
  |              the value `(str, int)` would be passed to `params`.
- |
+ |      
  |      Returns:
  |          String representing the new class where `params` are passed to `cls` as type variables.
- |
+ |      
  |      Raises:
  |          TypeError: Raised when trying to generate concrete names for non-generic models.
- |
- |  model_rebuild(
- |      *,
- |      force: 'bool' = False,
- |      raise_errors: 'bool' = True,
- |      _parent_namespace_depth: 'int' = 2,
- |      _types_namespace: 'MappingNamespace | None' = None
- |  ) -> 'bool | None'
+ |  
+ |  model_rebuild(*, force: 'bool' = False, raise_errors: 'bool' = True, _parent_namespace_depth: 'int' = 2, _types_namespace: 'MappingNamespace | None' = None) -> 'bool | None' from pydantic._internal._model_construction.ModelMetaclass
  |      Try to rebuild the pydantic-core schema for the model.
- |
+ |      
  |      This may be necessary when one of the annotations is a ForwardRef which could not be resolved during
  |      the initial attempt to build the schema, and automatic rebuilding fails.
- |
+ |      
  |      Args:
  |          force: Whether to force the rebuilding of the model schema, defaults to `False`.
  |          raise_errors: Whether to raise errors, defaults to `True`.
  |          _parent_namespace_depth: The depth level of the parent namespace, defaults to 2.
  |          _types_namespace: The types namespace, defaults to `None`.
- |
+ |      
  |      Returns:
  |          Returns `None` if the schema is already "complete" and rebuilding was not required.
  |          If rebuilding _was_ required, returns `True` if rebuilding was successful, otherwise `False`.
- |
- |  model_validate(
- |      obj: 'Any',
- |      *,
- |      strict: 'bool | None' = None,
- |      from_attributes: 'bool | None' = None,
- |      context: 'Any | None' = None,
- |      by_alias: 'bool | None' = None,
- |      by_name: 'bool | None' = None
- |  ) -> 'Self'
+ |  
+ |  model_validate(obj: 'Any', *, strict: 'bool | None' = None, extra: 'ExtraValues | None' = None, from_attributes: 'bool | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, by_name: 'bool | None' = None) -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
  |      Validate a pydantic model instance.
- |
+ |      
  |      Args:
  |          obj: The object to validate.
  |          strict: Whether to enforce types strictly.
+ |          extra: Whether to ignore, allow, or forbid extra data during model validation.
+ |              See the [`extra` configuration value][pydantic.ConfigDict.extra] for details.
  |          from_attributes: Whether to extract data from object attributes.
  |          context: Additional context to pass to the validator.
  |          by_alias: Whether to use the field's alias when validating against the provided input data.
  |          by_name: Whether to use the field's name when validating against the provided input data.
- |
+ |      
  |      Raises:
  |          ValidationError: If the object could not be validated.
- |
+ |      
  |      Returns:
  |          The validated model instance.
- |
- |  model_validate_json(
- |      json_data: 'str | bytes | bytearray',
- |      *,
- |      strict: 'bool | None' = None,
- |      context: 'Any | None' = None,
- |      by_alias: 'bool | None' = None,
- |      by_name: 'bool | None' = None
- |  ) -> 'Self'
+ |  
+ |  model_validate_json(json_data: 'str | bytes | bytearray', *, strict: 'bool | None' = None, extra: 'ExtraValues | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, by_name: 'bool | None' = None) -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
  |      !!! abstract "Usage Documentation"
  |          [JSON Parsing](../concepts/json.md#json-parsing)
- |
+ |      
  |      Validate the given JSON data against the Pydantic model.
- |
+ |      
  |      Args:
  |          json_data: The JSON data to validate.
  |          strict: Whether to enforce types strictly.
+ |          extra: Whether to ignore, allow, or forbid extra data during model validation.
+ |              See the [`extra` configuration value][pydantic.ConfigDict.extra] for details.
  |          context: Extra variables to pass to the validator.
  |          by_alias: Whether to use the field's alias when validating against the provided input data.
  |          by_name: Whether to use the field's name when validating against the provided input data.
- |
+ |      
  |      Returns:
  |          The validated Pydantic model.
- |
+ |      
  |      Raises:
  |          ValidationError: If `json_data` is not a JSON string or the object could not be validated.
- |
- |  model_validate_strings(
- |      obj: 'Any',
- |      *,
- |      strict: 'bool | None' = None,
- |      context: 'Any | None' = None,
- |      by_alias: 'bool | None' = None,
- |      by_name: 'bool | None' = None
- |  ) -> 'Self'
+ |  
+ |  model_validate_strings(obj: 'Any', *, strict: 'bool | None' = None, extra: 'ExtraValues | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, by_name: 'bool | None' = None) -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
  |      Validate the given object with string data against the Pydantic model.
- |
+ |      
  |      Args:
  |          obj: The object containing string data to validate.
  |          strict: Whether to enforce types strictly.
+ |          extra: Whether to ignore, allow, or forbid extra data during model validation.
+ |              See the [`extra` configuration value][pydantic.ConfigDict.extra] for details.
  |          context: Extra variables to pass to the validator.
  |          by_alias: Whether to use the field's alias when validating against the provided input data.
  |          by_name: Whether to use the field's name when validating against the provided input data.
- |
+ |      
  |      Returns:
  |          The validated Pydantic model.
- |
- |  parse_file(
- |      path: 'str | Path',
- |      *,
- |      content_type: 'str | None' = None,
- |      encoding: 'str' = 'utf8',
- |      proto: 'DeprecatedParseProtocol | None' = None,
- |      allow_pickle: 'bool' = False
- |  ) -> 'Self'
- |
- |  parse_obj(obj: 'Any') -> 'Self'
- |
- |  parse_raw(
- |      b: 'str | bytes',
- |      *,
- |      content_type: 'str | None' = None,
- |      encoding: 'str' = 'utf8',
- |      proto: 'DeprecatedParseProtocol | None' = None,
- |      allow_pickle: 'bool' = False
- |  ) -> 'Self'
- |
- |  schema(by_alias: 'bool' = True, ref_template: 'str' = '#/$defs/{model}') -> 'Dict[str, Any]'
- |
- |  schema_json(
- |      *,
- |      by_alias: 'bool' = True,
- |      ref_template: 'str' = '#/$defs/{model}',
- |      **dumps_kwargs: 'Any'
- |  ) -> 'str'
- |
- |  update_forward_refs(**localns: 'Any') -> 'None'
- |
- |  validate(value: 'Any') -> 'Self'
- |
+ |  
+ |  parse_file(path: 'str | Path', *, content_type: 'str | None' = None, encoding: 'str' = 'utf8', proto: 'DeprecatedParseProtocol | None' = None, allow_pickle: 'bool' = False) -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  parse_obj(obj: 'Any') -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  parse_raw(b: 'str | bytes', *, content_type: 'str | None' = None, encoding: 'str' = 'utf8', proto: 'DeprecatedParseProtocol | None' = None, allow_pickle: 'bool' = False) -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  schema(by_alias: 'bool' = True, ref_template: 'str' = '#/$defs/{model}') -> 'Dict[str, Any]' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  schema_json(*, by_alias: 'bool' = True, ref_template: 'str' = '#/$defs/{model}', **dumps_kwargs: 'Any') -> 'str' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  update_forward_refs(**localns: 'Any') -> 'None' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  validate(value: 'Any') -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
  |  ----------------------------------------------------------------------
  |  Readonly properties defined here:
- |
+ |  
  |  __fields_set__
- |
+ |  
  |  model_extra
  |      Get extra fields set during validation.
- |
+ |      
  |      Returns:
  |          A dictionary of extra fields, or `None` if `config.extra` is not set to `"allow"`.
- |
+ |  
  |  model_fields_set
  |      Returns the set of fields that have been explicitly set on this model instance.
- |
+ |      
  |      Returns:
  |          A set of strings representing the fields that have been set,
  |              i.e. that were not filled from defaults.
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Data descriptors defined here:
- |
+ |  
  |  __dict__
- |      dictionary for instance variables
- |
+ |      dictionary for instance variables (if defined)
+ |  
  |  __pydantic_extra__
- |
+ |  
  |  __pydantic_fields_set__
- |
+ |  
  |  __pydantic_private__
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Data and other attributes defined here:
- |
+ |  
  |  __abstractmethods__ = frozenset()
- |
+ |  
  |  __annotations__ = {}
- |
+ |  
  |  __hash__ = None
- |
+ |  
  |  __pydantic_complete__ = False
- |
+ |  
  |  __pydantic_core_schema__ = <pydantic._internal._mock_val_ser.MockCoreS...
- |
+ |  
  |  __pydantic_decorators__ = DecoratorInfos(validators={}, field_validato...
- |
+ |  
  |  __pydantic_parent_namespace__ = None
- |
+ |  
  |  __pydantic_root_model__ = False
- |
+ |  
  |  __pydantic_serializer__ = <pydantic._internal._mock_val_ser.MockValSer...
- |
+ |  
  |  __pydantic_validator__ = <pydantic._internal._mock_val_ser.MockValSer ...
- |
+ |  
  |  model_computed_fields = {}
- |
+ |  
  |  model_config = {}
- |
+ |  
  |  model_fields = {}
 ```
 
@@ -3183,16 +2983,16 @@ Info: will be still of int type, but will perform strict typecheck when variable
 ```
 
 ```hy
-Help on _AnnotatedAlias in module typing:
+Help on _AnnotatedAlias in module builtins:
 
 Annotated = class int(object)
  |  int([x]) -> integer
  |  int(x, base=10) -> integer
- |
+ |  
  |  Convert a number or string to an integer, or return 0 if no arguments
- |  are given.  If x is a number, return x.__int__().  For floating-point
+ |  are given.  If x is a number, return x.__int__().  For floating point
  |  numbers, this truncates towards zero.
- |
+ |  
  |  If x is not a number or if base is given, then x must be a string,
  |  bytes, or bytearray instance representing an integer literal in the
  |  given base.  The literal can be preceded by '+' or '-' and be surrounded
@@ -3200,223 +3000,220 @@ Annotated = class int(object)
  |  Base 0 means to interpret the base from the string as an integer literal.
  |  >>> int('0b100', base=0)
  |  4
- |
+ |  
  |  Built-in subclasses:
  |      bool
- |
+ |  
  |  Methods defined here:
- |
+ |  
  |  __abs__(self, /)
  |      abs(self)
- |
+ |  
  |  __add__(self, value, /)
  |      Return self+value.
- |
+ |  
  |  __and__(self, value, /)
  |      Return self&value.
- |
+ |  
  |  __bool__(self, /)
  |      True if self else False
- |
- |  __ceil__(self, /)
+ |  
+ |  __ceil__(...)
  |      Ceiling of an Integral returns itself.
- |
+ |  
  |  __divmod__(self, value, /)
  |      Return divmod(self, value).
- |
+ |  
  |  __eq__(self, value, /)
  |      Return self==value.
- |
+ |  
  |  __float__(self, /)
  |      float(self)
- |
- |  __floor__(self, /)
+ |  
+ |  __floor__(...)
  |      Flooring an Integral returns itself.
- |
+ |  
  |  __floordiv__(self, value, /)
  |      Return self//value.
- |
+ |  
  |  __format__(self, format_spec, /)
- |      Convert to a string according to format_spec.
- |
+ |      Default object formatter.
+ |  
  |  __ge__(self, value, /)
  |      Return self>=value.
- |
+ |  
  |  __getattribute__(self, name, /)
  |      Return getattr(self, name).
- |
+ |  
  |  __getnewargs__(self, /)
- |
+ |  
  |  __gt__(self, value, /)
  |      Return self>value.
- |
+ |  
  |  __hash__(self, /)
  |      Return hash(self).
- |
+ |  
  |  __index__(self, /)
  |      Return self converted to an integer, if self is suitable for use as an index into a list.
- |
+ |  
  |  __int__(self, /)
  |      int(self)
- |
+ |  
  |  __invert__(self, /)
  |      ~self
- |
+ |  
  |  __le__(self, value, /)
  |      Return self<=value.
- |
+ |  
  |  __lshift__(self, value, /)
  |      Return self<<value.
- |
+ |  
  |  __lt__(self, value, /)
  |      Return self<value.
- |
+ |  
  |  __mod__(self, value, /)
  |      Return self%value.
- |
+ |  
  |  __mul__(self, value, /)
  |      Return self*value.
- |
+ |  
  |  __ne__(self, value, /)
  |      Return self!=value.
- |
+ |  
  |  __neg__(self, /)
  |      -self
- |
+ |  
  |  __or__(self, value, /)
  |      Return self|value.
- |
+ |  
  |  __pos__(self, /)
  |      +self
- |
+ |  
  |  __pow__(self, value, mod=None, /)
  |      Return pow(self, value, mod).
- |
+ |  
  |  __radd__(self, value, /)
  |      Return value+self.
- |
+ |  
  |  __rand__(self, value, /)
  |      Return value&self.
- |
+ |  
  |  __rdivmod__(self, value, /)
  |      Return divmod(value, self).
- |
+ |  
  |  __repr__(self, /)
  |      Return repr(self).
- |
+ |  
  |  __rfloordiv__(self, value, /)
  |      Return value//self.
- |
+ |  
  |  __rlshift__(self, value, /)
  |      Return value<<self.
- |
+ |  
  |  __rmod__(self, value, /)
  |      Return value%self.
- |
+ |  
  |  __rmul__(self, value, /)
  |      Return value*self.
- |
+ |  
  |  __ror__(self, value, /)
  |      Return value|self.
- |
- |  __round__(self, ndigits=<unrepresentable>, /)
+ |  
+ |  __round__(...)
  |      Rounding an Integral returns itself.
- |
+ |      
  |      Rounding with an ndigits argument also returns an integer.
- |
+ |  
  |  __rpow__(self, value, mod=None, /)
  |      Return pow(value, self, mod).
- |
+ |  
  |  __rrshift__(self, value, /)
  |      Return value>>self.
- |
+ |  
  |  __rshift__(self, value, /)
  |      Return self>>value.
- |
+ |  
  |  __rsub__(self, value, /)
  |      Return value-self.
- |
+ |  
  |  __rtruediv__(self, value, /)
  |      Return value/self.
- |
+ |  
  |  __rxor__(self, value, /)
  |      Return value^self.
- |
+ |  
  |  __sizeof__(self, /)
  |      Returns size in memory, in bytes.
- |
+ |  
  |  __sub__(self, value, /)
  |      Return self-value.
- |
+ |  
  |  __truediv__(self, value, /)
  |      Return self/value.
- |
- |  __trunc__(self, /)
+ |  
+ |  __trunc__(...)
  |      Truncating an Integral returns itself.
- |
+ |  
  |  __xor__(self, value, /)
  |      Return self^value.
- |
+ |  
  |  as_integer_ratio(self, /)
- |      Return a pair of integers, whose ratio is equal to the original int.
- |
- |      The ratio is in lowest terms and has a positive denominator.
- |
+ |      Return integer ratio.
+ |      
+ |      Return a pair of integers, whose ratio is exactly equal to the original int
+ |      and with a positive denominator.
+ |      
  |      >>> (10).as_integer_ratio()
  |      (10, 1)
  |      >>> (-10).as_integer_ratio()
  |      (-10, 1)
  |      >>> (0).as_integer_ratio()
  |      (0, 1)
- |
+ |  
  |  bit_count(self, /)
  |      Number of ones in the binary representation of the absolute value of self.
- |
+ |      
  |      Also known as the population count.
- |
+ |      
  |      >>> bin(13)
  |      '0b1101'
  |      >>> (13).bit_count()
  |      3
- |
+ |  
  |  bit_length(self, /)
  |      Number of bits necessary to represent self in binary.
- |
+ |      
  |      >>> bin(37)
  |      '0b100101'
  |      >>> (37).bit_length()
  |      6
- |
- |  conjugate(self, /)
+ |  
+ |  conjugate(...)
  |      Returns self, the complex conjugate of any int.
- |
- |  is_integer(self, /)
- |      Returns True. Exists for duck type compatibility with float.is_integer.
- |
- |  to_bytes(self, /, length=1, byteorder='big', *, signed=False)
+ |  
+ |  to_bytes(self, /, length, byteorder, *, signed=False)
  |      Return an array of bytes representing an integer.
- |
+ |      
  |      length
  |        Length of bytes object to use.  An OverflowError is raised if the
- |        integer is not representable with the given number of bytes.  Default
- |        is length 1.
+ |        integer is not representable with the given number of bytes.
  |      byteorder
  |        The byte order used to represent the integer.  If byteorder is 'big',
  |        the most significant byte is at the beginning of the byte array.  If
  |        byteorder is 'little', the most significant byte is at the end of the
  |        byte array.  To request the native byte order of the host system, use
- |        sys.byteorder as the byte order value.  Default is to use 'big'.
+ |        `sys.byteorder' as the byte order value.
  |      signed
  |        Determines whether two's complement is used to represent the integer.
  |        If signed is False and a negative integer is given, an OverflowError
  |        is raised.
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Class methods defined here:
- |
- |  from_bytes(bytes, byteorder='big', *, signed=False)
+ |  
+ |  from_bytes(bytes, byteorder, *, signed=False) from builtins.type
  |      Return the integer represented by the given array of bytes.
- |
+ |      
  |      bytes
  |        Holds the array of bytes to convert.  The argument must either
  |        support the buffer protocol or be an iterable object producing bytes.
@@ -3427,28 +3224,28 @@ Annotated = class int(object)
  |        the most significant byte is at the beginning of the byte array.  If
  |        byteorder is 'little', the most significant byte is at the end of the
  |        byte array.  To request the native byte order of the host system, use
- |        sys.byteorder as the byte order value.  Default is to use 'big'.
+ |        `sys.byteorder' as the byte order value.
  |      signed
  |        Indicates whether two's complement is used to represent the integer.
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Static methods defined here:
- |
- |  __new__(*args, **kwargs)
+ |  
+ |  __new__(*args, **kwargs) from builtins.type
  |      Create and return a new object.  See help(type) for accurate signature.
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Data descriptors defined here:
- |
+ |  
  |  denominator
  |      the denominator of a rational number in lowest terms
- |
+ |  
  |  imag
  |      the imaginary part of a complex number
- |
+ |  
  |  numerator
  |      the numerator of a rational number in lowest terms
- |
+ |  
  |  real
  |      the real part of a complex number
 ```
@@ -3464,106 +3261,111 @@ Info: will be still of str type, but will perform strict typecheck when variable
 ```
 
 ```hy
-Help on _AnnotatedAlias in module typing:
+Help on _AnnotatedAlias in module builtins:
 
 Annotated = class str(object)
  |  str(object='') -> str
  |  str(bytes_or_buffer[, encoding[, errors]]) -> str
- |
+ |  
  |  Create a new string object from the given object. If encoding or
  |  errors is specified, then the object must expose a data buffer
  |  that will be decoded using the given encoding and error handler.
  |  Otherwise, returns the result of object.__str__() (if defined)
  |  or repr(object).
- |  encoding defaults to 'utf-8'.
+ |  encoding defaults to sys.getdefaultencoding().
  |  errors defaults to 'strict'.
- |
+ |  
  |  Methods defined here:
- |
+ |  
  |  __add__(self, value, /)
  |      Return self+value.
- |
+ |  
  |  __contains__(self, key, /)
- |      Return bool(key in self).
- |
+ |      Return key in self.
+ |  
  |  __eq__(self, value, /)
  |      Return self==value.
- |
+ |  
  |  __format__(self, format_spec, /)
  |      Return a formatted version of the string as described by format_spec.
- |
+ |  
  |  __ge__(self, value, /)
  |      Return self>=value.
- |
+ |  
+ |  __getattribute__(self, name, /)
+ |      Return getattr(self, name).
+ |  
  |  __getitem__(self, key, /)
  |      Return self[key].
- |
- |  __getnewargs__(self, /)
- |
+ |  
+ |  __getnewargs__(...)
+ |  
  |  __gt__(self, value, /)
  |      Return self>value.
- |
+ |  
  |  __hash__(self, /)
  |      Return hash(self).
- |
+ |  
  |  __iter__(self, /)
  |      Implement iter(self).
- |
+ |  
  |  __le__(self, value, /)
  |      Return self<=value.
- |
+ |  
  |  __len__(self, /)
  |      Return len(self).
- |
+ |  
  |  __lt__(self, value, /)
  |      Return self<value.
- |
+ |  
  |  __mod__(self, value, /)
  |      Return self%value.
- |
+ |  
  |  __mul__(self, value, /)
  |      Return self*value.
- |
+ |  
  |  __ne__(self, value, /)
  |      Return self!=value.
- |
+ |  
  |  __repr__(self, /)
  |      Return repr(self).
- |
+ |  
  |  __rmod__(self, value, /)
  |      Return value%self.
- |
+ |  
  |  __rmul__(self, value, /)
  |      Return value*self.
- |
+ |  
  |  __sizeof__(self, /)
  |      Return the size of the string in memory, in bytes.
- |
+ |  
  |  __str__(self, /)
  |      Return str(self).
- |
+ |  
  |  capitalize(self, /)
  |      Return a capitalized version of the string.
- |
+ |      
  |      More specifically, make the first character have upper case and the rest lower
  |      case.
- |
+ |  
  |  casefold(self, /)
  |      Return a version of the string suitable for caseless comparisons.
- |
+ |  
  |  center(self, width, fillchar=' ', /)
  |      Return a centered string of length width.
- |
+ |      
  |      Padding is done using the specified fill character (default is a space).
- |
- |  count(self, sub[, start[, end]], /)
- |      Return the number of non-overlapping occurrences of substring sub in string S[start:end].
- |
- |      Optional arguments start and end are interpreted as in slice notation.
- |
+ |  
+ |  count(...)
+ |      S.count(sub[, start[, end]]) -> int
+ |      
+ |      Return the number of non-overlapping occurrences of substring sub in
+ |      string S[start:end].  Optional arguments start and end are
+ |      interpreted as in slice notation.
+ |  
  |  encode(self, /, encoding='utf-8', errors='strict')
  |      Encode the string using the codec registered for encoding.
- |
+ |      
  |      encoding
  |        The encoding in which to encode the string.
  |      errors
@@ -3572,291 +3374,302 @@ Annotated = class str(object)
  |        UnicodeEncodeError.  Other possible values are 'ignore', 'replace' and
  |        'xmlcharrefreplace' as well as any other name registered with
  |        codecs.register_error that can handle UnicodeEncodeErrors.
- |
- |  endswith(self, suffix[, start[, end]], /)
- |      Return True if the string ends with the specified suffix, False otherwise.
- |
- |      suffix
- |        A string or a tuple of strings to try.
- |      start
- |        Optional start position. Default: start of the string.
- |      end
- |        Optional stop position. Default: end of the string.
- |
+ |  
+ |  endswith(...)
+ |      S.endswith(suffix[, start[, end]]) -> bool
+ |      
+ |      Return True if S ends with the specified suffix, False otherwise.
+ |      With optional start, test S beginning at that position.
+ |      With optional end, stop comparing S at that position.
+ |      suffix can also be a tuple of strings to try.
+ |  
  |  expandtabs(self, /, tabsize=8)
  |      Return a copy where all tab characters are expanded using spaces.
- |
+ |      
  |      If tabsize is not given, a tab size of 8 characters is assumed.
- |
- |  find(self, sub[, start[, end]], /)
- |      Return the lowest index in S where substring sub is found, such that sub is contained within S[start:end].
- |
- |      Optional arguments start and end are interpreted as in slice notation.
+ |  
+ |  find(...)
+ |      S.find(sub[, start[, end]]) -> int
+ |      
+ |      Return the lowest index in S where substring sub is found,
+ |      such that sub is contained within S[start:end].  Optional
+ |      arguments start and end are interpreted as in slice notation.
+ |      
  |      Return -1 on failure.
- |
- |  format(self, /, *args, **kwargs)
- |      Return a formatted version of the string, using substitutions from args and kwargs.
+ |  
+ |  format(...)
+ |      S.format(*args, **kwargs) -> str
+ |      
+ |      Return a formatted version of S, using substitutions from args and kwargs.
  |      The substitutions are identified by braces ('{' and '}').
- |
- |  format_map(self, mapping, /)
- |      Return a formatted version of the string, using substitutions from mapping.
+ |  
+ |  format_map(...)
+ |      S.format_map(mapping) -> str
+ |      
+ |      Return a formatted version of S, using substitutions from mapping.
  |      The substitutions are identified by braces ('{' and '}').
- |
- |  index(self, sub[, start[, end]], /)
- |      Return the lowest index in S where substring sub is found, such that sub is contained within S[start:end].
- |
- |      Optional arguments start and end are interpreted as in slice notation.
+ |  
+ |  index(...)
+ |      S.index(sub[, start[, end]]) -> int
+ |      
+ |      Return the lowest index in S where substring sub is found,
+ |      such that sub is contained within S[start:end].  Optional
+ |      arguments start and end are interpreted as in slice notation.
+ |      
  |      Raises ValueError when the substring is not found.
- |
+ |  
  |  isalnum(self, /)
  |      Return True if the string is an alpha-numeric string, False otherwise.
- |
+ |      
  |      A string is alpha-numeric if all characters in the string are alpha-numeric and
  |      there is at least one character in the string.
- |
+ |  
  |  isalpha(self, /)
  |      Return True if the string is an alphabetic string, False otherwise.
- |
+ |      
  |      A string is alphabetic if all characters in the string are alphabetic and there
  |      is at least one character in the string.
- |
+ |  
  |  isascii(self, /)
  |      Return True if all characters in the string are ASCII, False otherwise.
- |
+ |      
  |      ASCII characters have code points in the range U+0000-U+007F.
  |      Empty string is ASCII too.
- |
+ |  
  |  isdecimal(self, /)
  |      Return True if the string is a decimal string, False otherwise.
- |
+ |      
  |      A string is a decimal string if all characters in the string are decimal and
  |      there is at least one character in the string.
- |
+ |  
  |  isdigit(self, /)
  |      Return True if the string is a digit string, False otherwise.
- |
+ |      
  |      A string is a digit string if all characters in the string are digits and there
  |      is at least one character in the string.
- |
+ |  
  |  isidentifier(self, /)
  |      Return True if the string is a valid Python identifier, False otherwise.
- |
+ |      
  |      Call keyword.iskeyword(s) to test whether string s is a reserved identifier,
  |      such as "def" or "class".
- |
+ |  
  |  islower(self, /)
  |      Return True if the string is a lowercase string, False otherwise.
- |
+ |      
  |      A string is lowercase if all cased characters in the string are lowercase and
  |      there is at least one cased character in the string.
- |
+ |  
  |  isnumeric(self, /)
  |      Return True if the string is a numeric string, False otherwise.
- |
+ |      
  |      A string is numeric if all characters in the string are numeric and there is at
  |      least one character in the string.
- |
+ |  
  |  isprintable(self, /)
- |      Return True if all characters in the string are printable, False otherwise.
- |
- |      A character is printable if repr() may use it in its output.
- |
+ |      Return True if the string is printable, False otherwise.
+ |      
+ |      A string is printable if all of its characters are considered printable in
+ |      repr() or if it is empty.
+ |  
  |  isspace(self, /)
  |      Return True if the string is a whitespace string, False otherwise.
- |
+ |      
  |      A string is whitespace if all characters in the string are whitespace and there
  |      is at least one character in the string.
- |
+ |  
  |  istitle(self, /)
  |      Return True if the string is a title-cased string, False otherwise.
- |
+ |      
  |      In a title-cased string, upper- and title-case characters may only
  |      follow uncased characters and lowercase characters only cased ones.
- |
+ |  
  |  isupper(self, /)
  |      Return True if the string is an uppercase string, False otherwise.
- |
+ |      
  |      A string is uppercase if all cased characters in the string are uppercase and
  |      there is at least one cased character in the string.
- |
+ |  
  |  join(self, iterable, /)
  |      Concatenate any number of strings.
- |
+ |      
  |      The string whose method is called is inserted in between each given string.
  |      The result is returned as a new string.
- |
+ |      
  |      Example: '.'.join(['ab', 'pq', 'rs']) -> 'ab.pq.rs'
- |
+ |  
  |  ljust(self, width, fillchar=' ', /)
  |      Return a left-justified string of length width.
- |
+ |      
  |      Padding is done using the specified fill character (default is a space).
- |
+ |  
  |  lower(self, /)
  |      Return a copy of the string converted to lowercase.
- |
+ |  
  |  lstrip(self, chars=None, /)
  |      Return a copy of the string with leading whitespace removed.
- |
+ |      
  |      If chars is given and not None, remove characters in chars instead.
- |
+ |  
  |  partition(self, sep, /)
  |      Partition the string into three parts using the given separator.
- |
+ |      
  |      This will search for the separator in the string.  If the separator is found,
  |      returns a 3-tuple containing the part before the separator, the separator
  |      itself, and the part after it.
- |
+ |      
  |      If the separator is not found, returns a 3-tuple containing the original string
  |      and two empty strings.
- |
+ |  
  |  removeprefix(self, prefix, /)
  |      Return a str with the given prefix string removed if present.
- |
+ |      
  |      If the string starts with the prefix string, return string[len(prefix):].
  |      Otherwise, return a copy of the original string.
- |
+ |  
  |  removesuffix(self, suffix, /)
  |      Return a str with the given suffix string removed if present.
- |
+ |      
  |      If the string ends with the suffix string and that suffix is not empty,
  |      return string[:-len(suffix)]. Otherwise, return a copy of the original
  |      string.
- |
- |  replace(self, old, new, /, count=-1)
+ |  
+ |  replace(self, old, new, count=-1, /)
  |      Return a copy with all occurrences of substring old replaced by new.
- |
+ |      
  |        count
  |          Maximum number of occurrences to replace.
  |          -1 (the default value) means replace all occurrences.
- |
+ |      
  |      If the optional argument count is given, only the first count occurrences are
  |      replaced.
- |
- |  rfind(self, sub[, start[, end]], /)
- |      Return the highest index in S where substring sub is found, such that sub is contained within S[start:end].
- |
- |      Optional arguments start and end are interpreted as in slice notation.
+ |  
+ |  rfind(...)
+ |      S.rfind(sub[, start[, end]]) -> int
+ |      
+ |      Return the highest index in S where substring sub is found,
+ |      such that sub is contained within S[start:end].  Optional
+ |      arguments start and end are interpreted as in slice notation.
+ |      
  |      Return -1 on failure.
- |
- |  rindex(self, sub[, start[, end]], /)
- |      Return the highest index in S where substring sub is found, such that sub is contained within S[start:end].
- |
- |      Optional arguments start and end are interpreted as in slice notation.
+ |  
+ |  rindex(...)
+ |      S.rindex(sub[, start[, end]]) -> int
+ |      
+ |      Return the highest index in S where substring sub is found,
+ |      such that sub is contained within S[start:end].  Optional
+ |      arguments start and end are interpreted as in slice notation.
+ |      
  |      Raises ValueError when the substring is not found.
- |
+ |  
  |  rjust(self, width, fillchar=' ', /)
  |      Return a right-justified string of length width.
- |
+ |      
  |      Padding is done using the specified fill character (default is a space).
- |
+ |  
  |  rpartition(self, sep, /)
  |      Partition the string into three parts using the given separator.
- |
+ |      
  |      This will search for the separator in the string, starting at the end. If
  |      the separator is found, returns a 3-tuple containing the part before the
  |      separator, the separator itself, and the part after it.
- |
+ |      
  |      If the separator is not found, returns a 3-tuple containing two empty strings
  |      and the original string.
- |
+ |  
  |  rsplit(self, /, sep=None, maxsplit=-1)
  |      Return a list of the substrings in the string, using sep as the separator string.
- |
+ |      
  |        sep
  |          The separator used to split the string.
- |
+ |      
  |          When set to None (the default value), will split on any whitespace
- |          character (including \n \r \t \f and spaces) and will discard
+ |          character (including \\n \\r \\t \\f and spaces) and will discard
  |          empty strings from the result.
  |        maxsplit
- |          Maximum number of splits.
+ |          Maximum number of splits (starting from the left).
  |          -1 (the default value) means no limit.
- |
+ |      
  |      Splitting starts at the end of the string and works to the front.
- |
+ |  
  |  rstrip(self, chars=None, /)
  |      Return a copy of the string with trailing whitespace removed.
- |
+ |      
  |      If chars is given and not None, remove characters in chars instead.
- |
+ |  
  |  split(self, /, sep=None, maxsplit=-1)
  |      Return a list of the substrings in the string, using sep as the separator string.
- |
+ |      
  |        sep
  |          The separator used to split the string.
- |
+ |      
  |          When set to None (the default value), will split on any whitespace
- |          character (including \n \r \t \f and spaces) and will discard
+ |          character (including \\n \\r \\t \\f and spaces) and will discard
  |          empty strings from the result.
  |        maxsplit
- |          Maximum number of splits.
+ |          Maximum number of splits (starting from the left).
  |          -1 (the default value) means no limit.
- |
- |      Splitting starts at the front of the string and works to the end.
- |
+ |      
  |      Note, str.split() is mainly useful for data that has been intentionally
  |      delimited.  With natural text that includes punctuation, consider using
  |      the regular expression module.
- |
+ |  
  |  splitlines(self, /, keepends=False)
  |      Return a list of the lines in the string, breaking at line boundaries.
- |
+ |      
  |      Line breaks are not included in the resulting list unless keepends is given and
  |      true.
- |
- |  startswith(self, prefix[, start[, end]], /)
- |      Return True if the string starts with the specified prefix, False otherwise.
- |
- |      prefix
- |        A string or a tuple of strings to try.
- |      start
- |        Optional start position. Default: start of the string.
- |      end
- |        Optional stop position. Default: end of the string.
- |
+ |  
+ |  startswith(...)
+ |      S.startswith(prefix[, start[, end]]) -> bool
+ |      
+ |      Return True if S starts with the specified prefix, False otherwise.
+ |      With optional start, test S beginning at that position.
+ |      With optional end, stop comparing S at that position.
+ |      prefix can also be a tuple of strings to try.
+ |  
  |  strip(self, chars=None, /)
  |      Return a copy of the string with leading and trailing whitespace removed.
- |
+ |      
  |      If chars is given and not None, remove characters in chars instead.
- |
+ |  
  |  swapcase(self, /)
  |      Convert uppercase characters to lowercase and lowercase characters to uppercase.
- |
+ |  
  |  title(self, /)
  |      Return a version of the string where each word is titlecased.
- |
+ |      
  |      More specifically, words start with uppercased characters and all remaining
  |      cased characters have lower case.
- |
+ |  
  |  translate(self, table, /)
  |      Replace each character in the string using the given translation table.
- |
+ |      
  |        table
  |          Translation table, which must be a mapping of Unicode ordinals to
  |          Unicode ordinals, strings, or None.
- |
+ |      
  |      The table must implement lookup/indexing via __getitem__, for instance a
  |      dictionary or list.  If this operation raises LookupError, the character is
  |      left untouched.  Characters mapped to None are deleted.
- |
+ |  
  |  upper(self, /)
  |      Return a copy of the string converted to uppercase.
- |
+ |  
  |  zfill(self, width, /)
  |      Pad a numeric string with zeros on the left, to fill a field of the given width.
- |
+ |      
  |      The string is never truncated.
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Static methods defined here:
- |
- |  __new__(*args, **kwargs)
+ |  
+ |  __new__(*args, **kwargs) from builtins.type
  |      Create and return a new object.  See help(type) for accurate signature.
- |
- |  maketrans(x, y=<unrepresentable>, z=<unrepresentable>, /)
+ |  
+ |  maketrans(...)
  |      Return a translation table usable for str.translate().
- |
+ |      
  |      If there is only one argument, it must be a dictionary mapping Unicode
  |      ordinals (integers) or characters to Unicode ordinals, strings or None.
  |      Character keys will be then converted to ordinals.
@@ -3877,186 +3690,206 @@ Info: will be still of float type, but will perform strict typecheck when variab
 ```
 
 ```hy
-Help on _AnnotatedAlias in module typing:
+Help on _AnnotatedAlias in module builtins:
 
 Annotated = class float(object)
  |  Annotated(x=0, /)
- |
- |  Convert a string or number to a floating-point number, if possible.
- |
+ |  
+ |  Convert a string or number to a floating point number, if possible.
+ |  
  |  Methods defined here:
- |
+ |  
  |  __abs__(self, /)
  |      abs(self)
- |
+ |  
  |  __add__(self, value, /)
  |      Return self+value.
- |
+ |  
  |  __bool__(self, /)
  |      True if self else False
- |
+ |  
  |  __ceil__(self, /)
  |      Return the ceiling as an Integral.
- |
+ |  
  |  __divmod__(self, value, /)
  |      Return divmod(self, value).
- |
+ |  
  |  __eq__(self, value, /)
  |      Return self==value.
- |
+ |  
  |  __float__(self, /)
  |      float(self)
- |
+ |  
  |  __floor__(self, /)
  |      Return the floor as an Integral.
- |
+ |  
  |  __floordiv__(self, value, /)
  |      Return self//value.
- |
+ |  
  |  __format__(self, format_spec, /)
  |      Formats the float according to format_spec.
- |
+ |  
  |  __ge__(self, value, /)
  |      Return self>=value.
- |
+ |  
+ |  __getattribute__(self, name, /)
+ |      Return getattr(self, name).
+ |  
  |  __getnewargs__(self, /)
- |
+ |  
  |  __gt__(self, value, /)
  |      Return self>value.
- |
+ |  
  |  __hash__(self, /)
  |      Return hash(self).
- |
+ |  
  |  __int__(self, /)
  |      int(self)
- |
+ |  
  |  __le__(self, value, /)
  |      Return self<=value.
- |
+ |  
  |  __lt__(self, value, /)
  |      Return self<value.
- |
+ |  
  |  __mod__(self, value, /)
  |      Return self%value.
- |
+ |  
  |  __mul__(self, value, /)
  |      Return self*value.
- |
+ |  
  |  __ne__(self, value, /)
  |      Return self!=value.
- |
+ |  
  |  __neg__(self, /)
  |      -self
- |
+ |  
  |  __pos__(self, /)
  |      +self
- |
+ |  
  |  __pow__(self, value, mod=None, /)
  |      Return pow(self, value, mod).
- |
+ |  
  |  __radd__(self, value, /)
  |      Return value+self.
- |
+ |  
  |  __rdivmod__(self, value, /)
  |      Return divmod(value, self).
- |
+ |  
  |  __repr__(self, /)
  |      Return repr(self).
- |
+ |  
  |  __rfloordiv__(self, value, /)
  |      Return value//self.
- |
+ |  
  |  __rmod__(self, value, /)
  |      Return value%self.
- |
+ |  
  |  __rmul__(self, value, /)
  |      Return value*self.
- |
+ |  
  |  __round__(self, ndigits=None, /)
  |      Return the Integral closest to x, rounding half toward even.
- |
+ |      
  |      When an argument is passed, work like built-in round(x, ndigits).
- |
+ |  
  |  __rpow__(self, value, mod=None, /)
  |      Return pow(value, self, mod).
- |
+ |  
  |  __rsub__(self, value, /)
  |      Return value-self.
- |
+ |  
  |  __rtruediv__(self, value, /)
  |      Return value/self.
- |
+ |  
  |  __sub__(self, value, /)
  |      Return self-value.
- |
+ |  
  |  __truediv__(self, value, /)
  |      Return self/value.
- |
+ |  
  |  __trunc__(self, /)
  |      Return the Integral closest to x between 0 and x.
- |
+ |  
  |  as_integer_ratio(self, /)
- |      Return a pair of integers, whose ratio is exactly equal to the original float.
- |
- |      The ratio is in lowest terms and has a positive denominator.  Raise
- |      OverflowError on infinities and a ValueError on NaNs.
- |
+ |      Return integer ratio.
+ |      
+ |      Return a pair of integers, whose ratio is exactly equal to the original float
+ |      and with a positive denominator.
+ |      
+ |      Raise OverflowError on infinities and a ValueError on NaNs.
+ |      
  |      >>> (10.0).as_integer_ratio()
  |      (10, 1)
  |      >>> (0.0).as_integer_ratio()
  |      (0, 1)
  |      >>> (-.25).as_integer_ratio()
  |      (-1, 4)
- |
+ |  
  |  conjugate(self, /)
  |      Return self, the complex conjugate of any float.
- |
+ |  
  |  hex(self, /)
  |      Return a hexadecimal representation of a floating-point number.
- |
+ |      
  |      >>> (-0.1).hex()
  |      '-0x1.999999999999ap-4'
  |      >>> 3.14159.hex()
  |      '0x1.921f9f01b866ep+1'
- |
+ |  
  |  is_integer(self, /)
  |      Return True if the float is an integer.
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Class methods defined here:
- |
- |  __getformat__(typestr, /)
+ |  
+ |  __getformat__(typestr, /) from builtins.type
  |      You probably don't want to use this function.
- |
+ |      
  |        typestr
  |          Must be 'double' or 'float'.
- |
+ |      
  |      It exists mainly to be used in Python's test suite.
- |
+ |      
  |      This function returns whichever of 'unknown', 'IEEE, big-endian' or 'IEEE,
- |      little-endian' best describes the format of floating-point numbers used by the
+ |      little-endian' best describes the format of floating point numbers used by the
  |      C type named by typestr.
- |
- |  fromhex(string, /)
+ |  
+ |  __setformat__(typestr, fmt, /) from builtins.type
+ |      You probably don't want to use this function.
+ |      
+ |        typestr
+ |          Must be 'double' or 'float'.
+ |        fmt
+ |          Must be one of 'unknown', 'IEEE, big-endian' or 'IEEE, little-endian',
+ |          and in addition can only be one of the latter two if it appears to
+ |          match the underlying C reality.
+ |      
+ |      It exists mainly to be used in Python's test suite.
+ |      
+ |      Override the automatic determination of C-level floating point type.
+ |      This affects how floats are converted to and from binary strings.
+ |  
+ |  fromhex(string, /) from builtins.type
  |      Create a floating-point number from a hexadecimal string.
- |
+ |      
  |      >>> float.fromhex('0x1.ffffp10')
  |      2047.984375
  |      >>> float.fromhex('-0x1p-1074')
  |      -5e-324
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Static methods defined here:
- |
- |  __new__(*args, **kwargs)
+ |  
+ |  __new__(*args, **kwargs) from builtins.type
  |      Create and return a new object.  See help(type) for accurate signature.
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Data descriptors defined here:
- |
+ |  
  |  imag
  |      the imaginary part of a complex number
- |
+ |  
  |  real
  |      the real part of a complex number
 ```
@@ -4084,25 +3917,19 @@ Info: decorator for type-checking func args
 ```hy
 Help on function validate_call in module pydantic.validate_call_decorator:
 
-validate_call(
-    func: 'AnyCallableT | None' = None,
-    /,
-    *,
-    config: 'ConfigDict | None' = None,
-    validate_return: 'bool' = False
-) -> 'AnyCallableT | Callable[[AnyCallableT], AnyCallableT]'
+validate_call(func: 'AnyCallableT | None' = None, /, *, config: 'ConfigDict | None' = None, validate_return: 'bool' = False) -> 'AnyCallableT | Callable[[AnyCallableT], AnyCallableT]'
     !!! abstract "Usage Documentation"
         [Validation Decorator](../concepts/validation_decorator.md)
-
+    
     Returns a decorated wrapper around the function that validates the arguments and, optionally, the return value.
-
+    
     Usage may be either as a plain decorator `@validate_call` or with arguments `@validate_call(...)`.
-
+    
     Args:
         func: The function to be decorated.
         config: The configuration dictionary.
         validate_return: Whether to validate the return value.
-
+    
     Returns:
         The decorated function.
 ```
@@ -4170,14 +3997,14 @@ Help on function sign in module hyrule.misc:
 sign(x)
     Return -1 for negative ``x``, 1 for positive ``x``, and 0 for
     ``x`` equal to 0. The implementation is exactly ::
-
-
+    
+    
       (cond
         (< x 0) -1
         (> x 0)  1
         (= x 0)  0
         True     (raise TypeError))
-
+    
     with the corresponding consequences for special cases like negative
     zero and NaN.
 ```
@@ -4215,7 +4042,7 @@ Help on built-in function floor in module math:
 
 floor(x, /)
     Return the floor of x as an Integral.
-
+    
     This is the largest integer <= x.
 ```
 
@@ -4234,7 +4061,7 @@ Help on built-in function ceil in module math:
 
 ceil(x, /)
     Return the ceiling of x as an Integral.
-
+    
     This is the smallest integer >= x.
 ```
 
@@ -4362,10 +4189,10 @@ Help on built-in function dist in module math:
 
 dist(p, q, /)
     Return the Euclidean distance between two points p and q.
-
+    
     The points should be specified as sequences (or iterables) of
     coordinates.  Both inputs must have the same dimension.
-
+    
     Roughly equivalent to:
         sqrt(sum((px - qx) ** 2.0 for px, qx in zip(p, q)))
 ```
@@ -4386,17 +4213,17 @@ Help on built-in function hypot in module math:
 
 hypot(...)
     hypot(*coordinates) -> value
-
+    
     Multidimensional Euclidean distance from the origin to a point.
-
+    
     Roughly equivalent to:
         sqrt(sum(x**2 for x in coordinates))
-
+    
     For a two dimensional point (x, y), gives the hypotenuse
     using the Pythagorean theorem:  sqrt(x*x + y*y).
-
+    
     For example, the hypotenuse of a 3/4/5 right triangle is:
-
+    
         >>> hypot(3.0, 4.0)
         5.0
 ```
@@ -4456,8 +4283,8 @@ Help on built-in function log in module math:
 log(...)
     log(x, [base=math.e])
     Return the logarithm of x to the given base.
-
-    If the base is not specified, returns the natural logarithm (base e) of x.
+    
+    If the base not specified, returns the natural logarithm (base e) of x.
 ```
 
 ## ln
@@ -4595,182 +4422,202 @@ Help on float object:
 
 class float(object)
  |  float(x=0, /)
- |
- |  Convert a string or number to a floating-point number, if possible.
- |
+ |  
+ |  Convert a string or number to a floating point number, if possible.
+ |  
  |  Methods defined here:
- |
+ |  
  |  __abs__(self, /)
  |      abs(self)
- |
+ |  
  |  __add__(self, value, /)
  |      Return self+value.
- |
+ |  
  |  __bool__(self, /)
  |      True if self else False
- |
+ |  
  |  __ceil__(self, /)
  |      Return the ceiling as an Integral.
- |
+ |  
  |  __divmod__(self, value, /)
  |      Return divmod(self, value).
- |
+ |  
  |  __eq__(self, value, /)
  |      Return self==value.
- |
+ |  
  |  __float__(self, /)
  |      float(self)
- |
+ |  
  |  __floor__(self, /)
  |      Return the floor as an Integral.
- |
+ |  
  |  __floordiv__(self, value, /)
  |      Return self//value.
- |
+ |  
  |  __format__(self, format_spec, /)
  |      Formats the float according to format_spec.
- |
+ |  
  |  __ge__(self, value, /)
  |      Return self>=value.
- |
+ |  
+ |  __getattribute__(self, name, /)
+ |      Return getattr(self, name).
+ |  
  |  __getnewargs__(self, /)
- |
+ |  
  |  __gt__(self, value, /)
  |      Return self>value.
- |
+ |  
  |  __hash__(self, /)
  |      Return hash(self).
- |
+ |  
  |  __int__(self, /)
  |      int(self)
- |
+ |  
  |  __le__(self, value, /)
  |      Return self<=value.
- |
+ |  
  |  __lt__(self, value, /)
  |      Return self<value.
- |
+ |  
  |  __mod__(self, value, /)
  |      Return self%value.
- |
+ |  
  |  __mul__(self, value, /)
  |      Return self*value.
- |
+ |  
  |  __ne__(self, value, /)
  |      Return self!=value.
- |
+ |  
  |  __neg__(self, /)
  |      -self
- |
+ |  
  |  __pos__(self, /)
  |      +self
- |
+ |  
  |  __pow__(self, value, mod=None, /)
  |      Return pow(self, value, mod).
- |
+ |  
  |  __radd__(self, value, /)
  |      Return value+self.
- |
+ |  
  |  __rdivmod__(self, value, /)
  |      Return divmod(value, self).
- |
+ |  
  |  __repr__(self, /)
  |      Return repr(self).
- |
+ |  
  |  __rfloordiv__(self, value, /)
  |      Return value//self.
- |
+ |  
  |  __rmod__(self, value, /)
  |      Return value%self.
- |
+ |  
  |  __rmul__(self, value, /)
  |      Return value*self.
- |
+ |  
  |  __round__(self, ndigits=None, /)
  |      Return the Integral closest to x, rounding half toward even.
- |
+ |      
  |      When an argument is passed, work like built-in round(x, ndigits).
- |
+ |  
  |  __rpow__(self, value, mod=None, /)
  |      Return pow(value, self, mod).
- |
+ |  
  |  __rsub__(self, value, /)
  |      Return value-self.
- |
+ |  
  |  __rtruediv__(self, value, /)
  |      Return value/self.
- |
+ |  
  |  __sub__(self, value, /)
  |      Return self-value.
- |
+ |  
  |  __truediv__(self, value, /)
  |      Return self/value.
- |
+ |  
  |  __trunc__(self, /)
  |      Return the Integral closest to x between 0 and x.
- |
+ |  
  |  as_integer_ratio(self, /)
- |      Return a pair of integers, whose ratio is exactly equal to the original float.
- |
- |      The ratio is in lowest terms and has a positive denominator.  Raise
- |      OverflowError on infinities and a ValueError on NaNs.
- |
+ |      Return integer ratio.
+ |      
+ |      Return a pair of integers, whose ratio is exactly equal to the original float
+ |      and with a positive denominator.
+ |      
+ |      Raise OverflowError on infinities and a ValueError on NaNs.
+ |      
  |      >>> (10.0).as_integer_ratio()
  |      (10, 1)
  |      >>> (0.0).as_integer_ratio()
  |      (0, 1)
  |      >>> (-.25).as_integer_ratio()
  |      (-1, 4)
- |
+ |  
  |  conjugate(self, /)
  |      Return self, the complex conjugate of any float.
- |
+ |  
  |  hex(self, /)
  |      Return a hexadecimal representation of a floating-point number.
- |
+ |      
  |      >>> (-0.1).hex()
  |      '-0x1.999999999999ap-4'
  |      >>> 3.14159.hex()
  |      '0x1.921f9f01b866ep+1'
- |
+ |  
  |  is_integer(self, /)
  |      Return True if the float is an integer.
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Class methods defined here:
- |
- |  __getformat__(typestr, /)
+ |  
+ |  __getformat__(typestr, /) from builtins.type
  |      You probably don't want to use this function.
- |
+ |      
  |        typestr
  |          Must be 'double' or 'float'.
- |
+ |      
  |      It exists mainly to be used in Python's test suite.
- |
+ |      
  |      This function returns whichever of 'unknown', 'IEEE, big-endian' or 'IEEE,
- |      little-endian' best describes the format of floating-point numbers used by the
+ |      little-endian' best describes the format of floating point numbers used by the
  |      C type named by typestr.
- |
- |  fromhex(string, /)
+ |  
+ |  __setformat__(typestr, fmt, /) from builtins.type
+ |      You probably don't want to use this function.
+ |      
+ |        typestr
+ |          Must be 'double' or 'float'.
+ |        fmt
+ |          Must be one of 'unknown', 'IEEE, big-endian' or 'IEEE, little-endian',
+ |          and in addition can only be one of the latter two if it appears to
+ |          match the underlying C reality.
+ |      
+ |      It exists mainly to be used in Python's test suite.
+ |      
+ |      Override the automatic determination of C-level floating point type.
+ |      This affects how floats are converted to and from binary strings.
+ |  
+ |  fromhex(string, /) from builtins.type
  |      Create a floating-point number from a hexadecimal string.
- |
+ |      
  |      >>> float.fromhex('0x1.ffffp10')
  |      2047.984375
  |      >>> float.fromhex('-0x1p-1074')
  |      -5e-324
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Static methods defined here:
- |
- |  __new__(*args, **kwargs)
+ |  
+ |  __new__(*args, **kwargs) from builtins.type
  |      Create and return a new object.  See help(type) for accurate signature.
- |
+ |  
  |  ----------------------------------------------------------------------
  |  Data descriptors defined here:
- |
+ |  
  |  imag
  |      the imaginary part of a complex number
- |
+ |  
  |  real
  |      the real part of a complex number
 ```
@@ -4881,7 +4728,7 @@ Help on built-in function acos in module math:
 
 acos(x, /)
     Return the arc cosine (measured in radians) of x.
-
+    
     The result is between 0 and pi.
 ```
 
@@ -4901,7 +4748,7 @@ Help on built-in function asin in module math:
 
 asin(x, /)
     Return the arc sine (measured in radians) of x.
-
+    
     The result is between -pi/2 and pi/2.
 ```
 
@@ -4921,7 +4768,7 @@ Help on built-in function atan in module math:
 
 atan(x, /)
     Return the arc tangent (measured in radians) of x.
-
+    
     The result is between -pi/2 and pi/2.
 ```
 
@@ -4941,7 +4788,7 @@ Help on built-in function atan2 in module math:
 
 atan2(y, x, /)
     Return the arc tangent (measured in radians) of y/x.
-
+    
     Unlike atan(y/x), the signs of both x and y are considered.
 ```
 
@@ -5604,11 +5451,6 @@ Help on method uniform in module random:
 
 uniform(a, b) method of random.Random instance
     Get a random number in the range [a, b) or [a, b] depending on rounding.
-
-    The mean (expected value) and variance of the random variable are:
-
-        E[X] = (a + b) / 2
-        Var[X] = (b - a) ** 2 / 12
 ```
 
 ## rand01
@@ -5698,7 +5540,7 @@ Info: str.strip method as a function
 Help on function strip in module fptk.strings:
 
 strip(string: str, chars=None) -> str
-    str.strip method as a function,
+    str.strip method as a function, 
     removes leading and trailing whitespaces (or chars when given)
 ```
 
@@ -5752,15 +5594,9 @@ Info: adds char to string until target_len reached
 ```hy
 Help on function enlengthen in module fptk.strings:
 
-enlengthen(
-    target_len: int,
-    string: str,
-    char: str = ' ',
-    on_tail: bool = True,
-    force_len: bool = False
-) -> str
+enlengthen(target_len: int, string: str, char: str = ' ', on_tail: bool = True, force_len: bool = False) -> str
     appends char to string until target_len reached
-
+    
     - if len(string) > target_len, will return string with no change
     - with on_tail=False will prepend chars rather than append
     - with force_len=True will cut string to target_len if required (taking on_tail option into account)
@@ -5878,10 +5714,10 @@ Info: also works on folders
 ```
 
 ```hy
-Help on built-in function _path_exists in module nt:
+Help on function exists in module genericpath:
 
-_path_exists(path)
-    Test whether a path exists.  Returns False for broken symbolic links.
+exists(path)
+    Test whether a path exists.  Returns False for broken symbolic links
 ```
 
 ## fileQ
@@ -5895,9 +5731,9 @@ Sgnt: fileQ(filename)
 ```
 
 ```hy
-Help on built-in function _path_isfile in module nt:
+Help on function isfile in module genericpath:
 
-_path_isfile(path)
+isfile(path)
     Test whether a path is a regular file
 ```
 
@@ -5912,9 +5748,9 @@ Sgnt: dirQ(filename)
 ```
 
 ```hy
-Help on built-in function _path_isdir in module nt:
+Help on function isdir in module genericpath:
 
-_path_isdir(s)
+isdir(s)
     Return true if the pathname refers to an existing directory.
 ```
 
@@ -5950,12 +5786,7 @@ Info: modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation
 ```hy
 Help on function write_to_file in module fptk.IO:
 
-write_to_file(
-    text: str,
-    file_name: str,
-    mode: str = 'w',
-    encoding: str = 'utf-8'
-)
+write_to_file(text: str, file_name: str, mode: str = 'w', encoding: str = 'utf-8')
     writes text to file_name;
     modes:
     - 'w' - (over)write
@@ -6085,6 +5916,1121 @@ Info: tests if (op arg1 arg2), for example (= 1 1)
 Name: gives_error_typeQ
 Kind: FPTK Macro
 Info: example: (assertm gives_error_typeQ (get [1] 2) IndexError)
+```
+
+## Maybe
+
+[go up](#Cheetsheet)
+
+```hy
+Name: Maybe
+Kind: Reimport from [fptk.monads.maybeM]
+Info: Maybe monad. Should be used in annotations only
+```
+
+```hy
+Help on class Maybe in module fptk.monads.maybeM:
+
+class Maybe(pydantic.main.BaseModel, typing.Generic)
+ |  Maybe(*, container: Union[fptk.monads.maybeM._Just, fptk.monads.maybeM._Nothing]) -> None
+ |  
+ |  Method resolution order:
+ |      Maybe
+ |      pydantic.main.BaseModel
+ |      typing.Generic
+ |      builtins.object
+ |  
+ |  Methods defined here:
+ |  
+ |  __repr__(self)
+ |      Return repr(self).
+ |  
+ |  __str__(self)
+ |      Return str(self).
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data descriptors defined here:
+ |  
+ |  __weakref__
+ |      list of weak references to the object (if defined)
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data and other attributes defined here:
+ |  
+ |  __abstractmethods__ = frozenset()
+ |  
+ |  __annotations__ = {'container': typing.Union[fptk.monads.maybeM._Just,...
+ |  
+ |  __class_vars__ = set()
+ |  
+ |  __orig_bases__ = (<class 'pydantic.main.BaseModel'>, typing.Generic[~J...
+ |  
+ |  __parameters__ = (~J,)
+ |  
+ |  __private_attributes__ = {}
+ |  
+ |  __pydantic_complete__ = True
+ |  
+ |  __pydantic_computed_fields__ = {}
+ |  
+ |  __pydantic_core_schema__ = {'cls': <class 'fptk.monads.maybeM.Maybe'>,...
+ |  
+ |  __pydantic_custom_init__ = False
+ |  
+ |  __pydantic_decorators__ = DecoratorInfos(validators={}, field_validato...
+ |  
+ |  __pydantic_fields__ = {'container': FieldInfo(annotation=Union[_Just, ...
+ |  
+ |  __pydantic_generic_metadata__ = {'args': (), 'origin': None, 'paramete...
+ |  
+ |  __pydantic_parent_namespace__ = None
+ |  
+ |  __pydantic_post_init__ = None
+ |  
+ |  __pydantic_serializer__ = SchemaSerializer(serializer=Model(
+ |      Model...
+ |  
+ |  __pydantic_setattr_handlers__ = {}
+ |  
+ |  __pydantic_validator__ = SchemaValidator(title="Maybe", validator=Mode...
+ |  
+ |  __signature__ = <Signature (*, container: Union[fptk.monads.maybeM._Ju...
+ |  
+ |  model_config = {}
+ |  
+ |  ----------------------------------------------------------------------
+ |  Methods inherited from pydantic.main.BaseModel:
+ |  
+ |  __copy__(self) -> 'Self'
+ |      Returns a shallow copy of the model.
+ |  
+ |  __deepcopy__(self, memo: 'dict[int, Any] | None' = None) -> 'Self'
+ |      Returns a deep copy of the model.
+ |  
+ |  __delattr__(self, item: 'str') -> 'Any'
+ |      Implement delattr(self, name).
+ |  
+ |  __eq__(self, other: 'Any') -> 'bool'
+ |      Return self==value.
+ |  
+ |  __getattr__(self, item: 'str') -> 'Any'
+ |  
+ |  __getstate__(self) -> 'dict[Any, Any]'
+ |  
+ |  __init__(self, /, **data: 'Any') -> 'None'
+ |      Create a new model by parsing and validating input data from keyword arguments.
+ |      
+ |      Raises [`ValidationError`][pydantic_core.ValidationError] if the input data cannot be
+ |      validated to form a valid model.
+ |      
+ |      `self` is explicitly positional-only to allow `self` as a field name.
+ |  
+ |  __iter__(self) -> 'TupleGenerator'
+ |      So `dict(model)` works.
+ |  
+ |  __pretty__(self, fmt: 'Callable[[Any], Any]', **kwargs: 'Any') -> 'Generator[Any]'
+ |      Used by devtools (https://python-devtools.helpmanual.io/) to pretty print objects.
+ |  
+ |  __replace__(self, **changes: 'Any') -> 'Self'
+ |      # Because we make use of `@dataclass_transform()`, `__replace__` is already synthesized by
+ |      # type checkers, so we define the implementation in this `if not TYPE_CHECKING:` block:
+ |  
+ |  __repr_args__(self) -> '_repr.ReprArgs'
+ |  
+ |  __repr_name__(self) -> 'str'
+ |      Name of the instance's class, used in __repr__.
+ |  
+ |  __repr_recursion__(self, object: 'Any') -> 'str'
+ |      Returns the string representation of a recursive object.
+ |  
+ |  __repr_str__(self, join_str: 'str') -> 'str'
+ |  
+ |  __rich_repr__(self) -> 'RichReprResult'
+ |      Used by Rich (https://rich.readthedocs.io/en/stable/pretty.html) to pretty print objects.
+ |  
+ |  __setattr__(self, name: 'str', value: 'Any') -> 'None'
+ |      Implement setattr(self, name, value).
+ |  
+ |  __setstate__(self, state: 'dict[Any, Any]') -> 'None'
+ |  
+ |  copy(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'
+ |      Returns a copy of the model.
+ |      
+ |      !!! warning "Deprecated"
+ |          This method is now deprecated; use `model_copy` instead.
+ |      
+ |      If you need `include` or `exclude`, use:
+ |      
+ |      ```python {test="skip" lint="skip"}
+ |      data = self.model_dump(include=include, exclude=exclude, round_trip=True)
+ |      data = {**data, **(update or {})}
+ |      copied = self.model_validate(data)
+ |      ```
+ |      
+ |      Args:
+ |          include: Optional set or mapping specifying which fields to include in the copied model.
+ |          exclude: Optional set or mapping specifying which fields to exclude in the copied model.
+ |          update: Optional dictionary of field-value pairs to override field values in the copied model.
+ |          deep: If True, the values of fields that are Pydantic models will be deep-copied.
+ |      
+ |      Returns:
+ |          A copy of the model with included, excluded and updated fields as specified.
+ |  
+ |  dict(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'
+ |  
+ |  json(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'
+ |  
+ |  model_copy(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'
+ |      !!! abstract "Usage Documentation"
+ |          [`model_copy`](../concepts/models.md#model-copy)
+ |      
+ |      Returns a copy of the model.
+ |      
+ |      !!! note
+ |          The underlying instance's [`__dict__`][object.__dict__] attribute is copied. This
+ |          might have unexpected side effects if you store anything in it, on top of the model
+ |          fields (e.g. the value of [cached properties][functools.cached_property]).
+ |      
+ |      Args:
+ |          update: Values to change/add in the new model. Note: the data is not validated
+ |              before creating the new model. You should trust this data.
+ |          deep: Set to `True` to make a deep copy of the model.
+ |      
+ |      Returns:
+ |          New model instance.
+ |  
+ |  model_dump(self, *, mode: "Literal['json', 'python'] | str" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: "bool | Literal['none', 'warn', 'error']" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False) -> 'dict[str, Any]'
+ |      !!! abstract "Usage Documentation"
+ |          [`model_dump`](../concepts/serialization.md#python-mode)
+ |      
+ |      Generate a dictionary representation of the model, optionally specifying which fields to include or exclude.
+ |      
+ |      Args:
+ |          mode: The mode in which `to_python` should run.
+ |              If mode is 'json', the output will only contain JSON serializable types.
+ |              If mode is 'python', the output may contain non-JSON-serializable Python objects.
+ |          include: A set of fields to include in the output.
+ |          exclude: A set of fields to exclude from the output.
+ |          context: Additional context to pass to the serializer.
+ |          by_alias: Whether to use the field's alias in the dictionary key if defined.
+ |          exclude_unset: Whether to exclude fields that have not been explicitly set.
+ |          exclude_defaults: Whether to exclude fields that are set to their default value.
+ |          exclude_none: Whether to exclude fields that have a value of `None`.
+ |          exclude_computed_fields: Whether to exclude computed fields.
+ |              While this can be useful for round-tripping, it is usually recommended to use the dedicated
+ |              `round_trip` parameter instead.
+ |          round_trip: If True, dumped values should be valid as input for non-idempotent types such as Json[T].
+ |          warnings: How to handle serialization errors. False/"none" ignores them, True/"warn" logs errors,
+ |              "error" raises a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError].
+ |          fallback: A function to call when an unknown value is encountered. If not provided,
+ |              a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError] error is raised.
+ |          serialize_as_any: Whether to serialize fields with duck-typing serialization behavior.
+ |      
+ |      Returns:
+ |          A dictionary representation of the model.
+ |  
+ |  model_dump_json(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: "bool | Literal['none', 'warn', 'error']" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False) -> 'str'
+ |      !!! abstract "Usage Documentation"
+ |          [`model_dump_json`](../concepts/serialization.md#json-mode)
+ |      
+ |      Generates a JSON representation of the model using Pydantic's `to_json` method.
+ |      
+ |      Args:
+ |          indent: Indentation to use in the JSON output. If None is passed, the output will be compact.
+ |          ensure_ascii: If `True`, the output is guaranteed to have all incoming non-ASCII characters escaped.
+ |              If `False` (the default), these characters will be output as-is.
+ |          include: Field(s) to include in the JSON output.
+ |          exclude: Field(s) to exclude from the JSON output.
+ |          context: Additional context to pass to the serializer.
+ |          by_alias: Whether to serialize using field aliases.
+ |          exclude_unset: Whether to exclude fields that have not been explicitly set.
+ |          exclude_defaults: Whether to exclude fields that are set to their default value.
+ |          exclude_none: Whether to exclude fields that have a value of `None`.
+ |          exclude_computed_fields: Whether to exclude computed fields.
+ |              While this can be useful for round-tripping, it is usually recommended to use the dedicated
+ |              `round_trip` parameter instead.
+ |          round_trip: If True, dumped values should be valid as input for non-idempotent types such as Json[T].
+ |          warnings: How to handle serialization errors. False/"none" ignores them, True/"warn" logs errors,
+ |              "error" raises a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError].
+ |          fallback: A function to call when an unknown value is encountered. If not provided,
+ |              a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError] error is raised.
+ |          serialize_as_any: Whether to serialize fields with duck-typing serialization behavior.
+ |      
+ |      Returns:
+ |          A JSON string representation of the model.
+ |  
+ |  model_post_init(self, context: 'Any', /) -> 'None'
+ |      Override this method to perform additional initialization after `__init__` and `model_construct`.
+ |      This is useful if you want to do some validation that requires the entire model to be initialized.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Class methods inherited from pydantic.main.BaseModel:
+ |  
+ |  __class_getitem__(typevar_values: 'type[Any] | tuple[type[Any], ...]') -> 'type[BaseModel] | _forward_ref.PydanticRecursiveRef' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  __get_pydantic_core_schema__(source: 'type[BaseModel]', handler: 'GetCoreSchemaHandler', /) -> 'CoreSchema' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  __get_pydantic_json_schema__(core_schema: 'CoreSchema', handler: 'GetJsonSchemaHandler', /) -> 'JsonSchemaValue' from pydantic._internal._model_construction.ModelMetaclass
+ |      Hook into generating the model's JSON schema.
+ |      
+ |      Args:
+ |          core_schema: A `pydantic-core` CoreSchema.
+ |              You can ignore this argument and call the handler with a new CoreSchema,
+ |              wrap this CoreSchema (`{'type': 'nullable', 'schema': current_schema}`),
+ |              or just call the handler with the original schema.
+ |          handler: Call into Pydantic's internal JSON schema generation.
+ |              This will raise a `pydantic.errors.PydanticInvalidForJsonSchema` if JSON schema
+ |              generation fails.
+ |              Since this gets called by `BaseModel.model_json_schema` you can override the
+ |              `schema_generator` argument to that function to change JSON schema generation globally
+ |              for a type.
+ |      
+ |      Returns:
+ |          A JSON schema, as a Python object.
+ |  
+ |  __pydantic_init_subclass__(**kwargs: 'Any') -> 'None' from pydantic._internal._model_construction.ModelMetaclass
+ |      This is intended to behave just like `__init_subclass__`, but is called by `ModelMetaclass`
+ |      only after basic class initialization is complete. In particular, attributes like `model_fields` will
+ |      be present when this is called, but forward annotations are not guaranteed to be resolved yet,
+ |      meaning that creating an instance of the class may fail.
+ |      
+ |      This is necessary because `__init_subclass__` will always be called by `type.__new__`,
+ |      and it would require a prohibitively large refactor to the `ModelMetaclass` to ensure that
+ |      `type.__new__` was called in such a manner that the class would already be sufficiently initialized.
+ |      
+ |      This will receive the same `kwargs` that would be passed to the standard `__init_subclass__`, namely,
+ |      any kwargs passed to the class definition that aren't used internally by Pydantic.
+ |      
+ |      Args:
+ |          **kwargs: Any keyword arguments passed to the class definition that aren't used internally
+ |              by Pydantic.
+ |      
+ |      Note:
+ |          You may want to override [`__pydantic_on_complete__()`][pydantic.main.BaseModel.__pydantic_on_complete__]
+ |          instead, which is called once the class and its fields are fully initialized and ready for validation.
+ |  
+ |  __pydantic_on_complete__() -> 'None' from pydantic._internal._model_construction.ModelMetaclass
+ |      This is called once the class and its fields are fully initialized and ready to be used.
+ |      
+ |      This typically happens when the class is created (just before
+ |      [`__pydantic_init_subclass__()`][pydantic.main.BaseModel.__pydantic_init_subclass__] is called on the superclass),
+ |      except when forward annotations are used that could not immediately be resolved.
+ |      In that case, it will be called later, when the model is rebuilt automatically or explicitly using
+ |      [`model_rebuild()`][pydantic.main.BaseModel.model_rebuild].
+ |  
+ |  construct(_fields_set: 'set[str] | None' = None, **values: 'Any') -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  from_orm(obj: 'Any') -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  model_construct(_fields_set: 'set[str] | None' = None, **values: 'Any') -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |      Creates a new instance of the `Model` class with validated data.
+ |      
+ |      Creates a new model setting `__dict__` and `__pydantic_fields_set__` from trusted or pre-validated data.
+ |      Default values are respected, but no other validation is performed.
+ |      
+ |      !!! note
+ |          `model_construct()` generally respects the `model_config.extra` setting on the provided model.
+ |          That is, if `model_config.extra == 'allow'`, then all extra passed values are added to the model instance's `__dict__`
+ |          and `__pydantic_extra__` fields. If `model_config.extra == 'ignore'` (the default), then all extra passed values are ignored.
+ |          Because no validation is performed with a call to `model_construct()`, having `model_config.extra == 'forbid'` does not result in
+ |          an error if extra values are passed, but they will be ignored.
+ |      
+ |      Args:
+ |          _fields_set: A set of field names that were originally explicitly set during instantiation. If provided,
+ |              this is directly used for the [`model_fields_set`][pydantic.BaseModel.model_fields_set] attribute.
+ |              Otherwise, the field names from the `values` argument will be used.
+ |          values: Trusted or pre-validated data dictionary.
+ |      
+ |      Returns:
+ |          A new instance of the `Model` class with validated data.
+ |  
+ |  model_json_schema(by_alias: 'bool' = True, ref_template: 'str' = '#/$defs/{model}', schema_generator: 'type[GenerateJsonSchema]' = <class 'pydantic.json_schema.GenerateJsonSchema'>, mode: 'JsonSchemaMode' = 'validation', *, union_format: "Literal['any_of', 'primitive_type_array']" = 'any_of') -> 'dict[str, Any]' from pydantic._internal._model_construction.ModelMetaclass
+ |      Generates a JSON schema for a model class.
+ |      
+ |      Args:
+ |          by_alias: Whether to use attribute aliases or not.
+ |          ref_template: The reference template.
+ |          union_format: The format to use when combining schemas from unions together. Can be one of:
+ |      
+ |              - `'any_of'`: Use the [`anyOf`](https://json-schema.org/understanding-json-schema/reference/combining#anyOf)
+ |              keyword to combine schemas (the default).
+ |              - `'primitive_type_array'`: Use the [`type`](https://json-schema.org/understanding-json-schema/reference/type)
+ |              keyword as an array of strings, containing each type of the combination. If any of the schemas is not a primitive
+ |              type (`string`, `boolean`, `null`, `integer` or `number`) or contains constraints/metadata, falls back to
+ |              `any_of`.
+ |          schema_generator: To override the logic used to generate the JSON schema, as a subclass of
+ |              `GenerateJsonSchema` with your desired modifications
+ |          mode: The mode in which to generate the schema.
+ |      
+ |      Returns:
+ |          The JSON schema for the given model class.
+ |  
+ |  model_parametrized_name(params: 'tuple[type[Any], ...]') -> 'str' from pydantic._internal._model_construction.ModelMetaclass
+ |      Compute the class name for parametrizations of generic classes.
+ |      
+ |      This method can be overridden to achieve a custom naming scheme for generic BaseModels.
+ |      
+ |      Args:
+ |          params: Tuple of types of the class. Given a generic class
+ |              `Model` with 2 type variables and a concrete model `Model[str, int]`,
+ |              the value `(str, int)` would be passed to `params`.
+ |      
+ |      Returns:
+ |          String representing the new class where `params` are passed to `cls` as type variables.
+ |      
+ |      Raises:
+ |          TypeError: Raised when trying to generate concrete names for non-generic models.
+ |  
+ |  model_rebuild(*, force: 'bool' = False, raise_errors: 'bool' = True, _parent_namespace_depth: 'int' = 2, _types_namespace: 'MappingNamespace | None' = None) -> 'bool | None' from pydantic._internal._model_construction.ModelMetaclass
+ |      Try to rebuild the pydantic-core schema for the model.
+ |      
+ |      This may be necessary when one of the annotations is a ForwardRef which could not be resolved during
+ |      the initial attempt to build the schema, and automatic rebuilding fails.
+ |      
+ |      Args:
+ |          force: Whether to force the rebuilding of the model schema, defaults to `False`.
+ |          raise_errors: Whether to raise errors, defaults to `True`.
+ |          _parent_namespace_depth: The depth level of the parent namespace, defaults to 2.
+ |          _types_namespace: The types namespace, defaults to `None`.
+ |      
+ |      Returns:
+ |          Returns `None` if the schema is already "complete" and rebuilding was not required.
+ |          If rebuilding _was_ required, returns `True` if rebuilding was successful, otherwise `False`.
+ |  
+ |  model_validate(obj: 'Any', *, strict: 'bool | None' = None, extra: 'ExtraValues | None' = None, from_attributes: 'bool | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, by_name: 'bool | None' = None) -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |      Validate a pydantic model instance.
+ |      
+ |      Args:
+ |          obj: The object to validate.
+ |          strict: Whether to enforce types strictly.
+ |          extra: Whether to ignore, allow, or forbid extra data during model validation.
+ |              See the [`extra` configuration value][pydantic.ConfigDict.extra] for details.
+ |          from_attributes: Whether to extract data from object attributes.
+ |          context: Additional context to pass to the validator.
+ |          by_alias: Whether to use the field's alias when validating against the provided input data.
+ |          by_name: Whether to use the field's name when validating against the provided input data.
+ |      
+ |      Raises:
+ |          ValidationError: If the object could not be validated.
+ |      
+ |      Returns:
+ |          The validated model instance.
+ |  
+ |  model_validate_json(json_data: 'str | bytes | bytearray', *, strict: 'bool | None' = None, extra: 'ExtraValues | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, by_name: 'bool | None' = None) -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |      !!! abstract "Usage Documentation"
+ |          [JSON Parsing](../concepts/json.md#json-parsing)
+ |      
+ |      Validate the given JSON data against the Pydantic model.
+ |      
+ |      Args:
+ |          json_data: The JSON data to validate.
+ |          strict: Whether to enforce types strictly.
+ |          extra: Whether to ignore, allow, or forbid extra data during model validation.
+ |              See the [`extra` configuration value][pydantic.ConfigDict.extra] for details.
+ |          context: Extra variables to pass to the validator.
+ |          by_alias: Whether to use the field's alias when validating against the provided input data.
+ |          by_name: Whether to use the field's name when validating against the provided input data.
+ |      
+ |      Returns:
+ |          The validated Pydantic model.
+ |      
+ |      Raises:
+ |          ValidationError: If `json_data` is not a JSON string or the object could not be validated.
+ |  
+ |  model_validate_strings(obj: 'Any', *, strict: 'bool | None' = None, extra: 'ExtraValues | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, by_name: 'bool | None' = None) -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |      Validate the given object with string data against the Pydantic model.
+ |      
+ |      Args:
+ |          obj: The object containing string data to validate.
+ |          strict: Whether to enforce types strictly.
+ |          extra: Whether to ignore, allow, or forbid extra data during model validation.
+ |              See the [`extra` configuration value][pydantic.ConfigDict.extra] for details.
+ |          context: Extra variables to pass to the validator.
+ |          by_alias: Whether to use the field's alias when validating against the provided input data.
+ |          by_name: Whether to use the field's name when validating against the provided input data.
+ |      
+ |      Returns:
+ |          The validated Pydantic model.
+ |  
+ |  parse_file(path: 'str | Path', *, content_type: 'str | None' = None, encoding: 'str' = 'utf8', proto: 'DeprecatedParseProtocol | None' = None, allow_pickle: 'bool' = False) -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  parse_obj(obj: 'Any') -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  parse_raw(b: 'str | bytes', *, content_type: 'str | None' = None, encoding: 'str' = 'utf8', proto: 'DeprecatedParseProtocol | None' = None, allow_pickle: 'bool' = False) -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  schema(by_alias: 'bool' = True, ref_template: 'str' = '#/$defs/{model}') -> 'Dict[str, Any]' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  schema_json(*, by_alias: 'bool' = True, ref_template: 'str' = '#/$defs/{model}', **dumps_kwargs: 'Any') -> 'str' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  update_forward_refs(**localns: 'Any') -> 'None' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  validate(value: 'Any') -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  ----------------------------------------------------------------------
+ |  Readonly properties inherited from pydantic.main.BaseModel:
+ |  
+ |  __fields_set__
+ |  
+ |  model_extra
+ |      Get extra fields set during validation.
+ |      
+ |      Returns:
+ |          A dictionary of extra fields, or `None` if `config.extra` is not set to `"allow"`.
+ |  
+ |  model_fields_set
+ |      Returns the set of fields that have been explicitly set on this model instance.
+ |      
+ |      Returns:
+ |          A set of strings representing the fields that have been set,
+ |              i.e. that were not filled from defaults.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data descriptors inherited from pydantic.main.BaseModel:
+ |  
+ |  __dict__
+ |      dictionary for instance variables (if defined)
+ |  
+ |  __pydantic_extra__
+ |  
+ |  __pydantic_fields_set__
+ |  
+ |  __pydantic_private__
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data and other attributes inherited from pydantic.main.BaseModel:
+ |  
+ |  __hash__ = None
+ |  
+ |  __pydantic_root_model__ = False
+ |  
+ |  model_computed_fields = {}
+ |  
+ |  model_fields = {'container': FieldInfo(annotation=Union[_Just, _Nothin...
+ |  
+ |  ----------------------------------------------------------------------
+ |  Class methods inherited from typing.Generic:
+ |  
+ |  __init_subclass__(*args, **kwargs) from pydantic._internal._model_construction.ModelMetaclass
+ |      This method is called when a class is subclassed.
+ |      
+ |      The default implementation does nothing. It may be
+ |      overridden to extend subclasses.
+```
+
+## Just
+
+[go up](#Cheetsheet)
+
+```hy
+Name: Just
+Kind: Reimport from [fptk.monads.maybeM]
+Info: Just container of Maybe monad
+```
+
+```hy
+Help on function Just in module fptk.monads.maybeM:
+
+Just(value)
+```
+
+## Nothing
+
+[go up](#Cheetsheet)
+
+```hy
+Name: Nothing
+Kind: Reimport from [fptk.monads.maybeM]
+Info: Nothing of Maybe monad
+```
+
+```hy
+Help on Maybe in module fptk.monads.maybeM object:
+
+class Maybe(pydantic.main.BaseModel, typing.Generic)
+ |  Maybe(*, container: Union[fptk.monads.maybeM._Just, fptk.monads.maybeM._Nothing]) -> None
+ |  
+ |  Method resolution order:
+ |      Maybe
+ |      pydantic.main.BaseModel
+ |      typing.Generic
+ |      builtins.object
+ |  
+ |  Methods defined here:
+ |  
+ |  __repr__(self)
+ |      Return repr(self).
+ |  
+ |  __str__(self)
+ |      Return str(self).
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data descriptors defined here:
+ |  
+ |  __weakref__
+ |      list of weak references to the object (if defined)
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data and other attributes defined here:
+ |  
+ |  __abstractmethods__ = frozenset()
+ |  
+ |  __annotations__ = {'container': typing.Union[fptk.monads.maybeM._Just,...
+ |  
+ |  __class_vars__ = set()
+ |  
+ |  __orig_bases__ = (<class 'pydantic.main.BaseModel'>, typing.Generic[~J...
+ |  
+ |  __parameters__ = (~J,)
+ |  
+ |  __private_attributes__ = {}
+ |  
+ |  __pydantic_complete__ = True
+ |  
+ |  __pydantic_computed_fields__ = {}
+ |  
+ |  __pydantic_core_schema__ = {'cls': <class 'fptk.monads.maybeM.Maybe'>,...
+ |  
+ |  __pydantic_custom_init__ = False
+ |  
+ |  __pydantic_decorators__ = DecoratorInfos(validators={}, field_validato...
+ |  
+ |  __pydantic_fields__ = {'container': FieldInfo(annotation=Union[_Just, ...
+ |  
+ |  __pydantic_generic_metadata__ = {'args': (), 'origin': None, 'paramete...
+ |  
+ |  __pydantic_parent_namespace__ = None
+ |  
+ |  __pydantic_post_init__ = None
+ |  
+ |  __pydantic_serializer__ = SchemaSerializer(serializer=Model(
+ |      Model...
+ |  
+ |  __pydantic_setattr_handlers__ = {}
+ |  
+ |  __pydantic_validator__ = SchemaValidator(title="Maybe", validator=Mode...
+ |  
+ |  __signature__ = <Signature (*, container: Union[fptk.monads.maybeM._Ju...
+ |  
+ |  model_config = {}
+ |  
+ |  ----------------------------------------------------------------------
+ |  Methods inherited from pydantic.main.BaseModel:
+ |  
+ |  __copy__(self) -> 'Self'
+ |      Returns a shallow copy of the model.
+ |  
+ |  __deepcopy__(self, memo: 'dict[int, Any] | None' = None) -> 'Self'
+ |      Returns a deep copy of the model.
+ |  
+ |  __delattr__(self, item: 'str') -> 'Any'
+ |      Implement delattr(self, name).
+ |  
+ |  __eq__(self, other: 'Any') -> 'bool'
+ |      Return self==value.
+ |  
+ |  __getattr__(self, item: 'str') -> 'Any'
+ |  
+ |  __getstate__(self) -> 'dict[Any, Any]'
+ |  
+ |  __init__(self, /, **data: 'Any') -> 'None'
+ |      Create a new model by parsing and validating input data from keyword arguments.
+ |      
+ |      Raises [`ValidationError`][pydantic_core.ValidationError] if the input data cannot be
+ |      validated to form a valid model.
+ |      
+ |      `self` is explicitly positional-only to allow `self` as a field name.
+ |  
+ |  __iter__(self) -> 'TupleGenerator'
+ |      So `dict(model)` works.
+ |  
+ |  __pretty__(self, fmt: 'Callable[[Any], Any]', **kwargs: 'Any') -> 'Generator[Any]'
+ |      Used by devtools (https://python-devtools.helpmanual.io/) to pretty print objects.
+ |  
+ |  __replace__(self, **changes: 'Any') -> 'Self'
+ |      # Because we make use of `@dataclass_transform()`, `__replace__` is already synthesized by
+ |      # type checkers, so we define the implementation in this `if not TYPE_CHECKING:` block:
+ |  
+ |  __repr_args__(self) -> '_repr.ReprArgs'
+ |  
+ |  __repr_name__(self) -> 'str'
+ |      Name of the instance's class, used in __repr__.
+ |  
+ |  __repr_recursion__(self, object: 'Any') -> 'str'
+ |      Returns the string representation of a recursive object.
+ |  
+ |  __repr_str__(self, join_str: 'str') -> 'str'
+ |  
+ |  __rich_repr__(self) -> 'RichReprResult'
+ |      Used by Rich (https://rich.readthedocs.io/en/stable/pretty.html) to pretty print objects.
+ |  
+ |  __setattr__(self, name: 'str', value: 'Any') -> 'None'
+ |      Implement setattr(self, name, value).
+ |  
+ |  __setstate__(self, state: 'dict[Any, Any]') -> 'None'
+ |  
+ |  copy(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'
+ |      Returns a copy of the model.
+ |      
+ |      !!! warning "Deprecated"
+ |          This method is now deprecated; use `model_copy` instead.
+ |      
+ |      If you need `include` or `exclude`, use:
+ |      
+ |      ```python {test="skip" lint="skip"}
+ |      data = self.model_dump(include=include, exclude=exclude, round_trip=True)
+ |      data = {**data, **(update or {})}
+ |      copied = self.model_validate(data)
+ |      ```
+ |      
+ |      Args:
+ |          include: Optional set or mapping specifying which fields to include in the copied model.
+ |          exclude: Optional set or mapping specifying which fields to exclude in the copied model.
+ |          update: Optional dictionary of field-value pairs to override field values in the copied model.
+ |          deep: If True, the values of fields that are Pydantic models will be deep-copied.
+ |      
+ |      Returns:
+ |          A copy of the model with included, excluded and updated fields as specified.
+ |  
+ |  dict(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'
+ |  
+ |  json(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'
+ |  
+ |  model_copy(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'
+ |      !!! abstract "Usage Documentation"
+ |          [`model_copy`](../concepts/models.md#model-copy)
+ |      
+ |      Returns a copy of the model.
+ |      
+ |      !!! note
+ |          The underlying instance's [`__dict__`][object.__dict__] attribute is copied. This
+ |          might have unexpected side effects if you store anything in it, on top of the model
+ |          fields (e.g. the value of [cached properties][functools.cached_property]).
+ |      
+ |      Args:
+ |          update: Values to change/add in the new model. Note: the data is not validated
+ |              before creating the new model. You should trust this data.
+ |          deep: Set to `True` to make a deep copy of the model.
+ |      
+ |      Returns:
+ |          New model instance.
+ |  
+ |  model_dump(self, *, mode: "Literal['json', 'python'] | str" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: "bool | Literal['none', 'warn', 'error']" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False) -> 'dict[str, Any]'
+ |      !!! abstract "Usage Documentation"
+ |          [`model_dump`](../concepts/serialization.md#python-mode)
+ |      
+ |      Generate a dictionary representation of the model, optionally specifying which fields to include or exclude.
+ |      
+ |      Args:
+ |          mode: The mode in which `to_python` should run.
+ |              If mode is 'json', the output will only contain JSON serializable types.
+ |              If mode is 'python', the output may contain non-JSON-serializable Python objects.
+ |          include: A set of fields to include in the output.
+ |          exclude: A set of fields to exclude from the output.
+ |          context: Additional context to pass to the serializer.
+ |          by_alias: Whether to use the field's alias in the dictionary key if defined.
+ |          exclude_unset: Whether to exclude fields that have not been explicitly set.
+ |          exclude_defaults: Whether to exclude fields that are set to their default value.
+ |          exclude_none: Whether to exclude fields that have a value of `None`.
+ |          exclude_computed_fields: Whether to exclude computed fields.
+ |              While this can be useful for round-tripping, it is usually recommended to use the dedicated
+ |              `round_trip` parameter instead.
+ |          round_trip: If True, dumped values should be valid as input for non-idempotent types such as Json[T].
+ |          warnings: How to handle serialization errors. False/"none" ignores them, True/"warn" logs errors,
+ |              "error" raises a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError].
+ |          fallback: A function to call when an unknown value is encountered. If not provided,
+ |              a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError] error is raised.
+ |          serialize_as_any: Whether to serialize fields with duck-typing serialization behavior.
+ |      
+ |      Returns:
+ |          A dictionary representation of the model.
+ |  
+ |  model_dump_json(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: "bool | Literal['none', 'warn', 'error']" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False) -> 'str'
+ |      !!! abstract "Usage Documentation"
+ |          [`model_dump_json`](../concepts/serialization.md#json-mode)
+ |      
+ |      Generates a JSON representation of the model using Pydantic's `to_json` method.
+ |      
+ |      Args:
+ |          indent: Indentation to use in the JSON output. If None is passed, the output will be compact.
+ |          ensure_ascii: If `True`, the output is guaranteed to have all incoming non-ASCII characters escaped.
+ |              If `False` (the default), these characters will be output as-is.
+ |          include: Field(s) to include in the JSON output.
+ |          exclude: Field(s) to exclude from the JSON output.
+ |          context: Additional context to pass to the serializer.
+ |          by_alias: Whether to serialize using field aliases.
+ |          exclude_unset: Whether to exclude fields that have not been explicitly set.
+ |          exclude_defaults: Whether to exclude fields that are set to their default value.
+ |          exclude_none: Whether to exclude fields that have a value of `None`.
+ |          exclude_computed_fields: Whether to exclude computed fields.
+ |              While this can be useful for round-tripping, it is usually recommended to use the dedicated
+ |              `round_trip` parameter instead.
+ |          round_trip: If True, dumped values should be valid as input for non-idempotent types such as Json[T].
+ |          warnings: How to handle serialization errors. False/"none" ignores them, True/"warn" logs errors,
+ |              "error" raises a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError].
+ |          fallback: A function to call when an unknown value is encountered. If not provided,
+ |              a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError] error is raised.
+ |          serialize_as_any: Whether to serialize fields with duck-typing serialization behavior.
+ |      
+ |      Returns:
+ |          A JSON string representation of the model.
+ |  
+ |  model_post_init(self, context: 'Any', /) -> 'None'
+ |      Override this method to perform additional initialization after `__init__` and `model_construct`.
+ |      This is useful if you want to do some validation that requires the entire model to be initialized.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Class methods inherited from pydantic.main.BaseModel:
+ |  
+ |  __class_getitem__(typevar_values: 'type[Any] | tuple[type[Any], ...]') -> 'type[BaseModel] | _forward_ref.PydanticRecursiveRef' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  __get_pydantic_core_schema__(source: 'type[BaseModel]', handler: 'GetCoreSchemaHandler', /) -> 'CoreSchema' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  __get_pydantic_json_schema__(core_schema: 'CoreSchema', handler: 'GetJsonSchemaHandler', /) -> 'JsonSchemaValue' from pydantic._internal._model_construction.ModelMetaclass
+ |      Hook into generating the model's JSON schema.
+ |      
+ |      Args:
+ |          core_schema: A `pydantic-core` CoreSchema.
+ |              You can ignore this argument and call the handler with a new CoreSchema,
+ |              wrap this CoreSchema (`{'type': 'nullable', 'schema': current_schema}`),
+ |              or just call the handler with the original schema.
+ |          handler: Call into Pydantic's internal JSON schema generation.
+ |              This will raise a `pydantic.errors.PydanticInvalidForJsonSchema` if JSON schema
+ |              generation fails.
+ |              Since this gets called by `BaseModel.model_json_schema` you can override the
+ |              `schema_generator` argument to that function to change JSON schema generation globally
+ |              for a type.
+ |      
+ |      Returns:
+ |          A JSON schema, as a Python object.
+ |  
+ |  __pydantic_init_subclass__(**kwargs: 'Any') -> 'None' from pydantic._internal._model_construction.ModelMetaclass
+ |      This is intended to behave just like `__init_subclass__`, but is called by `ModelMetaclass`
+ |      only after basic class initialization is complete. In particular, attributes like `model_fields` will
+ |      be present when this is called, but forward annotations are not guaranteed to be resolved yet,
+ |      meaning that creating an instance of the class may fail.
+ |      
+ |      This is necessary because `__init_subclass__` will always be called by `type.__new__`,
+ |      and it would require a prohibitively large refactor to the `ModelMetaclass` to ensure that
+ |      `type.__new__` was called in such a manner that the class would already be sufficiently initialized.
+ |      
+ |      This will receive the same `kwargs` that would be passed to the standard `__init_subclass__`, namely,
+ |      any kwargs passed to the class definition that aren't used internally by Pydantic.
+ |      
+ |      Args:
+ |          **kwargs: Any keyword arguments passed to the class definition that aren't used internally
+ |              by Pydantic.
+ |      
+ |      Note:
+ |          You may want to override [`__pydantic_on_complete__()`][pydantic.main.BaseModel.__pydantic_on_complete__]
+ |          instead, which is called once the class and its fields are fully initialized and ready for validation.
+ |  
+ |  __pydantic_on_complete__() -> 'None' from pydantic._internal._model_construction.ModelMetaclass
+ |      This is called once the class and its fields are fully initialized and ready to be used.
+ |      
+ |      This typically happens when the class is created (just before
+ |      [`__pydantic_init_subclass__()`][pydantic.main.BaseModel.__pydantic_init_subclass__] is called on the superclass),
+ |      except when forward annotations are used that could not immediately be resolved.
+ |      In that case, it will be called later, when the model is rebuilt automatically or explicitly using
+ |      [`model_rebuild()`][pydantic.main.BaseModel.model_rebuild].
+ |  
+ |  construct(_fields_set: 'set[str] | None' = None, **values: 'Any') -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  from_orm(obj: 'Any') -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  model_construct(_fields_set: 'set[str] | None' = None, **values: 'Any') -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |      Creates a new instance of the `Model` class with validated data.
+ |      
+ |      Creates a new model setting `__dict__` and `__pydantic_fields_set__` from trusted or pre-validated data.
+ |      Default values are respected, but no other validation is performed.
+ |      
+ |      !!! note
+ |          `model_construct()` generally respects the `model_config.extra` setting on the provided model.
+ |          That is, if `model_config.extra == 'allow'`, then all extra passed values are added to the model instance's `__dict__`
+ |          and `__pydantic_extra__` fields. If `model_config.extra == 'ignore'` (the default), then all extra passed values are ignored.
+ |          Because no validation is performed with a call to `model_construct()`, having `model_config.extra == 'forbid'` does not result in
+ |          an error if extra values are passed, but they will be ignored.
+ |      
+ |      Args:
+ |          _fields_set: A set of field names that were originally explicitly set during instantiation. If provided,
+ |              this is directly used for the [`model_fields_set`][pydantic.BaseModel.model_fields_set] attribute.
+ |              Otherwise, the field names from the `values` argument will be used.
+ |          values: Trusted or pre-validated data dictionary.
+ |      
+ |      Returns:
+ |          A new instance of the `Model` class with validated data.
+ |  
+ |  model_json_schema(by_alias: 'bool' = True, ref_template: 'str' = '#/$defs/{model}', schema_generator: 'type[GenerateJsonSchema]' = <class 'pydantic.json_schema.GenerateJsonSchema'>, mode: 'JsonSchemaMode' = 'validation', *, union_format: "Literal['any_of', 'primitive_type_array']" = 'any_of') -> 'dict[str, Any]' from pydantic._internal._model_construction.ModelMetaclass
+ |      Generates a JSON schema for a model class.
+ |      
+ |      Args:
+ |          by_alias: Whether to use attribute aliases or not.
+ |          ref_template: The reference template.
+ |          union_format: The format to use when combining schemas from unions together. Can be one of:
+ |      
+ |              - `'any_of'`: Use the [`anyOf`](https://json-schema.org/understanding-json-schema/reference/combining#anyOf)
+ |              keyword to combine schemas (the default).
+ |              - `'primitive_type_array'`: Use the [`type`](https://json-schema.org/understanding-json-schema/reference/type)
+ |              keyword as an array of strings, containing each type of the combination. If any of the schemas is not a primitive
+ |              type (`string`, `boolean`, `null`, `integer` or `number`) or contains constraints/metadata, falls back to
+ |              `any_of`.
+ |          schema_generator: To override the logic used to generate the JSON schema, as a subclass of
+ |              `GenerateJsonSchema` with your desired modifications
+ |          mode: The mode in which to generate the schema.
+ |      
+ |      Returns:
+ |          The JSON schema for the given model class.
+ |  
+ |  model_parametrized_name(params: 'tuple[type[Any], ...]') -> 'str' from pydantic._internal._model_construction.ModelMetaclass
+ |      Compute the class name for parametrizations of generic classes.
+ |      
+ |      This method can be overridden to achieve a custom naming scheme for generic BaseModels.
+ |      
+ |      Args:
+ |          params: Tuple of types of the class. Given a generic class
+ |              `Model` with 2 type variables and a concrete model `Model[str, int]`,
+ |              the value `(str, int)` would be passed to `params`.
+ |      
+ |      Returns:
+ |          String representing the new class where `params` are passed to `cls` as type variables.
+ |      
+ |      Raises:
+ |          TypeError: Raised when trying to generate concrete names for non-generic models.
+ |  
+ |  model_rebuild(*, force: 'bool' = False, raise_errors: 'bool' = True, _parent_namespace_depth: 'int' = 2, _types_namespace: 'MappingNamespace | None' = None) -> 'bool | None' from pydantic._internal._model_construction.ModelMetaclass
+ |      Try to rebuild the pydantic-core schema for the model.
+ |      
+ |      This may be necessary when one of the annotations is a ForwardRef which could not be resolved during
+ |      the initial attempt to build the schema, and automatic rebuilding fails.
+ |      
+ |      Args:
+ |          force: Whether to force the rebuilding of the model schema, defaults to `False`.
+ |          raise_errors: Whether to raise errors, defaults to `True`.
+ |          _parent_namespace_depth: The depth level of the parent namespace, defaults to 2.
+ |          _types_namespace: The types namespace, defaults to `None`.
+ |      
+ |      Returns:
+ |          Returns `None` if the schema is already "complete" and rebuilding was not required.
+ |          If rebuilding _was_ required, returns `True` if rebuilding was successful, otherwise `False`.
+ |  
+ |  model_validate(obj: 'Any', *, strict: 'bool | None' = None, extra: 'ExtraValues | None' = None, from_attributes: 'bool | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, by_name: 'bool | None' = None) -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |      Validate a pydantic model instance.
+ |      
+ |      Args:
+ |          obj: The object to validate.
+ |          strict: Whether to enforce types strictly.
+ |          extra: Whether to ignore, allow, or forbid extra data during model validation.
+ |              See the [`extra` configuration value][pydantic.ConfigDict.extra] for details.
+ |          from_attributes: Whether to extract data from object attributes.
+ |          context: Additional context to pass to the validator.
+ |          by_alias: Whether to use the field's alias when validating against the provided input data.
+ |          by_name: Whether to use the field's name when validating against the provided input data.
+ |      
+ |      Raises:
+ |          ValidationError: If the object could not be validated.
+ |      
+ |      Returns:
+ |          The validated model instance.
+ |  
+ |  model_validate_json(json_data: 'str | bytes | bytearray', *, strict: 'bool | None' = None, extra: 'ExtraValues | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, by_name: 'bool | None' = None) -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |      !!! abstract "Usage Documentation"
+ |          [JSON Parsing](../concepts/json.md#json-parsing)
+ |      
+ |      Validate the given JSON data against the Pydantic model.
+ |      
+ |      Args:
+ |          json_data: The JSON data to validate.
+ |          strict: Whether to enforce types strictly.
+ |          extra: Whether to ignore, allow, or forbid extra data during model validation.
+ |              See the [`extra` configuration value][pydantic.ConfigDict.extra] for details.
+ |          context: Extra variables to pass to the validator.
+ |          by_alias: Whether to use the field's alias when validating against the provided input data.
+ |          by_name: Whether to use the field's name when validating against the provided input data.
+ |      
+ |      Returns:
+ |          The validated Pydantic model.
+ |      
+ |      Raises:
+ |          ValidationError: If `json_data` is not a JSON string or the object could not be validated.
+ |  
+ |  model_validate_strings(obj: 'Any', *, strict: 'bool | None' = None, extra: 'ExtraValues | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, by_name: 'bool | None' = None) -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |      Validate the given object with string data against the Pydantic model.
+ |      
+ |      Args:
+ |          obj: The object containing string data to validate.
+ |          strict: Whether to enforce types strictly.
+ |          extra: Whether to ignore, allow, or forbid extra data during model validation.
+ |              See the [`extra` configuration value][pydantic.ConfigDict.extra] for details.
+ |          context: Extra variables to pass to the validator.
+ |          by_alias: Whether to use the field's alias when validating against the provided input data.
+ |          by_name: Whether to use the field's name when validating against the provided input data.
+ |      
+ |      Returns:
+ |          The validated Pydantic model.
+ |  
+ |  parse_file(path: 'str | Path', *, content_type: 'str | None' = None, encoding: 'str' = 'utf8', proto: 'DeprecatedParseProtocol | None' = None, allow_pickle: 'bool' = False) -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  parse_obj(obj: 'Any') -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  parse_raw(b: 'str | bytes', *, content_type: 'str | None' = None, encoding: 'str' = 'utf8', proto: 'DeprecatedParseProtocol | None' = None, allow_pickle: 'bool' = False) -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  schema(by_alias: 'bool' = True, ref_template: 'str' = '#/$defs/{model}') -> 'Dict[str, Any]' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  schema_json(*, by_alias: 'bool' = True, ref_template: 'str' = '#/$defs/{model}', **dumps_kwargs: 'Any') -> 'str' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  update_forward_refs(**localns: 'Any') -> 'None' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  validate(value: 'Any') -> 'Self' from pydantic._internal._model_construction.ModelMetaclass
+ |  
+ |  ----------------------------------------------------------------------
+ |  Readonly properties inherited from pydantic.main.BaseModel:
+ |  
+ |  __fields_set__
+ |  
+ |  model_extra
+ |      Get extra fields set during validation.
+ |      
+ |      Returns:
+ |          A dictionary of extra fields, or `None` if `config.extra` is not set to `"allow"`.
+ |  
+ |  model_fields_set
+ |      Returns the set of fields that have been explicitly set on this model instance.
+ |      
+ |      Returns:
+ |          A set of strings representing the fields that have been set,
+ |              i.e. that were not filled from defaults.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data descriptors inherited from pydantic.main.BaseModel:
+ |  
+ |  __dict__
+ |      dictionary for instance variables (if defined)
+ |  
+ |  __pydantic_extra__
+ |  
+ |  __pydantic_fields_set__
+ |  
+ |  __pydantic_private__
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data and other attributes inherited from pydantic.main.BaseModel:
+ |  
+ |  __hash__ = None
+ |  
+ |  __pydantic_root_model__ = False
+ |  
+ |  model_computed_fields = {}
+ |  
+ |  model_fields = {'container': FieldInfo(annotation=Union[_Just, _Nothin...
+ |  
+ |  ----------------------------------------------------------------------
+ |  Class methods inherited from typing.Generic:
+ |  
+ |  __init_subclass__(*args, **kwargs) from pydantic._internal._model_construction.ModelMetaclass
+ |      This method is called when a class is subclassed.
+ |      
+ |      The default implementation does nothing. It may be
+ |      overridden to extend subclasses.
+```
+
+## justQ
+
+[go up](#Cheetsheet)
+
+```hy
+Name: justQ
+Kind: Reimport from [fptk.monads.maybeM]
+Sgnt: justQ(maybeValue) -> bool
+Info: throws error when used not on Maybe type
+```
+
+```hy
+Help on function justQ in module fptk.monads.maybeM:
+
+justQ(maybeM: fptk.monads.maybeM.Maybe) -> bool
+```
+
+## nothingQ
+
+[go up](#Cheetsheet)
+
+```hy
+Name: nothingQ
+Kind: Reimport from [fptk.monads.maybeM]
+Sgnt: justQ(maybeValue) -> bool
+Info: throws error when used not on Maybe type
+```
+
+```hy
+Help on function nothingQ in module fptk.monads.maybeM:
+
+nothingQ(maybeM: fptk.monads.maybeM.Maybe) -> bool
+```
+
+## mapM
+
+[go up](#Cheetsheet)
+
+```hy
+Name: mapM
+Kind: Reimport from [fptk.monads.maybeM]
+Sgnt: mapM(maybeVal, pureF1, pureF2, ...) -> Maybe
+Info: apply pure function to value stored in Maybe, do nothing for Nothing
+```
+
+```hy
+Help on function mapM in module fptk.monads.maybeM:
+
+mapM(maybeM: fptk.monads.maybeM.Maybe, *fs) -> fptk.monads.maybeM.Maybe
+```
+
+## bindM
+
+[go up](#Cheetsheet)
+
+```hy
+Name: bindM
+Kind: Reimport from [fptk.monads.maybeM]
+Sgnt: bindM(maybeVal, mF1, mF2, ...) -> Maybe
+Info: apply monadic (f :: val -> maybe) to Just, do nothing for Nothing
+```
+
+```hy
+Help on function bindM in module fptk.monads.maybeM:
+
+bindM(maybeM: fptk.monads.maybeM.Maybe, *fs) -> fptk.monads.maybeM.Maybe
+```
+
+## unwrapM
+
+[go up](#Cheetsheet)
+
+```hy
+Name: unwrapM
+Kind: Reimport from [fptk.monads.maybeM]
+Info: returns contained Just value or throws error when not Just
+```
+
+```hy
+Help on function unwrapM in module fptk.monads.maybeM:
+
+unwrapM(maybeM: fptk.monads.maybeM.Maybe) -> ~J
+    throws error on Nothing
+```
+
+## unwrapM_or
+
+[go up](#Cheetsheet)
+
+```hy
+Name: unwrapM_or
+Kind: Reimport from [fptk.monads.maybeM]
+Info: returns contained Just value or falls back to default
+```
+
+```hy
+Help on function unwrapM_or in module fptk.monads.maybeM:
+
+unwrapM_or(maybeM: fptk.monads.maybeM.Maybe, default: ~J) -> ~J
 ```
 
 ## Result

@@ -7,10 +7,10 @@
     (require hyrule [of unless])
 
     (export :objects [ Success Failure Result
-                      successQ failureQ
-                      mapR bindR
-                      unwrapR unwrapR_or unwrapE unwrapE_or
-                    ])
+                       successQ failureQ
+                       mapR bindR
+                       unwrapR unwrapR_or unwrapE unwrapE_or
+                     ])
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -36,14 +36,14 @@
         (defn __str__ [self] (+ "<R." (str self.result) ">"))
         (defn __repr__ [self] (self.__str__)))
 
-    (defn Failure [value] (Result :result (_Failure :value value )))
-    (defn Success [value] (Result :result (_Success :value value )))
+    (defn Failure [value] (Result :result (_Failure :value value)))
+    (defn Success [value] (Result :result (_Success :value value)))
 
 ; _____________________________________________________________________________/ }}}1
-; utils: Basic ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    ; - functions below also work correctly with [validateF]
-    ; - (of Result S F) — this too works with [validateF]
+; - functions below also work correctly with [validateF]
+; - (of Result S F) — this too works with [validateF]
+; utils: Typechecks ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ; dev note: rely on failureQ/successQ to check if resultM is of Result type
 
@@ -63,7 +63,7 @@
     (defn #^ Result mapR [#^ Result resultM #* fs]
         (if (failureQ resultM)
              (return resultM)
-             (return (Success ((compose #* fs) resultM.result.value )))))
+             (return (Success ((rcompose #* fs) resultM.result.value )))))
 
     (defn #^ Result bindR [#^ Result resultM #* fs]
         (setv _fs (lmap (fn [it] (partial _bindR1 it)) fs))
@@ -107,4 +107,3 @@
              (return default)))
 
 ; _____________________________________________________________________________/ }}}1
-

@@ -44,9 +44,9 @@ Typing:
 
 Other quirky things:
 - 1-based index variants of basic getters (don't worry, fptk does not force using them in any way)
-- Inspired by Haskell:
+- Haskell-inspired:
   - macros for [lenses](https://github.com/ingolemo/python-lenses) library
-  - Result type (AKA Either monad) that can be type-checked by pydantic
+  - Result and Maybe monads that can be type-checked by pydantic
   - macros for annotating functions via signatures like `int -> int => float`
 
 <!-- __________________________________________________________________________/ }}}1 -->
@@ -69,7 +69,7 @@ Tested with:
 1. [Cheetsheet](https://github.com/rmnavr/fptk/blob/main/docs/cheetsheet.md) — list of all fptk entities with descriptions 
 2. [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md) — description of every fptk macro (except lens-related macros)
 3. [Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md) — macros that simplify lens definition/application/composition
-4. [Result type](https://github.com/rmnavr/fptk/blob/main/docs/resultM.md) — API of fptk implementation of Result type
+4. [Monads](https://github.com/rmnavr/fptk/blob/main/docs/monads.md) — API of fptk implementation of several monad types
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Project status ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->

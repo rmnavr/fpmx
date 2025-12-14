@@ -4,7 +4,7 @@ fptk docs:
 1. [Cheetsheet](https://github.com/rmnavr/fptk/blob/main/docs/cheetsheet.md)
 2. You are here -> [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md)
 3. [Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)
-4. [Result type](https://github.com/rmnavr/fptk/blob/main/docs/resultM.md)
+4. [Monads](https://github.com/rmnavr/fptk/blob/main/docs/monads.md)
 ---
 
 <!-- Overview ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->

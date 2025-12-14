@@ -8,23 +8,16 @@
 // ____________________________________________________________________________/ }}}1
 // fptk ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	=>/=>> macro:
-		- (=> Point .x.val (.x.val)) test/implement
-
-	resultM:
-		+ resultM is with __future__ currently?
-		+ resultM — to dot-API?
-		+ resultM non-working with Polars and such -> turn off annotations?
-
-	other:
-		+ include clrz (also works with non-lists)
-		+ upd lns macros/docs (recognize 1 "key" or not?)
-
-	big upds:
-		- split to: core, pydantic/termcolor/etc.
-		? remove funcy dependency
+	Lower priority:
+	- (=> Point .x.val (.x.val)) test/implement
+	- resultM — to dot-API?
+	- resultM non-working with Polars and such -> turn off annotations?
+	- split: Core, Pydantic/Termcolor/Lens
+	- include clrz
+	- remove funcy dependency
 
 	docs:
+		+ upd lns macros/docs (recognize 1 "key" or not?)
 		- actually usable examples in docs for =>/p:
 
 	lists:
@@ -70,8 +63,5 @@
 
 // ____________________________________________________________________________/ }}}1
 
-	······························
-
-	- range_/lrange_ -> upd placement and description
 
 

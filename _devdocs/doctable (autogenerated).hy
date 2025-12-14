@@ -289,6 +289,17 @@ DEFN: fptk            | dt_print                 :: dt_printer(* args, fresh_run
 MACR: fptk._macros    | assertm                  :: (assertm op arg1 arg2)  ; tests if (op arg1 arg2), for example (= 1 1)
 MACR: fptk._macros    | gives_error_typeQ        ; example: (assertm gives_error_typeQ (get [1] 2) IndexError)
 
+=== Monad: Maybe ===
+FROM: fptk.monads.maybeM | Maybe                    ; Maybe monad. Should be used in annotations only
+FROM: fptk.monads.maybeM | Just                     ; Just container of Maybe monad
+FROM: fptk.monads.maybeM | Nothing                  ; Nothing of Maybe monad
+FROM: fptk.monads.maybeM | justQ                    :: justQ(maybeValue) -> bool  ; throws error when used not on Maybe type
+FROM: fptk.monads.maybeM | nothingQ                 :: justQ(maybeValue) -> bool  ; throws error when used not on Maybe type
+FROM: fptk.monads.maybeM | mapM                     :: mapM(maybeVal, pureF1, pureF2, ...) -> Maybe  ; apply pure function to value stored in Maybe, do nothing for Nothing
+FROM: fptk.monads.maybeM | bindM                    :: bindM(maybeVal, mF1, mF2, ...) -> Maybe  ; apply monadic (f :: val -> maybe) to Just, do nothing for Nothing
+FROM: fptk.monads.maybeM | unwrapM                  ; returns contained Just value or throws error when not Just
+FROM: fptk.monads.maybeM | unwrapM_or               ; returns contained Just value or falls back to default
+
 === Monad: Result ===
 FROM: fptk.monads.resultM | Result                   ; Result monad. Should be used in annotations only
 FROM: fptk.monads.resultM | Success                  ; Success container of Result monad

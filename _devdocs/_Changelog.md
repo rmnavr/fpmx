@@ -1,5 +1,7 @@
 
 # cur dev version
+- added Maybe monad (works similar to Result monad)
+- fixed incorrectly reversed application order of funcs in resultM
 - `f>` is back lol and `=>`/`p:` has special recognition for it (while `=>>` basic recognition works ok)
 
 # Version 0.4.4 (14 Nov 2025)

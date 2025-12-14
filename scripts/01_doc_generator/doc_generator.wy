@@ -1,5 +1,7 @@
 
-; uses ACTUAL fptk, because needs to extract help strings
+; code mixes wy and hy styles
+
+; uses ACTUAL fptk version, because needs to extract help strings
 ; Imports ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	(import  pyparsing :as pp)
@@ -674,7 +676,7 @@ fptk docs:
 1. You are here -> [Cheetsheet](https://github.com/rmnavr/fptk/blob/main/docs/cheetsheet.md)
 2. [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md)
 3. [Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)
-4. [Result type](https://github.com/rmnavr/fptk/blob/main/docs/resultM.md)
+4. [Monads](https://github.com/rmnavr/fptk/blob/main/docs/monads.md)
 ---
 "
 
