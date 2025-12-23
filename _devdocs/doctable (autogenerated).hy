@@ -72,6 +72,24 @@ DEFN: fptk            | lmask_sel                :: lmask_sel(data, selectors) -
 DEFN: fptk            | mask2idxs                :: mask2idxs(mask) -> list  ; mask is list like [1 0 1 0] or [True False True False], which will be converted to [0 2]
 DEFN: fptk            | idxs2mask                :: idxs2mask(idxs) -> list  ; idxs is non-sorted list of integers like [0 3 2], which will be converted to [1 0 1 1]
 
+=== APL: ranges-iterators-looping ===
+FROM: itertools       | inf_range (<-count)      :: inf_range(start [, step])  ; inf_range(10) -> generator: 10, 11, 12, ...
+FROM: itertools       | islice                   :: islice(iterable, start, stop[, step])  ; list(islice(inf_range(10), 2)) == [10, 11]
+DEFN: fptk            | lislice                  ; list version of islice: lislice
+FROM: itertools       | cycle                    :: cycle(p)  ; cycle('AB') -> A B A B ...
+DEFN: fptk            | lcycle                   :: lcycle(p, n) -> list  ; takes first n elems from cycle(p)
+FROM: itertools       | repeat                   :: repeat(elem [, n])  ; repeat(10,3) -> 10 10 10
+DEFN: fptk            | lrepeat                  :: lrepeat(elem, n) -> list  ; unlike in repeat, n has to be provided
+FROM: itertools       | concat (<-chain)         :: concat(*seqs) -> iterator
+DEFN: fptk            | lconcat                  :: lconcat(*seqs) -> list  ; list(concat(*seqs))
+FROM: funcy           | cat                      :: cat(seqs)  ; non-variadic version of concat
+FROM: funcy           | lcat                     :: lcat(seqs)  ; non-variadic version of concat
+FROM: funcy           | mapcat                   :: mapcat(f, *seqs)  ; maps, then concatenates
+FROM: funcy           | lmapcat                  :: lmapcat(f, *seqs)  ; maps, then concatenates
+FROM: funcy           | pairwise                 :: pairwise(seq) -> iterator  ; supposed to be used in loops, will produce no elems for seq with len <= 1
+FROM: funcy           | with_prev                :: with_prev(seq, fill=None) -> iterator  ; supposed to be used in loops
+FROM: funcy           | with_next                :: with_next(seq, fill=None) -> iterator  ; supposed to be used in loops
+
 === APL: working with lists ===
 FROM: hyrule          | flatten                  :: flatten(coll)  ; flattens to the bottom, non-mutating
 DEFN: fptk            | lprint                   :: lprint(seq, sep=None)  ; prints every elem of seq on new line
@@ -128,7 +146,6 @@ MACR: fptk._macros    | lpluckm                  ; list version of pluckm
 MACR: hyrule          | of                       ; example: (of List int) which is equiv to py-code: List[int]
 MACR: fptk._macros    | f::                      ; example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]
 MACR: fptk._macros    | def::                    ; define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))
-FROM: dataclasses     | dataclass
 FROM: enum            | Enum
 FROM: typing          | List
 FROM: typing          | Tuple
@@ -157,6 +174,10 @@ FROM: funcy           | setQ (<-is_set)          :: setQ(value)  ; checks if val
 FROM: funcy           | iteratorQ (<-is_iter)    :: iteratorQ(value)  ; checks if value is iterator
 FROM: funcy           | iterableQ (<-iterable)   :: iterableQ(value)  ; checks if value is iterable
 
+=== Typing: Dataclasses ===
+FROM: dataclasses     | dataclass
+FROM: dataclasses     | upd_field (<-replace)    ; non-mutating
+
 === Typing: Strict ===
 FROM: pydantic        | BaseModel
 FROM: pydantic        | StrictInt                ; will be still of int type, but will perform strict typecheck when variable is created
@@ -171,6 +192,7 @@ FROM: hyrule          | inc                      :: inc(n)  ; = n + 1
 FROM: hyrule          | dec                      :: dec(n)  ; = n - 1
 FROM: hyrule          | sign                     :: sign(n)  ; will give 0 for n=0
 FROM: operator        | neg                      :: neg(n)  ; = -1 * n
+FROM: operator        | mod                      :: mod(5, 2)  ; = 1
 FROM: math            | floor                    ; floor(1.9) = 1
 FROM: math            | ceil                     ; ceil(1.1) = 2
 DEFN: fptk            | clip                     :: clip(x, lower, upper)  ; clips x to fit in lower <= x <= upper limit

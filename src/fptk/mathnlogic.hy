@@ -1,7 +1,7 @@
 
 ; Import and Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (export :objects [ inc dec sign neg
+    (export :objects [ inc dec sign neg mod
                        floor ceil clip
                        half double squared reciprocal
                        sqrt dist hypot normalize
@@ -35,6 +35,7 @@
     (import hyrule    [dec])        #_ "dec(n) | = n - 1"
     (import hyrule    [sign])       #_ "sign(n) | will give 0 for n=0"
     (import operator  [neg])        #_ "neg(n) | = -1 * n"
+    (import operator  [mod])        #_ "mod(5, 2) | = 1"
 
     ;;
 

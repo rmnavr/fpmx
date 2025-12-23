@@ -697,7 +697,7 @@ fptk docs:
 	; (like because for StrictNumber it will give help on Union, which is useless)
 	setv $SUPPRESS_HELP
 		L	"listQ" "tupleQ" "setQ" "iteratorQ" "iterableQ"
-			"StrictNumber" "validateF" "Result"
+			"StrictNumber" "validateF" "Result" "Maybe" "Nothing"
 
 	setv $ASCII_NAMES_TABLE
 		C				; md header			; link

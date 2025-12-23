@@ -4,7 +4,7 @@ fptk docs:
 1. You are here -> [Cheetsheet](https://github.com/rmnavr/fptk/blob/main/docs/cheetsheet.md)
 2. [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md)
 3. [Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)
-4. [Result type](https://github.com/rmnavr/fptk/blob/main/docs/resultM.md)
+4. [Monads](https://github.com/rmnavr/fptk/blob/main/docs/monads.md)
 ---
 
 # Cheetsheet
@@ -17,14 +17,16 @@ fptk docs:
 | FP: threading | <span title=":: lzip(*iterables) -> List :: literally just list(zip(*iterables))">[`lzip`](#lzip)</span> <span title=":: lmap(f, *seqs) -> List :: list version of map">[`lmap`](#lmap)</span> <span title=":: starmap(function, iterable) ::">[`starmap`](#starmap)</span> <span title=":: lstarmap(function, iterable) -> list :: list version of starmap">[`lstarmap`](#lstarmap)</span> <span title=":: reduce(function, sequence[, initial]) -> value :: theory: reduce + monoid = binary-function for free becomes n-arg-function">[`reduce`](#reduce)</span> <span title=":: reductions(f, seq [, acc]) -> generator :: returns sequence of intermetidate values of reduce(f, seq, acc)">[`reductions`](#reductions)</span> <span title=":: lreductions(f, seq [, acc]) -> list :: list version of reductions">[`lreductions`](#lreductions)</span> <span title=":: sums(seq [, acc]) -> generator :: reductions with addition function">[`sums`](#sums)</span> <span title=":: lsums(seq [, acc]) -> list :: list version of sums">[`lsums`](#lsums)</span> <span title=":: product(iterable, /, *, start=1) :: product([2, 3, 5]) = 30">[`product`](#product)</span> | <span title=":: (fm (* it 3)) :: anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'">[`fm`](#fm)</span> <span title=":: (f> (* it 3) 4) :: anonymous function with fm syntax, immediately applicates args">[`f>`](#LambdaWithAppl)</span> <span title="same as map, but expects fm-syntax for func">[`mapm`](#mapm)</span> <span title="same as lmap, but expects fm-syntax for func">[`lmapm`](#lmapm)</span> |
 | FP: n-applicators | <span title=":: nested(n, f) :: applicator f(...(f(***)))">[`nested`](#nested)</span> <span title=":: apply_n(n, f, *args, **kwargs) :: f(f(f(...f(*args, **kwargs))">[`apply_n`](#apply_n)</span> | <span title=":: (do_n   n #* body) -> None :: expands to ~ (do body body body ...)">[`do_n`](#do_n)</span> <span title=":: (list_n n #* body) -> List ::">[`list_n`](#list_n)</span> |
 | APL: filtering | <span title=":: lfilter(pred, seq) -> List :: funcy list version of extended filter">[`lfilter`](#lfilter)</span> <span title=":: fltr1st(f, seq) -> Optional elem :: returns first found element (or None)">[`fltr1st`](#fltr1st)</span> <span title=":: reject(pred, seq)-> iterator :: same as filter, but checks for False">[`reject`](#reject)</span> <span title=":: lreject(pred, seq) -> List :: list version of reject">[`lreject`](#lreject)</span> <span title=":: without(items, seq) -> generator :: subtracts items from seq (as a sets)">[`without`](#without)</span> <span title=":: lwithout(items, seq) -> list :: list version of reject">[`lwithout`](#lwithout)</span> <span title=":: takewhile([pred, ] seq) :: yields elems of seq as long as they pass pred">[`takewhile`](#takewhile)</span> <span title=":: dropwhile([pred, ] seq) :: mirror of takewhile">[`dropwhile`](#dropwhile)</span> <span title=":: filter_split(pred, seq) -> passed, rejected ::">[`filter_split`](#filter_split)</span> <span title=":: lfilter_split(pred,seq) -> passed, rejected :: list version of filter_split">[`lfilter_split`](#lfilter_split)</span> <span title=":: bisect_at(n, seq) -> start, tail :: len of start will = n, works only with n>=0">[`bisect_at`](#bisect_at)</span> <span title=":: lbisect_at(n, seq) -> start, tail :: list version of bisect_at, but also for n<0, abs(n) will be len of tail">[`lbisect_at`](#lbisect_at)</span> <span title=":: bisect_by(pred, seq) -> taken, dropped :: similar to (takewhile, dropwhile)">[`bisect_by`](#bisect_by)</span> <span title=":: lbisect_by(pred, seq) -> taken, dropped :: list version of lbisect">[`lbisect_by`](#lbisect_by)</span> <span title=":: mask_sel('abc', [1,0,1]) -> iterator: 'a', 'c' ::">[`mask_sel`](#mask_sel)</span> <span title=":: lmask_sel(data, selectors) -> list ::">[`lmask_sel`](#lmask_sel)</span> <span title=":: mask2idxs(mask) -> list :: mask is list like [1 0 1 0] or [True False True False], which will be converted to [0 2]">[`mask2idxs`](#mask2idxs)</span> <span title=":: idxs2mask(idxs) -> list :: idxs is non-sorted list of integers like [0 3 2], which will be converted to [1 0 1 1]">[`idxs2mask`](#idxs2mask)</span> | <span title=":: (filterm f xs) :: same as filter, but expects fm-syntax for func">[`filterm`](#filterm)</span> <span title=":: (lfilterm f xs) :: list version of lfilterm">[`lfilterm`](#lfilterm)</span> |
+| APL: ranges-iterators-looping | <span title=":: inf_range(start [, step]) :: inf_range(10) -> generator: 10, 11, 12, ...">[`inf_range`](#inf_range)</span> <span title=":: islice(iterable, start, stop[, step]) :: list(islice(inf_range(10), 2)) == [10, 11]">[`islice`](#islice)</span> <span title="list version of islice: lislice">[`lislice`](#lislice)</span> <span title=":: cycle(p) :: cycle('AB') -> A B A B ...">[`cycle`](#cycle)</span> <span title=":: lcycle(p, n) -> list :: takes first n elems from cycle(p)">[`lcycle`](#lcycle)</span> <span title=":: repeat(elem [, n]) :: repeat(10,3) -> 10 10 10">[`repeat`](#repeat)</span> <span title=":: lrepeat(elem, n) -> list :: unlike in repeat, n has to be provided">[`lrepeat`](#lrepeat)</span> <span title=":: concat(*seqs) -> iterator ::">[`concat`](#concat)</span> <span title=":: lconcat(*seqs) -> list :: list(concat(*seqs))">[`lconcat`](#lconcat)</span> <span title=":: cat(seqs) :: non-variadic version of concat">[`cat`](#cat)</span> <span title=":: lcat(seqs) :: non-variadic version of concat">[`lcat`](#lcat)</span> <span title=":: mapcat(f, *seqs) :: maps, then concatenates">[`mapcat`](#mapcat)</span> <span title=":: lmapcat(f, *seqs) :: maps, then concatenates">[`lmapcat`](#lmapcat)</span> <span title=":: pairwise(seq) -> iterator :: supposed to be used in loops, will produce no elems for seq with len <= 1">[`pairwise`](#pairwise)</span> <span title=":: with_prev(seq, fill=None) -> iterator :: supposed to be used in loops">[`with_prev`](#with_prev)</span> <span title=":: with_next(seq, fill=None) -> iterator :: supposed to be used in loops">[`with_next`](#with_next)</span> |  |
 | APL: working with lists | <span title=":: flatten(coll) :: flattens to the bottom, non-mutating">[`flatten`](#flatten)</span> <span title=":: lprint(seq, sep=None) :: prints every elem of seq on new line">[`lprint`](#lprint)</span> <span title=":: lreversed(sequence) :: list version of reversed">[`lreversed`](#lreversed)</span> <span title=":: partition(n, seq, *, step=None, tail=False) -> generator :: splits seq to lists of len n, tail=True will allow including fewer than n items">[`partition`](#partition)</span> <span title=":: lpartition(n, seq, *, step=None, tail=False) -> List :: simply list(partition(...))">[`lpartition`](#lpartition)</span> <span title=":: partition_by(f, seq) -> iterator of iterators :: splits when f(item) change">[`partition_by`](#partition_by)</span> <span title=":: lpartition_by(f,seq) -> list of lists :: list(partition_by(...))">[`lpartition_by`](#lpartition_by)</span> <span title=":: lmulticut_by(pred, seq, keep_border=True, merge_border=False) -> list :: cut at pred(elem)==True elems">[`lmulticut_by`](#lmulticut_by)</span> |  |
 | APL: counting | <span title=":: count_occurrences(elem, seq) -> int :: rename of list.count method">[`count_occurrences`](#count_occurrences)</span> |  |
 | Getters: idxs and keys | <span title=":: nth(n, seq) -> Optional elem :: 0-based index; works also with dicts">[`nth`](#nth)</span> <span title=":: assoc(xs, k1, v1, k2, v2, ...) -> None :: ≈ (setv (get xs k1) v1 (get xs k2) v2) ; also possible: (assoc xs :x 1)">[`assoc`](#assoc)</span> <span title=":: first(seq) -> Optional elem ::">[`first`](#first)</span> <span title=":: second(seq) -> Optional elem ::">[`second`](#second)</span> <span title=":: third(seq) -> Optional elem ::">[`third`](#third)</span> <span title=":: fourth(seq) -> Optional elem ::">[`fourth`](#fourth)</span> <span title=":: beforelast(seq) -> Optional elem ::">[`beforelast`](#beforelast)</span> <span title=":: last(seq) -> Optional elem ::">[`last`](#last)</span> <span title=":: rest(seq) -> List :: drops 1st elem of list">[`rest`](#rest)</span> <span title=":: butlast(seq) -> List :: drops last elem of list">[`butlast`](#butlast)</span> <span title=":: drop(n, seq) -> List :: drops n>=0 elems from start of the list; when n<0, drops from end of the list">[`drop`](#drop)</span> <span title=":: take(n, seq) -> List :: takes n elems from start; when n<0, takes from end of the list">[`take`](#take)</span> <span title=":: pick(ns, seq) -> List :: throws error if some of ns doesn't exist; ns can be list of ints or dict keys">[`pick`](#pick)</span> | <span title="">[`ncut`](#ncut)</span> |
 | Getters: one based index | <span title=":: get_(seq, *ns) -> elem :: same as get, but with 1-based index (will throw error for n=0)">[`get_`](#get_)</span> <span title=":: nth_(n, seq) -> Optional elem :: same as nth, but with 1-based index; will return None for n=0">[`nth_`](#nth_)</span> <span title=":: slice_(start, end, step=None) :: similar to slice, but with 1-based index; will throw error for start=0 or end=0">[`slice_`](#slice_)</span> <span title=":: cut_(seq, start, end, step=None) -> List :: similar to cut, but with 1-based index; will throw error for start=0 or end=0">[`cut_`](#cut_)</span> <span title=":: range_(start, end=None, step=1) -> List :: same as range, but with 1-based index">[`range_`](#range_)</span> <span title=":: lrange_(start, end, step=1) -> List :: range including both ends when possible, also works on fractionals">[`lrange_`](#lrange_)</span> |  |
 | Getters: keys and attrs | <span title=":: pluck(key, mappings) -> generator :: gets same key (or idx) from every mapping, mappings can be lists of lists/dicts/etc.">[`pluck`](#pluck)</span> <span title=":: lpluck(key, mappings) -> list ::">[`lpluck`](#lpluck)</span> <span title=":: pluck_attr(attr, objects) -> generator :: attr should be given as str">[`pluck_attr`](#pluck_attr)</span> <span title=":: lpluck_attr(attr, objects) -> list :: list version of pluck_attr">[`lpluck_attr`](#lpluck_attr)</span> | <span title=":: (getattrm Object 'attr') (getattrm Object .attr) :: accepts fptk-style .attr syntax">[`getattrm`](#getattrm)</span> <span title=":: (pluckm n xs) (pluckm key ys) (pluckm .attr zs) :: accepts fptk-style .arg syntax">[`pluckm`](#pluckm)</span> <span title="list version of pluckm">[`lpluckm`](#lpluckm)</span> |
-| Typing: Base | <span title="">[`dataclass`](#dataclass)</span> <span title="">[`Enum`](#Enum)</span> <span title="">[`List`](#List)</span> <span title="">[`Tuple`](#Tuple)</span> <span title="">[`TypedDict`](#TypedDict)</span> <span title="">[`Dict`](#Dict)</span> <span title="">[`Union`](#Union)</span> <span title="">[`Generator`](#Generator)</span> <span title="">[`Any`](#Any)</span> <span title="">[`Optional`](#Optional)</span> <span title="">[`Callable`](#Callable)</span> <span title="">[`Literal`](#Literal)</span> <span title="">[`Type`](#Type)</span> <span title="">[`TypeVar`](#TypeVar)</span> <span title="">[`Generic`](#Generic)</span> <span title="">[`noneQ`](#noneQ)</span> <span title="">[`notnoneQ`](#notnoneQ)</span> <span title=":: oftypeQ(tp, x) :: checks directly via (= (type x) tp)">[`oftypeQ`](#oftypeQ)</span> <span title=":: intQ(x) :: checks literally if type(x) == int, will also work with StrictInt from pydantic">[`intQ`](#intQ)</span> <span title=":: floatQ(x) :: checks literally if type(x) == float, will also work with StrictFloat from pydantic">[`floatQ`](#floatQ)</span> <span title=":: numberQ(x) :: checks for intQ or floatQ, will also work with StrictInt/StrictFloat from pydantic">[`numberQ`](#numberQ)</span> <span title=":: strQ(x) :: checks literally if type(x) == str, will also work with StrictStr from pydantic">[`strQ`](#strQ)</span> <span title=":: dictQ(x) :: checks literally if type(x) == dict">[`dictQ`](#dictQ)</span> <span title=":: listQ(value) :: checks if value is list">[`listQ`](#listQ)</span> <span title=":: tupleQ(value) :: checks if value is tuple">[`tupleQ`](#tupleQ)</span> <span title=":: setQ(value) :: checks if value is set">[`setQ`](#setQ)</span> <span title=":: iteratorQ(value) :: checks if value is iterator">[`iteratorQ`](#iteratorQ)</span> <span title=":: iterableQ(value) :: checks if value is iterable">[`iterableQ`](#iterableQ)</span> | <span title="example: (of List int) which is equiv to py-code: List[int]">[`of`](#of)</span> <span title="example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]">[`f::`](#Annotator1)</span> <span title="define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))">[`def::`](#Annotator2)</span> |
+| Typing: Base | <span title="">[`Enum`](#Enum)</span> <span title="">[`List`](#List)</span> <span title="">[`Tuple`](#Tuple)</span> <span title="">[`TypedDict`](#TypedDict)</span> <span title="">[`Dict`](#Dict)</span> <span title="">[`Union`](#Union)</span> <span title="">[`Generator`](#Generator)</span> <span title="">[`Any`](#Any)</span> <span title="">[`Optional`](#Optional)</span> <span title="">[`Callable`](#Callable)</span> <span title="">[`Literal`](#Literal)</span> <span title="">[`Type`](#Type)</span> <span title="">[`TypeVar`](#TypeVar)</span> <span title="">[`Generic`](#Generic)</span> <span title="">[`noneQ`](#noneQ)</span> <span title="">[`notnoneQ`](#notnoneQ)</span> <span title=":: oftypeQ(tp, x) :: checks directly via (= (type x) tp)">[`oftypeQ`](#oftypeQ)</span> <span title=":: intQ(x) :: checks literally if type(x) == int, will also work with StrictInt from pydantic">[`intQ`](#intQ)</span> <span title=":: floatQ(x) :: checks literally if type(x) == float, will also work with StrictFloat from pydantic">[`floatQ`](#floatQ)</span> <span title=":: numberQ(x) :: checks for intQ or floatQ, will also work with StrictInt/StrictFloat from pydantic">[`numberQ`](#numberQ)</span> <span title=":: strQ(x) :: checks literally if type(x) == str, will also work with StrictStr from pydantic">[`strQ`](#strQ)</span> <span title=":: dictQ(x) :: checks literally if type(x) == dict">[`dictQ`](#dictQ)</span> <span title=":: listQ(value) :: checks if value is list">[`listQ`](#listQ)</span> <span title=":: tupleQ(value) :: checks if value is tuple">[`tupleQ`](#tupleQ)</span> <span title=":: setQ(value) :: checks if value is set">[`setQ`](#setQ)</span> <span title=":: iteratorQ(value) :: checks if value is iterator">[`iteratorQ`](#iteratorQ)</span> <span title=":: iterableQ(value) :: checks if value is iterable">[`iterableQ`](#iterableQ)</span> | <span title="example: (of List int) which is equiv to py-code: List[int]">[`of`](#of)</span> <span title="example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]">[`f::`](#Annotator1)</span> <span title="define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))">[`def::`](#Annotator2)</span> |
+| Typing: Dataclasses | <span title="">[`dataclass`](#dataclass)</span> <span title="non-mutating">[`upd_field`](#upd_field)</span> |  |
 | Typing: Strict | <span title="">[`BaseModel`](#BaseModel)</span> <span title="will be still of int type, but will perform strict typecheck when variable is created">[`StrictInt`](#StrictInt)</span> <span title="will be still of str type, but will perform strict typecheck when variable is created">[`StrictStr`](#StrictStr)</span> <span title="will be still of float type, but will perform strict typecheck when variable is created">[`StrictFloat`](#StrictFloat)</span> <span title="Union of StrictInt and StrictFloat">[`StrictNumber`](#StrictNumber)</span> <span title="decorator for type-checking func args">[`validate_call`](#validate_call)</span> <span title="same as validate_call but with option validate_return=True set (thus validating args and return type)">[`validateF`](#validateF)</span> |  |
-| Math and logic: Basic math | <span title=":: inc(n) :: = n + 1">[`inc`](#inc)</span> <span title=":: dec(n) :: = n - 1">[`dec`](#dec)</span> <span title=":: sign(n) :: will give 0 for n=0">[`sign`](#sign)</span> <span title=":: neg(n) :: = -1 * n">[`neg`](#neg)</span> <span title="floor(1.9) = 1">[`floor`](#floor)</span> <span title="ceil(1.1) = 2">[`ceil`](#ceil)</span> <span title=":: clip(x, lower, upper) :: clips x to fit in lower <= x <= upper limit">[`clip`](#clip)</span> <span title=":: half(x) :: = x/2">[`half`](#half)</span> <span title=":: double(x) :: = x*2">[`double`](#double)</span> <span title=":: squared(x) :: = pow(x,2)">[`squared`](#squared)</span> <span title=":: reciprocal(x) :: = 1/x ; throws error for x=0">[`reciprocal`](#reciprocal)</span> <span title=":: sqrt(n) :: = √n">[`sqrt`](#sqrt)</span> <span title=":: dist(p, q) -> float :: ≈ √((px-qx)² + (py-qy)² ...)">[`dist`](#dist)</span> <span title=":: hypot(*coordinates) :: = √(x² + y² + ...)">[`hypot`](#hypot)</span> <span title=":: normalize(xs) -> xs :: will throw error for zero-len vector">[`normalize`](#normalize)</span> <span title=":: exp(x) ::">[`exp`](#exp)</span> <span title=":: log(x, base=math.e) ::">[`log`](#log)</span> <span title=":: ln(x) :: = math.log(x, math.e) ; coexists with log for clarity">[`ln`](#ln)</span> <span title=":: log10(x) ::">[`log10`](#log10)</span> <span title=":: evenQ(x) ::">[`evenQ`](#evenQ)</span> <span title=":: oddQ(x) ::">[`oddQ`](#oddQ)</span> <span title=":: zeroQ(x) :: checks directly via (= x 0)">[`zeroQ`](#zeroQ)</span> <span title=":: negativeQ(x) :: checks directly via (< x 0)">[`negativeQ`](#negativeQ)</span> <span title=":: positiveQ(x) :: checks directly via (> x 0)">[`positiveQ`](#positiveQ)</span> |  |
+| Math and logic: Basic math | <span title=":: inc(n) :: = n + 1">[`inc`](#inc)</span> <span title=":: dec(n) :: = n - 1">[`dec`](#dec)</span> <span title=":: sign(n) :: will give 0 for n=0">[`sign`](#sign)</span> <span title=":: neg(n) :: = -1 * n">[`neg`](#neg)</span> <span title=":: mod(5, 2) :: = 1">[`mod`](#mod)</span> <span title="floor(1.9) = 1">[`floor`](#floor)</span> <span title="ceil(1.1) = 2">[`ceil`](#ceil)</span> <span title=":: clip(x, lower, upper) :: clips x to fit in lower <= x <= upper limit">[`clip`](#clip)</span> <span title=":: half(x) :: = x/2">[`half`](#half)</span> <span title=":: double(x) :: = x*2">[`double`](#double)</span> <span title=":: squared(x) :: = pow(x,2)">[`squared`](#squared)</span> <span title=":: reciprocal(x) :: = 1/x ; throws error for x=0">[`reciprocal`](#reciprocal)</span> <span title=":: sqrt(n) :: = √n">[`sqrt`](#sqrt)</span> <span title=":: dist(p, q) -> float :: ≈ √((px-qx)² + (py-qy)² ...)">[`dist`](#dist)</span> <span title=":: hypot(*coordinates) :: = √(x² + y² + ...)">[`hypot`](#hypot)</span> <span title=":: normalize(xs) -> xs :: will throw error for zero-len vector">[`normalize`](#normalize)</span> <span title=":: exp(x) ::">[`exp`](#exp)</span> <span title=":: log(x, base=math.e) ::">[`log`](#log)</span> <span title=":: ln(x) :: = math.log(x, math.e) ; coexists with log for clarity">[`ln`](#ln)</span> <span title=":: log10(x) ::">[`log10`](#log10)</span> <span title=":: evenQ(x) ::">[`evenQ`](#evenQ)</span> <span title=":: oddQ(x) ::">[`oddQ`](#oddQ)</span> <span title=":: zeroQ(x) :: checks directly via (= x 0)">[`zeroQ`](#zeroQ)</span> <span title=":: negativeQ(x) :: checks directly via (< x 0)">[`negativeQ`](#negativeQ)</span> <span title=":: positiveQ(x) :: checks directly via (> x 0)">[`positiveQ`](#positiveQ)</span> |  |
 | Math and logic: Trigonometry | <span title="literally just float pi=3.14...">[`pi`](#pi)</span> <span title=":: sin(x) :: x is in radians">[`sin`](#sin)</span> <span title=":: cos(x) :: x is in radians">[`cos`](#cos)</span> <span title=":: tan(x) :: x is in radians, will give smth like 1.6E+16 for x = pi">[`tan`](#tan)</span> <span title=":: degrees(x) :: x in radians is converted to degrees">[`degrees`](#degrees)</span> <span title=":: radians(x) :: x in degrees is converted to radians">[`radians`](#radians)</span> <span title=":: acos(x) :: x is in radians, result is between 0 and pi">[`acos`](#acos)</span> <span title=":: asin(x) :: x is in radians, result is between -pi/2 and pi/2">[`asin`](#asin)</span> <span title=":: asin(x) :: x is in radians, result is between -pi/2 and pi/2">[`atan`](#atan)</span> <span title=":: atan2(y, x) :: both signs are considered">[`atan2`](#atan2)</span> |  |
 | Math and logic: Base operators to functions | <span title="'and' as function">[`and_`](#and_)</span> <span title="'or' as function">[`or_`](#or_)</span> <span title="'not' as function">[`not_`](#not_)</span> <span title="'is' as function">[`is_`](#is_)</span> <span title="">[`xor`](#xor)</span> <span title="equal">[`eq`](#eq)</span> <span title="non-equal">[`neq`](#neq)</span> <span title="greater than">[`gt`](#gt)</span> <span title="less than">[`lt`](#lt)</span> <span title="greater or equal">[`geq`](#geq)</span> <span title="less or equal">[`leq`](#leq)</span> <span title="'@' as function">[`matmul`](#matmul)</span> <span title=":: div(a, b) ::">[`div`](#div)</span> <span title=":: gt0(x) :: checks for x > 0">[`gt0`](#gt0)</span> <span title=":: geq0(x) :: x >= 0">[`geq0`](#geq0)</span> <span title=":: lt0(x) :: checks for x < 0">[`lt0`](#lt0)</span> <span title=":: leq0(x) :: x <= 0">[`leq0`](#leq0)</span> <span title=":: minus(x, y) = x - y ::">[`minus`](#minus)</span> |  |
 | Math and logic: Dunders and Monoids | <span title=":: dmul(*args) = arg1 + arg2 + ... :: 'dunder mul', '*' operator as a function">[`dmul`](#dmul)</span> <span title=":: dadd(*args) = arg1 + arg2 + ... :: 'dunder add', '+' operator as a function">[`dadd`](#dadd)</span> <span title=":: lmul(*args) = arg1 * arg2 * ... :: rename of * operator, underlines usage for list">[`lmul`](#lmul)</span> <span title=":: smul(*args) = arg1 * arg2 * ... :: rename of * operator, underlines usage for string">[`smul`](#smul)</span> <span title=":: mul(*args) :: multiplication as a monoid (will not give error when used with 0 or 1 args)">[`mul`](#mul)</span> <span title=":: plus(*args) :: addition as a monoid (will not give error when used with 0 or 1 args)">[`plus`](#plus)</span> <span title=":: sconcat(*args) :: string concantenation as a monoid (will not give error when used with 0 or 1 args)">[`sconcat`](#sconcat)</span> |  |
@@ -1058,6 +1060,444 @@ idxs2mask(idxs, bools=False)
     setting bools=True will output [True False True True] instead
 ```
 
+## inf_range
+
+[go up](#Cheetsheet)
+
+```hy
+Name: inf_range (= itertools.count)
+Kind: Reimport
+Sgnt: inf_range(start [, step])
+Info: inf_range(10) -> generator: 10, 11, 12, ...
+```
+
+```hy
+Help on class count in module itertools:
+
+class count(builtins.object)
+ |  count(start=0, step=1)
+ |  
+ |  Return a count object whose .__next__() method returns consecutive values.
+ |  
+ |  Equivalent to:
+ |      def count(firstval=0, step=1):
+ |          x = firstval
+ |          while 1:
+ |              yield x
+ |              x += step
+ |  
+ |  Methods defined here:
+ |  
+ |  __getattribute__(self, name, /)
+ |      Return getattr(self, name).
+ |  
+ |  __iter__(self, /)
+ |      Implement iter(self).
+ |  
+ |  __next__(self, /)
+ |      Implement next(self).
+ |  
+ |  __reduce__(...)
+ |      Return state information for pickling.
+ |  
+ |  __repr__(self, /)
+ |      Return repr(self).
+ |  
+ |  ----------------------------------------------------------------------
+ |  Static methods defined here:
+ |  
+ |  __new__(*args, **kwargs) from builtins.type
+ |      Create and return a new object.  See help(type) for accurate signature.
+```
+
+## islice
+
+[go up](#Cheetsheet)
+
+```hy
+Name: islice
+Kind: Reimport from [itertools]
+Sgnt: islice(iterable, start, stop[, step])
+Info: list(islice(inf_range(10), 2)) == [10, 11]
+```
+
+```hy
+Help on class islice in module itertools:
+
+class islice(builtins.object)
+ |  islice(iterable, stop) --> islice object
+ |  islice(iterable, start, stop[, step]) --> islice object
+ |  
+ |  Return an iterator whose next() method returns selected values from an
+ |  iterable.  If start is specified, will skip all preceding elements;
+ |  otherwise, start defaults to zero.  Step defaults to one.  If
+ |  specified as another value, step determines how many values are
+ |  skipped between successive calls.  Works like a slice() on a list
+ |  but returns an iterator.
+ |  
+ |  Methods defined here:
+ |  
+ |  __getattribute__(self, name, /)
+ |      Return getattr(self, name).
+ |  
+ |  __iter__(self, /)
+ |      Implement iter(self).
+ |  
+ |  __next__(self, /)
+ |      Implement next(self).
+ |  
+ |  __reduce__(...)
+ |      Return state information for pickling.
+ |  
+ |  __setstate__(...)
+ |      Set state information for unpickling.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Static methods defined here:
+ |  
+ |  __new__(*args, **kwargs) from builtins.type
+ |      Create and return a new object.  See help(type) for accurate signature.
+```
+
+## lislice
+
+[go up](#Cheetsheet)
+
+```hy
+Name: lislice
+Kind: FPTK original
+Info: list version of islice: lislice
+```
+
+```hy
+Help on function lislice in module fptk.apl:
+
+lislice(*kwargs)
+    literally just list(lislice(...))
+```
+
+## cycle
+
+[go up](#Cheetsheet)
+
+```hy
+Name: cycle
+Kind: Reimport from [itertools]
+Sgnt: cycle(p)
+Info: cycle('AB') -> A B A B ...
+```
+
+```hy
+Help on class cycle in module itertools:
+
+class cycle(builtins.object)
+ |  cycle(iterable, /)
+ |  
+ |  Return elements from the iterable until it is exhausted. Then repeat the sequence indefinitely.
+ |  
+ |  Methods defined here:
+ |  
+ |  __getattribute__(self, name, /)
+ |      Return getattr(self, name).
+ |  
+ |  __iter__(self, /)
+ |      Implement iter(self).
+ |  
+ |  __next__(self, /)
+ |      Implement next(self).
+ |  
+ |  __reduce__(...)
+ |      Return state information for pickling.
+ |  
+ |  __setstate__(...)
+ |      Set state information for unpickling.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Static methods defined here:
+ |  
+ |  __new__(*args, **kwargs) from builtins.type
+ |      Create and return a new object.  See help(type) for accurate signature.
+```
+
+## lcycle
+
+[go up](#Cheetsheet)
+
+```hy
+Name: lcycle
+Kind: FPTK original
+Sgnt: lcycle(p, n) -> list
+Info: takes first n elems from cycle(p)
+```
+
+```hy
+Help on function lcycle in module fptk.apl:
+
+lcycle(p, n)
+    takes first n elems from cycle(p)
+```
+
+## repeat
+
+[go up](#Cheetsheet)
+
+```hy
+Name: repeat
+Kind: Reimport from [itertools]
+Sgnt: repeat(elem [, n])
+Info: repeat(10,3) -> 10 10 10
+```
+
+```hy
+Help on class repeat in module itertools:
+
+class repeat(builtins.object)
+ |  repeat(object [,times]) -> create an iterator which returns the object
+ |  for the specified number of times.  If not specified, returns the object
+ |  endlessly.
+ |  
+ |  Methods defined here:
+ |  
+ |  __getattribute__(self, name, /)
+ |      Return getattr(self, name).
+ |  
+ |  __iter__(self, /)
+ |      Implement iter(self).
+ |  
+ |  __length_hint__(...)
+ |      Private method returning an estimate of len(list(it)).
+ |  
+ |  __next__(self, /)
+ |      Implement next(self).
+ |  
+ |  __reduce__(...)
+ |      Return state information for pickling.
+ |  
+ |  __repr__(self, /)
+ |      Return repr(self).
+ |  
+ |  ----------------------------------------------------------------------
+ |  Static methods defined here:
+ |  
+ |  __new__(*args, **kwargs) from builtins.type
+ |      Create and return a new object.  See help(type) for accurate signature.
+```
+
+## lrepeat
+
+[go up](#Cheetsheet)
+
+```hy
+Name: lrepeat
+Kind: FPTK original
+Sgnt: lrepeat(elem, n) -> list
+Info: unlike in repeat, n has to be provided
+```
+
+```hy
+Help on function lrepeat in module fptk.apl:
+
+lrepeat(elem, n)
+    literally just list(repeat(elem, n))
+```
+
+## concat
+
+[go up](#Cheetsheet)
+
+```hy
+Name: concat (= itertools.chain)
+Kind: Reimport
+Sgnt: concat(*seqs) -> iterator
+```
+
+```hy
+Help on class chain in module itertools:
+
+class chain(builtins.object)
+ |  chain(*iterables) --> chain object
+ |  
+ |  Return a chain object whose .__next__() method returns elements from the
+ |  first iterable until it is exhausted, then elements from the next
+ |  iterable, until all of the iterables are exhausted.
+ |  
+ |  Methods defined here:
+ |  
+ |  __getattribute__(self, name, /)
+ |      Return getattr(self, name).
+ |  
+ |  __iter__(self, /)
+ |      Implement iter(self).
+ |  
+ |  __next__(self, /)
+ |      Implement next(self).
+ |  
+ |  __reduce__(...)
+ |      Return state information for pickling.
+ |  
+ |  __setstate__(...)
+ |      Set state information for unpickling.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Class methods defined here:
+ |  
+ |  __class_getitem__(...) from builtins.type
+ |      See PEP 585
+ |  
+ |  from_iterable(iterable, /) from builtins.type
+ |      Alternative chain() constructor taking a single iterable argument that evaluates lazily.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Static methods defined here:
+ |  
+ |  __new__(*args, **kwargs) from builtins.type
+ |      Create and return a new object.  See help(type) for accurate signature.
+```
+
+## lconcat
+
+[go up](#Cheetsheet)
+
+```hy
+Name: lconcat
+Kind: FPTK original
+Sgnt: lconcat(*seqs) -> list
+Info: list(concat(*seqs))
+```
+
+```hy
+Help on function lconcat in module fptk.apl:
+
+lconcat(*seqs)
+    literally just list(concat(*seqs))
+```
+
+## cat
+
+[go up](#Cheetsheet)
+
+```hy
+Name: cat
+Kind: Reimport from [funcy]
+Sgnt: cat(seqs)
+Info: non-variadic version of concat
+```
+
+```hy
+Help on built-in function from_iterable:
+
+from_iterable(iterable, /) method of builtins.type instance
+    Alternative chain() constructor taking a single iterable argument that evaluates lazily.
+```
+
+## lcat
+
+[go up](#Cheetsheet)
+
+```hy
+Name: lcat
+Kind: Reimport from [funcy]
+Sgnt: lcat(seqs)
+Info: non-variadic version of concat
+```
+
+```hy
+Help on function lcat in module funcy.seqs:
+
+lcat(seqs)
+    Concatenates the sequence of sequences.
+```
+
+## mapcat
+
+[go up](#Cheetsheet)
+
+```hy
+Name: mapcat
+Kind: Reimport from [funcy]
+Sgnt: mapcat(f, *seqs)
+Info: maps, then concatenates
+```
+
+```hy
+Help on function mapcat in module funcy.seqs:
+
+mapcat(f, *seqs)
+    Maps given sequence(s) and chains the results.
+```
+
+## lmapcat
+
+[go up](#Cheetsheet)
+
+```hy
+Name: lmapcat
+Kind: Reimport from [funcy]
+Sgnt: lmapcat(f, *seqs)
+Info: maps, then concatenates
+```
+
+```hy
+Help on function lmapcat in module funcy.seqs:
+
+lmapcat(f, *seqs)
+    Maps given sequence(s) and concatenates the results.
+```
+
+## pairwise
+
+[go up](#Cheetsheet)
+
+```hy
+Name: pairwise
+Kind: Reimport from [funcy]
+Sgnt: pairwise(seq) -> iterator
+Info: supposed to be used in loops, will produce no elems for seq with len <= 1
+```
+
+```hy
+Help on function pairwise in module funcy.seqs:
+
+pairwise(seq)
+    Yields all pairs of neighboring items in seq.
+```
+
+## with_prev
+
+[go up](#Cheetsheet)
+
+```hy
+Name: with_prev
+Kind: Reimport from [funcy]
+Sgnt: with_prev(seq, fill=None) -> iterator
+Info: supposed to be used in loops
+```
+
+```hy
+Help on function with_prev in module funcy.seqs:
+
+with_prev(seq, fill=None)
+    Yields each item paired with its preceding: (item, prev).
+```
+
+## with_next
+
+[go up](#Cheetsheet)
+
+```hy
+Name: with_next
+Kind: Reimport from [funcy]
+Sgnt: with_next(seq, fill=None) -> iterator
+Info: supposed to be used in loops
+```
+
+```hy
+Help on function with_next in module funcy.seqs:
+
+with_next(seq, fill=None)
+    Yields each item paired with its following: (item, next).
+```
+
 ## flatten
 
 [go up](#Cheetsheet)
@@ -1772,34 +2212,6 @@ Kind: FPTK Macro
 Info: define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))
 ```
 
-## dataclass
-
-[go up](#Cheetsheet)
-
-```hy
-Name: dataclass
-Kind: Reimport from [dataclasses]
-```
-
-```hy
-Help on function dataclass in module dataclasses:
-
-dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False)
-    Returns the same class as was passed in, with dunder methods
-    added based on the fields defined in the class.
-    
-    Examines PEP 526 __annotations__ to determine fields.
-    
-    If init is true, an __init__() method is added to the class. If
-    repr is true, a __repr__() method is added. If order is true, rich
-    comparison dunder methods are added. If unsafe_hash is true, a
-    __hash__() method function is added. If frozen is true, fields may
-    not be assigned to after instance creation. If match_args is true,
-    the __match_args__ tuple is added. If kw_only is true, then by
-    default all fields are keyword-only. If slots is true, an
-    __slots__ attribute is added.
-```
-
 ## Enum
 
 [go up](#Cheetsheet)
@@ -2491,6 +2903,62 @@ Name: iterableQ (= funcy.iterable)
 Kind: Reimport
 Sgnt: iterableQ(value)
 Info: checks if value is iterable
+```
+
+## dataclass
+
+[go up](#Cheetsheet)
+
+```hy
+Name: dataclass
+Kind: Reimport from [dataclasses]
+```
+
+```hy
+Help on function dataclass in module dataclasses:
+
+dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False)
+    Returns the same class as was passed in, with dunder methods
+    added based on the fields defined in the class.
+    
+    Examines PEP 526 __annotations__ to determine fields.
+    
+    If init is true, an __init__() method is added to the class. If
+    repr is true, a __repr__() method is added. If order is true, rich
+    comparison dunder methods are added. If unsafe_hash is true, a
+    __hash__() method function is added. If frozen is true, fields may
+    not be assigned to after instance creation. If match_args is true,
+    the __match_args__ tuple is added. If kw_only is true, then by
+    default all fields are keyword-only. If slots is true, an
+    __slots__ attribute is added.
+```
+
+## upd_field
+
+[go up](#Cheetsheet)
+
+```hy
+Name: upd_field (= dataclasses.replace)
+Kind: Reimport
+Info: non-mutating
+```
+
+```hy
+Help on function replace in module dataclasses:
+
+replace(obj, /, **changes)
+    Return a new object replacing specified fields with new values.
+    
+    This is especially useful for frozen classes.  Example usage:
+    
+      @dataclass(frozen=True)
+      class C:
+          x: int
+          y: int
+    
+      c = C(1, 2)
+      c1 = replace(c, x=3)
+      assert c1.x == 3 and c1.y == 2
 ```
 
 ## BaseModel
@@ -4025,6 +4493,24 @@ Help on built-in function neg in module _operator:
 
 neg(a, /)
     Same as -a.
+```
+
+## mod
+
+[go up](#Cheetsheet)
+
+```hy
+Name: mod
+Kind: Reimport from [operator]
+Sgnt: mod(5, 2)
+Info: = 1
+```
+
+```hy
+Help on built-in function mod in module _operator:
+
+mod(a, b, /)
+    Same as a % b.
 ```
 
 ## floor

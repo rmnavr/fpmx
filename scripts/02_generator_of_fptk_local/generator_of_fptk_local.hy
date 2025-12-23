@@ -106,6 +106,7 @@
                      #("../../src/fptk/benchmark.hy"        "[F] benchmark")
                      #("../../src/fptk/testing.hy"          "[F] testing")
                      #("../../src/fptk/monads/resultM.hy"   "[Monads] resultM")
+                     #("../../src/fptk/monads/maybeM.hy"    "[Monads] maybeM")
                      #("../../src/fptk/_macros.hy"          "MACROS")
                    ])
 

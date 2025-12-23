@@ -1,5 +1,5 @@
 
-    (export :objects [ dataclass
+    (export :objects [ dataclass upd_field
                        Enum
                        List Tuple TypedDict Dict Union
                        Generator Any Optional Callable Literal Type TypeVar Generic
@@ -8,6 +8,7 @@
                        ;; strict:
                        BaseModel StrictInt StrictStr StrictFloat StrictNumber
                        validate_call validateF
+                       ;; dataclasses:
                      ]
             :macros  [ of
                        f::   ; fptk macro
@@ -20,7 +21,6 @@
     (require fptk._macros [f::])    #_ "| example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]"
     (require fptk._macros [def::])  #_ "| define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))"
 
-    (import dataclasses [dataclass])
     (import enum        [Enum])
     (import typing      [List])
     (import typing      [Tuple])
@@ -74,6 +74,12 @@
     (import funcy [is_set   :as setQ])      #_ "setQ(value)      | checks if value is set"
     (import funcy [is_iter  :as iteratorQ]) #_ "iteratorQ(value) | checks if value is iterator"
     (import funcy [iterable :as iterableQ]) #_ "iterableQ(value) | checks if value is iterable"
+
+; _____________________________________________________________________________/ }}}1
+; [GROUP] Typing: Dataclasses ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (import dataclasses [dataclass])
+    (import dataclasses [replace :as upd_field ]) #_ "| non-mutating"
 
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] Typing: Strict ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1

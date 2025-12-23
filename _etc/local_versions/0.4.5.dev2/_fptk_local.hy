@@ -209,7 +209,7 @@
         (return mask))
 
 ; ________________________________________________________________________/ }}}2
-; [GROUP] APL: ranges, iterators, looping ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
+; [GROUP] APL: ranges-iterators-looping ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
     (import itertools [count :as inf_range]) #_ "inf_range(start [, step]) | inf_range(10) -> generator: 10, 11, 12, ..."
 
@@ -555,7 +555,6 @@
     ; ///fptk_local: removed import of fptk._macros///    #_ "| example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]"
     ; ///fptk_local: removed import of fptk._macros///  #_ "| define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))"
 
-    (import dataclasses [dataclass])
     (import enum        [Enum])
     (import typing      [List])
     (import typing      [Tuple])
@@ -611,6 +610,12 @@
     (import funcy [iterable :as iterableQ]) #_ "iterableQ(value) | checks if value is iterable"
 
 ; ________________________________________________________________________/ }}}2
+; [GROUP] Typing: Dataclasses ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
+
+    (import dataclasses [dataclass])
+    (import dataclasses [replace :as upd_field ]) #_ "| non-mutating"
+
+; ________________________________________________________________________/ }}}2
 ; [GROUP] Typing: Strict ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
     (import pydantic    [BaseModel])
@@ -647,6 +652,7 @@
     (import hyrule    [dec])        #_ "dec(n) | = n - 1"
     (import hyrule    [sign])       #_ "sign(n) | will give 0 for n=0"
     (import operator  [neg])        #_ "neg(n) | = -1 * n"
+    (import operator  [mod])        #_ "mod(5, 2) | = 1"
 
     ;;
 
@@ -1174,6 +1180,95 @@
           #^ F default]
         (if (failureQ resultM)
              (return resultM.value)
+             (return default)))
+
+; ________________________________________________________________________/ }}}2
+
+; _____________________________________________________________________________/ }}}1
+; [Monads] maybeM ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+; Import/Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
+
+    (import typing [TypeVar Generic Union])
+    (import pydantic [BaseModel])
+    (import funcy [rcompose lmap partial])
+    (require hyrule [of unless])
+
+    ; ///fptk_local: removed export statement///
+
+; ________________________________________________________________________/ }}}2
+
+; Classes ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
+
+    (setv J (TypeVar "J"))
+
+    (defclass _Just [BaseModel (of Generic J)]
+        #^ J value
+        (defn __str__ [self] (+ "Just: " (str self.value)))
+        (defn __repr__ [self] (self.__str__)))
+
+    (defclass _Nothing [BaseModel]
+        (defn __str__ [self] "Nothing")
+        (defn __repr__ [self] (self.__str__)))
+
+    (defclass Maybe [BaseModel (of Generic J)]
+        #^ (of Union (of _Just J) _Nothing) container
+        (defn __str__ [self] (+ "<M." (str self.container) ">"))
+        (defn __repr__ [self] (self.__str__)))
+
+    (defn Just [value] (Maybe :container (_Just :value value)))
+    (setv Nothing (Maybe :container (_Nothing)))
+
+; ________________________________________________________________________/ }}}2
+
+; - functions below also work correctly with [validateF]
+; - (of Maybe J) — this too works with [validateF]
+; utils: Typechecks ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
+
+    (defn _nonM_error [x] (ValueError f"Value <{x}> must be of Maybe type"))
+
+    (defn #^ bool justQ [#^ Maybe maybeM]
+        (unless (isinstance maybeM Maybe) (raise (_nonM_error maybeM )))
+        (isinstance maybeM.container _Just))
+
+    (defn #^ bool nothingQ [#^ Maybe maybeM]
+        (unless (isinstance maybeM Maybe) (raise (_nonM_error maybeM )))
+        (isinstance maybeM.container _Nothing))
+
+; ________________________________________________________________________/ }}}2
+; utils: Chaining ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
+
+    (defn #^ Maybe mapM [#^ Maybe maybeM #* fs]
+        (if (nothingQ maybeM)
+             (return Nothing)
+             (return (Just ((rcompose #* fs) maybeM.container.value )))))
+
+    (defn #^ Maybe bindM [#^ Maybe maybeM #* fs]
+        (setv _fs (lmap (fn [it] (partial _bindM1 it)) fs))
+        ( (rcompose #* _fs) maybeM))
+
+    (defn #^ Maybe _bindM1 [f #^ Maybe maybeM]
+        (if (nothingQ maybeM)
+             (return Nothing)
+             (do (setv new_maybe (f maybeM.container.value ))
+                  (unless (isinstance new_maybe Maybe)
+                           (raise (ValueError f"function {f} should return Maybe type (it tried to return value = {new_maybe})!")))
+                  (return new_maybe))))
+
+; ________________________________________________________________________/ }}}2
+; utils: routing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
+
+    (defn #^ J unwrapM [#^ (of Maybe J) maybeM]
+        "throws error on Nothing"
+        (if (justQ maybeM)
+             (return maybeM.container.value)
+             (raise (ValueError f"Can't unwrapM {maybeM}, since it's Nothing"))))
+
+    (defn #^ J unwrapM_or
+        [ #^ (of Maybe J) maybeM
+          #^ J default]
+        (if (justQ maybeM)
+             (return maybeM.container.value)
              (return default)))
 
 ; ________________________________________________________________________/ }}}2

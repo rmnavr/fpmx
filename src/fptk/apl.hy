@@ -108,7 +108,7 @@
         (return mask))
 
 ; _____________________________________________________________________________/ }}}1
-; [GROUP] APL: ranges, iterators, looping ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; [GROUP] APL: ranges-iterators-looping ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (import itertools [count :as inf_range]) #_ "inf_range(start [, step]) | inf_range(10) -> generator: 10, 11, 12, ..."
 
