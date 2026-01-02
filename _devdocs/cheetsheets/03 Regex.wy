@@ -15,6 +15,8 @@
     ; - special:                 \d \D \w \W \s \S \b \B \n \r \f \v
     ; - raw strings:             r"\d+" = "\\d+"
 
+    ; Literals:                  # ; = /
+
     ; flags:
     re.IGNORECASE or re.I  ; Makes the pattern matching case-insensitive.
     re.MULTILINE or re.M   ; Changes the behavior of ^ and $ to match the start and end of each line within the string, not just the start and end of the entire string.

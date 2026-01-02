@@ -99,6 +99,7 @@ DEFN: fptk            | partition                :: partition(n, seq, *, step=No
 DEFN: fptk            | lpartition               :: lpartition(n, seq, *, step=None, tail=False) -> List  ; simply list(partition(...))
 FROM: funcy           | partition_by             :: partition_by(f, seq) -> iterator of iterators  ; splits when f(item) change
 FROM: funcy           | lpartition_by            :: lpartition_by(f,seq) -> list of lists  ; list(partition_by(...))
+FROM: funcy           | group_by                 :: group_by(f, seq) -> defaultdict(list)  ; groups elems of seq keyed by the result of f
 DEFN: fptk            | lmulticut_by             :: lmulticut_by(pred, seq, keep_border=True, merge_border=False) -> list  ; cut at pred(elem)==True elems
 
 === APL: counting ===

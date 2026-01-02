@@ -190,7 +190,7 @@
     (import funcy [partition_by])   #_ "partition_by(f, seq) -> iterator of iterators | splits when f(item) change" ;;
     (import funcy [lpartition_by])  #_ "lpartition_by(f,seq) -> list of lists | list(partition_by(...))" ;;
 
-    (import funcy [group_by] #_ "group_by(f, seq) -> defaultdict(list) | groups elems of seq keyed by the result of f")
+    (import funcy [group_by] ) #_ "group_by(f, seq) -> defaultdict(list) | groups elems of seq keyed by the result of f" ;;
 
     #_ "lmulticut_by(pred, seq, keep_border=True, merge_border=False) -> list | cut at pred(elem)==True elems"
     (defn #^ (of List list)
