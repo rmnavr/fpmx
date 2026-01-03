@@ -31,7 +31,7 @@ Most important objects in lenses are UL (UnboundLens) and SF (StateFunction),
 which will be further referred to as UL and SF.
 
 UL/SF definition, application, composition:
-```
+```hy
 (. lens [-2] ["key"] [idx] attr)         ; define UL
 (. lens [-2] ["key"] [idx] attr (set 3)) ; define SF
 
@@ -46,7 +46,7 @@ UL/SF definition, application, composition:
 ```
 
 SF ("final" getters/setters):
-```
+```hy
 (. lens [1] (Each) (get))                       ; returns 1st focused elem // not the best combination with Each
 (. lens [1] (Each) (collect))                   ; returns all focused elems
 (. lens [1] (Each) (get_monoid))                ; returns as 1-lvl-deep list
@@ -58,7 +58,7 @@ SF ("final" getters/setters):
 ```
 
 Calling methods on focus:
-```
+```hy
 (. lens [1] [2] (call "__mul__" 10)) ; returns full data, calls method of focused object
                                      ; (avoid usage of mutating methods);
 (. lens [0] [2] (call___mul__ 10))   ; <- alternative syntax
@@ -71,7 +71,7 @@ Calling methods on focus:
 ```
 
 Important lens methods (short info):
-```
+```hy
 ; can work with both getters and setters:
 (Each)
 (Recur int)         ; recursively finds all ints
@@ -91,7 +91,7 @@ Important lens methods (short info):
 ```
 
 Helpers:
-```
+```hy
 (. lens [1] [2] (Fold str) (kind))  ; shows kind of UL (will not work with SF)
 ```
 
