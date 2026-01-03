@@ -10,7 +10,7 @@ They simplify lens definition, composition and application.
 > Lenses can be seen as buffed getters and setters.
 
 Usage:
-```
+```hy
 (import fptk.lenses [lens])        ; main object (lens) from original lenses library
 (require fptk [lns &+ &+> l> l>=]) ; macros
 
@@ -92,7 +92,11 @@ Important lens methods (short info):
 
 Helpers:
 ```hy
-(. lens [1] [2] (Fold str) (kind))  ; shows kind of UL (will not work with SF)
+(. lens [1] (Fold str) (kind))  ; shows kind of UL (will not work with SF)
+
+; note that if your data has field "kind",
+; you should use (GetAttr "kind") to not get
+; into the shaddow of lens inner "kind" method
 ```
 
 ## fptk lenses macros
@@ -129,16 +133,15 @@ All fptk macros recognize `lns` syntax described above.
 
 ```hy
 ; lns-macro is used to define UL or SF in alternative syntax:
-(lns 1 (Each))                          ; UL: (. lens [1] (Each))
-(lns 1 (Each) (set 3))                  ; SF: (. lens [1] (Each) (set 3))
+(lns -2 "key" idx .attr (dndr> / 3))    ; (/ (. lens [-2] ["key"] [idx] attr (set 3)) 3)    
 
-; l> is used to apply SF to data_structure,
-(l>  xs 1 (Each) (modify sqrt))         ; ((. lens [1] (Each) (modify sqrt)) xs)
+; l> is used to define and apply SF to data:
+(l> xs 1 (Each) (modify sqrt))          ; ((. lens [1] (Each) (modify sqrt)) xs)
 
 ; l>= also rebinds result to same name:
 (l>= xs 1 (Each) (modify sqrt))         ; (setv xs ((. lens [1] (Each) (modify sqrt)) xs))
 
-; &+ can combine several ULs + obligatory getter/setter at the end:
+; &+ is used to define SF via combination of ULs and obligatory getter/setter at the end:
 (&+ (lns 1) (. lens [2]) (set "here"))  ; (& (. lens [1]) (. lens [2] (set "here")))
 
 ; &+> also applies composed SF:

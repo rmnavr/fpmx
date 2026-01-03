@@ -1,24 +1,31 @@
 
----
-fptk docs:
-1. [Cheetsheet](https://github.com/rmnavr/fptk/blob/main/docs/cheetsheet.md)
-2. [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md)
-3. [Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)
-4. You are here -> [Monads](https://github.com/rmnavr/fptk/blob/main/docs/monads.md)
----
+# fptk monads
 
 fptk implements monad types:
 * [Maybe](#Maybe)
 * [Result](#Result)
 
+Monads aim to be compatible with pydantic typecheck.
+
 <!-- Maybe ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 # Maybe
 
+Module `fptk.monads.maybeM` exposes objects:
+* Class: `Maybe`
+* Factory functions: `Just`, `Nothing`
+* Functions: `justQ`, `nothingQ`, `mapM`, `bindM`, `unwrapM`, `unwrapM_or`
+
+## User API
+
+To check if your `m` is of Maybe type, you can use `(= (type m) Maybe)`.
+But you can't use `(= (type m) Just)`, since Just is actually a function, not a class.
+Use `(justQ m)` instead.
+
 Creating Maybe type:
 ```hy
-    (Just 3) ; Create Maybe type with Just container (with 3 placed inside it)
-    Nothing  ; Create Maybe type with Nothing inside
+    (Just 3) ; Create Maybe object with Just container (with 3 placed inside it)
+    Nothing  ; Create Maybe object with special "nothing" container
 
     ; From a user POV Maybe type itself must be used only in annotations,
     ; that can be optionally validated by pydantic's validate_call like for example:
@@ -50,32 +57,24 @@ Utilities:
 
 # Result
 
-## Intro to Result type in fptk
+Module `fptk.monads.resultM` exposes objects:
+* class: `Result`
+* factory functions: `Success`, `Failure`
+* functions: `successQ`, `failureQ`, `mapR`, `bindR`, `unwrapR`, `unwrapR_or`, `unwrapE`, `unwrapE_or`
 
-> Usage of Result type (or Either monad) pattern is best described in:
-> [F#-lang: Railway Oriented Programming](https://fsharpforfunandprofit.com/rop/)
-
-Terminology used in fptk implementation of Result type:
-- Result — main type
-- Container — Success or Failure type
-- Value — value wrapped in Success or Failure type
-
-Result in fptk aims to be compatible with pydantic typecheck.
-
-> **Dev note**:
-> fptk implementation of Result type contains some tricks
-> (required for proper pydantic checks) that are hidden from user API.
-> 
-> Most notable thing is that `Success` and `Failure` are
-> implemented as factory functions, not as classes (despite the fact that they start with a capital letter).
-> And actual types are called `_Success` and `_Failure` (which are not exposed to user).
 
 ## User API
+
+To check if your `m` is of Result type, you can use `(= (type m) Result)`.
+But you can't use `(= (type m) Success)`, since Success is actually a function, not a class.
+Use `(successQ m)` instead.
 
 Creating Result type:
 ```hy
     (Success 3)      ; Create Result type with Success container (with 3 placed inside it)
     (Failure "err")  ; Create Result type with Failure container (with "err" placed inside it)
+
+    ; internally Success and Failure are factory functions, not classes
 
     ; From a user POV Result type itself must be used only in annotations,
     ; that can be optionally validated by pydantic's validate_call like for example:
@@ -115,3 +114,5 @@ Dev usage:
 ```
 
 <!-- __________________________________________________________________________/ }}}1 -->
+
+
