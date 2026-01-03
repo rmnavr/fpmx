@@ -1,99 +1,147 @@
 
----
-fptk docs:
-1. [Cheetsheet](https://github.com/rmnavr/fptk/blob/main/docs/cheetsheet.md)
-2. [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md)
-3. You are here -> [Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)
-4. [Monads](https://github.com/rmnavr/fptk/blob/main/docs/monads.md)
----
+<!-- Intro ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-# Lenses-related macroses
+# fptk lenses
 
 Lenses macros should be used together with [lenses](https://github.com/ingolemo/python-lenses) library.
 They simplify lens definition, composition and application.
-> Lenses is Haskell-inspired library for working with deeply nested immutable data
 
-Following macros are used in fptk:
-* `lns`
-* `&+`
-* `&+>`
-* `l>`
-* `l>=` 
+> Lenses is Haskell-inspired library for working with deeply nested immutable data.
+> Lenses can be seen as buffed getters and setters.
 
-In general, symbols in fptk macros names (`l>`, `l>=`, `&+` and `&+>`) mean:
-- `l` — expects `lns` macro syntax
-- `&` — combine
-- `+` — expects getter/setter at the end
-- `>` — apply
+Usage:
+```
+(import fptk.lenses [lens])        ; main object (lens) from original lenses library
+(require fptk [lns &+ &+> l> l>=]) ; macros
 
-<!-- lns ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+; you don't need to interact with `lens` directly, but fptk-lenses macros require it to be loaded
+```
 
-# `lns` macro in details
+<!-- __________________________________________________________________________/ }}}1 -->
+<!-- Cheetsheet ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-`lns` macro offers alternative syntax for lenses.
+# Cheatsheet
 
-Basic syntax of `lns` macro:
+In order to see what role fptk-lenses macros play,
+below cheatsheet is given for lenses library as a whole, not just for fptk macros.
+
+## lenses cheatsheet (for original lenses library)
+
+Most important objects in lenses are UL (UnboundLens) and SF (StateFunction),
+which will be further referred to as UL and SF.
+
+UL/SF definition, application, composition:
+```
+(. lens [-2] ["key"] [idx] attr)         ; define UL
+(. lens [-2] ["key"] [idx] attr (set 3)) ; define SF
+
+((. lens [1] (get)) data)                ; SF application
+
+(&  (. lens [1]) (. lens [2]))                       ; composing ULs
+(&  (. lens [1]) (. lens [2]) (. lens [2] (set 3)))  ; composing ULs and SF (SF can be only at last position)
+(&  xs (. lens [1] (get)) (. lens [2] (get)))        ; SFs application (one after another)
+(&= xs (. lens (Each) (modify sqrt)))                ; SF application and rebinding xs to result
+
+(. lens [1] (bitwise_and 5))            ; since «&» is taken, this is how bitwise_and should be done
+```
+
+SF ("final" getters/setters):
+```
+(. lens [1] (Each) (get))                       ; returns 1st focused elem // not the best combination with Each
+(. lens [1] (Each) (collect))                   ; returns all focused elems
+(. lens [1] (Each) (get_monoid))                ; returns as 1-lvl-deep list
+
+(. lens [1] (Each) (set "here"))                ; returns full data
+(. lens [1] (Each) (set_many (cycle ["here"]))) ; returns full data, sets foci to values via iterator
+(. lens [1] (Each) (modify str))                ; \ returns full data, applies function to focus
+(. lens [1] (Each) (modify (fn [x] (str x))))   ; /
+```
+
+Calling methods on focus:
+```
+(. lens [1] [2] (call "__mul__" 10)) ; returns full data, calls method of focused object
+                                     ; (avoid usage of mutating methods);
+(. lens [0] [2] (call___mul__ 10))   ; <- alternative syntax
+; most dunders (except &) also have another syntax alternative:
+(* (. lens [0] [2]) 10)
+
+(. lens [1] (call_mut "sort" :shallow True)))   ; this is proper way to call mutating methods,
+(. lens [1] (call_mut "sort" :shallow False)))  ; shallow=False will use deepcopy internaly;
+(. lens [1] (call_mut_sort   :shallow True)))   ; <- alternative syntax
+```
+
+Important lens methods (short info):
+```
+; can work with both getters and setters:
+(Each)
+(Recur int)         ; recursively finds all ints
+(Values)            ; \
+(Item)              ; | returns tuple of key and value
+(Keys)              ; /
+(Filter (fn [x] (< x 100)))
+(Instance str)      ; checks if focus is str
+(Contains "item")   ; with (get) will return True/False, with set True/False will add/remove to data
+
+; work only with getter:
+(Fold ...)               ; getter with multiple foci
+(F (fn [x] (* x 10)))    ; wrapper for getter
+
+; work only with setter:
+(Fork (lns 0 1) (lns 1))
+```
+
+Helpers:
+```
+(. lens [1] [2] (Fold str) (kind))  ; shows kind of UL (will not work with SF)
+```
+
+## fptk lenses macros
+
+### lns syntax (fptk)
+
+`lns` macro offers new syntax for lens object:
+
 ```hy
 ; standalone numbers, strings and variables are recognized as index access:
 (lns 1 -2 (- 7) "key" idx)  ; (. lens [1] [-2] [- 7] ["key"] [idx])
 
-; form below is seen as attribute access:
+; attribute access:
 (lns .attr)                 ; (. lens attr)
-; [!] notice that .attr form can't pass attr as argument,
-;     use (GetAttr "attr") instead
+                            ; (. lens (GetAttr "attr"))
 
-; arbitrary expressions (i.e. that are surrounded by parentheses) are parsed without changes:
+; expressions surrounded by parentheses) are seen as is:
 (lns (Each) (set 3))        ; (. lens (Each) (set 3))
 
-; thus, to ensure arbitrary expression is recognized as index, you must use square brackets:
+; to ensure arbitrary expression is recognized as index, use square brackets:
 (lns (+ i 3))               ; (. lens (+ i 3))   // will give error
 (lns [(+ i 3)])             ; (. lens [(+ i 3)]) // works ok
-```
 
-`lns` macro also recognizes 4 special forms (`mth>`, `mut>`, `dndr>` and `dndr>>`):
-```hy
+; lns macro recognizes 4 special forms:
 (lns 1 (mth> .sort))                ; (. lens (call "sort")
 (lns 1 (mut> .copy :shallow True))  ; (. lens (call_mut "copy" :shallow True)
 (lns 1 (dndr>  / 3))                ; (/ (. lens [1]) 3)
 (lns 1 (dndr>> / 3))                ; (/ 3 (. lens [1]))
-
-; [!] notice that mth> and mut> can't pass method as argument,
-;     use (call "mth" ..) or (call_mut "mth" ..) instead
 ```
 
-Reasoning for creating syntax (```.attr``` and ```(mth> .sort)```) that can't pass attr/method name as argument is the same as for `pluckm` macro:
-* In hy original syntax `.smth` is the way to access attribute/method, not `"smth"`
-* Attribute's names are rarely passed as parameter (it may be considered anti-pattern)
+### Usage of fptk lenses macros
 
-<!-- __________________________________________________________________________/ }}}1 -->
-<!-- all macros ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+All fptk macros recognize `lns` syntax described above.
 
-# All lenses macros
-
-Most important objects in lenses are UnboundLens and StateFunction, which will be further referred to as UL and SF.
 ```hy
-; lns can be used to define both UL or SF:
-(lns 1 (Each))                      ; (. lens [1] (Each))
-(lns 1 (Each) (set 3))              ; (. lens [1] (Each) (set 3))
-```
+; lns-macro is used to define UL or SF in alternative syntax:
+(lns 1 (Each))                          ; UL: (. lens [1] (Each))
+(lns 1 (Each) (set 3))                  ; SF: (. lens [1] (Each) (set 3))
 
-For context, original lenses library offers `&` and `&=` functions that are used like so:
-```hy
-(& (. lens [1]) (. lens [2] (set 3)))        ; lens composition (ULs + last one can be UL/SF)
-(& xs (. lens [1] (get)) (. lens [2] (get))) ; SFs application (one after another)
-(&= xs (. lens (Each) (modify sqrt)))        ; applicating SF to xs and updating xs value
-```
+; l> is used to apply SF to data_structure,
+(l>  xs 1 (Each) (modify sqrt))         ; ((. lens [1] (Each) (modify sqrt)) xs)
 
-fptk lens macros (`l>`, `l>=`, `&+` and `&+>`) do not aim to replace original `&` and `&=` functions.
-They aim to extend number of ways in which lenses can be composed syntactically.
-```hy
-; l> is used to apply SF, l>= also updates value, both of them use lns syntax:
-(l>  xs 1 (Each) (modify sqrt))     ; ((. lens [1] (Each) (modify sqrt)) xs)
-(l>= xs 1 (Each) (modify sqrt))     ; (setv xs ((. lens [1] (Each) (modify sqrt)) xs))
+; l>= also rebinds result to same name:
+(l>= xs 1 (Each) (modify sqrt))         ; (setv xs ((. lens [1] (Each) (modify sqrt)) xs))
 
-; &+ can combine several ULs (in eather lns or normal syntax) and require getter/setter at the end,
-; &+> also applies composed SF:
+; &+ can combine several ULs + obligatory getter/setter at the end:
 (&+ (lns 1) (. lens [2]) (set "here"))  ; (& (. lens [1]) (. lens [2] (set "here")))
+
+; &+> also applies composed SF:
 (&+> xs (lns 1) (mut> .sort))           ; ((& (. lens [1] (call_mut "sort"))) xs)
 ```
 
