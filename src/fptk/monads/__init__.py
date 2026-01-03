@@ -1,2 +1,3 @@
-import hy
-from fptk.monads.__init_hy__ import *
+from fptk.monads.maybeM  import *
+from fptk.monads.resultM import *
+

@@ -65,6 +65,4 @@
 
 	fptk:
 	- chop
-    - strange: lmapm in fptk and _fptk_local work differently
-	  (see $TARGETS lmapm : (list) in jax FCN proj)
-	- dc_replace
+	- monads without pydantic?

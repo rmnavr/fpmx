@@ -3,8 +3,8 @@
 
     (import typing [TypeVar Generic Union])
     (import pydantic [BaseModel])
-    (import funcy [compose rcompose lmap partial])
-    (require hyrule [of unless])
+    (import funcy [rcompose lmap partial])
+    (require fptk.core.from_hyrule [of unless])
 
     (export :objects [ Success Failure Result
                        successQ failureQ

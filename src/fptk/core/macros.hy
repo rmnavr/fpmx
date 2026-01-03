@@ -1,9 +1,17 @@
 
-; Import ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; Import, Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	(import  hyrule [rest butlast])
-	(require hyrule [-> ->> of])
+	(import  fptk.core.from_hyrule [rest butlast flatten])
+	(require fptk.core.from_hyrule [-> ->> of comment])
 	(import  operator)
+
+    (export :macros [ def:: f::
+                      fm f> mapm lmapm filterm lfilterm
+                      => =>> p:
+                      pluckm lpluckm getattrm
+                      lns &+ &+> l> l>=
+                      timing assertm gives_error_typeQ
+                    ])
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -51,7 +59,7 @@
 	;	 hy.R.fptk.fptk_macros.fm	-> [✗ ✗] does not work anywhere
 
 ; _____________________________________________________________________________/ }}}1
-;
+; 
 ; expr type checkers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	(-> (defn _isExprWithHeadSymbol ; (head ...)
@@ -173,20 +181,6 @@
 
 ; === Macros ===
 
-; Benchmarking:
-; timing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    (defmacro timing [#* exprs]
-        `(do (setv _time_getter hy.I.time.perf_counter)
-             (setv f (fn [] ~@exprs))
-             (setv t0 (_time_getter))
-             (setv outp (f))
-             (setv t1 (_time_getter))
-             #((- t1 t0) outp)))
-
-; _____________________________________________________________________________/ }}}1
-
-; Typing:
 ; def:: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 ; ■ info ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
@@ -296,16 +290,15 @@
 		`(of Callable ~fInputs ~fOutput))
 
 ; _____________________________________________________________________________/ }}}1
-; Lambdas:
-; fm, (l)mapm, (l)filterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; fm, f>, (l)mapm, (l)filterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	(defmacro fm [#* exprs]
 		(setv itargs (->> exprs
-						  hy.I.hyrule.flatten
+						  flatten
 						  (filter (fn [%x] (= %x 'it)))
 						  sorted))	; example: [hy.models.Symbol('it')]
 		(setv pargs  (->> exprs
-						  hy.I.hyrule.flatten
+						  flatten
 						  (filter (fn [%x] (or (= %x '%1) (= %x '%2) (= %x '%3)
 											   (= %x '%4) (= %x '%5) (= %x '%6)
 											   (= %x '%7) (= %x '%8) (= %x '%9))))
@@ -318,7 +311,7 @@
 		(if has_pargs
 			(setv maxN (int (get pargs -1 -1)))		; only "%1"... args are found
 			(setv maxN 0))							; no args are found
-		(setv inputs (lfor n (hy.I.hyrule.thru 1 maxN) (hy.models.Symbol f"%{n}")))
+		(setv inputs (lfor n (hy.I.hyrule.thru 1 (+ maxN 1)) (hy.models.Symbol f"%{n}")))
 		(return `(fn [~@inputs] ~@exprs)))
 
 	(defmacro f> [one_shot_fm #* args]
@@ -337,7 +330,6 @@
 		(return `(list (filter (hy.R.fptk.fm ~one_shot_fm) ~iterable))))
 
 ; _____________________________________________________________________________/ }}}1
-; Threaders and getters:
 ; =>, =>> ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ;'3              ; new       hy.models.Integer 
@@ -530,7 +522,6 @@
 				  (return `(getattr ~iterable ~indx ~default)))))
 
 ; _____________________________________________________________________________/ }}}1
-; Lens:
 ; lns ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	(defmacro lns [#* macro_args]
@@ -595,7 +586,6 @@
 	   `(&= ~variable (hy.R.fptk.lns ~@lenses_args)))
 
 ; _____________________________________________________________________________/ }}}1
-; Tests:
 ; assertm, gives_error_typeQ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	(defmacro assertm [op arg1 arg2]
@@ -639,10 +629,10 @@
                                          (hy.I.termcolor.colored e2 "red"))))
 					 eFull)))
 
-    ; test:
-    ; (assertm eq (div 2 0) (div 1 0))
-    ; (assertm eq 1 (div 1 0))
-    ; (assertm eq (div 1 0) 1)
+    ;; test:
+    ;; (assertm eq (div 2 0) (div 1 0))
+    ;; (assertm eq 1 (div 1 0))
+    ;; (assertm eq (div 1 0) 1)
 
 	(defmacro gives_error_typeQ [expr error_type]
 	   `(try ~expr
@@ -651,4 +641,16 @@
 					 (= ~error_type (type e)))))
 
 ; _____________________________________________________________________________/ }}}1
+; timing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (defmacro timing [#* exprs]
+        `(do (setv _time_getter hy.I.time.perf_counter)
+             (setv f (fn [] ~@exprs))
+             (setv t0 (_time_getter))
+             (setv outp (f))
+             (setv t1 (_time_getter))
+             #((- t1 t0) outp)))
+
+; _____________________________________________________________________________/ }}}1
+
 

@@ -2,6 +2,9 @@
     (import fptk *) (require fptk *)
     (import pydantic [ConfigDict])
 
+    (import fptk.strict *)
+    (import fptk.monads *)
+
 ; Maybe: basics ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (assertm eq (justQ (Just 3)) True)

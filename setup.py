@@ -5,7 +5,6 @@ proj_version = '0.5.0.dev1'
 
 libs_required = [
     'hy >= 1',
-    'hyrule >= 1', 
     'pydantic >= 2', 
     'lenses >= 1.2.0',
     'funcy >= 2.0',

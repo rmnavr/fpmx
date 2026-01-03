@@ -1,88 +1,125 @@
 
 <!-- Intro ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-# **fptk** — functional toolkit for hy-lang
+# **fptk** — [F]unctional [P]rogramming [T]ool[K]it for hy-lang
 
-fptk is functional programming language extension for hy-lang.
-
-It is implemented as a curated list of FP-related types/classes, functions and macroses,
+fptk is a curated list of FP-related types/classes, functions and macros,
 that can be imported into main scope altogether to always have them at your fingertips.
-> Having high amount of functions available in main context is inspired by Wolfram Language,
-> in which all (yes, ALL) standard functions are always in the main context.
 
-Intended usage of fptk in hy is:
+Since fptk can be seen as a language extension,
+rather than a collection of functions, 
+it's intended usage is:
 ```hy
-(import fptk *)     ; import modules, functions and types/classes
+(import fptk *)     ; import modules, functions and types
 (require fptk *)    ; import macros
 ```
+(although you still can import objects one by one)
 
 <!-- __________________________________________________________________________/ }}}1 -->
 
-<!-- Topics ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+<!-- Parts ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-# Topics that fptk covers
+# Parts of fptk
 
-Main parts of FPTK are:
+fptk is split into 2 parts:
 
-Basic operations in FP-style:
-- Math, logic and checks (most checks in fptk end with "Q": like `intQ`, `zerolenQ`, etc.)
-- String manipulation and regexes
-- Basic IO (functions like `read_file` and `file_existsQ`)
-- Basic benchmarking and debugging
+## 1/2 Core functionality
 
-APL-like functions (heavily inspired by [funcy](https://github.com/Suor/funcy/) lib):
-> fptk follows funcy approach of providing both generator
-> and list version of most functions (like `map` and `lmap`).
-> Also, most functions do not mutate data.
-- Buffed getters (first, second, last, rest, ...)
-- Functional composition, piping, partial application and currying
-- Mapping, filtering and partitioning of sequences
+Full core functionality is loaded by:
+```hy
+(import fptk *)  ; or load only what is required
+(require fptk *) ; or load only what is required
+```
 
-Typing:
-- Reimport of basic types like `Any`, `Optional`, etc.
-- Dynamic type checking to an extent that is offered by [pydantic](https://github.com/pydantic/pydantic)
+Core functionality contains the following:
+- Basic operations in FP-style:
+  - Math, logic and checks (most checks in fptk end with "Q": like `intQ`, `zerolenQ`, etc.)
+  - String manipulation and regexes
+  - Basic IO (functions like `read_file` and `file_existsQ`)
+  - Basic benchmarking and debugging
+- APL-like functions (heavily inspired by [funcy](https://github.com/Suor/funcy/) lib):
+  > fptk follows funcy approach of providing both generator
+  > and list version of most functions (like `map` and `lmap`).
+  > Also, most functions do not mutate data.
+  - Buffed getters (first, second, last, rest, ...)
+  - Functional composition, piping, partial application
+  - Mapping, filtering and partitioning of sequences
+- Typing:
+  - Reimport of basic types like `Any`, `Optional`, `Union`, etc.
+- Other quirky things:
+  - 1-based index variants of basic getters (don't worry, fptk does not force using them in any way)
+  - Haskell-inspired macro for annotating functions: `(def:: int -> int => float ...)`
 
-Other quirky things:
-- 1-based index variants of basic getters (don't worry, fptk does not force using them in any way)
-- Haskell-inspired:
-  - macros for [lenses](https://github.com/ingolemo/python-lenses) library
-  - Result and Maybe monads that can be type-checked by pydantic
-  - macros for annotating functions via signatures like `int -> int => float`
+## 2/2 Extra funtionality
+
+Load required submodules as required:
+```hy
+; Strict typing:
+(import fptk.strict *) ; or load only what is required
+
+; Lenses:
+(import fptk.lenses [lens])
+(require fptk [lns &+ &+> l> l>=]) ; or load only what is required
+
+; Monads:
+(import fptk.monads *)
+; or one-by-one:
+(import fptk.monads.maybeM *)  ; or load only what is required
+(import fptk.monads.resultM *) ; or load only what is required
+```
+
+* `fptk.strict` containes strict-typing helpers utilizing [pydantic](https://github.com/pydantic/pydantic) lib
+* `fptk.lenses` offers macros for [lenses](https://github.com/ingolemo/python-lenses) library
+  (which is Haskell-inspired lib for working with deeply nested structures)
+* `fptk.monads` currently contains Result and Maybe monad that can be type-checked by pydantic
+
+## Note on fptk startup time
+
+fptk tries it's best to have fast startup time, but being hy lib, it required some import quirk:
+- calling `(import fptk *)` loads only core functionality, not extra functionality
+- lenses macros are stored in `(require fptk [lns ...])`, not in `(require fptk.lenses [...])`
+
+Approx load times for my machine (your milage may vary):
+-  80 ms to load hy itself 
+- 150 ms to load fptk core
+- extra  50 ms to load lenses
+- extra 200 ms to load strict typing and/or monads (pydantic takes most of load time)
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Dependencies ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 # Dependencies
 
-Tested with:
+Tested with versions:
 * [hy](https://github.com/hylang/hy) 1.0.0
-* [hyrule](https://github.com/hylang/hyrule) 1.0.0
 * [funcy](https://github.com/Suor/funcy/) 2.0
-* [lenses](https://github.com/ingolemo/python-lenses) 1.2 
-* [pydantic](https://github.com/pydantic/pydantic) 2.0
+* [lenses](https://github.com/ingolemo/python-lenses) 1.2
+* [pydantic](https://github.com/pydantic/pydantic) 2.12.3
+* termcolor 3.2.0
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Documentation ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 ## Documentation
 
-1. [Cheetsheet](https://github.com/rmnavr/fptk/blob/main/docs/cheetsheet.md) — list of all fptk entities with descriptions 
-2. [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md) — description of every fptk macro (except lens-related macros)
-3. [Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md) — macros that simplify lens definition/application/composition
-4. [Monads](https://github.com/rmnavr/fptk/blob/main/docs/monads.md) — API of fptk implementation of several monad types
+1. Core functionality:
+   - [Core - cheetsheet](docs/core_cheetsheet_autogenerated.md) 
+   - [Core - macros](docs/core_macros.md)
+2. Extra functionality:
+   - [strict typing](docs/strict_typing.md)
+   - [fptk lenses](docs/lenses.md)
+   - [monads](docs/monads.md)
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Project status ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 # Project status
 
-As of October 2025:
-- [x] full documentation is done
-- [x] testing suite is written
-- [ ] some functions require polishing (mostly on adding proper error messsaging)
-- [ ] edge cases of fptk macros interactions require more testing
+Stable release is not yet reached, some API-breaking changes may happen.
 
-Stable release is not yet reached, small API-breaking changes can happen.
+Overall design philosophy of fptk is to:
+- keep core functionality stable and fast-to-load
+- add new situational (and thus optional) modules into extras
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Installation ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->

@@ -1,5 +1,11 @@
 
-# cur dev version
+# Version 0.5.0
+- Big restructure to significantly increase startup time
+  - removed hyrule dependency
+  - split into modules: core, strict_typing, lenses, monads
+  - only core is loaded by default
+
+# Version 0.4.4.dev
 - added Maybe monad (works similar to Result monad)
 - fixed incorrectly reversed application order of funcs in resultM
 - `f>` is back lol and `=>`/`p:` has special recognition for it (while `=>>` basic recognition works ok)
