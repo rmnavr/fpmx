@@ -52,7 +52,7 @@
         "str.rstrip method as a function"
         (string.rstrip chars))
 
-    #_ "enlengthen(string, target_len, char=' ', on_tail=True) | adds char to string until target_len reached"
+    #_ "enlengthen(target_len, string, char=' ', on_tail=True) | adds char to string until target_len reached"
     (defn #^ str
         enlengthen
         [ #^ int  target_len
