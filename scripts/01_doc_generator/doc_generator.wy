@@ -675,7 +675,7 @@
 | Group | Functions/Types | Macros |
 |-------|-----------------|--------|"
 
-	setv $HEADER1		 "fptk-core cheatsheet"
+	setv $HEADER1		 "fptk-core-cheatsheet"
 	setv $HEADER2		 "Detailed descriptions"
 	setv $BACKLINK		 f"[go up](#{$HEADER1})"
 

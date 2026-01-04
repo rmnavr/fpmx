@@ -1,4 +1,4 @@
-# fptk-core cheatsheet
+# fptk-core-cheatsheet
 
 
 | Group | Functions/Types | Macros |
@@ -33,7 +33,7 @@
 
 ## count_occurrences
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: count_occurrences
@@ -50,7 +50,7 @@ count_occurrences(elem, seq)
 
 ## lfilter
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lfilter
@@ -69,7 +69,7 @@ lfilter(pred, seq)
 
 ## fltr1st
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: fltr1st
@@ -87,7 +87,7 @@ fltr1st(function, iterable)
 
 ## reject
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: reject (= funcy.remove)
@@ -105,7 +105,7 @@ remove(pred, seq)
 
 ## lreject
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lreject (= funcy.lremove)
@@ -123,7 +123,7 @@ lremove(pred, seq)
 
 ## without
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: without
@@ -141,7 +141,7 @@ without(items, seq)
 
 ## lwithout
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lwithout
@@ -159,7 +159,7 @@ lwithout(items, seq)
 
 ## takewhile
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: takewhile
@@ -178,7 +178,7 @@ takewhile(pred, seq=EMPTY)
 
 ## dropwhile
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: dropwhile
@@ -197,7 +197,7 @@ dropwhile(pred, seq=EMPTY)
 
 ## filter_split
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: filter_split (= funcy.split)
@@ -215,7 +215,7 @@ split(pred, seq)
 
 ## lfilter_split
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lfilter_split (= funcy.lsplit)
@@ -234,7 +234,7 @@ lsplit(pred, seq)
 
 ## bisect_at
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: bisect_at (= funcy.split_at)
@@ -253,7 +253,7 @@ split_at(n, seq)
 
 ## lbisect_at
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lbisect_at
@@ -273,7 +273,7 @@ lbisect_at(n, seq)
 
 ## bisect_by
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: bisect_by (= funcy.split_by)
@@ -292,7 +292,7 @@ split_by(pred, seq)
 
 ## lbisect_by
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lbisect_by (= funcy.lsplit_by)
@@ -311,7 +311,7 @@ lsplit_by(pred, seq)
 
 ## mask_sel
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: mask_sel (= itertools.compress)
@@ -353,7 +353,7 @@ class compress(builtins.object)
 
 ## lmask_sel
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lmask_sel
@@ -370,7 +370,7 @@ lmask_sel(data, selectors)
 
 ## mask2idxs
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: mask2idxs
@@ -388,7 +388,7 @@ mask2idxs(mask)
 
 ## idxs2mask
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: idxs2mask
@@ -407,7 +407,7 @@ idxs2mask(idxs, bools=False)
 
 ## filterm
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: filterm
@@ -418,7 +418,7 @@ Info: same as filter, but expects fm-syntax for func
 
 ## lfilterm
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lfilterm
@@ -429,7 +429,7 @@ Info: list version of lfilterm
 
 ## inf_range
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: inf_range (= itertools.count)
@@ -479,7 +479,7 @@ class count(builtins.object)
 
 ## islice
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: islice
@@ -528,7 +528,7 @@ class islice(builtins.object)
 
 ## lislice
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lislice
@@ -545,7 +545,7 @@ lislice(*kwargs)
 
 ## cycle
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: cycle
@@ -588,7 +588,7 @@ class cycle(builtins.object)
 
 ## lcycle
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lcycle
@@ -606,7 +606,7 @@ lcycle(p, n)
 
 ## repeat
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: repeat
@@ -652,7 +652,7 @@ class repeat(builtins.object)
 
 ## lrepeat
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lrepeat
@@ -670,7 +670,7 @@ lrepeat(elem, n)
 
 ## concat
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: concat (= itertools.chain)
@@ -723,7 +723,7 @@ class chain(builtins.object)
 
 ## lconcat
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lconcat
@@ -741,7 +741,7 @@ lconcat(*seqs)
 
 ## cat
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: cat
@@ -759,7 +759,7 @@ from_iterable(iterable, /) method of builtins.type instance
 
 ## lcat
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lcat
@@ -777,7 +777,7 @@ lcat(seqs)
 
 ## mapcat
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: mapcat
@@ -795,7 +795,7 @@ mapcat(f, *seqs)
 
 ## lmapcat
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lmapcat
@@ -813,7 +813,7 @@ lmapcat(f, *seqs)
 
 ## pairwise
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: pairwise
@@ -831,7 +831,7 @@ pairwise(seq)
 
 ## with_prev
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: with_prev
@@ -849,7 +849,7 @@ with_prev(seq, fill=None)
 
 ## with_next
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: with_next
@@ -867,7 +867,7 @@ with_next(seq, fill=None)
 
 ## flatten
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: flatten
@@ -885,7 +885,7 @@ flatten(coll)
 
 ## lreversed
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lreversed
@@ -902,7 +902,7 @@ lreversed(sequence)
 
 ## partition
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: partition
@@ -923,7 +923,7 @@ partition(n, seq, *, step=None, tail=False)
 
 ## lpartition
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lpartition
@@ -944,7 +944,7 @@ lpartition(n, seq, *, step=None, tail=False)
 
 ## partition_by
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: partition_by
@@ -962,7 +962,7 @@ partition_by(f, seq)
 
 ## lpartition_by
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lpartition_by
@@ -980,7 +980,7 @@ lpartition_by(f, seq)
 
 ## group_by
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: group_by
@@ -998,7 +998,7 @@ group_by(f, seq)
 
 ## lmulticut_by
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lmulticut_by
@@ -1029,7 +1029,7 @@ lmulticut_by(pred, seq: list, keep_border=True, merge_border=False) -> List[list
 
 ## cur_time
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: cur_time (= time.time)
@@ -1050,7 +1050,7 @@ time(...)
 
 ## dt_print
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: dt_print
@@ -1074,7 +1074,7 @@ dt_print(*args, fresh_run=False, last_T=[None])
 
 ## timing
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: timing
@@ -1085,7 +1085,7 @@ Info: returns time (in seconds) and result of execution of (fn [] expr1 expr2 ..
 
 ## identity
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: identity
@@ -1102,7 +1102,7 @@ identity(x)
 
 ## constantly
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: constantly
@@ -1119,7 +1119,7 @@ constantly(value)
 
 ## partial
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: partial
@@ -1187,7 +1187,7 @@ class partial(builtins.object)
 
 ## rpartial
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: rpartial
@@ -1205,7 +1205,7 @@ rpartial(func, *args, **kwargs)
 
 ## compose
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: compose
@@ -1223,7 +1223,7 @@ compose(*fs)
 
 ## rcompose
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: rcompose
@@ -1241,7 +1241,7 @@ rcompose(*fs)
 
 ## ljuxt
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: ljuxt
@@ -1260,7 +1260,7 @@ ljuxt(*fs)
 
 ## pflip
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: pflip
@@ -1279,7 +1279,7 @@ pflip(f, a)
 
 ## flip
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: flip
@@ -1297,7 +1297,7 @@ flip(f, a, b)
 
 ## hyruleThreading1
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: ->
@@ -1306,7 +1306,7 @@ Kind: Macro from [fptk/hyrule]
 
 ## hyruleThreading2
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: ->>
@@ -1315,7 +1315,7 @@ Kind: Macro from [fptk/hyrule]
 
 ## hyruleThreading3
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: as->
@@ -1324,7 +1324,7 @@ Kind: Macro from [fptk/hyrule]
 
 ## hyruleThreading4
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: doto
@@ -1334,7 +1334,7 @@ Info: mutating
 
 ## FPTKThreading1
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: =>
@@ -1344,7 +1344,7 @@ Info: unification of dot-macro and ->
 
 ## FPTKThreading2
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: =>>
@@ -1354,7 +1354,7 @@ Info: unification of dot-macro and ->>
 
 ## PipeOfPartials
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: p:
@@ -1364,7 +1364,7 @@ Info: aplicator, pipe of partials
 
 ## nested
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: nested
@@ -1382,7 +1382,7 @@ nested(n, f)
 
 ## apply_n
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: apply_n
@@ -1404,7 +1404,7 @@ apply_n(n, f, *args, **kwargs)
 
 ## do_n
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: do_n
@@ -1415,7 +1415,7 @@ Info: expands to ~ (do body body body ...)
 
 ## list_n
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: list_n
@@ -1425,7 +1425,7 @@ Sgnt: (list_n n #* body) -> List
 
 ## lzip
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lzip
@@ -1442,7 +1442,7 @@ lzip(*iterables)
 
 ## lmap
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lmap
@@ -1461,7 +1461,7 @@ lmap(f, *seqs)
 
 ## starmap
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: starmap
@@ -1500,7 +1500,7 @@ class starmap(builtins.object)
 
 ## lstarmap
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lstarmap
@@ -1518,7 +1518,7 @@ lstarmap(function, iterable)
 
 ## reduce
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: reduce
@@ -1543,7 +1543,7 @@ reduce(...)
 
 ## reductions
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: reductions
@@ -1561,7 +1561,7 @@ reductions(f, seq, acc=EMPTY)
 
 ## lreductions
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lreductions
@@ -1579,7 +1579,7 @@ lreductions(f, seq, acc=EMPTY)
 
 ## sums
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: sums
@@ -1597,7 +1597,7 @@ sums(seq, acc=EMPTY)
 
 ## lsums
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lsums
@@ -1615,7 +1615,7 @@ lsums(seq, acc=EMPTY)
 
 ## product
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: product (= math.prod)
@@ -1639,7 +1639,7 @@ prod(iterable, /, *, start=1)
 
 ## case
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: case
@@ -1648,7 +1648,7 @@ Kind: Macro from [fptk/hyrule]
 
 ## unless
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: unless
@@ -1657,7 +1657,7 @@ Kind: Macro from [fptk/hyrule]
 
 ## lif
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lif
@@ -1666,7 +1666,7 @@ Kind: Macro from [fptk/hyrule]
 
 ## branch
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: branch
@@ -1675,7 +1675,7 @@ Kind: Macro from [fptk/hyrule]
 
 ## fm
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: fm
@@ -1686,7 +1686,7 @@ Info: anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%
 
 ## LambdaWithAppl
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: f>
@@ -1697,7 +1697,7 @@ Info: anonymous function with fm syntax, immediately applicates args
 
 ## mapm
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: mapm
@@ -1707,7 +1707,7 @@ Info: same as map, but expects fm-syntax for func
 
 ## lmapm
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lmapm
@@ -1717,7 +1717,7 @@ Info: same as lmap, but expects fm-syntax for func
 
 ## assoc
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: assoc
@@ -1736,7 +1736,7 @@ assoc(coll, *kvs, **kwargs)
 
 ## nth
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: nth
@@ -1754,7 +1754,7 @@ nth(n, seq)
 
 ## first
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: first
@@ -1772,7 +1772,7 @@ first(seq)
 
 ## second
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: second
@@ -1790,7 +1790,7 @@ second(seq)
 
 ## third
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: third
@@ -1806,7 +1806,7 @@ third(seq)
 
 ## fourth
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: fourth
@@ -1822,7 +1822,7 @@ fourth(seq)
 
 ## beforelast
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: beforelast
@@ -1838,7 +1838,7 @@ beforelast(seq)
 
 ## last
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: last
@@ -1856,7 +1856,7 @@ last(seq)
 
 ## rest
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: rest
@@ -1874,7 +1874,7 @@ rest(seq)
 
 ## butlast
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: butlast
@@ -1892,7 +1892,7 @@ butlast(seq)
 
 ## drop
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: drop
@@ -1910,7 +1910,7 @@ drop(n, seq)
 
 ## take
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: take
@@ -1928,7 +1928,7 @@ take(n, seq)
 
 ## pick
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: pick
@@ -1948,7 +1948,7 @@ pick(ns, seq)
 
 ## ncut
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: ncut
@@ -1957,7 +1957,7 @@ Kind: Macro from [fptk/hyrule]
 
 ## pluck
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: pluck
@@ -1975,7 +1975,7 @@ pluck(key, mappings)
 
 ## lpluck
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lpluck
@@ -1992,7 +1992,7 @@ lpluck(key, mappings)
 
 ## pluck_attr
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: pluck_attr
@@ -2010,7 +2010,7 @@ pluck_attr(attr, objects)
 
 ## lpluck_attr
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lpluck_attr
@@ -2028,7 +2028,7 @@ lpluck_attr(attr, objects)
 
 ## pluckm
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: pluckm
@@ -2039,7 +2039,7 @@ Info: accepts fptk-style .arg syntax
 
 ## lpluckm
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lpluckm
@@ -2049,7 +2049,7 @@ Info: list version of pluckm
 
 ## getattrm
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: getattrm
@@ -2060,7 +2060,7 @@ Info: accepts fptk-style .attr syntax
 
 ## get_
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: get_
@@ -2081,7 +2081,7 @@ get_(seq, *ns)
 
 ## nth_
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: nth_
@@ -2101,7 +2101,7 @@ nth_(n, seq)
 
 ## slice_
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: slice_
@@ -2121,7 +2121,7 @@ slice_(start, end, step=None)
 
 ## cut_
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: cut_
@@ -2140,7 +2140,7 @@ cut_(seq, start, end, step=None)
 
 ## range_
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: range_
@@ -2157,7 +2157,7 @@ range_(start, end=None, step=1)
 
 ## lrange_
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lrange_
@@ -2176,7 +2176,7 @@ lrange_(start, end, step=1)
 
 ## file_existsQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: file_existsQ (= os.path.exists)
@@ -2194,7 +2194,7 @@ exists(path)
 
 ## fileQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: fileQ (= os.path.isfile)
@@ -2211,7 +2211,7 @@ isfile(path)
 
 ## dirQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: dirQ (= os.path.isdir)
@@ -2228,7 +2228,7 @@ isdir(s)
 
 ## read_file
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: read_file
@@ -2246,7 +2246,7 @@ read_file(file_name: str, encoding: str = 'utf-8')
 
 ## write_to_file
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: write_to_file
@@ -2270,7 +2270,7 @@ write_to_file(text: str, file_name: str, mode: str = 'w', encoding: str = 'utf-8
 
 ## and_
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: and_
@@ -2287,7 +2287,7 @@ and_(a, b, /)
 
 ## or_
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: or_
@@ -2304,7 +2304,7 @@ or_(a, b, /)
 
 ## not_
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: not_
@@ -2321,7 +2321,7 @@ not_(a, /)
 
 ## is_
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: is_
@@ -2338,7 +2338,7 @@ is_(a, b, /)
 
 ## xor
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: xor
@@ -2354,7 +2354,7 @@ xor(a, b, /)
 
 ## eq
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: eq
@@ -2371,7 +2371,7 @@ eq(a, b, /)
 
 ## neq
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: neq (= operator.ne)
@@ -2388,7 +2388,7 @@ ne(a, b, /)
 
 ## gt
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: gt
@@ -2405,7 +2405,7 @@ gt(a, b, /)
 
 ## lt
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lt
@@ -2422,7 +2422,7 @@ lt(a, b, /)
 
 ## geq
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: geq (= operator.ge)
@@ -2439,7 +2439,7 @@ ge(a, b, /)
 
 ## leq
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: leq (= operator.le)
@@ -2456,7 +2456,7 @@ le(a, b, /)
 
 ## matmul
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: matmul
@@ -2473,7 +2473,7 @@ matmul(a, b, /)
 
 ## div
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: div (= operator.truediv)
@@ -2490,7 +2490,7 @@ truediv(a, b, /)
 
 ## gt0
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: gt0
@@ -2508,7 +2508,7 @@ gt0(x)
 
 ## geq0
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: geq0
@@ -2526,7 +2526,7 @@ geq0(x)
 
 ## lt0
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lt0
@@ -2544,7 +2544,7 @@ lt0(x)
 
 ## leq0
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: leq0
@@ -2562,7 +2562,7 @@ leq0(x)
 
 ## minus
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: minus
@@ -2579,7 +2579,7 @@ minus(x, y)
 
 ## neg
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: neg
@@ -2597,7 +2597,7 @@ neg(a, /)
 
 ## mod
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: mod
@@ -2615,7 +2615,7 @@ mod(a, b, /)
 
 ## floor
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: floor
@@ -2634,7 +2634,7 @@ floor(x, /)
 
 ## ceil
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: ceil
@@ -2653,7 +2653,7 @@ ceil(x, /)
 
 ## dec
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: dec
@@ -2670,7 +2670,7 @@ dec(n)
 
 ## inc
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: inc
@@ -2687,7 +2687,7 @@ inc(n)
 
 ## sign
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: sign
@@ -2704,7 +2704,7 @@ sign(x)
 
 ## clip
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: clip
@@ -2722,7 +2722,7 @@ clip(x, lower, upper)
 
 ## half
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: half
@@ -2740,7 +2740,7 @@ half(x)
 
 ## double
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: double
@@ -2758,7 +2758,7 @@ double(x)
 
 ## squared
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: squared
@@ -2776,7 +2776,7 @@ squared(x)
 
 ## reciprocal
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: reciprocal
@@ -2794,7 +2794,7 @@ reciprocal(x)
 
 ## sqrt
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: sqrt
@@ -2812,7 +2812,7 @@ sqrt(x, /)
 
 ## dist
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: dist
@@ -2836,7 +2836,7 @@ dist(p, q, /)
 
 ## hypot
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: hypot
@@ -2867,7 +2867,7 @@ hypot(...)
 
 ## normalize
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: normalize
@@ -2889,7 +2889,7 @@ normalize(xs)
 
 ## exp
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: exp
@@ -2906,7 +2906,7 @@ exp(x, /)
 
 ## log
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: log
@@ -2926,7 +2926,7 @@ log(...)
 
 ## ln
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: ln
@@ -2943,7 +2943,7 @@ ln(x)
 
 ## log10
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: log10
@@ -2960,7 +2960,7 @@ log10(x, /)
 
 ## evenQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: evenQ (= funcy.even)
@@ -2976,7 +2976,7 @@ even(x)
 
 ## oddQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: oddQ (= funcy.odd)
@@ -2992,7 +2992,7 @@ odd(x)
 
 ## zeroQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: zeroQ
@@ -3010,7 +3010,7 @@ zeroQ(x)
 
 ## negativeQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: negativeQ
@@ -3028,7 +3028,7 @@ negativeQ(x)
 
 ## positiveQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: positiveQ
@@ -3046,7 +3046,7 @@ positiveQ(x)
 
 ## dmul
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: dmul
@@ -3065,7 +3065,7 @@ dmul(*args)
 
 ## dadd
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: dadd
@@ -3084,7 +3084,7 @@ dadd(*args)
 
 ## lmul
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lmul
@@ -3103,7 +3103,7 @@ lmul(*args)
 
 ## smul
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: smul
@@ -3122,7 +3122,7 @@ smul(*args)
 
 ## mul
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: mul
@@ -3142,7 +3142,7 @@ mul(*args)
 
 ## plus
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: plus
@@ -3161,7 +3161,7 @@ plus(*args)
 
 ## sconcat
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: sconcat
@@ -3181,7 +3181,7 @@ sconcat(*args)
 
 ## fnot
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: fnot
@@ -3199,7 +3199,7 @@ fnot(f, *args, **kwargs)
 
 ## eq_any
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: eq_any
@@ -3217,7 +3217,7 @@ eq_any(x, values)
 
 ## on
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: on
@@ -3236,7 +3236,7 @@ on(f, check, x, y)
 
 ## all_fs
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: all_fs
@@ -3254,7 +3254,7 @@ all_fs(fs, *args, **kwargs)
 
 ## any_fs
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: any_fs
@@ -3272,7 +3272,7 @@ any_fs(fs, *args, **kwargs)
 
 ## trueQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: trueQ
@@ -3290,7 +3290,7 @@ trueQ(x)
 
 ## falseQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: falseQ
@@ -3308,7 +3308,7 @@ falseQ(x)
 
 ## oflenQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: oflenQ
@@ -3326,7 +3326,7 @@ oflenQ(n, xs)
 
 ## zerolenQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: zerolenQ
@@ -3344,7 +3344,7 @@ zerolenQ(xs)
 
 ## choice
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: choice
@@ -3362,7 +3362,7 @@ choice(seq) method of random.Random instance
 
 ## randint
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: randint
@@ -3380,7 +3380,7 @@ randint(a, b) method of random.Random instance
 
 ## randfloat
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: randfloat (= random.uniform)
@@ -3398,7 +3398,7 @@ uniform(a, b) method of random.Random instance
 
 ## rand01
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: rand01 (= random.random)
@@ -3416,7 +3416,7 @@ random() method of random.Random instance
 
 ## pi
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: pi
@@ -3631,7 +3631,7 @@ class float(object)
 
 ## sin
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: sin
@@ -3649,7 +3649,7 @@ sin(x, /)
 
 ## cos
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: cos
@@ -3667,7 +3667,7 @@ cos(x, /)
 
 ## tan
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: tan
@@ -3685,7 +3685,7 @@ tan(x, /)
 
 ## degrees
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: degrees
@@ -3703,7 +3703,7 @@ degrees(x, /)
 
 ## radians
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: radians
@@ -3721,7 +3721,7 @@ radians(x, /)
 
 ## acos
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: acos
@@ -3741,7 +3741,7 @@ acos(x, /)
 
 ## asin
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: asin
@@ -3761,7 +3761,7 @@ asin(x, /)
 
 ## atan
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: atan
@@ -3781,7 +3781,7 @@ atan(x, /)
 
 ## atan2
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: atan2
@@ -3801,7 +3801,7 @@ atan2(y, x, /)
 
 ## pprint
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: pprint
@@ -3818,7 +3818,7 @@ pprint(object, stream=None, indent=1, width=80, depth=None, *, compact=False, so
 
 ## lprint
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lprint
@@ -3837,7 +3837,7 @@ lprint(seq, sep=None)
 
 ## comment
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: comment
@@ -3846,7 +3846,7 @@ Kind: Macro from [fptk/hyrule]
 
 ## strlen
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: strlen
@@ -3864,7 +3864,7 @@ strlen(text)
 
 ## str_join
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: str_join
@@ -3882,7 +3882,7 @@ str_join(ss, sep='')
 
 ## lowercase
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lowercase
@@ -3900,7 +3900,7 @@ lowercase(string: str) -> str
 
 ## strip
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: strip
@@ -3919,7 +3919,7 @@ strip(string: str, chars=None) -> str
 
 ## lstrip
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: lstrip
@@ -3937,7 +3937,7 @@ lstrip(string: str, chars=None) -> str
 
 ## rstrip
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: rstrip
@@ -3955,7 +3955,7 @@ rstrip(string: str, chars=None) -> str
 
 ## enlengthen
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: enlengthen
@@ -3978,7 +3978,7 @@ enlengthen(target_len: int, string: str, char: str = ' ', on_tail: bool = True, 
 
 ## re_sub
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: re_sub (= re.sub)
@@ -4000,7 +4000,7 @@ sub(pattern, repl, string, count=0, flags=0)
 
 ## re_split
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: re_split (= re.split)
@@ -4023,7 +4023,7 @@ split(pattern, string, maxsplit=0, flags=0)
 
 ## re_find
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: re_find
@@ -4042,7 +4042,7 @@ re_find(regex, s, flags=0)
 
 ## re_test
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: re_test
@@ -4060,7 +4060,7 @@ re_test(regex, s, flags=0)
 
 ## re_all
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: re_all
@@ -4078,7 +4078,7 @@ re_all(regex, s, flags=0)
 
 ## assertm
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: assertm
@@ -4089,7 +4089,7 @@ Info: tests if (op arg1 arg2), for example (= 1 1)
 
 ## gives_error_typeQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: gives_error_typeQ
@@ -4099,7 +4099,7 @@ Info: example: (assertm gives_error_typeQ (get [1] 2) IndexError)
 
 ## Enum
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: Enum
@@ -4136,7 +4136,7 @@ class Enum(builtins.object)
 
 ## List
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: List
@@ -4152,7 +4152,7 @@ List = typing.List
 
 ## Tuple
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: Tuple
@@ -4174,7 +4174,7 @@ Tuple = typing.Tuple
 
 ## TypedDict
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: TypedDict
@@ -4229,7 +4229,7 @@ TypedDict(typename, fields=None, /, *, total=True, **kwargs)
 
 ## Dict
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: Dict
@@ -4245,7 +4245,7 @@ Dict = typing.Dict
 
 ## Union
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: Union
@@ -4284,7 +4284,7 @@ Union = typing.Union
 
 ## Generator
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: Generator
@@ -4300,7 +4300,7 @@ Generator = typing.Generator
 
 ## Any
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: Any
@@ -4324,7 +4324,7 @@ Any = typing.Any
 
 ## Optional
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: Optional
@@ -4342,7 +4342,7 @@ Optional = typing.Optional
 
 ## Callable
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: Callable
@@ -4365,7 +4365,7 @@ Callable = typing.Callable
 
 ## Literal
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: Literal
@@ -4399,7 +4399,7 @@ Literal = typing.Literal
 
 ## Type
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: Type
@@ -4435,7 +4435,7 @@ Type = typing.Type
 
 ## TypeVar
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: TypeVar
@@ -4556,7 +4556,7 @@ class TypeVar(_Final, _Immutable, _TypeVarLike)
 
 ## Generic
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: Generic
@@ -4599,7 +4599,7 @@ class Generic(builtins.object)
 
 ## noneQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: noneQ (= funcy.isnone)
@@ -4614,7 +4614,7 @@ isnone(x)
 
 ## notnoneQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: notnoneQ (= funcy.notnone)
@@ -4629,7 +4629,7 @@ notnone(x)
 
 ## oftypeQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: oftypeQ
@@ -4647,7 +4647,7 @@ oftypeQ(tp, x)
 
 ## intQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: intQ
@@ -4665,7 +4665,7 @@ intQ(x)
 
 ## floatQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: floatQ
@@ -4683,7 +4683,7 @@ floatQ(x)
 
 ## numberQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: numberQ
@@ -4701,7 +4701,7 @@ numberQ(x)
 
 ## strQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: strQ
@@ -4719,7 +4719,7 @@ strQ(x)
 
 ## dictQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: dictQ
@@ -4737,7 +4737,7 @@ dictQ(x)
 
 ## listQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: listQ (= funcy.is_list)
@@ -4748,7 +4748,7 @@ Info: checks if value is list
 
 ## tupleQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: tupleQ (= funcy.is_tuple)
@@ -4759,7 +4759,7 @@ Info: checks if value is tuple
 
 ## setQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: setQ (= funcy.is_set)
@@ -4770,7 +4770,7 @@ Info: checks if value is set
 
 ## iteratorQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: iteratorQ (= funcy.is_iter)
@@ -4781,7 +4781,7 @@ Info: checks if value is iterator
 
 ## iterableQ
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: iterableQ (= funcy.iterable)
@@ -4792,7 +4792,7 @@ Info: checks if value is iterable
 
 ## of
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: of
@@ -4802,7 +4802,7 @@ Info: example: (of List int) which is equiv to py-code: List[int]
 
 ## Annotator2
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: def::
@@ -4812,7 +4812,7 @@ Info: example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[in
 
 ## Annotator1
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: f::
@@ -4822,7 +4822,7 @@ Info: define func with Haskell-style signature; example: (def:: int -> int => fl
 
 ## dataclass
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: dataclass
@@ -4850,7 +4850,7 @@ dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_has
 
 ## upd_field
 
-[go up](#fptk-core cheatsheet)
+[go up](#fptk-core-cheatsheet)
 
 ```hy
 Name: upd_field (= dataclasses.replace)
