@@ -311,7 +311,7 @@
 		(if has_pargs
 			(setv maxN (int (get pargs -1 -1)))		; only "%1"... args are found
 			(setv maxN 0))							; no args are found
-		(setv inputs (lfor n (hy.I.hyrule.thru 1 (+ maxN 1)) (hy.models.Symbol f"%{n}")))
+		(setv inputs (lfor n (range 1 (+ maxN 1)) (hy.models.Symbol f"%{n}")))
 		(return `(fn [~@inputs] ~@exprs)))
 
 	(defmacro f> [one_shot_fm #* args]

@@ -75,8 +75,8 @@ Important lens methods (short info):
 ; can work with both getters and setters:
 (Each)
 (Recur int)         ; recursively finds all ints
-(Values)            ; \
-(Item)              ; | returns tuple of key and value
+(Values)            ; \ for dicts
+(Item)              ; | <- returns tuple of key and value
 (Keys)              ; /
 (Filter (fn [x] (< x 100)))
 (Instance str)      ; checks if focus is str

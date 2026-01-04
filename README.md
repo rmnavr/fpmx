@@ -21,9 +21,11 @@ Since fptk positions itself as a language extension
 
 # Parts of fptk
 
-fptk is split into 2 distinct parts:
+fptk is split into 2 distinct parts with overall design goals:
+1. **core** — functionality frequently required in general everyday work; core aims to be stable and fast-to-load 
+2. **extras** — optional situational/experimental/slow modules
 
-## 1/2 Core functionality
+## Core functionality
 
 Full core functionality is loaded by:
 ```hy
@@ -50,9 +52,15 @@ Core functionality contains:
   - 1-based index variants of basic getters (don't worry, fptk does not force using them in any way)
   - Haskell-inspired macro for annotating functions: `(def:: int -> int => float ...)`
 
-## 2/2 Extra funtionality
+## Extra funtionality
 
-Load required submodules as required:
+There are 3 separate extra modules:
+* `fptk.strict` contains strict-typing helpers utilizing [pydantic](https://github.com/pydantic/pydantic) library
+* `fptk.lenses` offers macros for [lenses](https://github.com/ingolemo/python-lenses) library
+  (which is Haskell-inspired lib for working with deeply nested structures)
+* `fptk.monads` contains Result and Maybe monad that can be type-checked by pydantic
+
+Each submodule can be loaded via:
 ```hy
 ; Strict typing:
 (import fptk.strict *) ; or load only what is required
@@ -68,11 +76,6 @@ Load required submodules as required:
 (import fptk.monads.resultM *) ; or load only what is required
 ```
 
-* `fptk.strict` containes strict-typing helpers utilizing [pydantic](https://github.com/pydantic/pydantic) library
-* `fptk.lenses` offers macros for [lenses](https://github.com/ingolemo/python-lenses) library
-  (which is Haskell-inspired lib for working with deeply nested structures)
-* `fptk.monads` currently contains Result and Maybe monad that can be type-checked by pydantic
-
 ## Note on fptk startup time
 
 fptk tries it's best to have fast startup time, but being written in hy, it required some import quirks:
@@ -81,7 +84,7 @@ fptk tries it's best to have fast startup time, but being written in hy, it requ
 
 Approx load times for my machine (your mileage may vary):
 -  80 ms to load hy itself 
-- 150 ms to load fptk core
+- 120 ms to load fptk core
 - extra  50 ms to load lenses
 - extra 200 ms to load strict typing and/or monads (pydantic takes most of load time)
 
@@ -96,6 +99,9 @@ Tested with versions:
 * [lenses](https://github.com/ingolemo/python-lenses) 1.2
 * [pydantic](https://github.com/pydantic/pydantic) 2.12.3
 * termcolor 3.2.0
+
+fptk does NOT depend on hyrule lib, but it replicates some of it's macros (like `->`, `case` and others).
+This was required to increase fptk startup speed.
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Documentation ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
@@ -115,11 +121,8 @@ Tested with versions:
 
 # Project status
 
-Stable release is not yet reached, some API-breaking changes may happen.
-
-Overall design philosophy of fptk is to:
-- keep core functionality stable and fast-to-load
-- add new situational/optional/slow modules into extras
+* Core — consider it at 90% of reaching stable release (some API-breaking changes may still happen)
+* Extra — monads are in experimental phase
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Installation ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->

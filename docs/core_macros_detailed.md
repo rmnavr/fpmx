@@ -1,15 +1,7 @@
 
----
-fptk docs:
-1. [Cheetsheet](https://github.com/rmnavr/fptk/blob/main/docs/cheetsheet.md)
-2. You are here -> [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md)
-3. [Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)
-4. [Monads](https://github.com/rmnavr/fptk/blob/main/docs/monads.md)
----
-
 <!-- Overview ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-# full list of fptk macros
+# full list of fptk core macros
 
 fptk offers following macros:
 * Anonymous functions recognizing `it` or `%1`, `%2`, ... as arguments:
@@ -18,9 +10,6 @@ fptk offers following macros:
   * `(l)mapm`
   * `(l)filterm`
 * Getters and threading macros:
-  > fptk macros consistently use `.attr` for attribute access and `(.method)` for method calls.
-  >
-  > This is in contrast with hyrule's macro `->` where both `.smth` and `(.smth)` are seen as method calls.
   * `=>` and `=>>` — macros combining hy `.` and `->` (or `->>`) macros
   * `p:` — pipe of partials
   * `getattrm` — macros like `getattr` but with special syntax
@@ -31,14 +20,6 @@ fptk offers following macros:
 * Macros for testing:
   * `assertm`
   * `gives_error_typeQ`
-* Lens-related macros:
-  > they are described in separate doc
-  > ([Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)).
-  * `lns`
-  * `&+`
-  * `&+>`
-  * `l>`
-  * `l>=`
 
 <!-- __________________________________________________________________________/ }}}1 -->
 
@@ -177,6 +158,7 @@ Macros `(l)mapm` and `(l)filterm` can only contain one form in place of function
 
 Macros in this group consistently use syntax `.attr` for attribute access
 and `(.method)` for method calls.
+> This is in contrast with hyrule's macro `->` where both `.smth` and `(.smth)` are seen as method calls.
 
 <!-- => and =>> ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 

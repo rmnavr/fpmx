@@ -62,7 +62,6 @@ Module `fptk.monads.resultM` exposes objects:
 * factory functions: `Success`, `Failure`
 * functions: `successQ`, `failureQ`, `mapR`, `bindR`, `unwrapR`, `unwrapR_or`, `unwrapE`, `unwrapE_or`
 
-
 ## User API
 
 To check if your `m` is of Result type, you can use `(= (type m) Result)`.

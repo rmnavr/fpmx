@@ -1,55 +1,53 @@
 
-; code mixes wy and hy styles
-
-; uses ACTUAL fptk version, because needs to extract help strings
+; doc_gen needs to use ACTUAL fptk version, because it needs to extract help strings
 ; Imports ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (import  pyparsing :as pp)
-    (import  fptk *)
-    (require fptk *)
+    (import pyparsing :as pp)
+    (import fptk *) (require fptk *) (import fptk.lenses [lens])
 
     (import io)
     (import contextlib)
+    (import re)
 
 ; _____________________________________________________________________________/ }}}1
 
-; APP CLASSES ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; CLASSES ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    ; used for creating DEFINED_FUNC as parent module name
-    (setv $FPTK_NAME "fptk")
-
-    ; "FPTK Group from VimCells as raw text"
+    ; FPTK Group from VimCells as raw text, like from "[GROUP] APL: Filtering"
     (defclass [dataclass] FGroup []
-        (#^ str name)
-        (#^ str raw_content))
+        ( #^ str name)
+        ( #^ str raw_content))
 
     (defclass FEntityKind [Enum]
-        (setv IMPORT_MODULE         0)
-        (setv IMPORT_FROM_MODULE    1)
-        (setv IMPORT_FROM_MODULE_AS 2)
-        (setv REQUIRE_MACRO         3)
-        (setv NON_IMPORT_INFO       4)
-        (setv DEFINED_SETV          5)
-        (setv DEFINED_FUNC          6)
+        (setv IMPORT_MODULE 0); (import math)
+        (setv IMPORT_FROM_MODULE 1); (import funcy [list])
+        (setv IMPORT_FROM_MODULE_AS 2); (import funcy [list :as tree])
+        (setv REQUIRE_MACRO 3); (require hyrule [->]), also used by MACRO-exclusive regex
+        (setv NON_IMPORT_INFO 4); (comment ...)
+        (setv DEFINED_SETV 5); (setv x (+ 1 2))
+        (setv DEFINED_FUNC 6); (defn inc [x] (+ x 1))
         (defn __repr__ [self] (return self.name))
-        (defn __str__  [self] (return self.name)))
+        (defn __str__ [self] (return self.name)))
 
     ; "FPTK Entity — function, macros, etc."
     (defclass [dataclass] FEntity []
-        (#^ FEntityKind kind            #_ "IMPORT_FROM_MODULE")
-        (#^ str         kind_str        #_ "used only for non-import-info: macro/func/...")
-        (#^ str         org_name        #_ "used only for :as imports")
-        (#^ str         name            #_ "rpartial")
-        (#^ str         parent_module   #_ "funcy")
-        (#^ str         signature       #_ "rpartial(f, *args)")
-        (#^ str         descr           #_ "partially applicates"))
+        ( #^ FEntityKind kind)
+        ( #^ str kind_str #_ "used only for non-import-info, typically I use: 'macro' or 'base', but it is arbitrary"); empty string otherwise
+        ( #^ str org_name #_ "used only for :as imports"); empty string otherwise
+        ( #^ str name #_ "rpartial")
+        ( #^ str parent_module #_ "funcy")
+        ( #^ str signature #_ "rpartial(f, *args)")
+        ( #^ str descr #_ "partially applicates"))
 
-    (defclass [dataclass] DFGroup []  ; Deconstructed FPTK Group
-        (#^ str name)
-        (#^ (of List FEntity) fentities))
+    ; used for creating DEFINED_FUNC/DEFINED_SETV as parent module name
+    (setv $FPTK_NAME "fptk")
+
+    (defclass [dataclass] DFGroup []; Deconstructed FPTK Group
+        ( #^ str name)
+        ( #^ (of List FEntity) fentities))
 
 ; _____________________________________________________________________________/ }}}1
-; Parser ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; Parser for [GROUP] ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 ; FIND GROUPS:
 ; ■ hy atoms ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
@@ -184,9 +182,11 @@
     (defn #^ (of List FGroup)
         find_fgroups [#^ str code]
         (setv _groups (FPTK_GROUP.search_string code))
-        (lmap (fm (FGroup :name        %1._NAME
-                          :raw_content %1._CONTENT))
-              _groups ))
+        (lmap
+            (fm
+              (FGroup :name %1._NAME
+                     :raw_content %1._CONTENT))
+            _groups))
 
 ; ________________________________________________________________________/ }}}2
 
@@ -389,9 +389,66 @@
                 :fentities (find_fentities fgroup)))
 
 ; _____________________________________________________________________________/ }}}1
+; Regex  for [MACRO] ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (def:: str -> str => (of List DFGroup)
+        find_macros [code searched_module_name]
+        "will search for macros inside (require `module_name` [...])"
+        ;
+        (setv _whole_expression
+            (re_find
+                (sconcat r"\(require\s+" searched_module_name r"\s+\[.*?\]\)")
+                code
+                :flags (| re.DOTALL))); make . match also newline
+        ;
+        (setv _macro_exprs
+            (re_all
+                ; --1--                         --2--        --3--        --4--
+                r"(\S+)\s+#_\s+\"\s*\[GROUP\]\s*(.*?)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\""
+                _whole_expression))
+        ; create dfgroups consisting of one fentity
+        (setv _dfgs
+            (lmapm
+                (DFGroup :name (second it)
+                        :fentities
+                        [ (FEntity :kind FEntityKind.REQUIRE_MACRO
+                                  :kind_str ""
+                                  :org_name ""
+                                  :name (first it)
+                                  :parent_module searched_module_name
+                                  :signature (third it)
+                                  :descr (fourth it))])
+                _macro_exprs))
+        ; group them by group-name:
+        (unite_dfgroups _dfgs))
+
+; _____________________________________________________________________________/ }}}1
+; helper: unite dfgroups ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (def:: (of List DFGroup) => (of List DFGroup)
+        unite_dfgroups [dfgroups]
+        "when found dfgroups with same name, their fentities are unified into one new dfgroup"
+        (setv _exploded_dfgroups
+            (->> dfgroups; [<GR.name, [GR.f1 GR.f2]>, <GR.name, [GR.f1 GR.f2]>, ...]
+                (lmapm
+                    (lzip
+                        (lmul [it.name] (len it.fentities))
+                        it.fentities))
+                (lcat))); [ (name, f1), (name, f2), (name, f1), ... ]
+        ;
+        (setv _grouped_by_name
+            (lpartition_by first (sorted _exploded_dfgroups :key first)))
+                                                ; [ [[name1, GR.f1], [name1, GR.f2]], ... ]
+        ;
+        (lmapm
+            (DFGroup :name (first (first it))
+                    :fentities (lpluck 1 it))
+            _grouped_by_name))
+
+; _____________________________________________________________________________/ }}}1
 
 ; Long table:
-; entity to str ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; fentity to str ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (defn #^ str build_postfix [ #^ FEntity fe ]
         (setv signature (if (= fe.signature "")
@@ -429,38 +486,27 @@
               (sconcat "DEFN: " (pad1 fe.parent_module) " | " (pad2 fe.name) (build_postfix fe))))
 
 ; _____________________________________________________________________________/ }}}1
-; group to str ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; assembly ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (defn #^ (of List str)
-        group2str_list [ #^ FGroup fgroup ]
-        (flatten [ (sconcat "=== " fgroup.name " ===")
-                   (lmap (p: fentity2str
-                             rstrip) ; rstrip removes possible spaces on the right (to not invoke «next line» in *.md)
-                         (find_fentities fgroup))
-                   "" ]))
+    (def:: DFGroup => (of List str)
+        dfgroup2str_list [dfgroup]
+        (flatten
+            [ (sconcat "=== " dfgroup.name " ===")
+              (lmap (p: fentity2str rstrip) dfgroup.fentities)
+              ""]))
+    ; rstrip removes possible spaces on the right (to not invoke «next line» in *.md)
 
-; _____________________________________________________________________________/ }}}1
-; constructors ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    ; not used currently:
-    (defn gprint
-        [ #^ FGroup fgroup ]
-        (lprint (group2str_list fgroup)))
-
-    (defn #^ str generate_long_table
-        [ #^ str code
-        ]
-        (setv _groups     (find_fgroups code))
-        (setv _outp_table (->> _groups (lmap group2str_list)
-                                     flatten
-                                     (str_join :sep "\n")
-                                     (flip sconcat "\n")
-                                     ))
-        (return _outp_table))
+    (def:: (of List DFGroup) => str
+        generate_long_table [dfgroups]
+        (->> dfgroups
+            (lmap dfgroup2str_list)
+            (flatten)
+            (str_join :sep "\n")
+            (flip sconcat "\n")))
 
 ; _____________________________________________________________________________/ }}}1
 
-; Short table:
+; Short table (consists of: ¹ cheatsheet-table, ² md-blocks group):
 ; helper selectors ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (def:: (of List FEntity) => (of List FEntity)
@@ -520,19 +566,16 @@
 ; _____________________________________________________________________________/ }}}1
 ; assembly ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (def:: str => str
-        generate_short_table
-        [ code]
-        (=>> code
-            (find_fgroups)
-            (lmap deconstruct_fgroup)
+    (def:: (of List DFGroup) => str
+        generate_chsh_table
+        [ dfgroups]
+        (=>> dfgroups
             (lmap dfgroup_to_short_table_line)
             (str_join :sep "\n")
             (sconcat $SHORT_TABLE_HEADER "\n")))
 
 ; _____________________________________________________________________________/ }}}1
-
-; MD blocks (##title + short-card + help):
+; MD blocks (each block consists of: ¹ ##title, ² short-card, ³ help-string):
 ; helpers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (def:: str => str
@@ -586,9 +629,7 @@
                  FEntityKind.IMPORT_FROM_MODULE_AS
                  f"Kind: Reimport"
                  FEntityKind.REQUIRE_MACRO
-                 (if (eq fe.parent_module $FPTK_MACRO_LIB)
-                      "Kind: FPTK Macro"
-                      f"Kind: Macro from [{fe.parent_module}]")
+                 f"Kind: Macro from [{fe.parent_module}]"
                  FEntityKind.DEFINED_SETV
                  "Kind: FPTK original"
                  FEntityKind.DEFINED_FUNC
@@ -613,13 +654,11 @@
 ; _____________________________________________________________________________/ }}}1
 ; assembly ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (def:: str => str
+    (def:: (of List DFGroup) => str
         generate_md_blocks
-        [ code]
+        [ dfgroups]
         "fgroup.name(s) are not used"
-        (=>> code
-            (find_fgroups)
-            (lmap deconstruct_fgroup)
+        (=>> dfgroups
             (lpluckm .fentities)
             (flatten)
             (lreject (fm (eq it.kind FEntityKind.NON_IMPORT_INFO)))
@@ -629,76 +668,30 @@
 ; _____________________________________________________________________________/ }}}1
 
 ; Run:
-; CONST STRs ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    ; not used currently:
-; ■ HEADER_LONG ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
-
-    (setv $HEADER_LONG
-        sconcat $CONTENTS "
-# Auto-generated full list of FPTK entities (except macros)
-
-## Legend
-
-List below has format:
-```hy
-=== Group name 1 ===
-TYPE source_lib | func_or_class_name :: signature ; description
-TYPE source_lib | func_or_class_name :: signature ; description
-
-=== Group name 2 ===
-...
-```
-
-Column `TYPE` shows if things are simple imports/reimports: ...
-```hy
-FULL MODULE  | sys          ; (import sys)
-FROM: math   | ln (<-log)   ; (import math [log :as ln])
-MACR: hyrule | of           ; (require hyrule [of])
-INFO: hy     | cut /macro/  ; shows info on hy/py functions/macro (which are already always in main context); given just for big picture
-```
-
-... or fptk-defined entities:
-```hy
-SETV: fptk   | StrictNumber ; entity defined internally via (setv ...)
-DEFN: fptk   | third        ; entity defined internally via (defn ...)
-```
-
-## List of fptk entities
-")
-
-
-; ________________________________________________________________________/ }}}2
-
-    (setv $CONTENTS "
----
-fptk docs:
-1. You are here -> [Cheetsheet](https://github.com/rmnavr/fptk/blob/main/docs/cheetsheet.md)
-2. [Basic macros](https://github.com/rmnavr/fptk/blob/main/docs/macros.md)
-3. [Lens related macros](https://github.com/rmnavr/fptk/blob/main/docs/lens.md)
-4. [Monads](https://github.com/rmnavr/fptk/blob/main/docs/monads.md)
----
-")
+; CONST STRs (for short table) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (setv $SHORT_TABLE_HEADER
          "
 | Group | Functions/Types | Macros |
 |-------|-----------------|--------|")
 
-    (setv $HEADER1 "Cheetsheet")
+    (setv $HEADER1 "fptk-core cheatsheet")
     (setv $HEADER2 "Detailed descriptions")
     (setv $BACKLINK f"[go up](#{$HEADER1})")
-    (setv $FPTK_MACRO_LIB "fptk._macros")
 
 ; _____________________________________________________________________________/ }}}1
-; REPLACEMENTS ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; GLOB VARS  (for short table) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ; for this functions help-card will not be printed
     ; (like because for StrictNumber it will give help on Union, which is useless)
     (setv $SUPPRESS_HELP
-        [ "listQ" "tupleQ" "setQ" "iteratorQ" "iterableQ"
-            "StrictNumber" "validateF" "Result"])
+        [ "listQ" "tupleQ" "setQ" "iteratorQ" "iterableQ"])
+            ; "StrictNumber" "validateF" "Result" "Maybe" "Nothing" -> those are not anymore in core
 
+    ; typically function named 'partial' should be layed out in
+    ; the doc under 'partial' header;
+    ; but for macro '->' md-format of links fails, so need to
+    ; use headers which md-format will be able to work with
     (setv $ASCII_NAMES_TABLE
         { ; md header         ; link
             "->" #("hyruleThreading1" "hyruleThreading1")
@@ -710,52 +703,39 @@ fptk docs:
             "f>" #("LambdaWithAppl" "LambdaWithAppl")
             "p:" #("PipeOfPartials" "PipeOfPartials")
             "f::" #("Annotator1" "Annotator1")
-            "def::" #("Annotator2" "Annotator2")
-            "&+" #("Lens operator1" "Lens-operator1"); works!
-            "&+>" #("Lens operator2" "Lens-operator2")
-            "l>" #("Lens operator3" "Lens-operator3")
-            "l>=" #("Lens operator4" "Lens-operator4")})
-
-; _____________________________________________________________________________/ }}}1
-; USER CONFIG ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    (setv $SOURCES
-        [ "../../src/fptk/flow.hy"
-          "../../src/fptk/apl.hy"
-          "../../src/fptk/getters.hy"
-          "../../src/fptk/typing.hy"
-          "../../src/fptk/mathnlogic.hy"
-          "../../src/fptk/strings.hy"
-          "../../src/fptk/IO.hy"
-          "../../src/fptk/lens.hy"
-          "../../src/fptk/benchmark.hy"
-          "../../src/fptk/testing.hy"
-          "../../src/fptk/monads/__init_hy__.hy"])
-
-    (setv $TARGET_LONG_FILE "../../_devdocs/doctable (autogenerated).hy")
-    (setv $TARGET_SHORT_FILE "../../docs/cheetsheet.md")
+            "def::" #("Annotator2" "Annotator2")})
 
 ; _____________________________________________________________________________/ }}}1
 ; RUN ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (setv _code (str_join :sep "\n" (lmap read_file $SOURCES)))
+    (setv $SOURCE "../../src/fptk/core/funcs.hy")
+    (setv $TARGET_LONG_FILE "../../_devdocs/doctable_autogenerated.hy")
+    (setv $TARGET_SHORT_FILE "../../docs/core_cheatsheet_autogenerated.md")
+    (setv _code (read_file $SOURCE))
 
-    ; long table:
+    ; extract all data from code into DFGroups:
+    (setv _dfgroups
+        (unite_dfgroups; this is where sorting of group-names becomes alphabetical -> TODO: don't force this sorting
+            (lconcat
+                (=>> _code find_fgroups (lmap deconstruct_fgroup)); <- can also find macros among other things, yes
+                (find_macros _code "fptk.core.from_hyrule"); \ <- searches for macros in big require statements
+                (find_macros _code "fptk.core.macros")))); /
 
-        (setv _long_table (generate_long_table _code))
+    ; perform some pretty renamings
+    (setv _dfgroups
+        (-> _dfgroups
+           (l> (Each) .fentities (Each) .parent_module (Filter (partial eq "fptk.core.from_hyrule")) (set "fptk/hyrule"))
+           (l> (Each) .fentities (Each) .parent_module (Filter (partial eq "fptk.core.macros")) (set "fptk"))))
 
-        (write_to_file
-            f"\n{_long_table}"
-            $TARGET_LONG_FILE)
+    ; Long table:
+    (setv _long_table (generate_long_table _dfgroups))
+    (write_to_file f"\n{_long_table}" $TARGET_LONG_FILE)
 
-    ; short table + md blocks:
-
-        (setv _short_table (generate_short_table _code))
-        (setv _md_headers (generate_md_blocks _code))
-
-        (write_to_file
-            f"{$CONTENTS}\n# {$HEADER1}\n\n{_short_table}\n\n# {$HEADER2}\n\n{_md_headers}"
-            $TARGET_SHORT_FILE)
-
+    ; Short table:
+    (setv _cheatsheet_table (generate_chsh_table _dfgroups))
+    (setv _md_blocks (generate_md_blocks _dfgroups))
+    (setv _short_final f"# {$HEADER1}\n\n{_cheatsheet_table}\n\n# {$HEADER2}\n\n{_md_blocks}")
+    (print _short_final)
+    (write_to_file _short_final $TARGET_SHORT_FILE)
 
 ; _____________________________________________________________________________/ }}}1

@@ -1,11 +1,11 @@
 
-	__init__.py					// loads /core
+	__init__.py					// imports+requires everything from funcs.hy (not touching macros.hy)
 	lenses.hy					// stores only «import lenses [lens]», lns macros are in macros.hy
 	strict.hy					// loads pydantic + some definitions like StrictInt
 
 	/core   |
 	        | from_hyrule.hy ↓	// some extracted funcs/macros from hyrule lib -> it loads much faster than hyrule
-		    | funcs.hy		 •	// SOURCE OF ALL CORE = Funcs defs here + Macros reimport (from: from_hyrule.hy/macros.hy)
+		    | funcs.hy		 •	// FINAL SOURCE OF TRUTH = Funcs defs here + Macros reimport (from: from_hyrule.hy and macros.hy)
 		    | macros.hy	_____↑	// is allowed to depend only on from_hyrule.hy
 
 	/monads |
@@ -14,6 +14,10 @@
 		    | resultM.hy
 
 	·····························································································
+
+	• why funcs.hy reimports macros and __init__ calls hy.eval(hyread(...)) on funcs.hy, but not on macros.hy?
+      - because the aim is to have fast startup
+      - if macros were in several places (like funcs.hy AND macros.hy AND from_hyrule.hy) this would require 3 expensive hy.eval calls
 
 	• there is no /core.__init__.py to avoid extra hy.eval(hy.read...) call
 

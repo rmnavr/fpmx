@@ -7,6 +7,8 @@
     (import  functools  :as _functools)
     (import  operator   :as _operator)
 
+    (import  typing [List]) ; also re-imported in Typing, but hey
+
     ;; fptk functions require in their code:
     ;; - of, comment
     ;; - List
@@ -23,10 +25,10 @@
         unless              #_ "[GROUP] FP: threading           | |"
         lif                 #_ "[GROUP] FP: threading           | |"
         branch              #_ "[GROUP] FP: threading           | |"
-        ->                  #_ "[GROUP] FP: composition         | |"
-        ->>                 #_ "[GROUP] FP: composition         | |"
-        as->                #_ "[GROUP] FP: composition         | |"
-        doto                #_ "[GROUP] FP: composition         | | mutating"
+        ->                  #_ "[GROUP] FP: Composition         | |"
+        ->>                 #_ "[GROUP] FP: Composition         | |"
+        as->                #_ "[GROUP] FP: Composition         | |"
+        doto                #_ "[GROUP] FP: Composition         | | mutating"
         do_n                #_ "[GROUP] FP: n-applicators       | (do_n   n #* body) -> None | expands to ~ (do body body body ...)"
         list_n              #_ "[GROUP] FP: n-applicators       | (list_n n #* body) -> List |"
     ])
@@ -40,9 +42,9 @@
         lmapm               #_ "[GROUP] FP: threading           | | same as lmap, but expects fm-syntax for func"
         filterm             #_ "[GROUP] APL: filtering          | (filterm f xs)  | same as filter, but expects fm-syntax for func"
         lfilterm            #_ "[GROUP] APL: filtering          | (lfilterm f xs) | list version of lfilterm"
-        =>                  #_ "[GROUP] FP: composition         | | unification of dot-macro and ->"
-        =>>                 #_ "[GROUP] FP: composition         | | unification of dot-macro and ->>"
-        p:                  #_ "[GROUP] FP: composition         | | aplicator, pipe of partials"
+        =>                  #_ "[GROUP] FP: Composition         | | unification of dot-macro and ->"
+        =>>                 #_ "[GROUP] FP: Composition         | | unification of dot-macro and ->>"
+        p:                  #_ "[GROUP] FP: Composition         | | aplicator, pipe of partials"
         pluckm              #_ "[GROUP] Getters: keys and attrs | (pluckm n xs) (pluckm key ys) (pluckm .attr zs) | accepts fptk-style .arg syntax"
         lpluckm             #_ "[GROUP] Getters: keys and attrs | | list version of pluckm"
         getattrm            #_ "[GROUP] Getters: keys and attrs | (getattrm Object 'attr') (getattrm Object .attr) | accepts fptk-style .attr syntax"
@@ -54,70 +56,6 @@
      ])
 
      ;; lns macros are imported here (rather than in lenses.wy) because it is 30ms faster
-
-; _____________________________________________________________________________/ }}}1
-
-; [GROUP] Typing: Base ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    (import enum   [Enum])
-    (import typing [List])
-    (import typing [Tuple])
-    (import typing [TypedDict])
-    (import typing [Dict])
-    (import typing [Union])
-    (import typing [Generator])
-    (import typing [Any])
-    (import typing [Optional])
-    (import typing [Callable])
-    (import typing [Literal])
-    (import typing [Type])
-    (import typing [TypeVar])
-    (import typing [Generic])
-
-    ;; type checks:
-
-    (import funcy [isnone  :as noneQ])
-    (import funcy [notnone :as notnoneQ]) ;;
-
-    #_ "oftypeQ(tp, x) | checks directly via (= (type x) tp)"
-    (defn oftypeQ [tp x] "checks literally if type(x) == tp" (= (type x) tp))
-
-    #_ "intQ(x) | checks literally if type(x) == int, will also work with StrictInt from pydantic"
-    (defn intQ [x]
-        "checks literally if type(x) == int"
-        (= (type x) int))    
-
-    #_ "floatQ(x) | checks literally if type(x) == float, will also work with StrictFloat from pydantic"
-    (defn floatQ [x]
-        "checks literally if type(x) == float"
-        (= (type x) float))
-
-    #_ "numberQ(x) | checks for intQ or floatQ, will also work with StrictInt/StrictFloat from pydantic"
-    (defn numberQ [x]
-        "checks literally if type(x) == int or type(x) == float"
-        (= (type x) float))
-
-    #_ "strQ(x) | checks literally if type(x) == str, will also work with StrictStr from pydantic"
-    (defn strQ [x]
-        "checks literally if type(x) == int or type(x) == float"
-        (= (type x) str))
-
-    #_ "dictQ(x) | checks literally if type(x) == dict"
-    (defn dictQ [x]
-        "checks literally if type(x) == dict"
-        (= (type x) dict))
-
-    (import funcy [is_list  :as listQ ])    #_ "listQ(value)     | checks if value is list"
-    (import funcy [is_tuple :as tupleQ])    #_ "tupleQ(value)    | checks if value is tuple"
-    (import funcy [is_set   :as setQ])      #_ "setQ(value)      | checks if value is set"
-    (import funcy [is_iter  :as iteratorQ]) #_ "iteratorQ(value) | checks if value is iterator"
-    (import funcy [iterable :as iterableQ]) #_ "iterableQ(value) | checks if value is iterable"
-
-; _____________________________________________________________________________/ }}}1
-; [GROUP] Typing: Dataclasses ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    (import dataclasses [dataclass])
-    (import dataclasses [replace :as upd_field ]) #_ "| non-mutating"
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -329,6 +267,36 @@
 
     #_ "count_occurrences(elem, seq) -> int | rename of list.count method"
     (defn count_occurrences [elem seq] (seq.count elem))
+
+; _____________________________________________________________________________/ }}}1
+
+; [GROUP] Benchmarking ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (import time [time :as cur_time]) #_ "cur_time() | gets current time in seconds"
+
+    #_ "dt_printer(* args, fresh_run=False) | starts timer on fresh run, prints time passed since previous call"
+    (defn dt_print
+        [ #* args
+          [fresh_run False]
+          [last_T    [None]]
+        ]
+        " on first run, starts the timer (and print message that it started)
+          on subsequent runs prints how many time (in seconds) have passed since previous call
+          #
+          call with fresh_run = True to reset timer
+          #
+          last_T should not be touched by user!
+          it is used for storing time of previous run between runs"
+        (when fresh_run (setv (get last_T 0) None))
+        (setv _time_getter hy.I.time.perf_counter)
+        (setv curT (_time_getter))
+        ;;
+        (if (=  (get last_T 0) None)
+            (do (setv (get last_T 0) curT)
+                (print "[ Timer started ]" #* args))
+            (do (setv dT (- curT (get last_T 0)))
+                (setv (get last_T 0) curT)
+                (print f"[dT = {dT :.6f} s]" #* args))))
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -577,6 +545,39 @@
 
 ; _____________________________________________________________________________/ }}}1
 
+; [GROUP] IO ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (import os.path [exists :as file_existsQ]) #_ "file_existsQ(filename) | also works on folders" ;;
+    (import os.path [isfile :as fileQ])        #_ "fileQ(filename) |"
+    (import os.path [isdir  :as dirQ])         #_ "dirQ(filename) |"
+
+    #_ "read_file(file_name, encoding='utf-8') -> str | returns whole file content"
+    (defn read_file
+        [ #^ str file_name
+          #^ str [encoding "utf-8"]
+        ]
+        "returns whole file content"
+        (with [file (open file_name "r" :encoding encoding)] (setv outp (file.read)))
+        (return outp))
+
+    #_ "write_file(text, file_name, mode='w', encoding='utf-8') | modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation"
+    (defn write_to_file
+        [ #^ str text
+          #^ str file_name
+          #^ str [mode "w"]
+          #^ str [encoding "utf-8"]
+        ]
+        " writes text to file_name;
+          modes:
+          - 'w' - (over)write
+          - 'a' - append
+          - 'x' - exclusive creation
+          - ...
+          - see more at help(open)"
+        (with [file (open file_name mode :encoding encoding)] (file.write text)))
+
+; _____________________________________________________________________________/ }}}1
+
 ; [GROUP] Math and logic: Basic math ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (import operator  [neg])        #_ "neg(n) | = -1 * n"
@@ -820,6 +821,22 @@
 
 ; _____________________________________________________________________________/ }}}1
 
+; [GROUP] Misc ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (import pprint [pprint]) #_ "| standard python pprint function"
+
+    #_ "lprint(seq, sep=None) | prints every elem of seq on new line"
+    (defn lprint [seq [sep None]]
+          " essentially list(map(print, seq)) ;
+            with sep='---' (or some other) will print sep between seq elems
+          "
+          (if (= sep None)
+              (_funcy.lmap print seq)
+              (_funcy.lmap print (_funcy.interpose sep seq)))
+          (return None))
+
+; _____________________________________________________________________________/ }}}1
+
 ; [GROUP] Strings: Basics ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     #_ "strlen(text) | rename of len, underlines usage on strings"
@@ -892,85 +909,71 @@
     (import re      [split :as re_split])   #_ "re_split(rpattern, string) |"
     (import funcy   [re_find])              #_ "re_find(rpattern, string, flags=0) -> str| returns first found"
     (import funcy   [re_test])              #_ "re_test(rpattern, string, ...) -> bool | tests if string has match (not neccessarily whole string)"
-    (import funcy   [re_all])               #_ "re_all(rpattern, string, ...) -> List |"
+    (import funcy   [re_all])               #_ "re_all(rpattern, string, ...) -> List | returns tuples if groups requested like via r'a(b)(c)d'"
 
 ; _____________________________________________________________________________/ }}}1
 
-; [GROUP] Misc ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; [GROUP] Typing: Base ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (import pprint [pprint]) #_ "| standard python pprint function"
+    (import enum   [Enum])
+    (import typing [List])
+    (import typing [Tuple])
+    (import typing [TypedDict])
+    (import typing [Dict])
+    (import typing [Union])
+    (import typing [Generator])
+    (import typing [Any])
+    (import typing [Optional])
+    (import typing [Callable])
+    (import typing [Literal])
+    (import typing [Type])
+    (import typing [TypeVar])
+    (import typing [Generic])
 
-    #_ "lprint(seq, sep=None) | prints every elem of seq on new line"
-    (defn lprint [seq [sep None]]
-          " essentially list(map(print, seq)) ;
-            with sep='---' (or some other) will print sep between seq elems
-          "
-          (if (= sep None)
-              (_funcy.lmap print seq)
-              (_funcy.lmap print (_funcy.interpose sep seq)))
-          (return None))
+    ;; type checks:
 
-; _____________________________________________________________________________/ }}}1
-; [GROUP] IO ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+    (import funcy [isnone  :as noneQ])
+    (import funcy [notnone :as notnoneQ]) ;;
 
-    (import os.path [exists :as file_existsQ]) #_ "file_existsQ(filename) | also works on folders" ;;
-    (import os.path [isfile :as fileQ])        #_ "fileQ(filename) |"
-    (import os.path [isdir  :as dirQ])         #_ "dirQ(filename) |"
+    #_ "oftypeQ(tp, x) | checks directly via (= (type x) tp)"
+    (defn oftypeQ [tp x] "checks literally if type(x) == tp" (= (type x) tp))
 
-    #_ "read_file(file_name, encoding='utf-8') -> str | returns whole file content"
-    (defn read_file
-        [ #^ str file_name
-          #^ str [encoding "utf-8"]
-        ]
-        "returns whole file content"
-        (with [file (open file_name "r" :encoding encoding)] (setv outp (file.read)))
-        (return outp))
+    #_ "intQ(x) | checks literally if type(x) == int, will also work with StrictInt from pydantic"
+    (defn intQ [x]
+        "checks literally if type(x) == int"
+        (= (type x) int))    
 
-    #_ "write_file(text, file_name, mode='w', encoding='utf-8') | modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation"
-    (defn write_to_file
-        [ #^ str text
-          #^ str file_name
-          #^ str [mode "w"]
-          #^ str [encoding "utf-8"]
-        ]
-        " writes text to file_name;
-          modes:
-          - 'w' - (over)write
-          - 'a' - append
-          - 'x' - exclusive creation
-          - ...
-          - see more at help(open)"
-        (with [file (open file_name mode :encoding encoding)] (file.write text)))
+    #_ "floatQ(x) | checks literally if type(x) == float, will also work with StrictFloat from pydantic"
+    (defn floatQ [x]
+        "checks literally if type(x) == float"
+        (= (type x) float))
 
-; _____________________________________________________________________________/ }}}1
-; [GROUP] Benchmarking ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+    #_ "numberQ(x) | checks for intQ or floatQ, will also work with StrictInt/StrictFloat from pydantic"
+    (defn numberQ [x]
+        "checks literally if type(x) == int or type(x) == float"
+        (= (type x) float))
 
-    (import time [time :as cur_time]) #_ "cur_time() | gets current time in seconds"
+    #_ "strQ(x) | checks literally if type(x) == str, will also work with StrictStr from pydantic"
+    (defn strQ [x]
+        "checks literally if type(x) == int or type(x) == float"
+        (= (type x) str))
 
-    #_ "dt_printer(* args, fresh_run=False) | starts timer on fresh run, prints time passed since previous call"
-    (defn dt_print
-        [ #* args
-          [fresh_run False]
-          [last_T    [None]]
-        ]
-        " on first run, starts the timer (and print message that it started)
-          on subsequent runs prints how many time (in seconds) have passed since previous call
-          #
-          call with fresh_run = True to reset timer
-          #
-          last_T should not be touched by user!
-          it is used for storing time of previous run between runs"
-        (when fresh_run (setv (get last_T 0) None))
-        (setv _time_getter hy.I.time.perf_counter)
-        (setv curT (_time_getter))
-        ;;
-        (if (=  (get last_T 0) None)
-            (do (setv (get last_T 0) curT)
-                (print "[ Timer started ]" #* args))
-            (do (setv dT (- curT (get last_T 0)))
-                (setv (get last_T 0) curT)
-                (print f"[dT = {dT :.6f} s]" #* args))))
+    #_ "dictQ(x) | checks literally if type(x) == dict"
+    (defn dictQ [x]
+        "checks literally if type(x) == dict"
+        (= (type x) dict))
+
+    (import funcy [is_list  :as listQ ])    #_ "listQ(value)     | checks if value is list"
+    (import funcy [is_tuple :as tupleQ])    #_ "tupleQ(value)    | checks if value is tuple"
+    (import funcy [is_set   :as setQ])      #_ "setQ(value)      | checks if value is set"
+    (import funcy [is_iter  :as iteratorQ]) #_ "iteratorQ(value) | checks if value is iterator"
+    (import funcy [iterable :as iterableQ]) #_ "iterableQ(value) | checks if value is iterable"
 
 ; _____________________________________________________________________________/ }}}1
+; [GROUP] Typing: Dataclasses ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
+    (import dataclasses [dataclass])
+    (import dataclasses [replace :as upd_field ]) #_ "| non-mutating"
+
+; _____________________________________________________________________________/ }}}1
 

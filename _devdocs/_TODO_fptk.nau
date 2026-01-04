@@ -66,3 +66,6 @@
 	fptk:
 	- chop
 	- monads without pydantic?
+	- lenses:
+	  - GetAttr "kind"
+	  - &+ inner implementation: (get x) -> (& (last expr) (. lens (get x)))

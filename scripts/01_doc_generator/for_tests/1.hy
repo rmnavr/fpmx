@@ -1,6 +1,26 @@
 
     (require hyrule [comment])
 
+; [MACRO] Reimported macros ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (require fptk.core.from_hyrule [
+        of                  #_ "[GROUP] Pupos riba  | | example: (of List int) which is equiv to py-code: List[int]"
+        comment             #_ "[GROUP] Pupos funcs | |"
+        of1                 #_ "[GROUP] Pupos riba  | | example: (of List int) which is equiv to py-code: List[int]"
+        comment1            #_ "[GROUP] Pupos funcs | |"
+        ->
+    ])
+
+    (require fptk.core.macros [
+        assertm             #_ "[GROUP] Pupos riba  | (assertm op arg1 arg2) | tests if (op arg1 arg2), for example (= 1 1)"
+        gives_error_typeQ   #_ "[GROUP] Pupos funcs | | example: (assertm gives_error_typeQ (get [1] 2) IndexError)"
+        lns &+ &+> l> l>=
+     ])
+
+     ;; lns macros are imported here (rather than in lenses.wy) because it is 30ms faster
+
+; _____________________________________________________________________________/ }}}1
+
 ; [GROUP] Pupos riba ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (import funcy) 
@@ -45,4 +65,5 @@
     (defn rest [xs] (get xs (slice 1 None)))  
 
 ; _____________________________________________________________________________/ }}}1
+
 
