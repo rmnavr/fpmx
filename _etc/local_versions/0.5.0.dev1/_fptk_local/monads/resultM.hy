@@ -4,7 +4,7 @@
     (import typing [TypeVar Generic Union])
     (import pydantic [BaseModel])
     (import funcy [rcompose lmap partial])
-    (require __fptk_local_local.core.from_hyrule [of unless])
+    (require _fptk_local.core.from_hyrule [of unless])
 
     (export :objects [ Success Failure Result
                        successQ failureQ

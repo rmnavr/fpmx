@@ -70,7 +70,7 @@
                                   "_wy_source/monads/maybeM.wy"
                                   "_wy_source/monads/resultM.wy"
                                   "monads/__init__.py"
-                                  "monads/resultM.hy"
+                                  "monads/maybeM.hy"
                                   "monads/resultM.hy"
                                 ])
 
