@@ -58,7 +58,7 @@
 
     ; 1) text "fptk" inside local .hy files will be replaced with "_fptk_local"
     ; 2) whole local version folder will also be named "/_fptk_local"
-    (setv $REPLACEMENT          ["fptk" "wy.utils.fptk_local"]) 
+    (setv $REPLACEMENT          ["fptk" "_fptk_local"]) 
 
     ; files to patch with $REPLACEMENT (in local fptk, not in fptk, obviously)
     (setv $FILES_TO_PATCH       [ "__init__.py"
