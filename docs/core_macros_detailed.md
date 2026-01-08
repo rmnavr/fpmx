@@ -23,77 +23,6 @@ fptk offers following macros:
 
 <!-- __________________________________________________________________________/ }}}1 -->
 
-# Typing
-<!-- f:: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
-
-## `f::` — macros for annotating Callables
-
-Expanded into `Callable` annotation (with args and return types).
-One possible usage might be defining interfaces (if functions are used in that role).
-
-```hy
-(setv ICaller (f:: int -> int -> float => (of Tuple int str)))
-; equivalent py-code: ICaller = Callable[[int, int, float], Tuple[int, str]]
-```
-
-<!-- __________________________________________________________________________/ }}}1 -->
-<!-- def:: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
-
-## `def::` — macros for annotating functions via haskell-style signature
-
-Functions defined with `def::` macro will be annotated by values derived from user-given signature.
-
-Special symbols are recognized inside signature:
-- `->` separates arguments
-- `=>` marks function return type
-- `@` marks no signature
-
-Special hy/python symbols, used in args definition (`/`, `*`, `#*` and `#**`) will be successfully recognized too (see expected syntax below).
-Obviously, their order in signature and their order in function args list should match.
-
-Examples:
-```hy
-    ; basic example:
-    (def:: int -> int => int
-        f1 [a b] (+ a b))
-    ; it will be expanded to:
-    (defn #^ int f1
-        [#^ int a #^ int b] (+ a b))
-
-    ; zero-args function:
-    (def:: => int
-        f2 [] (print "hello"))
-
-    ; skip annotations for some args:
-    (def:: @ -> int => @
-        f3 [x y] (+ x y))
-
-    ; decorators list can be given before function name:
-    (def:: int -> int => int
-        [decorator] f4 [a b] (+ a b))
-
-    ; complex args example:
-    (def:: int -> int -> / -> int -> * -> int -> #** dict => int
-        f5 [a b / c * d #** kwargs] (+ a b c d))
-
-    ; another complex args example:
-    (def:: int -> int -> / -> int -> #* int -> #** dict => int
-        f6 [a b / c #* args #** kwargs] (+ a b c))
-
-    ; syntax for skipping annotations for #* and #** args:
-    (def:: @ -> @ -> / -> @ -> #* @ -> #** @ => @
-        f7 [a b / c #* args #** kwargs] (+ a b c))
-
-    ; traditional hy syntax for types applies as usual,
-    ; you can even use fptk f:: macro (for example for factories, closures and such)
-    (def:: (of List int) -> (of Optional float) => (f:: int => float)
-        f8 [xs t] (defn innerF [n] (+ (get xs n) (if (= t None) 0 t))))
-
-    ; You can call (help ff) to see that function indeed was annotated correctly
-```
-
-<!-- __________________________________________________________________________/ }}}1 -->
-
 # Lambdas
 <!-- fm, f>, (l)mapm, (l)filterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
@@ -106,7 +35,7 @@ Those macros all have same similar arguments recognition:
 
 Macros description:
 - `fm` defines lambda
-- `f>` defines and immediately applicates lambda (see threading macros for more usage examples)
+- `f>` defines and immediately applicates lambda (which is handy in threading macros, see corresponding chapter)
 - `mapm` and `lmapm` are both `map` that require lambda-syntax
 - `filterm` and `lfilterm` are both `filter` that require lambda-syntax
 
@@ -124,10 +53,13 @@ Macros description:
 ; fm will be able to find "it" or "%n" in formatted strings:
 (fm f"value = {it}")        ; -> (fn [it] f"value = {it}")
 ; fm will NOT be able to find "it" or "%n" in py expression:
-(fm (py "print(it)"))       ; -> (fn [] (print it))
+(fm (py "print(it)"))       ; -> (fn [] (py "print(it)"))
 ```
 
 ```hy
+; f> defines and immediately applicates lambda:
+(f> (print it) 3)           ; -> ((fn [it] (print it)) 3)
+
 ; f> works only with single form, use "do" for mutliforms:
 (f> (do (print it) it) 3)   ; -> ((fn [it] (print it) it) 3)
 ```
@@ -301,6 +233,77 @@ The only thing this macros does is allowing `.attr` syntax for getattr:
 ```hy
 (getattrm Point "x")     ; -> (getattr Point "x")
 (getattrm Point .x)      ; -> (getattr Point "x")
+```
+
+<!-- __________________________________________________________________________/ }}}1 -->
+
+# Typing
+<!-- f:: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+
+## `f::` — macros for annotating Callables
+
+Expanded into `Callable` annotation (with args and return types).
+One possible usage might be defining interfaces (if functions are used in that role).
+
+```hy
+(setv ICaller (f:: int -> int -> float => (of Tuple int str)))
+; equivalent py-code: ICaller = Callable[[int, int, float], Tuple[int, str]]
+```
+
+<!-- __________________________________________________________________________/ }}}1 -->
+<!-- def:: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+
+## `def::` — macros for annotating functions via haskell-style signature
+
+Functions defined with `def::` macro will be annotated by values derived from user-given signature.
+
+Special symbols are recognized inside signature:
+- `->` separates arguments
+- `=>` marks function return type
+- `@` marks no signature
+
+Special hy/python symbols, used in args definition (`/`, `*`, `#*` and `#**`) will be successfully recognized too (see expected syntax below).
+Obviously, their order in signature and their order in function args list should match.
+
+Examples:
+```hy
+    ; basic example:
+    (def:: int -> int => int
+        f1 [a b] (+ a b))
+    ; it will be expanded to:
+    (defn #^ int f1
+        [#^ int a #^ int b] (+ a b))
+
+    ; zero-args function:
+    (def:: => int
+        f2 [] (print "hello"))
+
+    ; skip annotations for some args:
+    (def:: @ -> int => @
+        f3 [x y] (+ x y))
+
+    ; decorators list can be given before function name:
+    (def:: int -> int => int
+        [decorator] f4 [a b] (+ a b))
+
+    ; complex args example:
+    (def:: int -> int -> / -> int -> * -> int -> #** dict => int
+        f5 [a b / c * d #** kwargs] (+ a b c d))
+
+    ; another complex args example:
+    (def:: int -> int -> / -> int -> #* int -> #** dict => int
+        f6 [a b / c #* args #** kwargs] (+ a b c))
+
+    ; syntax for skipping annotations for #* and #** args:
+    (def:: @ -> @ -> / -> @ -> #* @ -> #** @ => @
+        f7 [a b / c #* args #** kwargs] (+ a b c))
+
+    ; traditional hy syntax for types applies as usual,
+    ; you can even use fptk f:: macro (for example for factories, closures and such)
+    (def:: (of List int) -> (of Optional float) => (f:: int => float)
+        f8 [xs t] (defn innerF [n] (+ (get xs n) (if (= t None) 0 t))))
+
+    ; You can call (help ff) to see that function indeed was annotated correctly
 ```
 
 <!-- __________________________________________________________________________/ }}}1 -->

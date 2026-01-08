@@ -14,6 +14,8 @@ Run `doc_generator.hy` file to generate both documents.
 
 The only sourced file is `/src/core/funcs.hy`.
 
+<!-- GROUP ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+
 ## Inside [GROUP] VimCells
 
 VimCells with `[GROUP] cell_header` will be search for:
@@ -43,6 +45,9 @@ Rules:
 - signature/description use `|` as separator between them; when not found — comment will be seen as description-oly
 - comment `#_ "..."` is overall optional
 
+<!-- __________________________________________________________________________/ }}}1 -->
+<!-- MACRO ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+
 ## Inside [MACRO] VimCell
 
 One particular VimCell with `[MACRO] cell_header` contains 2 big `(require ...)` statements.
@@ -59,4 +64,7 @@ Recognized format (example):
 ```
 
 Group names found in [MACRO] VimCells are then united with group names found in [GROUP] VimCells.
+
+
+<!-- __________________________________________________________________________/ }}}1 -->
 

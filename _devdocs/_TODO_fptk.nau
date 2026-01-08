@@ -69,3 +69,14 @@
 	- lenses:
 	  - GetAttr "kind"
 	  - &+ inner implementation: (get x) -> (& (last expr) (. lens (get x)))
+
+	fptk 0.5.0:
+	- locals + pckg script
+	- renew locals (wy, heh, tc2d, clndr, hnr, NN)
+	- doc for strict_typing
+
+	* all_cheap_modules import lol?
+
+	- docgen issues: 
+			- forced sorting of group names
+			- "FPTK original" vs "Macro from: FPTK"
