@@ -1,21 +1,30 @@
 
 # fptk strict typing
 
-Strict typing is simple convenience module for pydantic.
+fptk strict typing is simple convenience module for pydantic.
+
+Usage:
+```hy
+(import fptk.strict *) ; or load only what is required
+```
 
 Basic pydantic workflow:
 you create classes inherited from BaseModel, and fields are validated
 upon objects creation (by type or whatever user requests).
 
+On my machine pydantic costs:
+- 100..150 ms to load
+- no more than 20..30% increased time for typechecked functions to execute (this obviously varies depending on functions)
+
 # Full list of exported objects
 
 |object|type|description|
 |------|----|-----------|
-| BaseModel     | class (pydantic)   | pydantic decorator for type-checking functions's args
-| StrictInt     | class (pydantic)   | will be still of int type, but will perform pydantic typecheck when variable is created" 
-| StrictStr     | class (pydantic)   | will be still of str type, but will perform pydantic typecheck when variable is created" 
-| StrictFloat   | class (pydantic)   | will be still of float type, but will perform pydantic typecheck when variable is created" 
-| StrictNumber  | class (fptk)       | defined as Union[StrictInt, StrictFloat], that's it
-| validate_call | function (pydantic)| decorator for type-checking functions's args
-| validateF     | function (fptk)    | simply validate_call(...) with option `validate_return=True` (thus it also validates return type)
+| `BaseModel`     | class (pydantic)   | pydantic decorator for type-checking functions's args
+| `StrictInt`     | class (pydantic)   | will be still of int type, but will perform pydantic typecheck when variable is created" 
+| `StrictStr`     | class (pydantic)   | will be still of str type, but will perform pydantic typecheck when variable is created" 
+| `StrictFloat`   | class (pydantic)   | will be still of float type, but will perform pydantic typecheck when variable is created" 
+| `StrictNumber`  | class (fptk)       | defined as Union[StrictInt, StrictFloat], that's it
+| `validate_call` | function (pydantic)| decorator for type-checking functions's args
+| `validateF`     | function (fptk)    | simply validate_call(...) with option `validate_return=True` (thus it also validates return type)
 

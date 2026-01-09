@@ -5,7 +5,16 @@ fptk implements monad types:
 * [Maybe](#Maybe)
 * [Result](#Result)
 
-Monads aim to be compatible with pydantic typecheck.
+Monads aim to be compatible with pydantic typecheck (thus importing monads also imports pydantic).
+
+Import statement:
+```hy
+(import fptk.monads *)
+
+; or one-by-one:
+(import fptk.monads.maybeM *)  ; or load only what is required
+(import fptk.monads.resultM *) ; or load only what is required
+```
 
 <!-- Maybe ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
@@ -15,6 +24,8 @@ Module `fptk.monads.maybeM` exposes objects:
 * Class: `Maybe`
 * Factory functions: `Just`, `Nothing`
 * Functions: `justQ`, `nothingQ`, `mapM`, `bindM`, `unwrapM`, `unwrapM_or`
+
+
 
 ## User API
 
@@ -113,5 +124,4 @@ Dev usage:
 ```
 
 <!-- __________________________________________________________________________/ }}}1 -->
-
 
