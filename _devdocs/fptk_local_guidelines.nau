@@ -1,0 +1,65 @@
+
+    In __init__.py for whole fptk I have option to always import monads/strict/lens.
+    In normal fptk I don't use it.
+    But I usually use it in projects with fptk_local (because I don't want to write "(import lens *)" in every proj file).
+
+// How to use fptk_local in projs ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    ## In non-package (without __init__ or smth) proj:
+
+        Just place whole /fptk_local dir in app.hy folder (or whatever top file is called)
+        And import it as (import fptk_local *)
+
+        All inner imports should use this name too "(import fptk_local.core.funcs *)"
+        // fptk_local_generator takes care of these renamings
+
+    ## In package proj (for example "wy"):
+
+        Example:
+        - project is called "wy" and is pip-installed (pip install -e .)
+        - fptk_local is at /wy/utils/fptk_local folder
+
+        Then:
+        - place whole /fptk_local dir in /wy/utils folder
+        - inner imports should be used like this: "(import wy.utils.fptk_local.core.funcs *)"
+
+        All inner imports should follow this rule too: "(import wy.utils.fptk_local.core.funcs *)"
+        // fptk_local_generator can be used for this
+
+// ____________________________________________________________________________/ }}}1
+// Macros hy.R issue ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    for macro f> and similar they internally use:
+    hy.R.fptk_local.core.macros.fm
+
+    - for vanilla fptk:
+        ✓ (hy.R.fptk.core.macros.fm (+ it 1)) — works
+        ± (fm (+ it 1)) — works, but in order for f> to work, fm has to be imported too
+
+    - for fptk_local in non-package proj:
+        ✓ (hy.R.fptk_local.core.macros.fm (+ it 1)) — works
+        ± (fm (+ it 1)) — same as for vanilla fptk
+
+    - for fptk_local in package proj (using same wy-proj example):
+        ✗ (hy.R.wy.utils.fptk_local.core.macros.fm (+ it 1)) — does NOT work (but probably need some proper imports)
+        ± (fm (+ it 1)) — same as for vanilla fptk
+
+        for this reason I use second (which is ±) option for wy
+        meh, but hey
+
+// ____________________________________________________________________________/ }}}1
+// Macros issue — old note ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    when only importing (import fptk [f>]), f> is required to have fm internally, and it can be called as:
+
+    -> hy.R.fptk.fm               -> ✗ does not work in dev file
+                                     ✓ works from outside projs (it is essentially call to installed lib)
+                                     ✓ this is how it is done in hyrule (I think this is due to their hy_init.hy importing everything)
+
+       fm                         -> [✓ ✗] works from dev file
+       hy.R.fptk_macros.fm        -> [✓ ✗] works from dev file
+       hy.R.fptk.fptk_macros.fm   -> [✗ ✗] does not work anywhere
+
+
+// ____________________________________________________________________________/ }}}1
+

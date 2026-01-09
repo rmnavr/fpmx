@@ -214,8 +214,6 @@
 ; _____________________________________________________________________________/ }}}1
 ; benchmark.hy | MACRO: timing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (setv $F1 "_1.txt")
-
     (assertm = (type (first (timing (apply_n 500 math.sqrt 1E10)))) float)
     
     ; (assertm = (dt_print "Timer start") None)
@@ -338,10 +336,15 @@
 ; _____________________________________________________________________________/ }}}1
 ; IO.hy ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
+    (setv $F1 "_for_read_write_test.txt")
+    (setv _test_string "this file is written (with this exact text)\nand then being read to test write_to_file/read_file/etc. functions")
+
+
     (assertm = (file_existsQ $F1) True)
     (assertm = (fileQ $F1) True)
     (assertm = (dirQ $F1) False)
-    (assertm = (do (write_to_file "hello" $F1) (read_file $F1)) "hello")
+
+    (assertm = (do (write_to_file _test_string $F1) (read_file $F1)) _test_string)
 
 ; _____________________________________________________________________________/ }}}1
 ; mathnlogic.hy ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1

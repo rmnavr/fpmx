@@ -46,19 +46,6 @@
 
 )
 ; _____________________________________________________________________________/ }}}1
-; Info on importing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-	; when only importing (import _fptk_local [f>]), f> is required to have fm internally, and it can be called as:
-	; 
-	; -> hy.R._fptk_local.fm				-> ✗ does not work in dev file
-	;								   ✓ works from outside projs (it is essentially call to installed lib)
-	;								   ✓ this is how it is done in hyrule (I think this is due to their hy_init.hy importing everything)
-	;										 
-	;	 fm							-> [✓ ✗] works from dev file
-	;	 hy.R._fptk_local_macros.fm		-> [✓ ✗] works from dev file
-	;	 hy.R._fptk_local._fptk_local_macros.fm	-> [✗ ✗] does not work anywhere
-
-; _____________________________________________________________________________/ }}}1
 ; 
 ; expr type checkers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
