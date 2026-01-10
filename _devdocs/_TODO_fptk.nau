@@ -1,9 +1,14 @@
 
 // [+] doc_gen ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
+	old (before big restructuring):
 	+ Remove requirement for `;;` comments to have double-semicolon
 	+ Enhance recognition of if `#_ "comment"` belongs to prev `(import ...)` or next `(defn ...)`
 	+ BUG: docgen should not find values in ;; (setv ...) JFK
+
+	- docgen issues (0.5.0): 
+		- forced sorting of group names
+		- "FPTK original" vs "Macro from: FPTK"
 
 // ____________________________________________________________________________/ }}}1
 // fptk ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -63,20 +68,12 @@
 
 // ____________________________________________________________________________/ }}}1
 
-	fptk:
-	- chop
-	- monads without pydantic?
+	* chop
+	- monads VS monads_strict
+	* all_cheap_modules import lol?
 	- lenses:
 	  - GetAttr "kind"
 	  - &+ inner implementation: (get x) -> (& (last expr) (. lens (get x)))
+	? если установить нормально, не будет ли оно всё равно так же долго грузиться, как хайрул?
 
-	fptk 0.5.0:
-	- locals + pckg script
-	- renew locals (wy, heh, tc2d, clndr, hnr, NN)
-	- doc for strict_typing
 
-	* all_cheap_modules import lol?
-
-	- docgen issues: 
-			- forced sorting of group names
-			- "FPTK original" vs "Macro from: FPTK"
