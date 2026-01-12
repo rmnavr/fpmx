@@ -3,17 +3,13 @@
 
 # **fptk** — functional toolkit for hy-lang
 
-fptk (*[F]unctional [P]rogramming [T]ool[K]it*) 
-is an opinionated list of FP-related types/classes, functions and macros,
-that can be imported into main scope altogether to always have them at your fingertips.
+fptk (*[F]unctional [P]rogramming [T]ool[K]it*) is a language extension for hy/py,
+implemented as an opinionated collection of ~200 FP-related functions, macros and types.
 
-Since fptk positions itself as a language extension
-(rather than just a collection of functions), it's intended usage is:
-```hy
-(import fptk *)     ; import modules, functions and types
-(require fptk *)    ; import macros
-```
-*(although you still can import objects one by one)*
+Essentially hy+fptk makes Python to be *my personally tuned language with FP and math flavour I always wanted*.
+Therefore, intended usage of fptk is `import *`.
+
+Fptk still aims to remain viable for general usage by extracting less-used functionality into optional modules.
 
 <!-- __________________________________________________________________________/ }}}1 -->
 
@@ -21,72 +17,86 @@ Since fptk positions itself as a language extension
 
 # Parts of fptk
 
-fptk is split into 2 distinct parts with overall design goals:
-1. **core** — functionality frequently required in general everyday work; core aims to be stable and fast-to-load 
-2. **extras** — optional situational/experimental/slow modules
+fptk is split into 2 parts:
+1. **core** — stable general-FP-usage module
+2. **extras** — optional (experimental/situational) modules
+
+<!-- ■ Core ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2 -->
 
 ## Core functionality
 
-Full core functionality is loaded by:
+Although nothing forbids you from importing objects one by one, indended usage of fptk core is:
 ```hy
-(import fptk *)  ; or load only what is required
-(require fptk *) ; or load only what is required
+(import  fptk.core *)
+(require fptk.core *)
 ```
 
 Core functionality contains:
 - Basic operations in FP-style:
   - Math, logic and checks (most checks in fptk end with "Q": like `intQ`, `zerolenQ`, etc.)
-  - String manipulation and regexes
-  - Basic IO (functions like `read_file` and `file_existsQ`)
-  - Basic benchmarking and debugging
+  - String manipulation and regexes (like `re_test`)
+  - IO (functions like `read_file` and `file_existsQ`)
+  - Benchmarking and debugging
 - APL-like functions and macros (heavily inspired by [funcy](https://github.com/Suor/funcy/) lib):
   > fptk follows funcy approach of providing both generator
   > and list version of most functions (like `map` and `lmap`).
   > Also, most functions do not mutate data.
-  - Buffed getters (first, second, last, rest, ...)
-  - Functional composition, piping, partial application
+  - Buffed getters (`first`, `second`, `last`, `rest`, ...)
+  - Buffed functional composition (threaders and pipes, pointfree, buffed lambdas)
   - Mapping, filtering and partitioning of sequences
 - Typing:
-  - Reimport of basic often used types like `Any`, `Optional`, `Union`, etc.
+  - Curated reimport of basic frequently used types like `Any`, `Optional`, `Union`, `dataclass`, etc.
 - Other quirky things:
   - 1-based index variants of basic getters (don't worry, fptk does not force using them in any way)
   - Haskell-inspired macro for annotating functions: `(def:: int -> int => float ...)`
 
+<!-- _____________________________________________________________________/ }}}2 -->
+<!-- ■ Extra ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2 -->
+
 ## Extra funtionality
 
-There are 3 separate extra modules:
-* `fptk.strict` contains strict-typing helpers utilizing [pydantic](https://github.com/pydantic/pydantic) library
-* `fptk.lenses` offers macros for [lenses](https://github.com/ingolemo/python-lenses) library
-  (which is Haskell-inspired lib for working with deeply nested structures)
-* `fptk.monads` contains Result and Maybe monad that can be type-checked by pydantic
+Currently fptk has following extra modules:
+* `fptk.strict.types`:
+  * requires [pydantic](https://github.com/pydantic/pydantic) library
+  * offers some helper classes for strict type checking
+* `fptk.strict.monads` 
+  * requires [pydantic](https://github.com/pydantic/pydantic) library
+  * contains Result and Maybe monad that can be type-checked by pydantic
+* `fptk.lenses`
+  * requires [lenses](https://github.com/ingolemo/python-lenses) library
+    (which is Haskell-inspired lib for working with deeply nested structures)
+  * offers macros nicer lens syntax
 
-Each submodule can be loaded via:
-```hy
-; Strict typing:
-(import fptk.strict *) ; or load only what is required
+<!-- _____________________________________________________________________/ }}}2 -->
+<!-- ■ Import ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2 -->
 
-; Lenses:
-(import fptk.lenses [lens])
-(require fptk [lns &+ &+> l> l>=]) ; or load only what is required
+## Import helper
 
-; Monads:
-(import fptk.monads *)
-; or one-by-one:
-(import fptk.monads.maybeM *)  ; or load only what is required
-(import fptk.monads.resultM *) ; or load only what is required
+You can use alternative syntax for loading modules.
+
+When loading only core (will load both funcs and macros):
+```
+(require fptk.loader [load_fptk])
+(load_fptk "core")
 ```
 
-## Note on fptk startup time
+When also loading other modules (will load both funcs and macros):
+```
+(require fptk.loader [load_fptk])
+(load_fptk "core" "lenses" "strict_types" "strict_monads")
+```
 
-fptk tries it's best to have fast startup time, but being written in hy, it required some import quirks:
-- calling `(import fptk *) (require fptk *)` loads only core functionality, not extra functionality
-- lenses macros are stored in `(require fptk [lns ...])`, not in `(require fptk.lenses [...])`
+> Be aware that loading modules that require 3rd-party libs may be slow.
+> 
+> Speed profile on my machine (your milage may vary):
+> -  80 ms to load Python
+> - 120 ms to load hy itself
+> - 100 ms to load fptk core (including 30 ms for funcy)
+> -  50 ms to load lenses
+> - 150 ms to load strict types (mostly due to pydantic)
+> - 150 ms to load strict monads on top of strict types
 
-Approx load times for my machine (your mileage may vary):
--  80 ms to load hy itself 
-- 120 ms to load fptk core
-- extra  50 ms to load lenses
-- extra 200 ms to load strict typing and/or monads (pydantic takes most of load time)
+<!-- _____________________________________________________________________/ }}}2 -->
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Documentation ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
@@ -94,12 +104,12 @@ Approx load times for my machine (your mileage may vary):
 ## Documentation
 
 1. Core functionality:
-   - [Cheatsheet on functions/types/macros](docs/core_cheatsheet_autogenerated.md) 
-   - [Macros in details](docs/core_macros_detailed.md) 
+   - [Cheatsheet on core functions/types/macros](docs/core_cheatsheet_autogenerated.md) 
+   - [Core macros in details](docs/core_macros_detailed.md) 
 2. Extra functionality:
    - [strict typing](docs/strict_typing.md)
+   - [strict monads](docs/monads.md)
    - [fptk lenses](docs/lenses.md)
-   - [monads](docs/monads.md)
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Dependencies ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
@@ -107,29 +117,33 @@ Approx load times for my machine (your mileage may vary):
 # Dependencies
 
 Tested with versions:
-* [hy](https://github.com/hylang/hy) 1.0.0
-* [funcy](https://github.com/Suor/funcy/) 2.0
-* [lenses](https://github.com/ingolemo/python-lenses) 1.2
-* [pydantic](https://github.com/pydantic/pydantic) 2.12.3
-* termcolor 3.2.0
+* Core requires:
+  * [hy](https://github.com/hylang/hy) 1.0.0
+  * [funcy](https://github.com/Suor/funcy/) 2.0
+  * termcolor 3.2.0
+* Extras require:
+  * [lenses](https://github.com/ingolemo/python-lenses) 1.2
+  * [pydantic](https://github.com/pydantic/pydantic) 2.12.3
 
-fptk does NOT depend on hyrule lib, but it replicates some of it's macros (like `->`, `case` and others).
-This was required to increase fptk startup speed.
+> fptk does NOT directly depend on hyrule lib, since it internally replicates some of it's macros (like `->`, `case` and others).
+> This was done to increase fptk startup speed.
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Project status ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 # Project status
 
-* Core — consider it at 90% of reaching stable release (some API-breaking changes may still happen)
-* Extra — monads are in experimental phase
+**Core** functionality is at 90% of reaching stable release (some API-breaking changes may still happen).
+
+Things planned for **extras**:
+* Non-strict monads (they should have much faster startup time as compared to pydantic-dependent strict monads)
+* Non-pydantic dynamic type-checker (should be faster to load, but with smaller functionality than pydantic)
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Installation ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 # Installation
 
-The easiest way to install fptk is via command:
 ```
 pip install git+https://github.com/rmnavr/fptk.git@main
 ```
