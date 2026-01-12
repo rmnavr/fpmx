@@ -1,3 +1,3 @@
 
-    (print "empty hy\n")
+    (print "empty hy")
 

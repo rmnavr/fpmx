@@ -35,4 +35,6 @@
         gives_error_typeQ   #_ "[GROUP] Testing                 | | example: (assertm gives_error_typeQ (get [1] 2) IndexError)"
      ])
 
+     ; lns macros are defined in macros.hy, yes, but not imported into core
+
 

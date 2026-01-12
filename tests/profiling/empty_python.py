@@ -1,3 +1,3 @@
 
-print("empty python\n")
+print("empty python")
 
