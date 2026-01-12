@@ -205,6 +205,7 @@
     ; aarg = annotated arg
 
 	(defmacro def:: [#* margs]
+        "help string (to be done)"
         ; deconstruct margs:
         (for [[&n &arg] (enumerate margs)]
             (when (= &arg '=>)
