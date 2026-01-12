@@ -1,15 +1,15 @@
 
 <!-- Intro ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-# **fptk** — functional toolkit for hy-lang
+# fptk — functional toolkit for hy-lang
 
-fptk (*[F]unctional [P]rogramming [T]ool[K]it*) is a language extension for hy/py,
+**fptk** ([F]unctional [P]rogramming [T]ool[K]it) is a language extension for hy/py,
 implemented as an opinionated collection of ~200 FP-related functions, macros and types.
 
 Essentially hy+fptk makes Python to be *my personally tuned language with FP and math flavour I always wanted*.
 Therefore, intended usage of fptk is `import *`.
 
-Fptk still aims to remain viable for general usage by extracting less-used functionality into optional modules.
+Fptk still aims to remain viable for general use by extracting less-used functionality into optional modules.
 
 <!-- __________________________________________________________________________/ }}}1 -->
 
@@ -18,7 +18,7 @@ Fptk still aims to remain viable for general usage by extracting less-used funct
 # Parts of fptk
 
 fptk is split into 2 parts:
-1. **core** — stable general-FP-usage module
+1. **core** — stable general-FP module
 2. **extras** — optional (experimental/situational) modules
 
 <!-- ■ Core ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2 -->
@@ -72,18 +72,30 @@ Currently fptk has following extra modules:
 
 ## Import helper
 
-You can use alternative syntax for loading modules.
+fptk also offers alternative syntax for loading modules.
 
-When loading only core (will load both funcs and macros):
+To load only core:
 ```
 (require fptk.loader [load_fptk])
 (load_fptk "core")
+
+; same as:
+(import  fptk.core *)
+(require fptk.core *)
 ```
 
-When also loading other modules (will load both funcs and macros):
+To also load other modules:
 ```
 (require fptk.loader [load_fptk])
 (load_fptk "core" "lenses" "strict_types" "strict_monads")
+
+; same as:
+(import  fptk.core *)
+(require fptk.core *)
+(import  fptk.lenses *)
+(require fptk.lenses *)
+(import  fptk.strict.types *)
+(import  fptk.strict.monads *)
 ```
 
 > Be aware that loading modules that require 3rd-party libs may be slow.
