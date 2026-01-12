@@ -1,8 +1,6 @@
 
-    (import  fptk *)
-    (require fptk *)
-    (import  fptk.lenses *)
-    (import  fptk.strict *)
+    (require fptk.loader [load_fptk])
+    (load_fptk "core" "lenses" "strict_types")
 
     (import math)
     (import operator)

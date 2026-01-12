@@ -39,15 +39,14 @@
 
     (defn #^ None
         rewrite_file_with_new_lib_name
-        [ #^ str filename ; 'maybeM.hy'
-          #^ str old      ; 'fptk'
-          #^ str new      ; '_fptk_local'
+        [ #^ str filename ;  'maybeM.hy'
+          #^ str old      ; r'fptk'
+          #^ str new      ;  '_fptk_local'
         ]
-        "replaces 'fptk' everywhere to '_fptk_local'"
+        "replaces 'fptk' everywhere to '_fptk_local', old should be regexed strings"
         (setv content_org (read_file filename))
         (setv content_new (re_sub old new content_org))
         (write_file content_new filename))
-
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -56,65 +55,61 @@
     (setv $SETUP_PY             "../../setup.py")
     (setv $SETUP_VERSION_HEADER "proj_version")
 
-    ; whole local version folder will also be named "/_fptk_local":
-    (setv $LOCAL_FOLDER_NAME    "_fptk_local")
-    ; text "fptk" inside local .hy files will be replaced with "_fptk_local"
-    (setv $REPLACEMENT          ["fptk" "_fptk_local"])
-
-    ; files to patch with $REPLACEMENT (in local fptk, not in fptk, obviously)
-    (setv $FILES_TO_PATCH       [ "__init__.py"
-                                  "lenses.hy"
-                                  "strict.hy"
-                                  "core/from_hyrule.hy"
-                                  "core/funcs.hy"
-                                  "core/macros.hy"
-                                  "monads/__init__.py"
-                                  "monads/maybeM.hy"
-                                  "monads/resultM.hy"
-                                ])
-
     (setv $SOURCE_FOLDER        "../../src/fptk")
     (setv $LOCALS_FOLDER        "../../_etc/local_versions")
 
-    ; folders that are removed in local_version after copy:
-    (setv $SUBFOLDERS_TO_REMOVE [ "__pycache__"
-                                  "core/__pycache__"
-                                  "monads/__pycache__"
-                                  "_wy_source"
+    ; whole local version folder will also be named "/fptk_local":
+    (setv $LOCAL_FOLDER_NAME    "fptk_local")
+    ; text "fptk" (or "hy.R.fptk/") inside local .hy files will be replaced with equiv "fptk_local"
+    ; those replacements work because I have no «fptk» without following «.» or «/» in the text
+    (setv $REPLACEMENTS         [ [r"fptk\."       "fptk_local."]
+                                  [r"hy\.R\.fptk/" "hy.R.fptk_local/"]
+                                ])
+
+    ; those files will be also patched with replacements
+    (setv $FILES_TO_COPY        [ "__init__.py"
+                                  "lenses.hy"
+                                  "loader.hy"
+                                  "core/__init__.py"
+                                  "core/__init__macros.hy"
+                                  "core/funcs.hy"
+                                  "core/from_hyrule.hy"
+                                  "core/macros.hy"
+                                  "strict/types.hy"
+                                  "strict/monads/__init__.py"
+                                  "strict/monads/maybeM.hy"
+                                  "strict/monads/resultM.hy"
                                 ])
 
 ; _____________________________________________________________________________/ }}}1
 
-    (setv _fptk_version  (extract_version $SETUP_VERSION_HEADER (read_file $SETUP_PY)))
-    (setv _target_folder (sconcat $LOCALS_FOLDER "/" _fptk_version "/" $LOCAL_FOLDER_NAME))
-    (setv _target_folders_to_remove (lmap (partial sconcat _target_folder "/") $SUBFOLDERS_TO_REMOVE))
-    (setv _target_files_to_patch    (lmap (partial sconcat _target_folder "/") $FILES_TO_PATCH))
+    (setv _fptk_version   (extract_version $SETUP_VERSION_HEADER (read_file $SETUP_PY)))
+    (setv _target_folder  (sconcat $LOCALS_FOLDER "/" _fptk_version "/" $LOCAL_FOLDER_NAME))
+
+    (setv _sources (lmapm (sconcat $SOURCE_FOLDER "/" it) $FILES_TO_COPY))
+    (setv _targets (lmapm (sconcat _target_folder "/" it) $FILES_TO_COPY))
+    (setv _source_target_files_pairs (zip _sources _targets))
 
     (setv _target_readme  (sconcat _target_folder "/README.md"))
     (setv _readme_content (generate_readme_content _fptk_version))
 
-    (print "\n1) working on folders, writing README:")
     ; remove local_version_v0.5.0 or smth if exists already (in case this script reruns)
     (when (os.path.exists _target_folder)
           (send2trash _target_folder)
           (print f"-- folder removed : {(clrz _target_folder)}"))
 
-    (try ; 1) copy whole fptk lib:
-         (shutil.copytree $SOURCE_FOLDER _target_folder)
-         (print f"-- copy done      : {(clrz $SOURCE_FOLDER)} -> {(clrz _target_folder)}")
-         ; 2) write readme file for local:
+    (try ; ✠ make dirs
+         (lmapm (os.makedirs (os.path.dirname it) :exist_ok True) _targets)
+         (print f"-- created required subdirs in target folder")
+         ; ✠ write readme file for local:
          (write_file _readme_content _target_readme)
-         (print f"-- file written   : {(clrz _target_readme)}")
-         ; 3) remove __pycache__ folders and such:
-         (for [fldr _target_folders_to_remove]
-              (when (os.path.exists fldr)
-                    (print f"-- removing folder: {(clrz fldr)}")
-                    (send2trash fldr)))
-         ; 4) patch 'fptk' to '_fptk_local' inside files:
-         (print f"\n2) renaming imports inside files with: {(clrz (first $REPLACEMENT))} -> {(clrz (second $REPLACEMENT))}:")
-         (for [file _target_files_to_patch]
-              (rewrite_file_with_new_lib_name file (first $REPLACEMENT) (second $REPLACEMENT))
-              (print f"-- patched file   : {(clrz file)}"))
+         (print f"-- readme file written     : {(clrz _target_readme)}")
+         ; ✠ copy and patch files:
+         (for [[source target] _source_target_files_pairs]
+              (shutil.copy2 source target)
+              (rewrite_file_with_new_lib_name target #* (first  $REPLACEMENTS)) ; fptk.
+              (rewrite_file_with_new_lib_name target #* (second $REPLACEMENTS)) ; hy.R.fptk/
+              (print f"-- copied and patched file : {(clrz target)}"))
          ;
          (except [e Exception] (print e)))
 

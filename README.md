@@ -101,13 +101,13 @@ To also load other modules:
 
 > Be aware that loading modules that require 3rd-party libs may be slow.
 > 
-> Speed profile on my machine (your milage may vary):
+> Speed profile on my machine (your mileage may vary):
 > -  80 ms to load Python
 > - 120 ms to load hy itself
 > - 100 ms to load fptk core (including 30 ms for funcy)
 > -  50 ms to load lenses
 > - 150 ms to load strict types (mostly due to pydantic)
-> - 150 ms to load strict monads on top of strict types
+> - 150 ms to load strict monads on top of pydantic
 
 <!-- _____________________________________________________________________/ }}}2 -->
 

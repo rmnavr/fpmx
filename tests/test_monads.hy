@@ -1,9 +1,9 @@
 
-    (import fptk *) (require fptk *)
+    (import fptk.core *) (require fptk.core *)
     (import pydantic [ConfigDict])
 
-    (import fptk.strict *)
-    (import fptk.monads *)
+    (import fptk.strict.types *)
+    (import fptk.strict.monads *)
 
 ; Maybe: basics ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 

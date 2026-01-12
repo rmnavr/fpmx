@@ -12,11 +12,13 @@ Run `doc_generator.hy` file to generate both documents.
 
 # Required format in source files
 
-The only sourced file is `/src/core/funcs.hy`.
+Two files are sourced for data:
+- `/src/core/funcs.hy` — looking into [GROUP] VimCells for functions and such
+- `/src/core/__init__macros.hy` — looking for macros in 2 big require statements
 
 <!-- GROUP ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-## Inside [GROUP] VimCells
+## Functions — inside [GROUP] VimCells
 
 VimCells with `[GROUP] cell_header` will be search for:
 ```
@@ -50,8 +52,7 @@ Rules:
 
 ## Inside [MACRO] VimCell
 
-One particular VimCell with `[MACRO] cell_header` contains 2 big `(require ...)` statements.
-Macros are searched for in those 2 big statements.
+Macros are searched for in 2 big require statements (in `__init__macros.hy`).
 
 Recognized format (example):
 ```
@@ -63,8 +64,7 @@ Recognized format (example):
     ;; word [GROUP] is obligatory
 ```
 
-Group names found in [MACRO] VimCells are then united with group names found in [GROUP] VimCells.
-
+Group names found here are then united with group names found in [GROUP] VimCells.
 
 <!-- __________________________________________________________________________/ }}}1 -->
 

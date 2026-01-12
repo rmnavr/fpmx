@@ -8,7 +8,7 @@
     (import  operator   :as _operator)
 
     (import  typing [List])     ; also re-imported in Typing, but hey
-    (require fptk.core.from_hyrule [comment of])
+    (require fptk_local.core.from_hyrule [comment of])
 
 ; _____________________________________________________________________________/ }}}1
 ; Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -135,7 +135,7 @@
 
     (comment "py | base | reversed | reversed(sequence) -> iterator |") 
 
-    (import fptk.core.from_hyrule [flatten]) #_ "flatten(coll) | recursively flattens to the bottom"
+    (import fptk_local.core.from_hyrule [flatten]) #_ "flatten(coll) | recursively flattens to the bottom"
 
     #_ "lreversed(sequence) | list version of reversed"
     (defn lreversed [sequence] (list (reversed sequence)))
@@ -346,7 +346,7 @@
 
         ;; idxs, keys:
         (comment "hy     | macro | get   | (get xs n #* keys) -> xs[n][key1]... | throws error when not found")
-        (import fptk.core.from_hyrule [assoc]) #_ "assoc(xs, k1, v1, k2, v2, ...) -> None | ≈ (setv (get xs k1) v1 (get xs k2) v2) ; also possible: (assoc xs :x 1)"
+        (import fptk_local.core.from_hyrule [assoc]) #_ "assoc(xs, k1, v1, k2, v2, ...) -> None | ≈ (setv (get xs k1) v1 (get xs k2) v2) ; also possible: (assoc xs :x 1)"
 
         ;; idxs:
         (import funcy [nth])        #_ "nth(n, seq) -> Optional elem | 0-based index; works also with dicts"

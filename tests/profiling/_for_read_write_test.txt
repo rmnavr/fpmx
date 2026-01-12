@@ -1,0 +1,2 @@
+this file is written (with this exact text)
+and then being read to test write_to_file/read_file/etc. functions

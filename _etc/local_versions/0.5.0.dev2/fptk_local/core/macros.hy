@@ -1,8 +1,8 @@
 
 ; Import, Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	(import  fptk.core.from_hyrule [rest butlast flatten])
-	(require fptk.core.from_hyrule [-> ->> of comment])
+	(import  fptk_local.core.from_hyrule [rest butlast flatten])
+	(require fptk_local.core.from_hyrule [-> ->> of comment])
 	(import  operator)
 
     (export :macros [ def:: f::
@@ -162,7 +162,7 @@
     ; f>
 
         ;(defmacro f> [lambda_def #* args]
-        ;	(return `((hy.R.fptk.fm ~lambda_def) ~@args)))
+        ;	(return `((hy.R.fptk_local.fm ~lambda_def) ~@args)))
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -303,19 +303,19 @@
 		(return `(fn [~@inputs] ~@exprs)))
 
 	(defmacro f> [one_shot_fm #* args]
-		(return `((hy.R.fptk/core.fm ~one_shot_fm) ~@args)))
+		(return `((hy.R.fptk_local/core.fm ~one_shot_fm) ~@args)))
 
 	(defmacro mapm [one_shot_fm #* args]
-		(return `(map (hy.R.fptk/core.fm ~one_shot_fm) ~@args)))
+		(return `(map (hy.R.fptk_local/core.fm ~one_shot_fm) ~@args)))
 
 	(defmacro lmapm [one_shot_fm #* args]
-		(return `(list (map (hy.R.fptk/core.fm ~one_shot_fm) ~@args))))
+		(return `(list (map (hy.R.fptk_local/core.fm ~one_shot_fm) ~@args))))
 
 	(defmacro filterm [one_shot_fm iterable]
-		(return `(filter (hy.R.fptk/core.fm ~one_shot_fm) ~iterable)))
+		(return `(filter (hy.R.fptk_local/core.fm ~one_shot_fm) ~iterable)))
 
 	(defmacro lfilterm [one_shot_fm iterable]
-		(return `(list (filter (hy.R.fptk/core.fm ~one_shot_fm) ~iterable))))
+		(return `(list (filter (hy.R.fptk_local/core.fm ~one_shot_fm) ~iterable))))
 
 ; _____________________________________________________________________________/ }}}1
 ; =>, =>> ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -466,7 +466,7 @@
 					(_isExprWithHeadSymbol &arg "f>") 
 					(do (setv body (get &arg 1))
                         (setv ags  (cut &arg 2 None))
-                        (pargs.append `(hy.I.funcy.partial (hy.R.fptk/core.fm ~body) ~@ags)))
+                        (pargs.append `(hy.I.funcy.partial (hy.R.fptk_local/core.fm ~body) ~@ags)))
 					; (func 1 2)       -> (partial func 1 2)
 					; (operator.add 3) -> (partial operator.add 3)
 					(= (type &arg) hy.models.Expression)
@@ -551,7 +551,7 @@
 	(defmacro &+ [#* macro_args]
 		(setv lenses_ (butlast macro_args))
 		(setv func	 (get macro_args (- 1)))
-	   `(& ~@lenses_ (hy.R.fptk/core/macros.lns ~func)))
+	   `(& ~@lenses_ (hy.R.fptk_local/core/macros.lns ~func)))
 
 	; compose lens, add setters/getters, apply
 
@@ -559,19 +559,19 @@
 		(setv variable (get macro_args 0))
 		(setv lenses   (butlast (rest macro_args)))
 		(setv func	   (get macro_args (- 1)))
-	   `((& ~@lenses (hy.R.fptk/core/macros.lns ~func)) ~variable))
+	   `((& ~@lenses (hy.R.fptk_local/core/macros.lns ~func)) ~variable))
 
 	; construct lens, apply:
 
 	(defmacro l> [#* macro_args]
 		(setv variable	  (get macro_args 0))
 		(setv lenses_args (rest macro_args))
-	   `((hy.R.fptk/core/macros.lns ~@lenses_args) ~variable))
+	   `((hy.R.fptk_local/core/macros.lns ~@lenses_args) ~variable))
 
 	(defmacro l>= [#* macro_args]
 		(setv variable	  (get macro_args 0))
 		(setv lenses_args (rest macro_args))
-	   `(&= ~variable (hy.R.fptk/core/macros.lns ~@lenses_args)))
+	   `(&= ~variable (hy.R.fptk_local/core/macros.lns ~@lenses_args)))
 
 ; _____________________________________________________________________________/ }}}1
 ; assertm, gives_error_typeQ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
