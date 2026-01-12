@@ -72,10 +72,11 @@ Currently fptk has following extra modules:
 
 ## Import helper
 
-fptk also offers alternative syntax for loading modules.
+Since fptk is language extension, rather than just a collection of functions and macros,
+it offers alternative concise syntax for loading it's modules.
 
 To load only core:
-```
+```hy
 (require fptk.loader [load_fptk])
 (load_fptk "core")
 
@@ -85,7 +86,7 @@ To load only core:
 ```
 
 To also load other modules:
-```
+```hy
 (require fptk.loader [load_fptk])
 (load_fptk "core" "lenses" "strict_types" "strict_monads")
 
