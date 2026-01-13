@@ -5,7 +5,7 @@ fptk strict typing is simple convenience module for pydantic.
 
 Usage:
 ```hy
-(import fptk.strict *) ; or load only what is required
+(import fptk.strict.types *) ; or load only what is required
 ```
 
 Basic pydantic workflow:

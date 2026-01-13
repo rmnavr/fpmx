@@ -1,6 +1,8 @@
 __pycache__/
 build/
-*.~$lock
+_etc/local_versions
+
+*.ignore
 *.swp.tmp
 *.swo.tmp
 *.swp

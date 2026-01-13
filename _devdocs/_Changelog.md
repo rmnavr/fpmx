@@ -2,8 +2,7 @@
 # Version 0.5.0
 - Big restructure to significantly increase startup time
   - removed hyrule dependency
-  - split into modules: core, strict_typing, lenses, monads
-  - only core is loaded by default
+  - split into 2 big parts: core and extra (strict/monads, lenses)
 
 # Version 0.4.4.dev
 - added Maybe monad (works similar to Result monad)

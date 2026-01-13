@@ -29,7 +29,7 @@
         (sconcat "\n" "This is local version of github.com/rmnavr/fptk lib.\n"
                       "\n"
                       "Purpose of local version is to have stable fptk \n"
-                      "inside other projects until fptk reaches stable version.\n"
+                      "inside other projects until fptk reaches stable relsease.\n"
                       "\n"
                       "This file was generated from local git version: " version
                       "\n"))
@@ -58,13 +58,17 @@
     (setv $SOURCE_FOLDER        "../../src/fptk")
     (setv $LOCALS_FOLDER        "../../_etc/local_versions")
 
-    ; whole local version folder will also be named "/fptk_local":
+    ; v.1 = Normal:
     (setv $LOCAL_FOLDER_NAME    "fptk_local")
-    ; text "fptk" (or "hy.R.fptk/") inside local .hy files will be replaced with equiv "fptk_local"
-    ; those replacements work because I have no «fptk» without following «.» or «/» in the text
     (setv $REPLACEMENTS         [ [r"fptk\."       "fptk_local."]
                                   [r"hy\.R\.fptk/" "hy.R.fptk_local/"]
                                 ])
+
+    ; v.2 = For wy:
+    ; (setv $LOCAL_FOLDER_NAME    "wy.utils.fptk_local")
+    ; (setv $REPLACEMENTS         [ [r"fptk\."       "wy.utils.fptk_local."]
+    ;                               [r"hy\.R\.fptk/" "hy.R.wy/utils/fptk_local/"]
+    ;                             ])
 
     ; those files will be also patched with replacements
     (setv $FILES_TO_COPY        [ "__init__.py"
@@ -75,10 +79,11 @@
                                   "core/funcs.hy"
                                   "core/from_hyrule.hy"
                                   "core/macros.hy"
+                                  "monads/maybeM.hy"
+                                  "monads/resultM.hy"
                                   "strict/types.hy"
-                                  "strict/monads/__init__.py"
-                                  "strict/monads/maybeM.hy"
-                                  "strict/monads/resultM.hy"
+                                  "strict/maybeM.hy"
+                                  "strict/resultM.hy"
                                 ])
 
 ; _____________________________________________________________________________/ }}}1

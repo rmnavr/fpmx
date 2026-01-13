@@ -2,8 +2,14 @@
     (import fptk.core *) (require fptk.core *)
     (import pydantic [ConfigDict])
 
+    ; non-strict:
+    ; import fptk.monads.resultM *
+    ; import fptk.monads.maybeM *
+
+    ; strict:
     (import fptk.strict.types *)
-    (import fptk.strict.monads *)
+    (import fptk.strict.resultM *)
+    (import fptk.strict.maybeM *)
 
 ; Maybe: basics ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
@@ -55,7 +61,7 @@
         (mapR (safe_divide 1 0) double (partial mul 7))
         (Failure f"1.0/0.0, div by 0, bruh"))
 
-    (assertm gives_error_typeQ (mapR 3 double (partial mul 7)) ValueError)
+    (assertm gives_error_typeQ (mapR 3 double (partial mul 7)) TypeError)
 
     (assertm eq; (8/4)/4 = 0.5
         (bindR (Success 8) (pflip safe_divide 4) (pflip safe_divide 4))
@@ -63,19 +69,19 @@
 
     (setv x (Success 14))
     (setv y (Failure "pups_err"))
-    (assertm eq (unwrapR x) 14)
+    (assertm eq (unwrapS x) 14)
     (assertm eq (unwrapE y) "pups_err")
     (assertm eq (unwrapE_or x "def_err") "def_err")
-    (assertm eq (unwrapR_or y 0) 0)
+    (assertm eq (unwrapS_or y 0) 0)
 
 ; _____________________________________________________________________________/ }}}1
 ; Result: typing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (defclass AppError [BaseModel]
-        #^ StrictInt n
+        #^ int n
         #^ Exception e
         (setv model_config (ConfigDict :arbitrary_types_allowed True))
-        (defn __init__ [self #^ StrictInt n #^ Exception e]
+        (defn __init__ [self #^ int n #^ Exception e]
             (-> (super) (.__init__ :n n :e e)))
         (defn __str__ [self] (sconcat "<Error" (str self.n) ": " (str self.e) ">"))
         (defn __repr__ [self] (self.__str__)))

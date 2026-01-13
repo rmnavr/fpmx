@@ -9,14 +9,17 @@
               (actions.append `(import  fptk_local.lenses *))
               (actions.append `(require fptk_local.lenses *)))
         ;
+        (when (in '"maybeM" args)
+              (actions.append `(import  fptk_local.monads.maybeM *)))
+        (when (in '"resultM" args)
+              (actions.append `(import  fptk_local.monads.resultM *)))
+        ;
         (when (in '"strict_types" args)
               (actions.append `(import  fptk_local.strict.types *)))
-        (when (in '"strict_monads" args)
-              (actions.append `(import  fptk_local.strict.monads *)))
-        (when (in '"strict_resultM" args)
-              (actions.append `(import  fptk_local.strict.monads.resultM *)))
-        (when (in '"strict_maybeM" args)
-              (actions.append `(import  fptk_local.strict.monads.maybeM *)))
+        (when (in '"resultM_strict" args)
+              (actions.append `(import  fptk_local.strict.resultM *)))
+        (when (in '"maybeM_strict" args)
+              (actions.append `(import  fptk_local.strict.maybeM *)))
         ;
        `(do ~@ actions))
 

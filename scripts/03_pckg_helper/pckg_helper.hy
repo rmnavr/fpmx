@@ -97,13 +97,13 @@
 
     ; STEP 1 (tests)
 
-        (print (colorize 7 "[Step 1/4] Running tests:"))
+        (print (colorize 7 "[Step 1/3] Running tests:"))
         (lmap run_test $FPTK_TESTS) 
 
     ; STEP 2 (docgen)
 
         (print "")
-        (print (colorize 7 "[Step 2/4] Doc generation for functions:"))
+        (print (colorize 7 "[Step 2/3] Doc generation for functions:"))
 
         (try (run_shell_command f"cd {$DOCGEN_DIR} && {$HYCMD} {$DOCGEN}")
              (print (colorize 4 "Docgen - finished"))
@@ -113,7 +113,7 @@
     ; STEP 3 (fptk local)
 
         (print "")
-        (print (colorize 7 "[Step 3/4] Generating fptk_local:"))
+        (print (colorize 7 "[Step 3/3] Generating fptk_local:"))
 
         (try (run_shell_command f"cd {$FPTKLOCAL_DIR} && {$HYCMD} {$FPTKLOCAL}")
              (print (colorize 4 "Generating _fptk_local - finished"))
@@ -121,8 +121,7 @@
                                  (sys.exit 1)))
 
     ; STEP4 (adding version marker)
-
-        (print "")
-        (print (colorize 7 "[Step 4/4] Generating version marker file in fptk dir (and removing previous)"))
-        (write_version_marker)
+    ;   (print "")
+    ;   (print (colorize 7 "[Step 4/4] Generating version marker file in fptk dir (and removing previous)"))
+    ;   (write_version_marker)
 

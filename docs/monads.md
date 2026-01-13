@@ -5,62 +5,66 @@ fptk implements monad types:
 * [Maybe](#Maybe)
 * [Result](#Result)
 
-Monads aim to be compatible with pydantic typecheck (thus importing monads also imports pydantic).
+They are implemented in two variants with the same interface and namings:
+- *normal* 
+- *strict* — compatible with pydantic typecheck (thus importing monads also imports pydantic)
+
+The reason both variants exist is due to pydantic requiring extra time to load (~150 ms on my machine).
 
 Import statement:
 ```hy
-(import fptk.monads *)
-
-; or one-by-one:
+; normal:
 (import fptk.monads.maybeM *)  ; or load only what is required
 (import fptk.monads.resultM *) ; or load only what is required
+
+; strict:
+(import fptk.strict.maybeM *)  ; or load only what is required
+(import fptk.strict.resultM *) ; or load only what is required
 ```
 
 <!-- Maybe ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 # Maybe
 
-Module `fptk.monads.maybeM` exposes objects:
-* Class: `Maybe`
-* Factory functions: `Just`, `Nothing`
-* Functions: `justQ`, `nothingQ`, `mapM`, `bindM`, `unwrapM`, `unwrapM_or`
+Module `fptk.monads.maybeM` (or `fptk.strict.maybeM`) exposes objects:
+* class: `Maybe`
+* factory functions: `Just`, `Nothing`
+* functions: `justQ`, `nothingQ`, `mapM`, `bindM`, `unwrapM`, `unwrapM_or`
 
+Notice that `Just` and `Nothing` are functions, not classes.
+Real just/nothing implementation is intentionally hidden from user.
 
-
-## User API
-
-To check if your `m` is of Maybe type, you can use `(= (type m) Maybe)`.
-But you can't use `(= (type m) Just)`, since Just is actually a function, not a class.
-Use `(justQ m)` instead.
-
-Creating Maybe type:
+User API:
 ```hy
-    (Just 3) ; Create Maybe object with Just container (with 3 placed inside it)
-    Nothing  ; Create Maybe object with special "nothing" container
+; check if object r is of Maybe type
+(= (type r) Maybe)
+(isinstance r Maybe)
 
-    ; From a user POV Maybe type itself must be used only in annotations,
-    ; that can be optionally validated by pydantic's validate_call like for example:
-    (defn [validate_call] f [#^ (of Maybe int) x] (print x))
+; use Maybe in annotations:
+(defn f [#^ (of Maybe int) x #^ Maybe y] (print x y))
+; strict variant can also be pydantic validated:
+(defn [validate_call :validate_return True]
+      #^ None f [#^ (of Maybe int) x #^ Maybe y]
+      (print x y))
 
-    ; output can be validated by pydantic too:
-    (defn [(validate_call :validate_return True)]
-          #^ (of Maybe int) f [#^ int x] (Just x))
-```
+; create Maybe objects:
+(Just 3)      
+Nothing
 
-Utilities:
-```hy
-    (justQ    m) -> bool  ; Checks if Maybe contains (Just ...)
-    (nothingQ m) -> bool  ; Checks if Maybe contains Nothing
+; check if object m is Just/Nothing (will give error if used not on Maybe type):
+(justQ    m)
+(nothingQ m)
 
-    (mapM m pureF1 pureF2 ...)  ; Apply pure functions to value stored in Just
-                                ; or do nothing for Nothing
-                                ; It is user's responsibility to ensure pureFi are indeed pure
+(mapM m pureF1 pureF2 ...)  ; Apply pure functions to value stored in Just
+                            ; or do nothing for Nothing
+                            ; It is user's responsibility to ensure pureFi are indeed pure
 
-    (bindM m monadicF1 monadicF2 ...)   ; Apply functions of signagure [f :: val -> Maybe]
-                                        ; to value stored in Just or do nothing for Nothing
+(bindM m monadicF1 monadicF2 ...)   ; Apply functions of signagure [f :: val -> Maybe]
+                                    ; to value stored in Just or do nothing for Nothing
 
-    (unwrapM    m)          ; returns contained Just value or throws error when not Just
-    (unwrapM_or m default)  ; returns contained Just value or falls back to default
+; unwrappers will give errors when trying to apply them on non-Maybe type
+(unwrapM    m)          ; returns contained Just value or throws error when not Just
+(unwrapM_or m default)  ; returns contained Just value or falls back to default
 ```
 
 <!-- __________________________________________________________________________/ }}}1 -->
@@ -68,59 +72,48 @@ Utilities:
 
 # Result
 
-Module `fptk.monads.resultM` exposes objects:
+Module `fptk.monads.resultM` (or `fptk.strict.resultM`) exposes objects:
 * class: `Result`
 * factory functions: `Success`, `Failure`
-* functions: `successQ`, `failureQ`, `mapR`, `bindR`, `unwrapR`, `unwrapR_or`, `unwrapE`, `unwrapE_or`
+* functions: `successQ`, `failureQ`, `mapR`, `bindR`, `unwarpR`, `unwrapS`, `unwrapS_or`, `unwrapE`, `unwrapE_or`
 
-## User API
+Notice that `Success` and `Failure` are functions, not classes.
+Real success/failure implementation is intentionally hidden from user.
 
-To check if your `m` is of Result type, you can use `(= (type m) Result)`.
-But you can't use `(= (type m) Success)`, since Success is actually a function, not a class.
-Use `(successQ m)` instead.
-
-Creating Result type:
+User API:
 ```hy
-    (Success 3)      ; Create Result type with Success container (with 3 placed inside it)
-    (Failure "err")  ; Create Result type with Failure container (with "err" placed inside it)
+; check if object r is of Result type
+(= (type r) Result)
+(isinstance r Result)
 
-    ; internally Success and Failure are factory functions, not classes
+; use Result in annotations:
+(defn f [#^ (of Result int str) x #^ Result y] (print x y))
+; strict variant can also be pydantic validated:
+(defn [validate_call :validate_return True]
+      #^ None f [#^ (of Result int str) x #^ Result y]
+      (print x y))
 
-    ; From a user POV Result type itself must be used only in annotations,
-    ; that can be optionally validated by pydantic's validate_call like for example:
-    (defn [validate_call] f [#^ (of Result int str) x] (print x))
+; create Result objects:
+(Success 3)      
+(Failure "err")  
 
-    ; output can be validated by pydantic too:
-    (defn [(validate_call :validate_return True)]
-          #^ (of Result int str) f [#^ int x] (Success x))
-```
+; check if object m is Success/Failure (will give error if used not on Result type):
+(successQ m)
+(failureQ m)
 
-Utilities:
-```hy
-    (successQ r) -> bool  ; Checks if Result contains Success
-    (failureQ r) -> bool  ; Checks if Result contains Failure
+(mapR r pureF1 pureF2 ...)  ; Apply pure functions to value stored in Success
+                            ; or do nothing for Failure;
+                            ; It is user's responsibility to ensure pureFi are indeed pure
 
-    (mapR r pureF1 pureF2 ...)  ; Apply pure functions to value stored in Success
-                                ; or do nothing for Failure;
-                                ; It is user's responsibility to ensure pureFi are indeed pure
+(bindR r monadicF1 monadicF2 ...)   ; Apply functions of signagure [f(val) -> Result]
+                                    ; to value stored in Success or do nothing for Failure
 
-    (bindR r monadicF1 monadicF2 ...)   ; Apply functions of signagure [f :: val -> Result]
-                                        ; to value stored in Success or do nothing for Failure
-
-    (unwrapR    r)          ; returns contained Success value or throws error when not Success
-    (unwrapR_or r default)  ; returns contained Success value or falls back to default
-    (unwrapE    r)          ; returns contained Failure value or throws error when not Failure
-    (unwrapE_or r default)  ; returns contained Failure value or falls back to default
-
-    ; If you need to access contained value no matter if it is Success or Failure, you can use:
-    r.value
-```
-
-Dev usage:
-```hy
-    ; If you really need to access container _Success (or _Failure) 
-    ; (although API is intentionally built to discourage such a usecase), use:
-    r.result
+; unwrappers will give errors when trying to apply them on non-Result type
+(unwrapR    r)          ; returns contained value, no matter if it is Success or Failure
+(unwrapS    r)          ; returns contained Success value or throws error when not Success
+(unwrapS_or r default)  ; returns contained Success value or falls back to default
+(unwrapE    r)          ; returns contained Failure value or throws error when not Failure
+(unwrapE_or r default)  ; returns contained Failure value or falls back to default
 ```
 
 <!-- __________________________________________________________________________/ }}}1 -->

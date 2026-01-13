@@ -12,13 +12,13 @@ They simplify lens definition, composition and application.
 Usage:
 ```hy
 (import fptk.lenses [lens])        ; main object (lens) from original lenses library
-(require fptk [lns &+ &+> l> l>=]) ; macros
+(require fptk [lns l> l>= &+ &+>]) ; macros
 
-; you don't need to interact with `lens` directly, but fptk-lenses macros require it to be loaded
+; you won't need to interact with `lens` directly, but fptk-lenses macros require it to be loaded
 ```
 
 <!-- __________________________________________________________________________/ }}}1 -->
-<!-- Cheetsheet ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+<!-- Cheatsheet ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 # Cheatsheet
 
@@ -30,7 +30,15 @@ below cheatsheet is given for lenses library as a whole, not just for fptk macro
 Most important objects in lenses are UL (UnboundLens) and SF (StateFunction),
 which will be further referred to as UL and SF.
 
-UL/SF definition, application, composition:
+Also, in examples below, `lens` object is the one you import from lenses library:
+```hy
+(import lenses [lens])
+
+; or use fptk reimport:
+(import fptk.lenses [lens])
+```
+
+UL/SF definition, application and composition:
 ```hy
 (. lens [-2] ["key"] [idx] attr)         ; define UL
 (. lens [-2] ["key"] [idx] attr (set 3)) ; define SF

@@ -1,8 +1,14 @@
 
+; non-strict as compared to strict:
+; 1) do not import pydantic
+; 2) Classes definition
+; -- utils functions are totally the same
+
 ; Import/Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
+    ; no pydantic
+
     (import typing [TypeVar Generic Union])
-    (import pydantic [BaseModel])
     (import funcy [rcompose lmap partial])
     (require fptk.core.from_hyrule [of unless])
 
@@ -18,17 +24,17 @@
 
     (setv J (TypeVar "J"))
 
-    (defclass _Just [BaseModel (of Generic J)]
-        #^ J value
+    (defclass _Just [(of Generic J)]
+        (defn __init__ [self value] (setv #^ J self.value value))
         (defn __str__ [self] (+ "Just: " (str self.value)))
         (defn __repr__ [self] (self.__str__)))
 
-    (defclass _Nothing [BaseModel]
+    (defclass _Nothing []
         (defn __str__ [self] "Nothing")
         (defn __repr__ [self] (self.__str__)))
 
-    (defclass Maybe [BaseModel (of Generic J)]
-        #^ (of Union (of _Just J) _Nothing) container
+    (defclass Maybe [(of Generic J)]
+        (defn __init__ [self container] (setv #^ (of Union (of _Just J) _Nothing) self.container container))
         (defn __str__ [self] (+ "<M." (str self.container) ">"))
         (defn __repr__ [self] (self.__str__)))
 
@@ -37,8 +43,6 @@
 
 ; _____________________________________________________________________________/ }}}1
 
-; - functions below also work correctly with [validateF]
-; - (of Maybe J) — this too works with [validateF]
 ; utils: Typechecks ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (defn _nonM_error [x] (ValueError f"Value <{x}> must be of Maybe type"))

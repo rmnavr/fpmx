@@ -1,10 +1,16 @@
 
+; non-strict as compared to strict:
+; 1) do not import pydantic
+; 2) Classes definition
+; -- utils functions are totally the same
+
 ; Import/Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (import typing [TypeVar Generic Union])
     (import pydantic [BaseModel])
+
+    (import typing [TypeVar Generic Union])
     (import funcy [rcompose lmap partial])
-    (require fptk_local.core.from_hyrule [of unless])
+    (require fptk.core.from_hyrule [of unless])
 
     (export :objects [ Maybe Just Nothing
                        justQ nothingQ
@@ -37,8 +43,6 @@
 
 ; _____________________________________________________________________________/ }}}1
 
-; - functions below also work correctly with [validateF]
-; - (of Maybe J) — this too works with [validateF]
 ; utils: Typechecks ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (defn _nonM_error [x] (ValueError f"Value <{x}> must be of Maybe type"))

@@ -59,13 +59,16 @@ Currently fptk has following extra modules:
 * `fptk.strict.types`:
   * requires [pydantic](https://github.com/pydantic/pydantic) library
   * offers some helper classes for strict type checking
-* `fptk.strict.monads` 
-  * requires [pydantic](https://github.com/pydantic/pydantic) library
-  * contains Result and Maybe monad that can be type-checked by pydantic
+* `fptk.monads` and their `fptk.strict` equivalent
+  * contains Maybe and Result monads
+  * strict monads can be pydantic type-checked
+  * strict monads require [pydantic](https://github.com/pydantic/pydantic) library
 * `fptk.lenses`
   * requires [lenses](https://github.com/ingolemo/python-lenses) library
     (which is Haskell-inspired lib for working with deeply nested structures)
-  * offers macros nicer lens syntax
+  * offers macros for nicer lens syntax
+
+Modules that require pydantic may be slower to load (takes extra ~150 ms on my machine).
 
 <!-- _____________________________________________________________________/ }}}2 -->
 <!-- ■ Import ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2 -->
@@ -88,7 +91,7 @@ To load only core:
 To also load other modules:
 ```hy
 (require fptk.loader [load_fptk])
-(load_fptk "core" "lenses" "strict_types" "strict_monads")
+(load_fptk "core" "lenses" "strict_types" "maybeM" "resultM" "maybeM_strict" "resultM_strict")
 
 ; same as:
 (import  fptk.core *)
@@ -96,18 +99,11 @@ To also load other modules:
 (import  fptk.lenses *)
 (require fptk.lenses *)
 (import  fptk.strict.types *)
-(import  fptk.strict.monads *)
+(import  fptk.monads.maybeM *)
+(import  fptk.monads.resultM *)
+(import  fptk.strict.maybeM *)
+(import  fptk.strict.resultM *)
 ```
-
-> Be aware that loading modules that require 3rd-party libs may be slow.
-> 
-> Speed profile on my machine (your mileage may vary):
-> -  80 ms to load Python
-> - 120 ms to load hy itself
-> - 100 ms to load fptk core (including 30 ms for funcy)
-> -  50 ms to load lenses
-> - 150 ms to load strict types (mostly due to pydantic)
-> - 150 ms to load strict monads on top of pydantic
 
 <!-- _____________________________________________________________________/ }}}2 -->
 

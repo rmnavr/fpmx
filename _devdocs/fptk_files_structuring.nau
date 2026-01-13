@@ -1,27 +1,27 @@
 
-	__init__.py					// imports+requires everything from funcs.hy (not touching macros.hy)
-	lenses.hy					// stores only «import lenses [lens]», lns macros are in macros.hy
-	strict.hy					// loads pydantic + some definitions like StrictInt
+    __init__.py     // <empty>
+    loader.hy       // DEF: load_fptk (macro)
+    lenses.hy       // • import lenses [lens]                                                 require [lns ...] ←┐
+                                                                                                                 |
+    /core   |                                                                                                    |
+            | __init__.py           //  ┌→ import * , require * ←——————————————————————┐                         |
+            | __init__macros.hy     //  |                       ┌→ require (+minidoc) →•← require (+minidoc) ←┐  |
+            | funcs.hy              //  • ⁺FUNCS_fptk           |                                             |  |
+            | macros.hy             //     (def+minidoc+docstr) • ¹MACRO_fptk                                 |  • ³MACRO_lns
+            | from_hyrule.hy        //                                                  ²MACRO_hyrule_replica • 
 
-	/core   |
-	        | from_hyrule.hy ↓	// some extracted funcs/macros from hyrule lib -> it loads much faster than hyrule
-		    | funcs.hy		 •	// FINAL SOURCE OF TRUTH = Funcs defs here + Macros reimport (from: from_hyrule.hy and macros.hy)
-		    | macros.hy	_____↑	// is allowed to depend only on from_hyrule.hy
+    /strict | types.hy              // StrictInt, validateF, etc.
+            | maybeM.hy   
+            | resultM.hy  
 
-	/monads |
-	        | __init__.py		// monads may be imported all (import fptk.monads *) or one by one (import fptk.maybeM.hy)
-		    | maybeM.hy
-		    | resultM.hy
+    /monads | maybeM.hy   
+            | resultM.hy  
 
-	·····························································································
+    ·····························································································
 
-	• why funcs.hy reimports macros and __init__ calls hy.eval(hyread(...)) on funcs.hy, but not on macros.hy?
-      - because the aim is to have fast startup
-      - if macros were in several places (like funcs.hy AND macros.hy AND from_hyrule.hy) this would require 3 expensive hy.eval calls
+    • load_fptk is in loader.hy (instead of __init__.py) because
+      this way «import fptk.core *» is faster
 
-	• there is no /core.__init__.py to avoid extra hy.eval(hy.read...) call
-
-	• lns macros are in macros.hy because:
-	  - it saves 30ms load time (because we are avoiding to call extra hy.eval(hy.read...)) 
-	  - to use lenses on top of fptk.core, you only need to call «import fptk.lenses *»
+    • python calls hy.eval(hy.read(...)) are expensive
+    • 1000 same «imports» are free, 1000 same «requires» add up to noticiable startup time
 

@@ -10,6 +10,8 @@
 		- forced sorting of group names
 		- "FPTK original" vs "Macro from: FPTK"
 
+	(help (get_macro def::))
+
 // ____________________________________________________________________________/ }}}1
 // fptk ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
@@ -75,5 +77,11 @@
 	  - GetAttr "kind"
 	  - &+ inner implementation: (get x) -> (& (last expr) (. lens (get x)))
 	? если установить нормально, не будет ли оно всё равно так же долго грузиться, как хайрул?
+
+
+	(timing :unit    "ms"
+	        :fdigits 3
+			:n       100
+	        (print 1) (print 2))
 
 
