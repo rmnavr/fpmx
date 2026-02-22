@@ -7,7 +7,5 @@ Performed actions:
 1. Prompts fptk version as given in setup.py
 2. Runs tests
 3. Generates doc-table for fptk funcs
-4. Creates `_fptk_local.hy` by uniting files in `src` 
-   > This is needed for using `_fptk_local.hy` in other projects to have stable fptk inside them.
-   > This is until fptk will reach stable release.
+4. Creates `/fptk_local` for usage in other projs
 

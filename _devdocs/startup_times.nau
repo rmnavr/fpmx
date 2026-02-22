@@ -21,7 +21,7 @@
 		-   1 ms — termcolor
 		-   0 ms — operator, math, os ... and all the basic libs
 
-	How:
+	Implemented measures to increase startup time:
 		
 		// ↑ strong speed increase
 		• Removed hyrule dependency (kept only required hyrule-macros in new module) // 0.400 ms → 0.030 ms
@@ -31,7 +31,7 @@
 		  - all macroses are loaded in one go (from one main module)
 
 		• Removed scattering of (require fptk.macros [f::]) all over the files.
-		  // 100 separate require costs 700 ms to load (even after compiling)
+		  // 100 separate «require» costs 700 ms to load (even after compiling)
 		  // 1 require (with 100 macros together) is about 30 ms
 
 		• Clumped everything in few files

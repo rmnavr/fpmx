@@ -1,9 +1,4 @@
 
-; non-strict as compared to strict:
-; 1) do not import pydantic
-; 2) Classes definition
-; -- utils functions are totally the same 
-
 ; Import/Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	; no pydantic
@@ -15,7 +10,7 @@
     export :objects  [ Maybe Just Nothing
                        justQ nothingQ
                        mapM bindM
-                       unwrapM unwrapM_or
+                       unwrapJ unwrapJ_or
                      ]
 
 ; _____________________________________________________________________________/ }}}1
@@ -45,7 +40,7 @@
 
 ; utils: Typechecks ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    defn _nonM_error [x] : ValueError f"Value <{x}> must be of Maybe type" 
+    defn _nonM_error [x] : ValueError f"Object <{x}> must be of Maybe type" 
 
     defn #^ bool justQ [#^ Maybe maybeM]
         unless : isinstance maybeM Maybe :: raise : _nonM_error maybeM
@@ -76,15 +71,15 @@
                   return new_maybe
 
 ; _____________________________________________________________________________/ }}}1
-; utils: routing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; utils: Routing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    defn #^ J unwrapM [#^ (of Maybe J) maybeM]
+    defn #^ J unwrapJ [#^ (of Maybe J) maybeM]
         "throws error on Nothing"
         if : justQ maybeM
              return maybeM.container.value
-             raise : ValueError f"Can't unwrapM {maybeM}, since it's Nothing"
+             raise : ValueError f"Can't unwrapJ {maybeM}, since it's Nothing"
 
-    defn #^ J unwrapM_or 
+    defn #^ J unwrapJ_or 
         L #^ (of Maybe J) maybeM
           #^ J default
         if : justQ maybeM

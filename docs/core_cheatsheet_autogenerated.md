@@ -9,9 +9,9 @@
 | APL: working with lists | <span title=":: flatten(coll) :: recursively flattens to the bottom">[`flatten`](#flatten)</span> <span title=":: lreversed(sequence) :: list version of reversed">[`lreversed`](#lreversed)</span> <span title=":: partition(n, seq, *, step=None, tail=False) -> generator :: splits seq to lists of len n, tail=True will allow including fewer than n items">[`partition`](#partition)</span> <span title=":: lpartition(n, seq, *, step=None, tail=False) -> List :: simply list(partition(...))">[`lpartition`](#lpartition)</span> <span title=":: partition_by(f, seq) -> iterator of iterators :: splits when f(item) change">[`partition_by`](#partition_by)</span> <span title=":: lpartition_by(f,seq) -> list of lists :: list(partition_by(...))">[`lpartition_by`](#lpartition_by)</span> <span title=":: group_by(f, seq) -> defaultdict(list) :: groups elems of seq keyed by the result of f">[`group_by`](#group_by)</span> <span title=":: lmulticut_by(pred, seq, keep_border=True, merge_border=False) -> list :: cut at pred(elem)==True elems">[`lmulticut_by`](#lmulticut_by)</span> |  |
 | Benchmarking | <span title=":: cur_time() :: gets current time in seconds">[`cur_time`](#cur_time)</span> <span title=":: dt_printer(* args, fresh_run=False) :: starts timer on fresh run, prints time passed since previous call">[`dt_print`](#dt_print)</span> | <span title=":: (timing expr1 expr2 ...) -> #(float, Any) :: returns time (in seconds) and result of execution of (fn [] expr1 expr2 ...)">[`timing`](#timing)</span> |
 | FP: Composition | <span title="identity(n) -> n">[`identity`](#identity)</span> <span title=":: constantly(val) :: constantly(30) is FUNCTION that always return val no matter the arguments">[`constantly`](#constantly)</span> <span title="applicator">[`partial`](#partial)</span> <span title="applicator">[`rpartial`](#rpartial)</span> <span title=":: compose(f1, f2, ..., fn) :: = f1(f2(..fn(***))) ; applicator">[`compose`](#compose)</span> <span title=":: rcompose(f1, f2, ..., fn) :: = fn(..(f2(f1(***)))) ; applicator">[`rcompose`](#rcompose)</span> <span title=":: ljuxt(*fs) :: = [f1, f2, ...](***) ; applicator">[`ljuxt`](#ljuxt)</span> <span title=":: pflip(f, a) :: applicator for function f(a,b) of 2 args; example: pflip(div, 4)(1) == 0.25">[`pflip`](#pflip)</span> <span title=":: flip(f, a, b) = f(b, a) :: calls f with flipped args">[`flip`](#flip)</span> | <span title="">[`->`](#hyruleThreading1)</span> <span title="">[`->>`](#hyruleThreading2)</span> <span title="">[`as->`](#hyruleThreading3)</span> <span title="mutating">[`doto`](#hyruleThreading4)</span> <span title="unification of dot-macro and ->">[`=>`](#FPTKThreading1)</span> <span title="unification of dot-macro and ->>">[`=>>`](#FPTKThreading2)</span> <span title="aplicator, pipe of partials">[`p:`](#PipeOfPartials)</span> |
-| FP: Control flow |  |  |
+| FP: Control flow |  | <span title="">[`case`](#case)</span> <span title="">[`unless`](#unless)</span> <span title="">[`lif`](#lif)</span> <span title="">[`branch`](#branch)</span> |
 | FP: n-applicators | <span title=":: nested(n, f) :: applicator f(...(f(***)))">[`nested`](#nested)</span> <span title=":: apply_n(n, f, *args, **kwargs) :: f(f(f(...f(*args, **kwargs))">[`apply_n`](#apply_n)</span> | <span title=":: (do_n   n #* body) -> None :: expands to ~ (do body body body ...)">[`do_n`](#do_n)</span> <span title=":: (list_n n #* body) -> List ::">[`list_n`](#list_n)</span> |
-| FP: threading | <span title=":: lzip(*iterables) -> List :: literally just list(zip(*iterables))">[`lzip`](#lzip)</span> <span title=":: lmap(f, *seqs) -> List :: list version of map">[`lmap`](#lmap)</span> <span title=":: starmap(function, iterable) ::">[`starmap`](#starmap)</span> <span title=":: lstarmap(function, iterable) -> list :: list version of starmap">[`lstarmap`](#lstarmap)</span> <span title=":: reduce(function, sequence[, initial]) -> value :: theory: reduce + monoid = binary-function for free becomes n-arg-function">[`reduce`](#reduce)</span> <span title=":: reductions(f, seq [, acc]) -> generator :: returns sequence of intermetidate values of reduce(f, seq, acc)">[`reductions`](#reductions)</span> <span title=":: lreductions(f, seq [, acc]) -> list :: list version of reductions">[`lreductions`](#lreductions)</span> <span title=":: sums(seq [, acc]) -> generator :: reductions with addition function">[`sums`](#sums)</span> <span title=":: lsums(seq [, acc]) -> list :: list version of sums">[`lsums`](#lsums)</span> <span title=":: product(iterable, /, *, start=1) :: product([2, 3, 5]) = 30">[`product`](#product)</span> | <span title="">[`case`](#case)</span> <span title="">[`unless`](#unless)</span> <span title="">[`lif`](#lif)</span> <span title="">[`branch`](#branch)</span> <span title=":: (fm (* it 3)) :: anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'">[`fm`](#fm)</span> <span title=":: (f> (* it 3) 4) :: anonymous function with fm syntax, immediately applicates args">[`f>`](#LambdaWithAppl)</span> <span title="same as map, but expects fm-syntax for func">[`mapm`](#mapm)</span> <span title="same as lmap, but expects fm-syntax for func">[`lmapm`](#lmapm)</span> |
+| FP: threading | <span title=":: lzip(*iterables) -> List :: literally just list(zip(*iterables))">[`lzip`](#lzip)</span> <span title=":: lmap(f, *seqs) -> List :: list version of map">[`lmap`](#lmap)</span> <span title=":: starmap(function, iterable) ::">[`starmap`](#starmap)</span> <span title=":: lstarmap(function, iterable) -> list :: list version of starmap">[`lstarmap`](#lstarmap)</span> <span title=":: reduce(function, sequence[, initial]) -> value :: theory: reduce + monoid = binary-function for free becomes n-arg-function">[`reduce`](#reduce)</span> <span title=":: reductions(f, seq [, acc]) -> generator :: returns sequence of intermetidate values of reduce(f, seq, acc)">[`reductions`](#reductions)</span> <span title=":: lreductions(f, seq [, acc]) -> list :: list version of reductions">[`lreductions`](#lreductions)</span> <span title=":: sums(seq [, acc]) -> generator :: reductions with addition function">[`sums`](#sums)</span> <span title=":: lsums(seq [, acc]) -> list :: list version of sums">[`lsums`](#lsums)</span> <span title=":: product(iterable, /, *, start=1) :: product([2, 3, 5]) = 30">[`product`](#product)</span> | <span title=":: (fm (* it 3)) :: anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'">[`fm`](#fm)</span> <span title=":: (f> (* it 3) 4) :: anonymous function with fm syntax, immediately applicates args">[`f>`](#LambdaWithAppl)</span> <span title="same as map, but expects fm-syntax for func">[`mapm`](#mapm)</span> <span title="same as lmap, but expects fm-syntax for func">[`lmapm`](#lmapm)</span> |
 | Getters: idxs and keys | <span title=":: assoc(xs, k1, v1, k2, v2, ...) -> None :: ≈ (setv (get xs k1) v1 (get xs k2) v2) ; also possible: (assoc xs :x 1)">[`assoc`](#assoc)</span> <span title=":: nth(n, seq) -> Optional elem :: 0-based index; works also with dicts">[`nth`](#nth)</span> <span title=":: first(seq) -> Optional elem ::">[`first`](#first)</span> <span title=":: second(seq) -> Optional elem ::">[`second`](#second)</span> <span title=":: third(seq) -> Optional elem ::">[`third`](#third)</span> <span title=":: fourth(seq) -> Optional elem ::">[`fourth`](#fourth)</span> <span title=":: beforelast(seq) -> Optional elem ::">[`beforelast`](#beforelast)</span> <span title=":: last(seq) -> Optional elem ::">[`last`](#last)</span> <span title=":: rest(seq) -> List :: drops 1st elem of list">[`rest`](#rest)</span> <span title=":: butlast(seq) -> List :: drops last elem of list">[`butlast`](#butlast)</span> <span title=":: drop(n, seq) -> List :: drops n>=0 elems from start of the list; when n<0, drops from end of the list">[`drop`](#drop)</span> <span title=":: take(n, seq) -> List :: takes n elems from start; when n<0, takes from end of the list">[`take`](#take)</span> <span title=":: pick(ns, seq) -> List :: throws error if some of ns doesn't exist; ns can be list of ints or dict keys">[`pick`](#pick)</span> | <span title="">[`ncut`](#ncut)</span> |
 | Getters: keys and attrs | <span title=":: pluck(key, mappings) -> generator :: gets same key (or idx) from every mapping, mappings can be lists of lists/dicts/etc.">[`pluck`](#pluck)</span> <span title=":: lpluck(key, mappings) -> list ::">[`lpluck`](#lpluck)</span> <span title=":: pluck_attr(attr, objects) -> generator :: attr should be given as str">[`pluck_attr`](#pluck_attr)</span> <span title=":: lpluck_attr(attr, objects) -> list :: list version of pluck_attr">[`lpluck_attr`](#lpluck_attr)</span> | <span title=":: (pluckm n xs) (pluckm key ys) (pluckm .attr zs) :: accepts fptk-style .arg syntax">[`pluckm`](#pluckm)</span> <span title="list version of pluckm">[`lpluckm`](#lpluckm)</span> <span title=":: (getattrm Object 'attr') (getattrm Object .attr) :: accepts fptk-style .attr syntax">[`getattrm`](#getattrm)</span> |
 | Getters: one based index | <span title=":: get_(seq, *ns) -> elem :: same as get, but with 1-based index (will throw error for n=0)">[`get_`](#get_)</span> <span title=":: nth_(n, seq) -> Optional elem :: same as nth, but with 1-based index; will return None for n=0">[`nth_`](#nth_)</span> <span title=":: slice_(start, end, step=None) :: similar to slice, but with 1-based index; will throw error for start=0 or end=0">[`slice_`](#slice_)</span> <span title=":: cut_(seq, start, end, step=None) -> List :: similar to cut, but with 1-based index; will throw error for start=0 or end=0">[`cut_`](#cut_)</span> <span title=":: range_(start, end=None, step=1) -> List :: same as range, but with 1-based index">[`range_`](#range_)</span> <span title=":: lrange_(start, end, step=1) -> List :: range including both ends when possible, also works on fractionals">[`lrange_`](#lrange_)</span> |  |
@@ -1367,6 +1367,42 @@ Kind: Macro from [fptk]
 Info: aplicator, pipe of partials
 ```
 
+## case
+
+[go up](#fptk-core-cheatsheet)
+
+```hy
+Name: case
+Kind: Macro from [fptk/hyrule]
+```
+
+## unless
+
+[go up](#fptk-core-cheatsheet)
+
+```hy
+Name: unless
+Kind: Macro from [fptk/hyrule]
+```
+
+## lif
+
+[go up](#fptk-core-cheatsheet)
+
+```hy
+Name: lif
+Kind: Macro from [fptk/hyrule]
+```
+
+## branch
+
+[go up](#fptk-core-cheatsheet)
+
+```hy
+Name: branch
+Kind: Macro from [fptk/hyrule]
+```
+
 ## nested
 
 [go up](#fptk-core-cheatsheet)
@@ -1642,42 +1678,6 @@ prod(iterable, /, *, start=1)
     When the iterable is empty, return the start value.  This function is
     intended specifically for use with numeric values and may reject
     non-numeric types.
-```
-
-## case
-
-[go up](#fptk-core-cheatsheet)
-
-```hy
-Name: case
-Kind: Macro from [fptk/hyrule]
-```
-
-## unless
-
-[go up](#fptk-core-cheatsheet)
-
-```hy
-Name: unless
-Kind: Macro from [fptk/hyrule]
-```
-
-## lif
-
-[go up](#fptk-core-cheatsheet)
-
-```hy
-Name: lif
-Kind: Macro from [fptk/hyrule]
-```
-
-## branch
-
-[go up](#fptk-core-cheatsheet)
-
-```hy
-Name: branch
-Kind: Macro from [fptk/hyrule]
 ```
 
 ## fm

@@ -15,7 +15,7 @@
     export :objects  [ Maybe Just Nothing
                        justQ nothingQ
                        mapM bindM
-                       unwrapM unwrapM_or
+                       unwrapJ unwrapJ_or
                      ]
 
 ; _____________________________________________________________________________/ }}}1
@@ -78,13 +78,13 @@
 ; _____________________________________________________________________________/ }}}1
 ; utils: routing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    defn #^ J unwrapM [#^ (of Maybe J) maybeM]
+    defn #^ J unwrapJ [#^ (of Maybe J) maybeM]
         "throws error on Nothing"
         if : justQ maybeM
              return maybeM.container.value
-             raise : ValueError f"Can't unwrapM {maybeM}, since it's Nothing"
+             raise : ValueError f"Can't unwrapJ {maybeM}, since it's Nothing"
 
-    defn #^ J unwrapM_or 
+    defn #^ J unwrapJ_or 
         L #^ (of Maybe J) maybeM
           #^ J default
         if : justQ maybeM

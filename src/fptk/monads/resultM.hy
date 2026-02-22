@@ -1,9 +1,4 @@
 
-; non-strict as compared to strict:
-; 1) do not import pydantic
-; 2) Classes definition
-; -- utils functions are totally the same
-
 ; Import/Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ; no pydantic import
@@ -15,7 +10,7 @@
     (export :objects [ Success Failure Result
                        successQ failureQ
                        mapR bindR
-                       unwrapR unwrapS unwrapS_or unwrapE unwrapE_or
+                       unwrapR unwrapS unwrapS_or unwrapF unwrapF_or
                      ])
 
 ; _____________________________________________________________________________/ }}}1
@@ -115,15 +110,15 @@
              (return resultM.value)
              (return default)))
 
-    (defn #^ F unwrapE [#^ (of Result S F) resultM]
+    (defn #^ F unwrapF [#^ (of Result S F) resultM]
         "throws error when on Success track"
         (unless (isinstance resultM Result)
              (raise (_unwrappingError resultM)))
         (if (isinstance resultM.container _Failure)
              (return resultM.value)
-             (raise (TypeError f"Can't unwrapE {resultM}, since it's on Success track"))))
+             (raise (TypeError f"Can't unwrapF {resultM}, since it's on Success track"))))
 
-    (defn #^ F unwrapE_or
+    (defn #^ F unwrapF_or
         [ #^ (of Result S F) resultM
           #^ F default]
         (unless (isinstance resultM Result)

@@ -80,6 +80,10 @@ MACR: fptk            | p:                       ; aplicator, pipe of partials
 === FP: Control flow ===
 INFO: hy              | if /base/                :: (if check true false)
 INFO: hy              | cond /base/              :: (cond check1 do1 ... true doT)
+MACR: fptk/hyrule     | case
+MACR: fptk/hyrule     | unless
+MACR: fptk/hyrule     | lif
+MACR: fptk/hyrule     | branch
 
 === FP: n-applicators ===
 DEFN: fptk            | nested                   :: nested(n, f)  ; applicator f(...(f(***)))
@@ -100,10 +104,6 @@ FROM: funcy           | lreductions              :: lreductions(f, seq [, acc]) 
 FROM: funcy           | sums                     :: sums(seq [, acc]) -> generator  ; reductions with addition function
 FROM: funcy           | lsums                    :: lsums(seq [, acc]) -> list  ; list version of sums
 FROM: math            | product (<-prod)         :: product(iterable, /, *, start=1)  ; product([2, 3, 5]) = 30
-MACR: fptk/hyrule     | case
-MACR: fptk/hyrule     | unless
-MACR: fptk/hyrule     | lif
-MACR: fptk/hyrule     | branch
 MACR: fptk            | fm                       :: (fm (* it 3))  ; anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'
 MACR: fptk            | f>                       :: (f> (* it 3) 4)  ; anonymous function with fm syntax, immediately applicates args
 MACR: fptk            | mapm                     ; same as map, but expects fm-syntax for func

@@ -36,9 +36,9 @@ Real just/nothing implementation is intentionally hidden from user.
 
 User API:
 ```hy
-; check if object r is of Maybe type
-(= (type r) Maybe)
-(isinstance r Maybe)
+; check if object m is of Maybe type
+(= (type m) Maybe)
+(isinstance m Maybe)
 
 ; use Maybe in annotations:
 (defn f [#^ (of Maybe int) x #^ Maybe y] (print x y))

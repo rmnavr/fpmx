@@ -1,4 +1,9 @@
 
+# Version 0.5.0.dev4
+- Renamed monads unwrappers:
+  - Maybe: unwrapM -> unwrapJ 
+  - Result: unwrapE -> unwrapF 
+
 # Version 0.5.0
 - Big restructure to significantly increase startup time
   - removed hyrule dependency

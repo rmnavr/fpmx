@@ -19,5 +19,5 @@
     ------------------------------------------------
         
     When running simple script (non-package) «script.hy»,
-    just place fptk_local in same folder, and import fptk_local.core * will work.
+    just place fptk_local in same folder, and importing via [³import fptk_local.core⁺] will work.
 

@@ -117,7 +117,7 @@ To also load other modules:
    - [Core macros in details](docs/core_macros_detailed.md) 
 2. Extra functionality:
    - [strict typing](docs/strict_typing.md)
-   - [strict monads](docs/monads.md)
+   - [monads](docs/monads.md)
    - [fptk lenses](docs/lenses.md)
 
 <!-- __________________________________________________________________________/ }}}1 -->
@@ -143,10 +143,6 @@ Tested with versions:
 # Project status
 
 **Core** functionality is at 90% of reaching stable release (some API-breaking changes may still happen).
-
-Things planned for **extras**:
-* Non-strict monads (they should have much faster startup time as compared to pydantic-dependent strict monads)
-* Non-pydantic dynamic type-checker (should be faster to load, but with smaller functionality than pydantic)
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Installation ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->

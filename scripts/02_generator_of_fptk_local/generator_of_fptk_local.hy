@@ -103,13 +103,13 @@
           (send2trash _target_folder)
           (print f"-- folder removed : {(clrz _target_folder)}"))
 
-    (try ; ✠ make dirs
+    (try ; -> make dirs
          (lmapm (os.makedirs (os.path.dirname it) :exist_ok True) _targets)
          (print f"-- created required subdirs in target folder")
-         ; ✠ write readme file for local:
+         ; -> write readme file for local:
          (write_file _readme_content _target_readme)
          (print f"-- readme file written     : {(clrz _target_readme)}")
-         ; ✠ copy and patch files:
+         ; -> copy and patch files:
          (for [[source target] _source_target_files_pairs]
               (shutil.copy2 source target)
               (rewrite_file_with_new_lib_name target #* (first  $REPLACEMENTS)) ; fptk.

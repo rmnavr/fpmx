@@ -18,8 +18,8 @@
     assertm eq (nothingQ (Just 3)) False
     assertm eq (nothingQ Nothing ) True
 
-    assertm eq (unwrapM (Just 3)) 3
-    assertm eq (unwrapM_or Nothing 4) 4
+    assertm eq (unwrapJ (Just 3)) 3
+    assertm eq (unwrapJ_or Nothing 4) 4
 
     ; 10/(2.5*2) = 2.0
     assertm eq
@@ -36,7 +36,6 @@
     assertm eq (maybe_divide 1 0) Nothing
 
 ; _____________________________________________________________________________/ }}}1
-
 ; Result: basics ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     defn [validateF] #^ (of Result float str)
@@ -70,8 +69,8 @@
     setv x : Success 14
     setv y : Failure "pups_err"
     assertm eq (unwrapS x) 14
-    assertm eq (unwrapE y) "pups_err"
-    assertm eq (unwrapE_or x "def_err") "def_err"
+    assertm eq (unwrapF y) "pups_err"
+    assertm eq (unwrapF_or x "def_err") "def_err"
     assertm eq (unwrapS_or y 0) 0
 
 ; _____________________________________________________________________________/ }}}1
