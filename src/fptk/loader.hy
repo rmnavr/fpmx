@@ -21,6 +21,9 @@
         (when (in '"maybeM_strict" args)
               (actions.append `(import  fptk.strict.maybeM *)))
         ;
+        (when (in '"term" args)
+              (actions.append `(import  fptk.term.colors *)))
+        ;
        `(do ~@ actions))
 
         

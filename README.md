@@ -67,6 +67,8 @@ Currently fptk has following extra modules:
   * requires [lenses](https://github.com/ingolemo/python-lenses) library
     (which is Haskell-inspired lib for working with deeply nested structures)
   * offers macros for nicer lens syntax
+* `fptk.term`
+  * terminal utils: plotting, coloring, etc.
 
 Modules that require pydantic may be slower to load (takes extra ~150 ms on my machine).
 
@@ -91,18 +93,27 @@ To load only core:
 To also load other modules:
 ```hy
 (require fptk.loader [load_fptk])
-(load_fptk "core" "lenses" "strict_types" "maybeM" "resultM" "maybeM_strict" "resultM_strict")
+(load_fptk "core"
+           "lenses"
+           "maybeM" "resultM"
+           "strict_types" "maybeM_strict" "resultM_strict"
+           "term")
 
 ; same as:
 (import  fptk.core *)
 (require fptk.core *)
+
 (import  fptk.lenses *)
 (require fptk.lenses *)
-(import  fptk.strict.types *)
+
 (import  fptk.monads.maybeM *)
 (import  fptk.monads.resultM *)
+
+(import  fptk.strict.types *)
 (import  fptk.strict.maybeM *)
 (import  fptk.strict.resultM *)
+
+(import  fptk.term.colors *) 
 ```
 
 <!-- _____________________________________________________________________/ }}}2 -->
@@ -117,8 +128,9 @@ To also load other modules:
    - [Core macros in details](docs/core_macros_detailed.md) 
 2. Extra functionality:
    - [strict typing](docs/strict_typing.md)
-   - [monads](docs/monads.md)
+   - [monads (strict and non-strict variants)](docs/monads.md)
    - [fptk lenses](docs/lenses.md)
+   - [utils for terminal](docs/terminal.md)
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Dependencies ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->

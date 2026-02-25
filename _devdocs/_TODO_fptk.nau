@@ -103,3 +103,5 @@
 	getattrm not needed
 	readme: monads are not only strict! (link)
 
+	number = (of Optional int float)
+

@@ -81,7 +81,8 @@
     (setv $FPTK_TESTS_DIR   "../../tests")
     (setv $FPTK_TESTS       [ "test_macros_import.hy"
                               "tests_main.hy"
-                              "test_monads.hy"])
+                              "test_monads.hy"
+                              "test_term.hy"])
 
     (setv $DOCGEN_DIR       "../01_doc_generator")
     (setv $DOCGEN           "doc_generator.hy")
