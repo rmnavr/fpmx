@@ -1,6 +1,8 @@
 
-    ; TODO: xmin < xmax check
-    ; TODO: xmin=1, xmax=None, when xmin > max.x of all pts
+    ; TODO:
+    ; - xmin < xmax check
+    ; - xmin=1, xmax=None, when xmin > max.x of all pts
+    ; - :sep linux/windows
 
 ; Imports ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 

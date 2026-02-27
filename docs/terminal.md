@@ -51,21 +51,24 @@ Attrs:
 
 ## Plotting in terminal
 
-Function `dotPlot` uses Braille dots to print simple dot-plots (individual points are NOT drawn as connected).
+Function `dotPlot` uses Braille dots to produce simple dot-plots (individual points are NOT drawn as connected).
+Returned value is string.
 
 Example usage:
-```
+```hy
+(setv plot 
     (dotPlot [[1 2] [3 4] [3 7]]
              :xsize 10 ; size is measured in term chars
              :ysize 5  ; size is measured in term chars
              :xmin  None ; None means it will be auto-calculated
              :xmax  None
              :ymin  0.
-             :ymax  10.)
+             :ymax  10.)) ; returns multiline string
+
+(print plot)
 ```
 
-
-Example drawing:
+Example drawing of Sin function (github renders Braille not as monospace lol, but in real terminal all should look aligned):
 ```
  __________
 ⎟⢠⠋⡇    ⡎⢣ ⎜
