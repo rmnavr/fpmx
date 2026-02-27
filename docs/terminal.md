@@ -1,7 +1,22 @@
 
 # Utils for terminal
 
-## Colored text
+Calling... 
+```hy
+(import  fptk.term.colors *) 
+(import  fptk.term.dotplot *) 
+
+; or simply:
+(require fptk.loader [load_fptk])
+(load_fptk "term")
+```
+
+...will expose following functions:
+* `clrz`
+* `clrz_term_test`
+* `dotPlot`
+
+# Coloring
 
 fptk offers simple adapter `clrz` for `termcolor.colored` function
 Unlike original `termcolor.colored`, in `clrz` you can provide color instructions in arbitrary order.
@@ -36,5 +51,28 @@ Attrs:
 
 ## Plotting in terminal
 
-On the TODO list
+Function `dotPlot` uses Braille dots to print simple dot-plots (individual points are NOT drawn as connected).
+
+Example usage:
+```
+    (dotPlot [[1 2] [3 4] [3 7]]
+             :xsize 10 ; size is measured in term chars
+             :ysize 5  ; size is measured in term chars
+             :xmin  None ; None means it will be auto-calculated
+             :xmax  None
+             :ymin  0.
+             :ymax  10.)
+```
+
+
+Example drawing:
+```
+ __________
+⎟⢠⠋⡇    ⡎⢣ ⎜
+⎟⡜ ⢸   ⢸ ⠈⡆⎜
+⎟⠁  ⡇  ⡇  ⢣⎜
+⎟   ⢱ ⢰⠁  ⠸⎜
+⎟   ⠈⣆⡞    ⎜
+ ‾‾‾‾‾‾‾‾‾‾
+```
 

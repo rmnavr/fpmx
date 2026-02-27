@@ -114,6 +114,7 @@ To also load other modules:
 (import  fptk.strict.resultM *)
 
 (import  fptk.term.colors *) 
+(import  fptk.term.dotplot *) 
 ```
 
 <!-- _____________________________________________________________________/ }}}2 -->

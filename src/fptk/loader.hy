@@ -22,7 +22,8 @@
               (actions.append `(import  fptk.strict.maybeM *)))
         ;
         (when (in '"term" args)
-              (actions.append `(import  fptk.term.colors *)))
+              (actions.append `(import  fptk.term.colors *))
+              (actions.append `(import  fptk.term.dotplot *)))
         ;
        `(do ~@ actions))
 
