@@ -16,6 +16,8 @@ Calling...
 * `clrz_term_test`
 * `dotPlot`
 
+<!-- colors ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+
 # Coloring
 
 fptk offers simple adapter `clrz` for `termcolor.colored` function
@@ -49,6 +51,9 @@ Attrs:
     bold dark underline blink reverse concealed strike
 ```
 
+<!-- __________________________________________________________________________/ }}}1 -->
+<!-- plotting ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+
 ## Plotting in terminal
 
 Function `dotPlot` uses Braille dots to produce simple dot-plots (individual points are NOT drawn as connected).
@@ -78,4 +83,7 @@ Example drawing of Sin function (github renders Braille not as monospace lol, bu
 ⎟   ⠈⣆⡞    ⎜
  ‾‾‾‾‾‾‾‾‾‾
 ```
+
+
+<!-- __________________________________________________________________________/ }}}1 -->
 
