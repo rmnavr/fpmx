@@ -3,13 +3,13 @@
     (import pydantic [ConfigDict])
 
     ; non-strict:
-    (import fptk.monads.resultM *)
-    (import fptk.monads.maybeM *)
+    ; import fptk.monads.resultM *
+    ; import fptk.monads.maybeM *
 
     ; strict:
     (import fptk.strict.types *)
-    ; import fptk.strict.resultM *
-    ; import fptk.strict.maybeM *
+    (import fptk.strict.resultM *)
+    (import fptk.strict.maybeM *)
 
 ; Maybe: basics ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 

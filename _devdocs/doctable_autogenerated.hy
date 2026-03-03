@@ -33,8 +33,8 @@ FROM: itertools       | cycle                    :: cycle(p)  ; cycle('AB') -> A
 DEFN: fptk            | lcycle                   :: lcycle(p, n) -> list  ; takes first n elems from cycle(p)
 FROM: itertools       | repeat                   :: repeat(elem [, n])  ; repeat(10,3) -> 10 10 10
 DEFN: fptk            | lrepeat                  :: lrepeat(elem, n) -> list  ; unlike in repeat, n has to be provided
-FROM: itertools       | concat (<-chain)         :: concat(*seqs) -> iterator
-DEFN: fptk            | lconcat                  :: lconcat(*seqs) -> list  ; list(concat(*seqs))
+FROM: itertools       | concat (<-chain)         :: concat(*seqs) -> iterator  ; variadic vertion of cat
+DEFN: fptk            | lconcat                  :: lconcat(*seqs) -> list  ; literally just list(concat(*seqs))
 FROM: funcy           | cat                      :: cat(seqs)  ; non-variadic version of concat
 FROM: funcy           | lcat                     :: lcat(seqs)  ; non-variadic version of concat
 FROM: funcy           | mapcat                   :: mapcat(f, *seqs)  ; maps, then concatenates
@@ -179,6 +179,7 @@ FROM: operator        | neg                      :: neg(n)  ; = -1 * n
 FROM: operator        | mod                      :: mod(5, 2)  ; = 1
 FROM: math            | floor                    ; floor(1.9) = 1
 FROM: math            | ceil                     ; ceil(1.1) = 2
+DEFN: fptk            | round_to                 :: round_to(n, step)  ; rounds to closest multiple of step: round_to(9.1, 1.5) == 9.0
 DEFN: fptk            | dec                      :: inc(n)  ; = n + 1
 DEFN: fptk            | inc                      :: dec(n)  ; = n - 1
 DEFN: fptk            | sign                     :: sign(n)  ; will give 0 for n=0
@@ -202,12 +203,10 @@ DEFN: fptk            | negativeQ                :: negativeQ(x)  ; checks direc
 DEFN: fptk            | positiveQ                :: positiveQ(x)  ; checks directly via (> x 0)
 
 === Math and logic: Dunders and Monoids ===
-DEFN: fptk            | dmul                     :: dmul(*args) = arg1 + arg2 + ...  ; 'dunder mul', '*' operator as a function
-DEFN: fptk            | dadd                     :: dadd(*args) = arg1 + arg2 + ...  ; 'dunder add', '+' operator as a function
-DEFN: fptk            | lmul                     :: lmul(*args) = arg1 * arg2 * ...  ; rename of * operator, underlines usage for list
-DEFN: fptk            | smul                     :: smul(*args) = arg1 * arg2 * ...  ; rename of * operator, underlines usage for string
-DEFN: fptk            | mul                      :: mul(*args)  ; multiplication as a monoid (will not give error when used with 0 or 1 args)
-DEFN: fptk            | plus                     :: plus(*args)  ; addition as a monoid (will not give error when used with 0 or 1 args)
+DEFN: fptk            | mul                      :: mul(*args)  ; literally just mul(a,b,c,...)=a*b*c*...; can also be used with 0 or 1 arg
+DEFN: fptk            | smul                     :: smul(*args)  ; synonim of mul (with underlined usage on strings)
+DEFN: fptk            | lmul                     :: lmul(*args)  ; synonim of mul (with underlined usage on lists)
+DEFN: fptk            | plus                     :: plus(*args)  ; literally just plus(a,b,c,...)=a+b+c...; can also be used with 0 or 1 arg
 DEFN: fptk            | sconcat                  :: sconcat(*args)  ; string concantenation as a monoid (will not give error when used with 0 or 1 args)
 
 === Math and logic: Logic checks ===
@@ -279,6 +278,7 @@ FROM: typing          | Literal
 FROM: typing          | Type
 FROM: typing          | TypeVar
 FROM: typing          | Generic
+FROM: typing          | NamedTuple
 FROM: funcy           | noneQ (<-isnone)
 FROM: funcy           | notnoneQ (<-notnone)
 DEFN: fptk            | oftypeQ                  :: oftypeQ(tp, x)  ; checks directly via (= (type x) tp)

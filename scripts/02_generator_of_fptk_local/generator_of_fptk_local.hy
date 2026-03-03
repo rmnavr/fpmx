@@ -84,6 +84,8 @@
                                   "strict/types.hy"
                                   "strict/maybeM.hy"
                                   "strict/resultM.hy"
+                                  "term/colors.hy"
+                                  "term/dotplot.hy"
                                 ])
 
 ; _____________________________________________________________________________/ }}}1

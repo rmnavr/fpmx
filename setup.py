@@ -1,7 +1,7 @@
 from setuptools                 import setup, find_packages
 from setuptools.command.install import install 
 
-proj_version = '0.5.0.dev4'
+proj_version = '0.5.0.dev5'
 
 libs_required = [
     'hy >= 1',

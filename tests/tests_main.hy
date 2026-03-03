@@ -417,18 +417,10 @@
     (assertm gives_error_typeQ (+ [1]) TypeError)
 
     ; same as */+ :
-    (assertm = (dadd 3) 3)
-    (assertm = (dadd)   0)
-    (assertm gives_error_typeQ (dadd "pups") TypeError)
-    (assertm gives_error_typeQ (dadd [1]) TypeError)
-    (assertm = (dmul 3) 3)
-    (assertm = (dmul)   1)
-
     (assertm = (lmul 3 [1]) [1 1 1])
     (assertm = (smul 3 "a") "aaa")
 
     ; monoids:
-
     (assertm = (mul) 1)
     (assertm = (mul 3) 3)
     (assertm = (mul 7 0) 0)

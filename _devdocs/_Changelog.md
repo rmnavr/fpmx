@@ -1,4 +1,8 @@
 
+# Version 0.5.0.dev5
+- `term` module added, including `clrz` and `dotPlot` functions
+- `dmul` and `dadd` are removed as redundant (just use `plus` and `mul`)
+
 # Version 0.5.0.dev4
 - Renamed monads unwrappers:
   - Maybe: unwrapM -> unwrapJ 

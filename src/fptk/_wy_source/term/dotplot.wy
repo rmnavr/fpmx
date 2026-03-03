@@ -226,7 +226,6 @@
 
     ; import math [sin]
 
-
     ; setv xs : list : map (fn [it] (/ it 10)) (range 0 100)
     ; setv ys : list : map sin xs
     ; setv series : list : zip xs ys

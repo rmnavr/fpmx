@@ -1,22 +1,22 @@
 
 ; Import (required for functions def) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    ; underscored in order for «import *» not import them unwantedly
-    
+    ;; underscored in order for «import *» not to import them unwantedly
+
     (import  funcy      :as _funcy)
     (import  functools  :as _functools)
     (import  operator   :as _operator)
 
-    (import  typing [List])     ; also re-imported in Typing, but hey
+    (import  typing [List])     ;; also re-imported in Typing, but hey
     (require fptk.core.from_hyrule [comment of])
 
 ; _____________________________________________________________________________/ }}}1
 ; Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    ; All (automatically)
-    ; 
-    ; Notice that funcs is not supposed to export macros,
-    ; so having (require ... [of comment]) here is OK
+    ;; All (automatically)
+    ;;
+    ;; Notice that funcs is not supposed to export macros,
+    ;; so having (require ... [of comment]) above is OK
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -98,7 +98,7 @@
 
     (import itertools [count :as inf_range]) #_ "inf_range(start [, step]) | inf_range(10) -> generator: 10, 11, 12, ..."
 
-    (import itertools [islice])              #_ "islice(iterable, start, stop[, step]) | list(islice(inf_range(10), 2)) == [10, 11]"  
+    (import itertools [islice])              #_ "islice(iterable, start, stop[, step]) | list(islice(inf_range(10), 2)) == [10, 11]"
 
     #_ "| list version of islice: lislice"
     (defn lislice [#* kwargs] "literally just list(lislice(...))" (list (islice #* kwargs)))
@@ -108,16 +108,16 @@
     #_ "lcycle(p, n) -> list | takes first n elems from cycle(p)"
     (defn lcycle [p n] "takes first n elems from cycle(p)" (lislice (cycle p) n))
 
-    (import itertools [repeat])              #_ "repeat(elem [, n]) | repeat(10,3) -> 10 10 10" 
+    (import itertools [repeat])              #_ "repeat(elem [, n]) | repeat(10,3) -> 10 10 10"
 
     #_ "lrepeat(elem, n) -> list | unlike in repeat, n has to be provided"
     (defn lrepeat [elem n] "literally just list(repeat(elem, n))" (list (repeat elem n)))
 
     ;; ========================================
 
-    (import itertools [chain :as concat])    #_ "concat(*seqs) -> iterator |"
+    (import itertools [chain :as concat])    #_ "concat(*seqs) -> iterator | variadic vertion of cat"
 
-    #_ "lconcat(*seqs) -> list | list(concat(*seqs))"
+    #_ "lconcat(*seqs) -> list | literally just list(concat(*seqs))"
     (defn lconcat [#* seqs] "literally just list(concat(*seqs))" (list (concat #* seqs)))
 
     (import funcy     [cat])        #_ "cat(seqs)  | non-variadic version of concat"
@@ -133,7 +133,7 @@
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] APL: working with lists ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (comment "py | base | reversed | reversed(sequence) -> iterator |") 
+    (comment "py | base | reversed | reversed(sequence) -> iterator |")
 
     (import fptk.core.from_hyrule [flatten]) #_ "flatten(coll) | recursively flattens to the bottom"
 
@@ -170,7 +170,7 @@
 
     #_ "lmulticut_by(pred, seq, keep_border=True, merge_border=False) -> list | cut at pred(elem)==True elems"
     (defn #^ (of List list)
-        lmulticut_by 
+        lmulticut_by
         [ pred
           #^ list seq
           [keep_border  True ]
@@ -179,7 +179,7 @@
         " cuts at elems which give pred(elem)=True
           #
           keep_border =True  will keep elements with pred(elem)=True
-          merge_border=True  will cut only at first of a sequence of pred(elem)=True elems 
+          merge_border=True  will cut only at first of a sequence of pred(elem)=True elems
           #
           in the example below evenQ is function that gives True for even numbers,
           that is cuts will happen at elems=0
@@ -367,7 +367,7 @@
         #_ "beforelast(seq) -> Optional elem |"
         (defn beforelast [seq] (if (<= (len seq) 1) (return None) (return (get seq -2))))
 
-        (import funcy [last])       #_ "last(seq) -> Optional elem |" 
+        (import funcy [last])       #_ "last(seq) -> Optional elem |"
 
     ;; list getters:
 
@@ -405,16 +405,16 @@
           will throw error for n=0,
           will throw error if elem not found (just like hy get macro)
         "
-        (setv _ns_plus1 
+        (setv _ns_plus1
             (lfor &n ns
                 (do (when (= &n 0) (raise (IndexError "n=0 can't be used with 1-based getter")))
                     (if (and (= (type &n) int) (>= &n 1))
                         (- &n 1)
-                        &n)))) ;; this line covers both &n<0 and &n=dict_key        
+                        &n)))) ;; this line covers both &n<0 and &n=dict_key
         (return (get seq #* _ns_plus1)))
 
     #_ "nth_(n, seq) -> Optional elem | same as nth, but with 1-based index; will return None for n=0"
-    (defn nth_ [n seq] 
+    (defn nth_ [n seq]
         " same as nth, but with 1-based index,
           will throw error for n=0,
           will return None if elem not found (just like nth)
@@ -540,13 +540,15 @@
 
 ; [GROUP] Math and logic: Basic math ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (import operator  [neg])        #_ "neg(n) | = -1 * n"
-    (import operator  [mod])        #_ "mod(5, 2) | = 1"
+    (import operator  [neg])    #_ "neg(n) | = -1 * n"
+    (import operator  [mod])    #_ "mod(5, 2) | = 1"
+    (import math      [floor])  #_ "| floor(1.9) = 1"
+    (import math      [ceil])   #_ "| ceil(1.1) = 2"
 
     ;;
 
-    (import math [floor])  #_ "| floor(1.9) = 1"
-    (import math [ceil])   #_ "| ceil(1.1) = 2"
+    #_ "round_to(n, step) | rounds to closest multiple of step: round_to(9.1, 1.5) == 9.0"
+    (defn round_to [n step] (* step (round (/ n step))))
 
     #_ "inc(n) | = n + 1"
     (defn dec [n] (- n 1))
@@ -607,6 +609,7 @@
     (import math [log10])  #_ "log10(x) |"
 
     ;; checks:
+
     (import funcy [even :as evenQ]) #_ "evenQ(x) |"
     (import funcy [odd  :as oddQ])  #_ "oddQ(x)  |"
 
@@ -667,57 +670,39 @@
     #_ "minus(x, y) = x - y |"
     (defn minus [x y] "minux(x, y) = x - y" (- x y))
 
-
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] Math and logic: Dunders and Monoids ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    ;; =========================================================================
-    ;; dunders
-    ;; - python behaves like so:
+    ;; python behaves like so:
     ;; - (*) = 1, (* 3) = 3
     ;; - (+) = 0, (+ 3) = 3
     ;; - (+ "") = error, (+ []) = error
 
-        #_ "dmul(*args) = arg1 + arg2 + ... | 'dunder mul', '*' operator as a function"
-        (defn dmul [#* args]
-            "dmul(a1, a2, ...) = a1 * a2 * ...
-             dunder mul, '*' operator as a function"
-            (* #* args))
-
-        #_ "dadd(*args) = arg1 + arg2 + ... | 'dunder add', '+' operator as a function"
-        (defn dadd [#* args]
-            "dadd(a1, a2, ...) = a1 + a2 + ...
-             dunder add, '+' operator as a function"
-            (+ #* args))
-
-    ;; renames
-
-        #_ "lmul(*args) = arg1 * arg2 * ... | rename of * operator, underlines usage for list"
-        (defn lmul [#* args]
-            "lmul(list, n, ...) = list * n * ...
-             rename of * operator, can be used to underline usage on list"
-            (* #* args))
-
-        #_ "smul(*args) = arg1 * arg2 * ... | rename of * operator, underlines usage for string"
-        (defn smul [#* args]
-            " smul(s, n, ...) = s * n * ...
-              rename of * operator, can be used to underline usage on string"
-            (* #* args))
-
-    ;; monoids
-
-        #_ "mul(*args) | multiplication as a monoid (will not give error when used with 0 or 1 args)"
+        #_ "mul(*args) | literally just mul(a,b,c,...)=a*b*c*...; can also be used with 0 or 1 arg"
         (defn mul [#* args]
-            " mul(a1, a2, ...) = 1 * a1 * a2 * ...
-              multiplication as a monoid with identity = 1,
-              can be used with 0 or 1 arg"
-            (_functools.reduce _operator.mul args 1))
+            " literally just: mul(a, b, ...) = a * b * ... ;
+              can also be used with 0 or 1 arg"
+            (* #* args))
 
-        #_ "plus(*args) | addition as a monoid (will not give error when used with 0 or 1 args)"
+        #_ "smul(*args) | synonim of mul (with underlined usage on strings)"
+        (defn smul [#* args]
+            "just a * operator as function;
+             can be used to underline usage on strings like:
+             smul('a', 3) == 'aaa' "
+            (* #* args))
+
+        #_ "lmul(*args) | synonim of mul (with underlined usage on lists)"
+        (defn lmul [#* args]
+            "just a * operator as function;
+             can be used to underline usage on lists like:
+             lmul([1], 3) == [1, 1, 1] "
+            (* #* args))
+
+        #_ "plus(*args) | literally just plus(a,b,c,...)=a+b+c...; can also be used with 0 or 1 arg"
         (defn plus [#* args]
-            " plus(a1, a2, ...) = 0 + a1 + a2 + ...
-              addition as a monoid with identity = 0 "
-            (_functools.reduce (fn [%s1 %s2] (+ %s1 %s2)) args 0))
+            " literally just: plus(a, b, ...) = a + b + ... ;
+              can also be used with 0 or 1 arg"
+            (+ #* args))
 
         #_ "sconcat(*args) | string concantenation as a monoid (will not give error when used with 0 or 1 args)"
         (defn sconcat [#* args]
@@ -818,7 +803,7 @@
 
     #_ "strip(string, chars=None) | str.strip method as a function"
     (defn #^ str strip [#^ str string [chars None]]
-        " str.strip method as a function, 
+        " str.strip method as a function,
           removes leading and trailing whitespaces (or chars when given)"
         (string.strip chars))
 
@@ -846,12 +831,12 @@
           - if len(string) > target_len, will return string with no change
           - with on_tail=False will prepend chars rather than append
           - with force_len=True will cut string to target_len if required (taking on_tail option into account)
-          - when len(char)> 1 is given, repeats it's pattern, but still ensures target_len 
+          - when len(char)> 1 is given, repeats it's pattern, but still ensures target_len
         "
         (when (< target_len 0) (raise (ValueError "target_len < 0 is not allowed")))
         (when (= char "")      (raise (ValueError "empty char is not allowed")))
         ;;
-        (when (and force_len 
+        (when (and force_len
                    (> (len string) target_len))
               (if on_tail (return (cut string target_len))
                           (return (cut string (- (len string) target_len) (+ (len string) 1)))))
@@ -889,6 +874,7 @@
     (import typing [Type])
     (import typing [TypeVar])
     (import typing [Generic])
+    (import typing [NamedTuple])
 
     ;; type checks:
 
@@ -901,7 +887,7 @@
     #_ "intQ(x) | checks literally if type(x) == int, will also work with StrictInt from pydantic"
     (defn intQ [x]
         "checks literally if type(x) == int"
-        (= (type x) int))    
+        (= (type x) int))
 
     #_ "floatQ(x) | checks literally if type(x) == float, will also work with StrictFloat from pydantic"
     (defn floatQ [x]
