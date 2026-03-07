@@ -105,3 +105,8 @@
 
 	number = (of Optional int float)
 
+	rename to fpmx, rewrite readme
+	+ math.isclose
+
+	fpmx is a tightly controlled math/fp vocabulary, curated namespace export, domain specific env
+
