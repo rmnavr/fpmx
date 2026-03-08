@@ -1,4 +1,9 @@
 
+# Version 0.5.1
+- rebranding from `fptk` to `fpmx`
+- reorganized functions classification groups
+- added `approx_eq` function
+
 # Version 0.5.0.dev5
 - `term` module added, including `clrz` and `dotPlot` functions
 - functions `dmul` and `dadd` are removed as redundant (just use `plus` and `mul`)

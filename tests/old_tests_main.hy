@@ -5,12 +5,14 @@
     (import math)
     (import operator)
 
+    (import hypothesis [given strategies :as st])
+
 ; FUNCTIONS =======================
 ; apl ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (assertm = (lfilter evenQ [1 2 3 4]) [2 4])
-    (assertm = (fltr1st evenQ [1 2 3 4 5]) 2)
-    (assertm = (fltr1st evenQ []) None)
+    (assert (eq (lfilter evenQ [1 2 3 4]) [2 4]))
+    (assert (eq (fltr1st evenQ [1 2 3 4 5]) 2))
+    (assert (eq (fltr1st evenQ []) None))
 
     (assertm = (lfilter_split evenQ [1 2 3 4]) #([2 4] [1 3]))
 

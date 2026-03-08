@@ -8,3 +8,5 @@ _etc/local_versions
 *.swp
 *.swo
 *.egg-info/
+*.hypothesis/
+*.pytest_cache/
