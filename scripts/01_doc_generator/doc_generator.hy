@@ -760,14 +760,13 @@
            (l> (Each) .fentities (Each) .parent_module (Filter (partial eq "fpmx.prelude.macros")) (set "fpmx"))))
 
     ; List of one-liners:
-    ; setv _oneliners_table : generate_long_table _dfgroups
-    ; write_to_file f"\n{_oneliners_table}" $TARGET_LONG_FILE
+    (setv _oneliners_table (generate_long_table _dfgroups))
+    (write_to_file f"\n{_oneliners_table}" $TARGET_LONG_FILE)
 
     ; MD-table:
     (setv _cheatsheet_table (generate_chsh_table _dfgroups))
     (setv _md_blocks (generate_md_blocks _dfgroups))
     (setv _mdtable_final f"# {$HEADER1}\n\n{_cheatsheet_table}\n\n# {$HEADER2}\n\n{_md_blocks}")
-    (print _cheatsheet_table)
-    ; write_to_file _mdtable_final $TARGET_SHORT_FILE
+    (write_to_file _mdtable_final $TARGET_SHORT_FILE)
 
 ; _____________________________________________________________________________/ }}}1
