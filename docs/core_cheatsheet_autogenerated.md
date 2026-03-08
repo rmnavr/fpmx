@@ -8,7 +8,7 @@
 | G03: Operators to functions | <span title=":: minus(x, y) = x - y ::">[`minus`](#minus)</span> <span title=":: neg(n) :: = -1 * n">[`neg`](#neg)</span> <span title=":: mod(5, 2) :: = 1">[`mod`](#mod)</span> <span title="'@' as function">[`matmul`](#matmul)</span> <span title=":: div(a, b) ::">[`div`](#div)</span> <span title="'and' as function">[`and_`](#and_)</span> <span title="'or' as function">[`or_`](#or_)</span> <span title="'not' as function">[`not_`](#not_)</span> <span title="'is' as function">[`is_`](#is_)</span> <span title="">[`xor`](#xor)</span> <span title="equal">[`eq`](#eq)</span> <span title="non-equal">[`neq`](#neq)</span> <span title="greater than">[`gt`](#gt)</span> <span title="less than">[`lt`](#lt)</span> <span title="greater or equal">[`geq`](#geq)</span> <span title="less or equal">[`leq`](#leq)</span> <span title=":: gt0(x) :: checks for x > 0">[`gt0`](#gt0)</span> <span title=":: geq0(x) :: x >= 0">[`geq0`](#geq0)</span> <span title=":: lt0(x) :: checks for x < 0">[`lt0`](#lt0)</span> <span title=":: leq0(x) :: x <= 0">[`leq0`](#leq0)</span> <span title=":: mul(*args) :: literally just mul(a,b,c,...)=a*b*c*...; can also be used with 0 or 1 arg">[`mul`](#mul)</span> <span title=":: smul(*args) :: synonim of mul (with underlined usage on strings)">[`smul`](#smul)</span> <span title=":: lmul(*args) :: synonim of mul (with underlined usage on lists)">[`lmul`](#lmul)</span> <span title=":: plus(*args) :: literally just plus(a,b,c,...)=a+b+c...; can also be used with 0 or 1 arg">[`plus`](#plus)</span> <span title=":: sconcat(*args) :: string concantenation as a monoid (will not give error when used with 0 or 1 args)">[`sconcat`](#sconcat)</span> |  |
 | G04: Strings | <span title=":: strlen(text) :: rename of len, underlines usage on strings">[`strlen`](#strlen)</span> <span title=":: str_join(ss, sep='') :: rearrangement of funcy.str_join, ss is seq of strings">[`str_join`](#str_join)</span> <span title=":: enlengthen(target_len, string, char=' ', on_tail=True) :: adds char to string until target_len reached">[`enlengthen`](#enlengthen)</span> <span title=":: lowercase(string) :: str.lower method as a function">[`lowercase`](#lowercase)</span> <span title=":: strip(string, chars=None) :: str.strip method as a function">[`strip`](#strip)</span> <span title=":: lstrip(string, chars=None) :: str.lstrip method as a function">[`lstrip`](#lstrip)</span> <span title=":: rstrip(string, chars=None) :: str.rstrip method as a function">[`rstrip`](#rstrip)</span> <span title=":: re_sub(rpattern, replacement, string, count=0, flags=0) ::">[`re_sub`](#re_sub)</span> <span title=":: re_split(rpattern, string) ::">[`re_split`](#re_split)</span> <span title=":: re_find(rpattern, string, flags=0) -> str :: returns first found">[`re_find`](#re_find)</span> <span title=":: re_test(rpattern, string, ...) -> bool :: tests if string has match (not neccessarily whole string)">[`re_test`](#re_test)</span> <span title=":: re_all(rpattern, string, ...) -> List :: returns tuples if groups requested like via r'a(b)(c)d'">[`re_all`](#re_all)</span> |  |
 | G05: Getters | <span title=":: assoc(xs, k1, v1, k2, v2, ...) -> None :: ≈ (setv (get xs k1) v1 (get xs k2) v2) ; also possible: (assoc xs :x 1)">[`assoc`](#assoc)</span> <span title=":: nth(n, seq) -> Optional elem :: 0-based index; works also with dicts">[`nth`](#nth)</span> <span title=":: first(seq) -> Optional elem ::">[`first`](#first)</span> <span title=":: second(seq) -> Optional elem ::">[`second`](#second)</span> <span title=":: third(seq) -> Optional elem ::">[`third`](#third)</span> <span title=":: fourth(seq) -> Optional elem ::">[`fourth`](#fourth)</span> <span title=":: beforelast(seq) -> Optional elem ::">[`beforelast`](#beforelast)</span> <span title=":: last(seq) -> Optional elem ::">[`last`](#last)</span> <span title=":: rest(seq) -> List :: drops 1st elem of list">[`rest`](#rest)</span> <span title=":: butlast(seq) -> List :: drops last elem of list">[`butlast`](#butlast)</span> <span title=":: drop(n, seq) -> List :: drops n>=0 elems from start of the list; when n<0, drops from end of the list">[`drop`](#drop)</span> <span title=":: take(n, seq) -> List :: takes n elems from start; when n<0, takes from end of the list">[`take`](#take)</span> <span title=":: pick(ns, seq) -> List :: throws error if some of ns doesn't exist; ns can be list of ints or dict keys">[`pick`](#pick)</span> <span title=":: pluck(key, mappings) -> generator :: gets same key (or idx) from every mapping, mappings can be lists of lists/dicts/etc.">[`pluck`](#pluck)</span> <span title=":: lpluck(key, mappings) -> list ::">[`lpluck`](#lpluck)</span> <span title=":: pluck_attr(attr, objects) -> generator :: attr should be given as str">[`pluck_attr`](#pluck_attr)</span> <span title=":: lpluck_attr(attr, objects) -> list :: list version of pluck_attr">[`lpluck_attr`](#lpluck_attr)</span> <span title=":: mask_sel('abc', [1,0,1]) -> iterator: 'a', 'c' ::">[`mask_sel`](#mask_sel)</span> <span title=":: lmask_sel(data, selectors) -> list ::">[`lmask_sel`](#lmask_sel)</span> <span title=":: mask2idxs(mask) -> list :: mask is list like [1 0 1 0] or [True False True False], which will be converted to [0 2]">[`mask2idxs`](#mask2idxs)</span> <span title=":: idxs2mask(idxs) -> list :: idxs is non-sorted list of integers like [0 3 2], which will be converted to [1 0 1 1]">[`idxs2mask`](#idxs2mask)</span> | <span title="">[`ncut`](#ncut)</span> <span title=":: (pluckm n xs) (pluckm key ys) (pluckm .attr zs) :: accepts fptk-style .arg syntax">[`pluckm`](#pluckm)</span> <span title="list version of pluckm">[`lpluckm`](#lpluckm)</span> <span title=":: (getattrm Object 'attr') (getattrm Object .attr) :: accepts fptk-style .attr syntax">[`getattrm`](#getattrm)</span> |
-| G06: Typing | <span title="">[`Enum`](#Enum)</span> <span title="">[`List`](#List)</span> <span title="">[`Tuple`](#Tuple)</span> <span title="">[`TypedDict`](#TypedDict)</span> <span title="">[`Dict`](#Dict)</span> <span title="">[`Union`](#Union)</span> <span title="">[`Generator`](#Generator)</span> <span title="">[`Any`](#Any)</span> <span title="">[`Optional`](#Optional)</span> <span title="">[`Callable`](#Callable)</span> <span title="">[`Literal`](#Literal)</span> <span title="">[`Type`](#Type)</span> <span title="">[`TypeVar`](#TypeVar)</span> <span title="">[`Generic`](#Generic)</span> <span title="">[`NamedTuple`](#NamedTuple)</span> <span title="">[`dataclass`](#dataclass)</span> <span title="non-mutating">[`upd_field`](#upd_field)</span> | <span title="example: (of List int) which is equiv to py-code: List[int]">[`of`](#of)</span> <span title="example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]">[`def::`](#Annotator2)</span> <span title="define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))">[`f::`](#Annotator1)</span> |
+| G06: Typing | <span title="">[`List`](#List)</span> <span title="">[`Tuple`](#Tuple)</span> <span title="">[`Dict`](#Dict)</span> <span title="">[`Union`](#Union)</span> <span title="">[`TypedDict`](#TypedDict)</span> <span title="">[`NamedTuple`](#NamedTuple)</span> <span title="">[`Optional`](#Optional)</span> <span title="">[`Generator`](#Generator)</span> <span title="">[`Any`](#Any)</span> <span title="">[`Callable`](#Callable)</span> <span title="">[`Literal`](#Literal)</span> <span title="">[`Type`](#Type)</span> <span title="">[`TypeVar`](#TypeVar)</span> <span title="">[`Generic`](#Generic)</span> <span title="">[`Enum`](#Enum)</span> <span title="simply Union(int, float)">[`number`](#number)</span> <span title="">[`dataclass`](#dataclass)</span> <span title="non-mutating">[`upd_field`](#upd_field)</span> | <span title="example: (of List int) which is equiv to py-code: List[int]">[`of`](#of)</span> <span title="example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]">[`def::`](#Annotator2)</span> <span title="define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))">[`f::`](#Annotator1)</span> |
 | G07: IO | <span title=":: file_existsQ(filename) :: also works on folders">[`file_existsQ`](#file_existsQ)</span> <span title=":: fileQ(filename) ::">[`fileQ`](#fileQ)</span> <span title=":: dirQ(filename) ::">[`dirQ`](#dirQ)</span> <span title=":: read_file(file_name, encoding='utf-8') -> str :: returns whole file content">[`read_file`](#read_file)</span> <span title=":: write_file(text, file_name, mode='w', encoding='utf-8') :: modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation">[`write_to_file`](#write_to_file)</span> |  |
 | G08: APL | <span title=":: inf_range(start [, step]) :: inf_range(10) -> generator: 10, 11, 12, ...">[`inf_range`](#inf_range)</span> <span title=":: cycle(p) :: cycle('AB') -> A B A B ...">[`cycle`](#cycle)</span> <span title=":: lcycle(p, n) -> list :: takes first n elems from cycle(p)">[`lcycle`](#lcycle)</span> <span title=":: repeat(elem [, n]) :: repeat(10,3) -> 10 10 10">[`repeat`](#repeat)</span> <span title=":: lrepeat(elem, n) -> list :: unlike in repeat, n has to be provided">[`lrepeat`](#lrepeat)</span> <span title=":: pairwise(seq) -> iterator :: supposed to be used in loops, will produce no elems for seq with len <= 1">[`pairwise`](#pairwise)</span> <span title=":: with_prev(seq, fill=None) -> iterator :: supposed to be used in loops">[`with_prev`](#with_prev)</span> <span title=":: with_next(seq, fill=None) -> iterator :: supposed to be used in loops">[`with_next`](#with_next)</span> <span title=":: islice(iterable, start, stop[, step]) :: list(islice(inf_range(10), 2)) == [10, 11]">[`islice`](#islice)</span> <span title="list version of islice: lislice">[`lislice`](#lislice)</span> <span title=":: cat(seqs) :: non-variadic version of concat">[`cat`](#cat)</span> <span title=":: lcat(seqs) :: non-variadic version of concat">[`lcat`](#lcat)</span> <span title=":: concat(*seqs) -> iterator :: variadic vertion of cat">[`concat`](#concat)</span> <span title=":: lconcat(*seqs) -> list :: literally just list(concat(*seqs))">[`lconcat`](#lconcat)</span> <span title=":: mapcat(f, *seqs) :: maps, then concatenates">[`mapcat`](#mapcat)</span> <span title=":: lmapcat(f, *seqs) :: maps, then concatenates">[`lmapcat`](#lmapcat)</span> <span title=":: lreversed(sequence) :: list version of reversed">[`lreversed`](#lreversed)</span> <span title=":: lfilter(pred, seq) -> List :: funcy list version of extended filter">[`lfilter`](#lfilter)</span> <span title=":: fltr1st(f, seq) -> Optional elem :: returns first found element (or None)">[`fltr1st`](#fltr1st)</span> <span title=":: reject(pred, seq)-> iterator :: same as filter, but checks for False">[`reject`](#reject)</span> <span title=":: lreject(pred, seq) -> List :: list version of reject">[`lreject`](#lreject)</span> <span title=":: without(items, seq) -> generator :: subtracts items from seq (as a sets)">[`without`](#without)</span> <span title=":: lwithout(items, seq) -> list :: list version of reject">[`lwithout`](#lwithout)</span> <span title=":: takewhile([pred, ] seq) :: yields elems of seq as long as they pass pred">[`takewhile`](#takewhile)</span> <span title=":: dropwhile([pred, ] seq) :: mirror of takewhile">[`dropwhile`](#dropwhile)</span> <span title=":: filter_split(pred, seq) -> passed, rejected ::">[`filter_split`](#filter_split)</span> <span title=":: lfilter_split(pred,seq) -> passed, rejected :: list version of filter_split">[`lfilter_split`](#lfilter_split)</span> <span title=":: flatten(coll) :: recursively flattens to the bottom">[`flatten`](#flatten)</span> <span title=":: bisect_at(n, seq) -> start, tail :: len of start will = n, works only with n>=0">[`bisect_at`](#bisect_at)</span> <span title=":: lbisect_at(n, seq) -> start, tail :: list version of bisect_at, but also for n<0, abs(n) will be len of tail">[`lbisect_at`](#lbisect_at)</span> <span title=":: bisect_by(pred, seq) -> taken, dropped :: similar to (takewhile, dropwhile)">[`bisect_by`](#bisect_by)</span> <span title=":: lbisect_by(pred, seq) -> taken, dropped :: list version of lbisect">[`lbisect_by`](#lbisect_by)</span> <span title=":: partition(n, seq, *, step=None, tail=False) -> generator :: splits seq to lists of len n, tail=True will allow including fewer than n items">[`partition`](#partition)</span> <span title=":: lpartition(n, seq, *, step=None, tail=False) -> List :: simply list(partition(...))">[`lpartition`](#lpartition)</span> <span title=":: partition_by(f, seq) -> iterator of iterators :: splits when f(item) change">[`partition_by`](#partition_by)</span> <span title=":: lpartition_by(f,seq) -> list of lists :: list(partition_by(...))">[`lpartition_by`](#lpartition_by)</span> <span title=":: group_by(f, seq) -> defaultdict(list) :: groups elems of seq keyed by the result of f">[`group_by`](#group_by)</span> <span title=":: lmulticut_by(pred, seq, keep_border=True, merge_border=False) -> list :: cut at pred(elem)==True elems">[`lmulticut_by`](#lmulticut_by)</span> | <span title=":: (filterm f xs) :: same as filter, but expects fm-syntax for func">[`filterm`](#filterm)</span> <span title=":: (lfilterm f xs) :: list version of lfilterm">[`lfilterm`](#lfilterm)</span> |
 | G09: FP | <span title=":: lzip(*iterables) -> List :: literally just list(zip(*iterables))">[`lzip`](#lzip)</span> <span title=":: lmap(f, *seqs) -> List :: list version of map">[`lmap`](#lmap)</span> <span title=":: starmap(function, iterable) ::">[`starmap`](#starmap)</span> <span title=":: lstarmap(function, iterable) -> list :: list version of starmap">[`lstarmap`](#lstarmap)</span> <span title=":: reduce(function, sequence[, initial]) -> value :: theory: reduce + monoid = binary-function for free becomes n-arg-function">[`reduce`](#reduce)</span> <span title=":: reductions(f, seq [, acc]) -> generator :: returns sequence of intermetidate values of reduce(f, seq, acc)">[`reductions`](#reductions)</span> <span title=":: lreductions(f, seq [, acc]) -> list :: list version of reductions">[`lreductions`](#lreductions)</span> <span title="identity(n) -> n">[`identity`](#identity)</span> <span title=":: constantly(val) :: constantly(30) is FUNCTION that always return val no matter the arguments">[`constantly`](#constantly)</span> <span title=":: compose(f1, f2, ..., fn) :: = f1(f2(..fn(***))) ; applicator">[`compose`](#compose)</span> <span title=":: rcompose(f1, f2, ..., fn) :: = fn(..(f2(f1(***)))) ; applicator">[`rcompose`](#rcompose)</span> <span title=":: ljuxt(*fs) :: = [f1, f2, ...](***) ; applicator">[`ljuxt`](#ljuxt)</span> <span title=":: nested(n, f) :: applicator f(...(f(***)))">[`nested`](#nested)</span> <span title=":: apply_n(n, f, *args, **kwargs) :: f(f(f(...f(*args, **kwargs))">[`apply_n`](#apply_n)</span> <span title="applicator">[`partial`](#partial)</span> <span title="applicator">[`rpartial`](#rpartial)</span> <span title=":: flip(f, a, b) = f(b, a) :: calls f with flipped args">[`flip`](#flip)</span> <span title=":: pflip(f, a) :: applicator for function f(a,b) of 2 args; example: pflip(div, 4)(1) == 0.25">[`pflip`](#pflip)</span> <span title=":: fnot(f, *args, **kwargs) :: = not(f(*args, **kwargs))">[`fnot`](#fnot)</span> <span title=":: eq_any(x, values) :: = (or (eq x value1) (eq x value2) ...)">[`eq_any`](#eq_any)</span> <span title=":: on(f, check, x, y) :: example: (on len eq xs ys) -> (eq (len xs) (len yx))">[`on`](#on)</span> <span title=":: all_fs(fs, *args, **kwargs) :: checks if all f(*args, **kwargs) are True">[`all_fs`](#all_fs)</span> <span title=":: any_fs(fs, *args, **kwargs) :: checks if any of f(*args, **kwargs) is True">[`any_fs`](#any_fs)</span> | <span title="">[`case`](#case)</span> <span title="">[`unless`](#unless)</span> <span title="">[`lif`](#lif)</span> <span title="">[`branch`](#branch)</span> <span title="">[`->`](#hyruleThreading1)</span> <span title="">[`->>`](#hyruleThreading2)</span> <span title="">[`as->`](#hyruleThreading3)</span> <span title="mutating">[`doto`](#hyruleThreading4)</span> <span title=":: (do_n   n #* body) -> None :: expands to ~ (do body body body ...)">[`do_n`](#do_n)</span> <span title=":: (list_n n #* body) -> List ::">[`list_n`](#list_n)</span> <span title=":: (fm (* it 3)) :: anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'">[`fm`](#fm)</span> <span title=":: (f> (* it 3) 4) :: anonymous function with fm syntax, immediately applicates args">[`f>`](#LambdaWithAppl)</span> <span title="same as map, but expects fm-syntax for func">[`mapm`](#mapm)</span> <span title="same as lmap, but expects fm-syntax for func">[`lmapm`](#lmapm)</span> <span title="unification of dot-macro and ->">[`=>`](#FPTKThreading1)</span> <span title="unification of dot-macro and ->>">[`=>>`](#FPTKThreading2)</span> <span title="aplicator, pipe of partials">[`p:`](#PipeOfPartials)</span> |
@@ -2414,43 +2414,6 @@ Sgnt: (getattrm Object 'attr') (getattrm Object .attr)
 Info: accepts fptk-style .attr syntax
 ```
 
-## Enum
-
-[go up](#fptk-core-cheatsheet)
-
-```hy
-Name: Enum
-Kind: Reimport from [enum]
-```
-
-```hy
-Help on class Enum in module enum:
-
-class Enum(builtins.object)
- |  Enum(value, names=None, *, module=None, qualname=None, type=None, start=1)
- |  
- |  Generic enumeration.
- |  
- |  Derive from this class to define new enumerations.
- |  
- |  Data descriptors defined here:
- |  
- |  name
- |      The name of the Enum member.
- |  
- |  value
- |      The value of the Enum member.
- |  
- |  ----------------------------------------------------------------------
- |  Readonly properties inherited from EnumMeta:
- |  
- |  __members__
- |      Returns a mapping of member name->value.
- |      
- |      This mapping lists all enum members, including aliases. Note that this
- |      is a read-only view of the internal mapping.
-```
-
 ## List
 
 [go up](#fptk-core-cheatsheet)
@@ -2487,61 +2450,6 @@ Tuple = typing.Tuple
     of an int, a float and a string.
     
     To specify a variable-length tuple of homogeneous type, use Tuple[T, ...].
-```
-
-## TypedDict
-
-[go up](#fptk-core-cheatsheet)
-
-```hy
-Name: TypedDict
-Kind: Reimport from [typing]
-```
-
-```hy
-Help on function TypedDict in module typing:
-
-TypedDict(typename, fields=None, /, *, total=True, **kwargs)
-    A simple typed namespace. At runtime it is equivalent to a plain dict.
-    
-    TypedDict creates a dictionary type that expects all of its
-    instances to have a certain set of keys, where each key is
-    associated with a value of a consistent type. This expectation
-    is not checked at runtime but is only enforced by type checkers.
-    Usage::
-    
-        class Point2D(TypedDict):
-            x: int
-            y: int
-            label: str
-    
-        a: Point2D = {'x': 1, 'y': 2, 'label': 'good'}  # OK
-        b: Point2D = {'z': 3, 'label': 'bad'}           # Fails type check
-    
-        assert Point2D(x=1, y=2, label='first') == dict(x=1, y=2, label='first')
-    
-    The type info can be accessed via the Point2D.__annotations__ dict, and
-    the Point2D.__required_keys__ and Point2D.__optional_keys__ frozensets.
-    TypedDict supports two additional equivalent forms::
-    
-        Point2D = TypedDict('Point2D', x=int, y=int, label=str)
-        Point2D = TypedDict('Point2D', {'x': int, 'y': int, 'label': str})
-    
-    By default, all keys must be present in a TypedDict. It is possible
-    to override this by specifying totality.
-    Usage::
-    
-        class point2D(TypedDict, total=False):
-            x: int
-            y: int
-    
-    This means that a point2D TypedDict can have any of the keys omitted.A type
-    checker is only expected to support a literal False or True as the value of
-    the total argument. True is the default, and makes all items defined in the
-    class body be required.
-    
-    The class syntax is only supported in Python 3.6+, while two other
-    syntax forms work for Python 2.7 and 3.2+
 ```
 
 ## Dict
@@ -2599,6 +2507,116 @@ Union = typing.Union
     - You can use Optional[X] as a shorthand for Union[X, None].
 ```
 
+## TypedDict
+
+[go up](#fptk-core-cheatsheet)
+
+```hy
+Name: TypedDict
+Kind: Reimport from [typing]
+```
+
+```hy
+Help on function TypedDict in module typing:
+
+TypedDict(typename, fields=None, /, *, total=True, **kwargs)
+    A simple typed namespace. At runtime it is equivalent to a plain dict.
+    
+    TypedDict creates a dictionary type that expects all of its
+    instances to have a certain set of keys, where each key is
+    associated with a value of a consistent type. This expectation
+    is not checked at runtime but is only enforced by type checkers.
+    Usage::
+    
+        class Point2D(TypedDict):
+            x: int
+            y: int
+            label: str
+    
+        a: Point2D = {'x': 1, 'y': 2, 'label': 'good'}  # OK
+        b: Point2D = {'z': 3, 'label': 'bad'}           # Fails type check
+    
+        assert Point2D(x=1, y=2, label='first') == dict(x=1, y=2, label='first')
+    
+    The type info can be accessed via the Point2D.__annotations__ dict, and
+    the Point2D.__required_keys__ and Point2D.__optional_keys__ frozensets.
+    TypedDict supports two additional equivalent forms::
+    
+        Point2D = TypedDict('Point2D', x=int, y=int, label=str)
+        Point2D = TypedDict('Point2D', {'x': int, 'y': int, 'label': str})
+    
+    By default, all keys must be present in a TypedDict. It is possible
+    to override this by specifying totality.
+    Usage::
+    
+        class point2D(TypedDict, total=False):
+            x: int
+            y: int
+    
+    This means that a point2D TypedDict can have any of the keys omitted.A type
+    checker is only expected to support a literal False or True as the value of
+    the total argument. True is the default, and makes all items defined in the
+    class body be required.
+    
+    The class syntax is only supported in Python 3.6+, while two other
+    syntax forms work for Python 2.7 and 3.2+
+```
+
+## NamedTuple
+
+[go up](#fptk-core-cheatsheet)
+
+```hy
+Name: NamedTuple
+Kind: Reimport from [typing]
+```
+
+```hy
+Help on function NamedTuple in module typing:
+
+NamedTuple(typename, fields=None, /, **kwargs)
+    Typed version of namedtuple.
+    
+    Usage in Python versions >= 3.6::
+    
+        class Employee(NamedTuple):
+            name: str
+            id: int
+    
+    This is equivalent to::
+    
+        Employee = collections.namedtuple('Employee', ['name', 'id'])
+    
+    The resulting class has an extra __annotations__ attribute, giving a
+    dict that maps field names to types.  (The field names are also in
+    the _fields attribute, which is part of the namedtuple API.)
+    Alternative equivalent keyword syntax is also accepted::
+    
+        Employee = NamedTuple('Employee', name=str, id=int)
+    
+    In Python versions <= 3.5 use::
+    
+        Employee = NamedTuple('Employee', [('name', str), ('id', int)])
+```
+
+## Optional
+
+[go up](#fptk-core-cheatsheet)
+
+```hy
+Name: Optional
+Kind: Reimport from [typing]
+```
+
+```hy
+Help on _SpecialForm in module typing:
+
+Optional = typing.Optional
+    Optional type.
+    
+    Optional[X] is equivalent to Union[X, None].
+```
+
 ## Generator
 
 [go up](#fptk-core-cheatsheet)
@@ -2637,24 +2655,6 @@ Any = typing.Any
     Note that all the above statements are true from the point of view of
     static type checkers. At runtime, Any should not be used with instance
     or class checks.
-```
-
-## Optional
-
-[go up](#fptk-core-cheatsheet)
-
-```hy
-Name: Optional
-Kind: Reimport from [typing]
-```
-
-```hy
-Help on _SpecialForm in module typing:
-
-Optional = typing.Optional
-    Optional type.
-    
-    Optional[X] is equivalent to Union[X, None].
 ```
 
 ## Callable
@@ -2914,41 +2914,81 @@ class Generic(builtins.object)
  |      overridden to extend subclasses.
 ```
 
-## NamedTuple
+## Enum
 
 [go up](#fptk-core-cheatsheet)
 
 ```hy
-Name: NamedTuple
-Kind: Reimport from [typing]
+Name: Enum
+Kind: Reimport from [enum]
 ```
 
 ```hy
-Help on function NamedTuple in module typing:
+Help on class Enum in module enum:
 
-NamedTuple(typename, fields=None, /, **kwargs)
-    Typed version of namedtuple.
+class Enum(builtins.object)
+ |  Enum(value, names=None, *, module=None, qualname=None, type=None, start=1)
+ |  
+ |  Generic enumeration.
+ |  
+ |  Derive from this class to define new enumerations.
+ |  
+ |  Data descriptors defined here:
+ |  
+ |  name
+ |      The name of the Enum member.
+ |  
+ |  value
+ |      The value of the Enum member.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Readonly properties inherited from EnumMeta:
+ |  
+ |  __members__
+ |      Returns a mapping of member name->value.
+ |      
+ |      This mapping lists all enum members, including aliases. Note that this
+ |      is a read-only view of the internal mapping.
+```
+
+## number
+
+[go up](#fptk-core-cheatsheet)
+
+```hy
+Name: number
+Kind: FPTK original
+Info: simply Union(int, float)
+```
+
+```hy
+Help on _UnionGenericAlias in module typing:
+
+Union = typing.Union
+    Union type; Union[X, Y] means either X or Y.
     
-    Usage in Python versions >= 3.6::
+    To define a union, use e.g. Union[int, str].  Details:
+    - The arguments must be types and there must be at least one.
+    - None as an argument is a special case and is replaced by
+      type(None).
+    - Unions of unions are flattened, e.g.::
     
-        class Employee(NamedTuple):
-            name: str
-            id: int
+        Union[Union[int, str], float] == Union[int, str, float]
     
-    This is equivalent to::
+    - Unions of a single argument vanish, e.g.::
     
-        Employee = collections.namedtuple('Employee', ['name', 'id'])
+        Union[int] == int  # The constructor actually returns int
     
-    The resulting class has an extra __annotations__ attribute, giving a
-    dict that maps field names to types.  (The field names are also in
-    the _fields attribute, which is part of the namedtuple API.)
-    Alternative equivalent keyword syntax is also accepted::
+    - Redundant arguments are skipped, e.g.::
     
-        Employee = NamedTuple('Employee', name=str, id=int)
+        Union[int, str, int] == Union[int, str]
     
-    In Python versions <= 3.5 use::
+    - When comparing unions, the argument order is ignored, e.g.::
     
-        Employee = NamedTuple('Employee', [('name', str), ('id', int)])
+        Union[int, str] == Union[str, int]
+    
+    - You cannot subclass or instantiate a union.
+    - You can use Optional[X] as a shorthand for Union[X, None].
 ```
 
 ## dataclass

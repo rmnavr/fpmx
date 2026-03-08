@@ -138,21 +138,22 @@ MACR: fptk            | lpluckm                  ; list version of pluckm
 MACR: fptk            | getattrm                 :: (getattrm Object 'attr') (getattrm Object .attr)  ; accepts fptk-style .attr syntax
 
 === G06: Typing ===
-FROM: enum            | Enum
 FROM: typing          | List
 FROM: typing          | Tuple
-FROM: typing          | TypedDict
 FROM: typing          | Dict
 FROM: typing          | Union
+FROM: typing          | TypedDict
+FROM: typing          | NamedTuple
+FROM: typing          | Optional
 FROM: typing          | Generator
 FROM: typing          | Any
-FROM: typing          | Optional
 FROM: typing          | Callable
 FROM: typing          | Literal
 FROM: typing          | Type
 FROM: typing          | TypeVar
 FROM: typing          | Generic
-FROM: typing          | NamedTuple
+FROM: enum            | Enum
+SETV: fptk            | number                   ; simply Union(int, float)
 FROM: dataclasses     | dataclass
 FROM: dataclasses     | upd_field (<-replace)    ; non-mutating
 MACR: fptk/hyrule     | of                       ; example: (of List int) which is equiv to py-code: List[int]

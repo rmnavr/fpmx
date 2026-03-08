@@ -67,7 +67,8 @@
         #_ "numberQ(x) | checks for intQ or floatQ, will also work with StrictInt/StrictFloat from pydantic"
         (defn numberQ [x]
             "checks literally if type(x) == int or type(x) == float"
-            (= (type x) float))
+            (setv tp (type x))
+            (or (= tp float) (= tp int)))
 
         #_ "strQ(x) | checks literally if type(x) == str, will also work with StrictStr from pydantic"
         (defn strQ [x]
@@ -477,21 +478,27 @@
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] G06: Typing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (import enum   [Enum])
     (import typing [List])
     (import typing [Tuple])
-    (import typing [TypedDict])
     (import typing [Dict])
     (import typing [Union])
+
+    (import typing [TypedDict])
+    (import typing [NamedTuple]) ;;
+
+    (import typing [Optional])
     (import typing [Generator])
     (import typing [Any])
-    (import typing [Optional])
     (import typing [Callable])
     (import typing [Literal])
     (import typing [Type])
     (import typing [TypeVar])
     (import typing [Generic])
-    (import typing [NamedTuple])
+
+    (import enum   [Enum]) ;;
+
+    #_ "simply Union(int, float)"
+    (setv number (of Union int float))
 
     (import dataclasses [dataclass])
     (import dataclasses [replace :as upd_field ]) #_ "| non-mutating"
