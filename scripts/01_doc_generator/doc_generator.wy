@@ -465,7 +465,7 @@
 
 ; _____________________________________________________________________________/ }}}1
 
-; One-liners table («long»):
+; One-liners table:
 ; fentity to str ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	(defn #^ str fentity2str [ #^ FEntity fe ]
@@ -508,7 +508,7 @@
 ; assembly ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     def:: (of List DFGroup) => str
-       \generate_long_table L dfgroups
+       \generate_oneliners_table L dfgroups
         "expects dfgroups to be already order-sorted"
         ->> dfgroups                    
             lpartition_by (fm it.name)
@@ -535,7 +535,7 @@
 
 ; _____________________________________________________________________________/ }}}1
 
-; Md table («short») (consists of: ¹ cheatsheet-table, ² md-blocks group):
+; Md table (consists of: ¹ cheatsheet-table, ² md-blocks group):
 ; helper selectors ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	def:: (of List FEntity) => (of List FEntity)
@@ -556,11 +556,23 @@
 ; _____________________________________________________________________________/ }}}1
 ; constructors ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	def:: DFGroup => str
-	   \dfgroup_to_short_table_line
-		L\ dfgroup
+	def:: (of List DFGroup) => (of List str)
+	   \dfgroups_with_same_name_to_table_lines
+		L\ dfgroups
+        setv _dfg0 : first dfgroups
+		setv _line0 : dfgroup_to_md_table_line _dfg0 _dfg0.name 
+        setv _linesRest
+            lmapm
+                dfgroup_to_md_table_line it ""
+                rest dfgroups
+        ;
+        return : lconcat [_line0] _linesRest
+
+    ; helper
+	def:: DFGroup -> str => str
+	   \dfgroup_to_md_table_line
+		L\ dfgroup column0 ; for column0: use dfgroup.name when group starts and empty_string otherwise
 		;
-		setv column0 : sconcat dfgroup.name 
 		setv column1 : sconcat dfgroup.subname
 		;
 		setv fentities dfgroup.fentities
@@ -598,14 +610,17 @@
 ; assembly ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	def:: (of List DFGroup) => str
-	   \generate_chsh_table
-		L\ dfgroups
+	   \generate_chsh_table [dfgroups]
 		=>> dfgroups
-			lmap dfgroup_to_short_table_line
+            lpartition_by (fm it.name)
+			lmap dfgroups_with_same_name_to_table_lines
+            flatten
 			str_join :sep "\n"
-			sconcat $SHORT_TABLE_HEADER "\n"
+			sconcat $MD_TABLE_HEADER "\n"
 
 ; _____________________________________________________________________________/ }}}1
+
+
 ; MD blocks (each block consists of: ¹ ##title, ² short-card, ³ help-string):
 ; helpers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
@@ -699,9 +714,9 @@
 ; _____________________________________________________________________________/ }}}1
 
 ; Run:
-; CONST STRs (for short table) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; CONST STRs (for md table) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	setv $SHORT_TABLE_HEADER
+	setv $MD_TABLE_HEADER
 		 "
 | Group | Subgroup | Functions/Types | Macros |
 |-------|----------|-----------------|--------|"
@@ -711,7 +726,7 @@
 	setv $BACKLINK		 f"[go up](#{$HEADER1})"
 
 ; _____________________________________________________________________________/ }}}1
-; GLOB VARS  (for short table) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; GLOB VARS  (for md table) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	; for this functions help-card will not be printed
 	; (like because for StrictNumber it will give help on Union, which is useless)
@@ -741,8 +756,8 @@
 
     setv $SOURCE1           "../../src/fpmx/prelude/funcs.hy"
     setv $SOURCE2           "../../src/fpmx/prelude/__init__macros.hy"
-	setv $TARGET_SHORT_FILE "../../docs/00_prelude_cheatsheet_table_view.md"
-	setv $TARGET_LONG_FILE	"../../docs/01_prelude_cheatsheet_list_view.hy" 
+	setv $TARGET_HY_FILE	"../../docs/01_prelude_cheatsheet_list_view.hy" 
+	setv $TARGET_MD_FILE    "../../docs/00_prelude_cheatsheet_table_view.md"
 	setv _code_funcs  : read_file $SOURCE1
 	setv _code_macros : read_file $SOURCE2
 
@@ -761,14 +776,14 @@
            l> (Each) .fentities (Each) .parent_module (Filter (partial eq "fpmx.prelude.macros")) (set "fpmx")
 
 	; List of one-liners:
-    setv _oneliners_table : generate_long_table _dfgroups
-    write_to_file f"\n{_oneliners_table}" $TARGET_LONG_FILE
+    setv _oneliners_table : generate_oneliners_table _dfgroups
+    write_to_file f"\n{_oneliners_table}" $TARGET_HY_FILE
 
 	; MD-table:
     setv _cheatsheet_table : generate_chsh_table _dfgroups
     setv _md_blocks : generate_md_blocks _dfgroups
     setv _mdtable_final f"# {$HEADER1}\n\n{_cheatsheet_table}\n\n# {$HEADER2}\n\n{_md_blocks}"
-    write_to_file _mdtable_final $TARGET_SHORT_FILE
+    write_to_file _mdtable_final $TARGET_MD_FILE
 
 ; _____________________________________________________________________________/ }}}1
 
