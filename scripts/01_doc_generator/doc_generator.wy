@@ -1,9 +1,9 @@
 
-; doc_gen needs to use ACTUAL fptk version, because it needs to extract help strings
+; doc_gen needs to use ACTUAL fpmx version, because it needs to extract help strings
 ; Imports ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    require fptk.loader [load_fptk]
-    load_fptk "core" "lenses"
+    require fpmx.loader [load_fpmx]
+    load_fpmx "prelude" "lenses"
 
 	import  pyparsing :as pp
 
@@ -15,7 +15,7 @@
 
 ; CLASSES ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	; FPTK Group from VimCells as raw text, like from "[GROUP] APL: Filtering"
+	; FPMX Group from VimCells as raw text, like from "[GROUP] APL: Filtering"
 	defclass [dataclass] FGroup []
 		: #^ str name
 		: #^ str raw_content
@@ -31,7 +31,7 @@
 		defn __repr__ [self] : return self.name
 		defn __str__  [self] : return self.name
 
-	; "FPTK Entity — function, macros, etc."
+	; "FPMX Entity — function, macros, etc."
 	defclass [dataclass] FEntity []
 		: #^ FEntityKind    kind			
 		: #^ str			kind_str		#_ "used only for non-import-info, typically I use: 'macro' or 'base', but it is arbitrary" ; empty string otherwise
@@ -42,9 +42,9 @@
 		: #^ str			descr			#_ "partially applicates"
 
 	; used for creating DEFINED_FUNC/DEFINED_SETV as parent module name
-	setv $FPTK_NAME "fptk"
+	setv $FPMX_NAME "fpmx"
 
-	defclass [dataclass] DFGroup []  ; Deconstructed FPTK Group
+	defclass [dataclass] DFGroup []  ; Deconstructed FPMX Group
 		: #^ str               name
 		: #^ (of List FEntity) fentities
 
@@ -177,13 +177,13 @@
 ; ________________________________________________________________________/ }}}2
 ; ■ find groups (defined by VimCells) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-	(setv FPTK_GROUP (+ "; [GROUP]" (t_orn "_NAME" (pp.OneOrMore WORD)) (pp.OneOrMore "‾") "\\ {" "{{" "1"
+	(setv FPMX_GROUP (+ "; [GROUP]" (t_orn "_NAME" (pp.OneOrMore WORD)) (pp.OneOrMore "‾") "\\ {" "{{" "1"
 						(t_orn "_CONTENT" CONTENT)
 						";" (pp.OneOrMore "_") "/ }}" "}1"))
 
 	defn #^ (of List FGroup)
 	   \find_fgroups [#^ str code]
-		setv _groups : FPTK_GROUP.search_string code
+		setv _groups : FPMX_GROUP.search_string code
 		lmap 
             fm
               FGroup :name		  %1._NAME
@@ -196,14 +196,14 @@
 ; lmap everywhere is honestly not required, since normally only 1 elem is expected (but hey)
 ; ■ find import_module ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-	(setv FPTK_IM (+ LPAR "import"
+	(setv FPMX_IM (+ LPAR "import"
 					 (t_orn "_NAME" WORD)
 					 RPAR
 					 (pp.Optional (+ (pp.Literal "#_") (t_orn "_DESCR" QSTRING)))))
 
 	(defn #^ (of List FEntity)
 		process_IMs [#^ str code]
-		(setv _IMs (FPTK_IM.search_string code))
+		(setv _IMs (FPMX_IM.search_string code))
 		(lmap (fm (FEntity :kind		  FEntityKind.IMPORT_MODULE
 						   :kind_str	  ""
 						   :org_name	  ""
@@ -216,7 +216,7 @@
 ; ________________________________________________________________________/ }}}2
 ; ■ find import_from_module ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-	(setv FPTK_IFM (+ LPAR "import"
+	(setv FPMX_IFM (+ LPAR "import"
 					  (t_orn "_PARENT_MODULE" WORD)
 					  LBRCKT
 					  (t_orn "_NAME" WORD)
@@ -226,7 +226,7 @@
 
 	(defn #^ (of List FEntity)
 		process_IFMs [#^ str code]
-		(setv _IFMs (FPTK_IFM.search_string code))
+		(setv _IFMs (FPMX_IFM.search_string code))
 		(setv pipe
 			(rcompose (fm (FEntity :kind		  FEntityKind.IMPORT_FROM_MODULE
 								   :kind_str	  ""
@@ -241,7 +241,7 @@
 ; ________________________________________________________________________/ }}}2
 ; ■ find import_from_module_as ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-	(setv FPTK_IFMA (+ LPAR "import"
+	(setv FPMX_IFMA (+ LPAR "import"
 					   (t_orn "_PARENT_MODULE" WORD)
 					   LBRCKT
 					   (t_orn "_ORG_NAME" WORD)
@@ -253,7 +253,7 @@
 
 	(defn #^ (of List FEntity)
 		process_IFMAs [#^ str code]
-		(setv _IFMAs (FPTK_IFMA.search_string code))
+		(setv _IFMAs (FPMX_IFMA.search_string code))
 		(setv pipe
 			(rcompose (fm (FEntity :kind		  FEntityKind.IMPORT_FROM_MODULE_AS
 								   :kind_str	  ""
@@ -268,7 +268,7 @@
 ; ________________________________________________________________________/ }}}2
 ; ■ find require_macro ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-	(setv FPTK_RM  (+ LPAR "require"
+	(setv FPMX_RM  (+ LPAR "require"
 					  (t_orn "_PARENT_MODULE" WORD)
 					  LBRCKT
 					  (t_orn "_NAME" WORD)
@@ -278,7 +278,7 @@
 
 	(defn #^ (of List FEntity)
 		process_RMs [#^ str code]
-		(setv _RMs (FPTK_RM.search_string code))
+		(setv _RMs (FPMX_RM.search_string code))
 		(setv pipe
 			(rcompose (fm (FEntity :kind		  FEntityKind.REQUIRE_MACRO
 								   :kind_str	  ""
@@ -294,11 +294,11 @@
 ; ________________________________________________________________________/ }}}2
 ; ■ find non_import_info ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-	(setv FPTK_NII (+ LPAR "comment" (t_orn "_DESCR" QSTRING) RPAR))
+	(setv FPMX_NII (+ LPAR "comment" (t_orn "_DESCR" QSTRING) RPAR))
 
 	(defn #^ (of List FEntity)
 		process_NIIs [#^ str code]
-		(setv _NIIs (FPTK_NII.search_string code))
+		(setv _NIIs (FPMX_NII.search_string code))
 		(setv pipe
 			(rcompose (fm (FEntity :kind		  FEntityKind.NON_IMPORT_INFO
 								   :kind_str	  ""
@@ -313,19 +313,19 @@
 ; ________________________________________________________________________/ }}}2
 ; ■ find defined_setv ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-	(setv FPTK_DS	(+ (pp.Optional (+ (pp.Literal "#_") (t_orn "_DESCR" QSTRING)))
+	(setv FPMX_DS	(+ (pp.Optional (+ (pp.Literal "#_") (t_orn "_DESCR" QSTRING)))
 					   LPAR "setv"
 					   (t_orn "_NAME" WORD)
 					   CONTENT))
 
 	(defn #^ (of List FEntity)
 		process_DSs [#^ str code]
-		(setv _DSs (FPTK_DS.search_string code))
+		(setv _DSs (FPMX_DS.search_string code))
 		(lmap (fm (FEntity :kind		  FEntityKind.DEFINED_SETV
 						   :kind_str	  ""
 						   :org_name	  ""
 						   :name		  %1._NAME
-						   :parent_module $FPTK_NAME
+						   :parent_module $FPMX_NAME
 						   :signature	  ""
 						   :descr		  (remove_quotes %1._DESCR)))
 			  _DSs))
@@ -333,7 +333,7 @@
 ; ________________________________________________________________________/ }}}2
 ; ■ find defined_func ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-	(setv FPTK_DF	(+ (pp.Optional (+ (pp.Literal "#_") (t_orn "_DESCR" QSTRING)))
+	(setv FPMX_DF	(+ (pp.Optional (+ (pp.Literal "#_") (t_orn "_DESCR" QSTRING)))
 					   LPAR "defn"
 					   (pp.Optional QEXPR)		; decorator
 					   (pp.Optional ANNOTATION) ; return type
@@ -343,13 +343,13 @@
 
 	(defn #^ (of List FEntity)
 		process_DFs [#^ str code]
-		(setv _DFs (FPTK_DF.search_string code))
+		(setv _DFs (FPMX_DF.search_string code))
 		(setv pipe
 			(rcompose (fm (FEntity :kind		  FEntityKind.DEFINED_FUNC
 								   :kind_str	  ""
 								   :org_name	  ""
 								   :name		  %1._NAME
-								   :parent_module $FPTK_NAME
+								   :parent_module $FPMX_NAME
 								   :signature	  ""
 								   :descr		  (remove_quotes %1._DESCR)))
 					  split_descr))
@@ -358,18 +358,18 @@
 ; ________________________________________________________________________/ }}}2
 ; ■ find fentities (assembly) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-	(setv FPTK_ALL (| (t_orn "_IM"	 FPTK_IM  )
-					  (t_orn "_IFM"  FPTK_IFM )
-					  (t_orn "_IFMA" FPTK_IFMA)
-					  (t_orn "_RM"	 FPTK_RM  )
-					  (t_orn "_NII"  FPTK_NII )
-					  (t_orn "_DF"	 FPTK_DF  )
-					  (t_orn "_DS"	 FPTK_DS  )))
+	(setv FPMX_ALL (| (t_orn "_IM"	 FPMX_IM  )
+					  (t_orn "_IFM"  FPMX_IFM )
+					  (t_orn "_IFMA" FPMX_IFMA)
+					  (t_orn "_RM"	 FPMX_RM  )
+					  (t_orn "_NII"  FPMX_NII )
+					  (t_orn "_DF"	 FPMX_DF  )
+					  (t_orn "_DS"	 FPMX_DS  )))
 
 	(defn #^ (of List FEntity)
 		find_fentities
 		[#^ FGroup fgroup]
-		(setv _ALL (FPTK_ALL.search_string fgroup.raw_content))
+		(setv _ALL (FPMX_ALL.search_string fgroup.raw_content))
 		(setv _fentities
 			(lfor &elem _ALL
 				; «first» extracts found string (to send raw code further)
@@ -633,9 +633,9 @@
 				\FEntityKind.REQUIRE_MACRO
 				 f"Kind: Macro from [{fe.parent_module}]"
 				\FEntityKind.DEFINED_SETV
-				 "Kind: FPTK original"
+				 "Kind: FPMX original"
 				\FEntityKind.DEFINED_FUNC
-				 "Kind: FPTK original"
+				 "Kind: FPMX original"
 		setv tail : build_card_tail fe
 		return : sconcat line1 "\n" line2 tail
 
@@ -677,7 +677,7 @@
 | Group | Functions/Types | Macros |
 |-------|-----------------|--------|"
 
-	setv $HEADER1		 "fptk-core-cheatsheet"
+	setv $HEADER1		 "fpmx-prelude-cheatsheet"
 	setv $HEADER2		 "Detailed descriptions"
 	setv $BACKLINK		 f"[go up](#{$HEADER1})"
 
@@ -687,8 +687,8 @@
 	; for this functions help-card will not be printed
 	; (like because for StrictNumber it will give help on Union, which is useless)
 	setv $SUPPRESS_HELP
-		L	"listQ" "tupleQ" "setQ" "iteratorQ" "iterableQ"
-			; "StrictNumber" "validateF" "Result" "Maybe" "Nothing" -> those are not anymore in core
+		L	"listQ" "tupleQ" "setQ" "iteratorQ" "iterableQ" "number"
+			; "StrictNumber" "validateF" "Result" "Maybe" "Nothing"
 
     ; typically function named 'partial' should be layed out in
     ; the doc under 'partial' header; 
@@ -700,8 +700,8 @@
 			"->>"	 #: "hyruleThreading2"	"hyruleThreading2"
 			"as->"	 #: "hyruleThreading3"	"hyruleThreading3"
 			"doto"	 #: "hyruleThreading4"	"hyruleThreading4"
-			"=>"	 #: "FPTKThreading1"	"FPTKThreading1"
-			"=>>"	 #: "FPTKThreading2"	"FPTKThreading2"
+			"=>"	 #: "FPMXThreading1"	"FPMXThreading1"
+			"=>>"	 #: "FPMXThreading2"	"FPMXThreading2"
 			"f>"	 #: "LambdaWithAppl"	"LambdaWithAppl"
 			"p:"	 #: "PipeOfPartials"	"PipeOfPartials"
 			"f::"	 #: "Annotator1"		"Annotator1"
@@ -710,10 +710,10 @@
 ; _____________________________________________________________________________/ }}}1
 ; RUN ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    setv $SOURCE1           "../../src/fptk/core/funcs.hy"
-    setv $SOURCE2           "../../src/fptk/core/__init__macros.hy"
-	setv $TARGET_LONG_FILE	"../../_devdocs/doctable_autogenerated.hy" 
-	setv $TARGET_SHORT_FILE "../../docs/core_cheatsheet_autogenerated.md"
+    setv $SOURCE1           "../../src/fpmx/prelude/funcs.hy"
+    setv $SOURCE2           "../../src/fpmx/prelude/__init__macros.hy"
+	setv $TARGET_SHORT_FILE "../../docs/00_prelude_cheatsheet_table_view.md"
+	setv $TARGET_LONG_FILE	"../../docs/01_prelude_cheatsheet_list_view.hy" 
 	setv _code_funcs  : read_file $SOURCE1
 	setv _code_macros : read_file $SOURCE2
 
@@ -722,14 +722,14 @@
         unite_dfgroups ; this is where sorting of group-names becomes alphabetical -> TODO: don't force this sorting
             lconcat
                 =>> _code_funcs find_fgroups (lmap deconstruct_fgroup) ; <- can also find macros among other things, yes
-                find_macros _code_macros "fptk.core.from_hyrule"       ; \ <- searches for macros in big require statements
-                find_macros _code_macros "fptk.core.macros"            ; /
+                find_macros _code_macros "fpmx.prelude.from_hyrule"       ; \ <- searches for macros in big require statements
+                find_macros _code_macros "fpmx.prelude.macros"            ; /
 
     ; perform some pretty renamings
     setv _dfgroups
         -> _dfgroups
-           l> (Each) .fentities (Each) .parent_module (Filter (partial eq "fptk.core.from_hyrule")) (set "fptk/hyrule")
-           l> (Each) .fentities (Each) .parent_module (Filter (partial eq "fptk.core.macros")) (set "fptk")
+           l> (Each) .fentities (Each) .parent_module (Filter (partial eq "fpmx.prelude.from_hyrule")) (set "fpmx/hyrule")
+           l> (Each) .fentities (Each) .parent_module (Filter (partial eq "fpmx.prelude.macros")) (set "fpmx")
 
 	; Long table:
     setv _long_table : generate_long_table _dfgroups

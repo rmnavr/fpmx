@@ -1,7 +1,7 @@
 
-# fptk monads
+# fpmx monads
 
-fptk implements monad types:
+fpmx implements monad types:
 * [Maybe](#Maybe)
 * [Result](#Result)
 
@@ -14,19 +14,19 @@ The reason both variants exist is due to pydantic requiring extra time to load (
 Import statement:
 ```hy
 ; normal:
-(import fptk.monads.maybeM *)  ; or load only what is required
-(import fptk.monads.resultM *) ; or load only what is required
+(import fpmx.monads.maybeM *)  ; or load only what is required
+(import fpmx.monads.resultM *) ; or load only what is required
 
 ; strict:
-(import fptk.strict.maybeM *)  ; or load only what is required
-(import fptk.strict.resultM *) ; or load only what is required
+(import fpmx.strict.maybeM *)  ; or load only what is required
+(import fpmx.strict.resultM *) ; or load only what is required
 ```
 
 <!-- Maybe ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 # Maybe
 
-Module `fptk.monads.maybeM` (or `fptk.strict.maybeM`) exposes objects:
+Module `fpmx.monads.maybeM` (or `fpmx.strict.maybeM`) exposes objects:
 * class: `Maybe`
 * factory functions: `Just`, `Nothing`
 * functions: `justQ`, `nothingQ`, `mapM`, `bindM`, `unwrapM`, `unwrapM_or`
@@ -72,7 +72,7 @@ Nothing
 
 # Result
 
-Module `fptk.monads.resultM` (or `fptk.strict.resultM`) exposes objects:
+Module `fpmx.monads.resultM` (or `fpmx.strict.resultM`) exposes objects:
 * class: `Result`
 * factory functions: `Success`, `Failure`
 * functions: `successQ`, `failureQ`, `mapR`, `bindR`, `unwarpR`, `unwrapS`, `unwrapS_or`, `unwrapE`, `unwrapE_or`

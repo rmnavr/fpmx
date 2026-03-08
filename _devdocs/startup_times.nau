@@ -1,20 +1,20 @@
 
 	Speed gained:
 
-		fptk v0.4.4 took around 1200 ms to load (so slow):
-		-  80 ms — hy (not fptk issue, this is what it is)
-		- 400 ms — hyrule (very long load for some reason, not fptk issue) 
+		fpmx v0.4.4 took around 1200 ms to load (so slow):
+		-  80 ms — hy (not fpmx issue, this is what it is)
+		- 400 ms — hyrule (very long load for some reason, not fpmx issue) 
 		- 800 ms — funcs, pydantic, monads, etc.
 
-		fptk v0.5.0 loads at:
+		fpmx v0.5.0 loads at:
 		-  80 ms — hy 
 		-  50 ms — extracted hyrule macros   \
-		-  50 ms — funcs                     | core load times
+		-  50 ms — funcs                     | prelude load times
 		-  50 ms — all macros, including lns /
 		-  50 ms — (optional) lenses lib (import lenses [lens])
 		- 120 ms — (optional) strict-typing = pydantic load time
 		- 120 ms — (optional) monads; for some reason BaseClass is slow to load (even when pydantic is already loaded) 
-		// overall time is around: 200 ms core, +250 ms lenses+pydantic+monads
+		// overall time is around: 200 ms prelude, +250 ms lenses+pydantic+monads
 
 		other 3rd party libs:
 		-  15 ms — funcy
@@ -30,7 +30,7 @@
 		  - removed «:readers» arg in __init__ // x2 execution time reduction
 		  - all macroses are loaded in one go (from one main module)
 
-		• Removed scattering of (require fptk.macros [f::]) all over the files.
+		• Removed scattering of (require fpmx.macros [f::]) all over the files.
 		  // 100 separate «require» costs 700 ms to load (even after compiling)
 		  // 1 require (with 100 macros together) is about 30 ms
 

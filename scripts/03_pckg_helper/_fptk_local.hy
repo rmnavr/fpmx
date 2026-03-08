@@ -1,5 +1,5 @@
 
-; This is local version of github.com/rmnavr/fptk lib.
+; This is local version of github.com/rmnavr/fptk lib (currently fpmx).
 ; It's purpose is to have stable fptk inside other projects until fptk reaches stable version.
 ;
 ; Due to how hy macros imports work, when you import macros that depend from

@@ -1,15 +1,15 @@
 
-# Version 0.5.1
-- rebranding from `fptk` to `fpmx`
+# Version 0.6.0 (10 Mar 2026)
+- rebranding from `fptk` to `fpmx` (all the older naming is replaced everywhere, even in changelog)
 - reorganized functions classification groups
 - added `approx_eq` function
 
-# Version 0.5.0.dev5
+0.5.1.dev5:
 - `term` module added, including `clrz` and `dotPlot` functions
 - functions `dmul` and `dadd` are removed as redundant (just use `plus` and `mul`)
 - function `round_to` added
 
-# Version 0.5.0.dev4
+0.5.1.dev4:
 - Renamed monads unwrappers:
   - Maybe: unwrapM -> unwrapJ 
   - Result: unwrapE -> unwrapF 
@@ -17,9 +17,9 @@
 # Version 0.5.0
 - Big restructure to significantly increase startup time
   - removed hyrule dependency
-  - split into 2 big parts: core and extra (strict/monads, lenses)
+  - split into 2 big parts: core (prelude) and extra (strict/monads, lenses)
 
-# Version 0.4.4.dev
+0.4.5.dev:
 - added Maybe monad (works similar to Result monad)
 - fixed incorrectly reversed application order of funcs in resultM
 - `f>` is back lol and `=>`/`p:` has special recognition for it (while `=>>` basic recognition works ok)
@@ -36,20 +36,19 @@
 # Version 0.4.0 (20 Oct 2025)
 - changed order of args for oflenQ: from `oflenQ(xs,n)` to `oflenQ(n,xs)`
 - removed `with_execution_time`, replaced with simplier `timing`
-- removed `curry`, `rcurry` and `autocurry` (because `partial` is enough for fptk needs)
+- removed `curry`, `rcurry` and `autocurry` (because `partial` is enough for fpmx needs)
 - added `resultM` module
 - renamed `write_file` to `write_to_file`
-- fptk source is now splitted into several files (tests/scripts upd accrodingly)
+- fpmx source is now splitted into several files (tests/scripts upd accrodingly)
 - completely removed auto full import of all modules (like re, os, etc.)
 
-# 11 Oct 2025
+# Version 0.x.x (11 Oct 2025)
 - refactored to submodules
 
-# 30 Jul 2025
+# Version 0.x.x (30 Jul 2025)
 - added many iterator funcs and also tests for them
-
-# 28 Jul 2025
 - lmulticut_by: full functionality and test
 - upd: enlengthen
 - removed funcs on strings (ends_with, subsitute or smth)
   that can be replaced with regex funcs with similar functionality
+

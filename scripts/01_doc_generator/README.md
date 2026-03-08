@@ -1,7 +1,7 @@
 
-# FPTK Doc Genrator
+# FPMX Doc Genrator
 
-**FPTK Doc Generator** auto-generates 2 different documents:
+**FPMX Doc Generator** auto-generates 2 different documents:
 * **Long-table** — one-liners list for `/_devdocs`
 * **Stort-table** — official doc placed in `/docs`, consists of 2 parts:
   1. short cheatsheet-table
@@ -13,8 +13,8 @@ Run `doc_generator.hy` file to generate both documents.
 # Required format in source files
 
 Two files are sourced for data:
-- `/src/core/funcs.hy` — looking into [GROUP] VimCells for functions and such
-- `/src/core/__init__macros.hy` — looking for macros in 2 big require statements
+- `/src/prelude/funcs.hy` — looking into [GROUP] VimCells for functions and such
+- `/src/prelude/__init__macros.hy` — looking for macros in 2 big require statements
 
 <!-- GROUP ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
@@ -56,7 +56,7 @@ Macros are searched for in 2 big require statements (in `__init__macros.hy`).
 
 Recognized format (example):
 ```
-    (require fptk.core.macros [
+    (require fpmx.prelude.macros [
         of  #_ "[GROUP] Typing: Base  | signature | description"
         ->  #_ "[GROUP] FP: Threading | signature | description"
     ])

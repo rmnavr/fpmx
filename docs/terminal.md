@@ -3,12 +3,12 @@
 
 Calling... 
 ```hy
-(import  fptk.term.colors *) 
-(import  fptk.term.dotplot *) 
+(import  fpmx.term.colors *) 
+(import  fpmx.term.dotplot *) 
 
 ; or simply:
-(require fptk.loader [load_fptk])
-(load_fptk "term")
+(require fpmx.loader [load_fpmx])
+(load_fpmx "term")
 ```
 
 ...will expose following functions:
@@ -20,7 +20,7 @@ Calling...
 
 # Coloring
 
-fptk offers simple adapter `clrz` for `termcolor.colored` function
+fpmx offers simple adapter `clrz` for `termcolor.colored` function
 Unlike original `termcolor.colored`, in `clrz` you can provide color instructions in arbitrary order.
 
 You can also color-check your terminal using `clrz_term_test`.

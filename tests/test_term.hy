@@ -1,6 +1,6 @@
 
-    (require fptk.loader [load_fptk])
-    (load_fptk "core" "term")
+    (require fpmx.loader [load_fpmx])
+    (load_fpmx "prelude" "term")
     (import termcolor [colored])
 
 ; clrz ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1

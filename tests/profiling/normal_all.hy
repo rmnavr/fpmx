@@ -1,16 +1,16 @@
 
-    (import  fptk.core *)
-    (require fptk.core *)
+    (import  fpmx.prelude *)
+    (require fpmx.prelude *)
 
-    (import  fptk.lenses *)
-    (require fptk.lenses *)
+    (import  fpmx.lenses *)
+    (require fpmx.lenses *)
 
-    (import  fptk.monads.resultM *)
-    (import  fptk.monads.resultM *)
+    (import  fpmx.monads.resultM *)
+    (import  fpmx.monads.resultM *)
 
-    (import  fptk.strict.types *)
-    (import  fptk.strict.maybeM *)
-    (import  fptk.strict.resultM *)
+    (import  fpmx.strict.types *)
+    (import  fpmx.strict.maybeM *)
+    (import  fpmx.strict.resultM *)
 
     (print "normal_all")
 

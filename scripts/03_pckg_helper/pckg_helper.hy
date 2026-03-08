@@ -45,7 +45,7 @@
     ; && chains cmd commands (2nd is run only if 1st was successful)
 
     (defn run_test [file]
-        (try (run_shell_command (sconcat "cd " $FPTK_TESTS_DIR " && " $HYCMD " " file))
+        (try (run_shell_command (sconcat "cd " $FPMX_TESTS_DIR " && " $HYCMD " " file))
              (print (colorize 4 (sconcat "Test " file " - finished")))
              (except [Exception]
                      (print "ERROR: failed trying to run test:" file)
@@ -56,14 +56,14 @@
 
     (defn write_version_marker []
         (setv found_prev (lfilter (fm (re_test $TIMESTAMP it))
-                                  (os.listdir $FPTK_DIR)))
-        (setv found_prev (lmap (partial sconcat $FPTK_DIR "/") found_prev))
+                                  (os.listdir $FPMX_DIR)))
+        (setv found_prev (lmap (partial sconcat $FPMX_DIR "/") found_prev))
         (when (fnot zerolenQ found_prev)
               (print (colorize 4 "found prev:") found_prev)
               (lmap os.remove found_prev))
 
         (setv version (extract_version $VERSION_HEADER (read_file $SETUP_PY)))
-        (setv filename (sconcat $FPTK_DIR "/" $TIMESTAMP version))
+        (setv filename (sconcat $FPMX_DIR "/" $TIMESTAMP version))
         (print (colorize 4 "writing new:") filename)
         (write_file "" filename))
 
@@ -72,23 +72,23 @@
 ; CONFIG ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (setv $HYCMD            "hy")
-    (setv $FPTK_DIR         "../../src/fptk")
+    (setv $FPMX_DIR         "../../src/fpmx")
 
     (setv $VERSION_HEADER   "proj_version")
     (setv $SETUP_PY         "../../setup.py")
-    (setv $TIMESTAMP        "_fptk_ver_")
+    (setv $TIMESTAMP        "_fpmx_ver_")
 
-    (setv $FPTK_TESTS_DIR   "../../tests")
-    (setv $FPTK_TESTS       [ "test_macros_import.hy"
-                              "tests_main.hy"
+    (setv $FPMX_TESTS_DIR   "../../tests")
+    (setv $FPMX_TESTS       [ "test_macros_import.hy"
+                              "test_main.hy"
                               "test_monads.hy"
                               "test_term.hy"])
 
     (setv $DOCGEN_DIR       "../01_doc_generator")
     (setv $DOCGEN           "doc_generator.hy")
 
-    (setv $FPTKLOCAL_DIR    "../02_generator_of_fptk_local")
-    (setv $FPTKLOCAL        "generator_of_fptk_local.hy")
+    (setv $FPMXLOCAL_DIR    "../02_generator_of_fpmx_local")
+    (setv $FPMXLOCAL        "generator_of_fpmx_local.hy")
 
 ; _____________________________________________________________________________/ }}}1
     
@@ -99,7 +99,7 @@
     ; STEP 1 (tests)
 
         (print (colorize 7 "[Step 1/3] Running tests:"))
-        (lmap run_test $FPTK_TESTS) 
+        (lmap run_test $FPMX_TESTS) 
 
     ; STEP 2 (docgen)
 
@@ -111,18 +111,18 @@
              (except [Exception] (print "ERROR: failed trying to run docgen")
                                  (sys.exit 1)))
 
-    ; STEP 3 (fptk local)
+    ; STEP 3 (fpmx local)
 
         (print "")
-        (print (colorize 7 "[Step 3/3] Generating fptk_local:"))
+        (print (colorize 7 "[Step 3/3] Generating fpmx_local:"))
 
-        (try (run_shell_command f"cd {$FPTKLOCAL_DIR} && {$HYCMD} {$FPTKLOCAL}")
-             (print (colorize 4 "Generating _fptk_local - finished"))
-             (except [Exception] (print "ERROR: failed trying to generate _fptk_local")
+        (try (run_shell_command f"cd {$FPMXLOCAL_DIR} && {$HYCMD} {$FPMXLOCAL}")
+             (print (colorize 4 "Generating _fpmx_local - finished"))
+             (except [Exception] (print "ERROR: failed trying to generate _fpmx_local")
                                  (sys.exit 1)))
 
     ; STEP4 (adding version marker)
     ;   (print "")
-    ;   (print (colorize 7 "[Step 4/4] Generating version marker file in fptk dir (and removing previous)"))
+    ;   (print (colorize 7 "[Step 4/4] Generating version marker file in fpmx dir (and removing previous)"))
     ;   (write_version_marker)
 
