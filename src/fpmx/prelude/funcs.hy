@@ -609,7 +609,7 @@
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] 63 APL: sorting ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (comment "py | base | reversed | reversed(sequence) -> iterator |")
+    (comment "py | bultin | reversed | reversed(sequence) -> iterator |")
 
     #_ "lreversed(sequence) | list version of reversed"
     (defn lreversed [sequence] (list (reversed sequence)))
@@ -617,7 +617,7 @@
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] 64 APL: filtering ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (comment "py | base | filter | filter(function or None, iterable) -> filter object | when f=None, checks if elems are True")
+    (comment "py | builtin | filter | filter(function or None, iterable) -> filter object | when f=None, checks if elems are True")
     (import funcy [lfilter]) #_ "lfilter(pred, seq) -> List | funcy list version of extended filter"
 
     #_ "fltr1st(f, seq) -> Optional elem | returns first found element (or None)"
@@ -752,11 +752,12 @@
 
 ; [GROUP] 70 FP: control flow ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (comment "hy | base | if   | (if check true false)          | ")
+    (comment "py | builtin | if   | (if check true false)          | ")
     (comment "hy | base | cond | (cond check1 do1 ... true doT) | ")
 
 ; _____________________________________________________________________________/ }}}1
-; [GROUP] 71 FP: map zip reduce ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+;«[GROUP] 71 FP: lambdas» — only in macros
+; [GROUP] 72 FP: map zip reduce ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (comment "py | base | zip | zip(*iterables) -> zip object |")
 
@@ -778,7 +779,7 @@
     (import funcy     [lreductions])        #_ "lreductions(f, seq [, acc]) -> list | list version of reductions"
 
 ; _____________________________________________________________________________/ }}}1
-; [GROUP] 72 FP: function composition ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; [GROUP] 73 FP: function composition ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ;; consts
 
@@ -827,7 +828,7 @@
 
 
 ; _____________________________________________________________________________/ }}}1
-; [GROUP] 73 FP: logic checks in FP style ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; [GROUP] 74 FP: logic checks in FP style ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     #_ "fnot(f, *args, **kwargs) | = not(f(*args, **kwargs)) "
     (defn fnot [f #* args #** kwargs]
@@ -858,7 +859,6 @@
 
 
 ; _____________________________________________________________________________/ }}}1
-;«[GROUP] 74 FP: lambdas» — only in macros
 
 ; [GROUP] 90 Misc: one-based index getters ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
@@ -983,7 +983,8 @@
                 (print f"[dT = {dT :.6f} s]" #* args))))
 
 ; _____________________________________________________________________________/ }}}1
-; [GROUP] 92 Misc: misc ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+;«[GROUP] 92 Misc: testing» — only in macros
+; [GROUP] 93 Misc: misc ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (import pprint [pprint]) #_ "| standard python pprint function"
 
@@ -998,6 +999,4 @@
           (return None))
 
 ; _____________________________________________________________________________/ }}}1
-;«[GROUP] 93 Misc: testing» — only in macros
-
 

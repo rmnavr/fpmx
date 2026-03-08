@@ -211,10 +211,10 @@ DEFN: fpmx            | lconcat                  :: lconcat(*seqs) -> list  ; li
 FROM: funcy           | mapcat                   :: mapcat(f, *seqs)  ; maps, then concatenates
 FROM: funcy           | lmapcat                  :: lmapcat(f, *seqs)  ; maps, then concatenates
 ;: sorting:
-INFO: py              | reversed /base/          :: reversed(sequence) -> iterator
+INFO: py              | reversed /bultin/        :: reversed(sequence) -> iterator
 DEFN: fpmx            | lreversed                :: lreversed(sequence)  ; list version of reversed
 ;: filtering:
-INFO: py              | filter /base/            :: filter(function or None, iterable) -> filter object  ; when f=None, checks if elems are True
+INFO: py              | filter /builtin/         :: filter(function or None, iterable) -> filter object  ; when f=None, checks if elems are True
 FROM: funcy           | lfilter                  :: lfilter(pred, seq) -> List  ; funcy list version of extended filter
 DEFN: fpmx            | fltr1st                  :: fltr1st(f, seq) -> Optional elem  ; returns first found element (or None)
 FROM: funcy           | reject (<-remove)        :: reject(pred, seq)-> iterator  ; same as filter, but checks for False
@@ -240,12 +240,19 @@ DEFN: fpmx            | lmulticut_by             :: lmulticut_by(pred, seq, keep
 
 === FP ===
 ;: control flow:
-INFO: hy              | if /base/                :: (if check true false)
+INFO: py              | if /builtin/             :: (if check true false)
 INFO: hy              | cond /base/              :: (cond check1 do1 ... true doT)
 MACR: fpmx/hyrule     | case
 MACR: fpmx/hyrule     | unless
 MACR: fpmx/hyrule     | lif
 MACR: fpmx/hyrule     | branch
+;: lambdas:
+MACR: fpmx            | fm                       :: (fm (* it 3))  ; anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'
+MACR: fpmx            | f>                       :: (f> (* it 3) 4)  ; anonymous function with fm syntax, immediately applicates args
+MACR: fpmx            | mapm                     ; same as map, but expects fm-syntax for func
+MACR: fpmx            | lmapm                    ; same as lmap, but expects fm-syntax for func
+MACR: fpmx            | filterm                  :: (filterm f xs)  ; same as filter, but expects fm-syntax for func
+MACR: fpmx            | lfilterm                 :: (lfilterm f xs)  ; list version of lfilterm
 ;: map zip reduce:
 INFO: py              | zip /base/               :: zip(*iterables) -> zip object
 DEFN: fpmx            | lzip                     :: lzip(*iterables) -> List  ; literally just list(zip(*iterables))
@@ -283,13 +290,6 @@ DEFN: fpmx            | eq_any                   :: eq_any(x, values)  ; = (or (
 DEFN: fpmx            | on                       :: on(f, check, x, y)  ; example: (on len eq xs ys) -> (eq (len xs) (len yx))
 DEFN: fpmx            | all_fs                   :: all_fs(fs, *args, **kwargs)  ; checks if all f(*args, **kwargs) are True
 DEFN: fpmx            | any_fs                   :: any_fs(fs, *args, **kwargs)  ; checks if any of f(*args, **kwargs) is True
-;: lambdas:
-MACR: fpmx            | fm                       :: (fm (* it 3))  ; anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'
-MACR: fpmx            | f>                       :: (f> (* it 3) 4)  ; anonymous function with fm syntax, immediately applicates args
-MACR: fpmx            | mapm                     ; same as map, but expects fm-syntax for func
-MACR: fpmx            | lmapm                    ; same as lmap, but expects fm-syntax for func
-MACR: fpmx            | filterm                  :: (filterm f xs)  ; same as filter, but expects fm-syntax for func
-MACR: fpmx            | lfilterm                 :: (lfilterm f xs)  ; list version of lfilterm
 
 === Misc ===
 ;: one-based index getters:
@@ -303,11 +303,11 @@ DEFN: fpmx            | lrange_                  :: lrange_(start, end, step=1) 
 FROM: time            | cur_time (<-time)        :: cur_time()  ; gets current time in seconds
 DEFN: fpmx            | dt_print                 :: dt_printer(* args, fresh_run=False)  ; starts timer on fresh run, prints time passed since previous call
 MACR: fpmx            | timing                   :: (timing expr1 expr2 ...) -> #(float, Any)  ; returns time (in seconds) and result of execution of (fn [] expr1 expr2 ...)
+;: testing:
+MACR: fpmx            | assertm                  :: (assertm op arg1 arg2)  ; tests if (op arg1 arg2), for example (= 1 1)
+MACR: fpmx            | gives_error_typeQ        ; example: (assertm gives_error_typeQ (get [1] 2) IndexError)
 ;: misc:
 FROM: pprint          | pprint                   ; standard python pprint function
 DEFN: fpmx            | lprint                   :: lprint(seq, sep=None)  ; prints every elem of seq on new line
 MACR: fpmx/hyrule     | comment
-;: testing:
-MACR: fpmx            | assertm                  :: (assertm op arg1 arg2)  ; tests if (op arg1 arg2), for example (= 1 1)
-MACR: fpmx            | gives_error_typeQ        ; example: (assertm gives_error_typeQ (get [1] 2) IndexError)
 

@@ -33,14 +33,14 @@
 |  | filtering | <span title=":: lfilter(pred, seq) -> List :: funcy list version of extended filter">[`lfilter`](#lfilter)</span> <span title=":: fltr1st(f, seq) -> Optional elem :: returns first found element (or None)">[`fltr1st`](#fltr1st)</span> <span title=":: reject(pred, seq)-> iterator :: same as filter, but checks for False">[`reject`](#reject)</span> <span title=":: lreject(pred, seq) -> List :: list version of reject">[`lreject`](#lreject)</span> <span title=":: without(items, seq) -> generator :: subtracts items from seq (as a sets)">[`without`](#without)</span> <span title=":: lwithout(items, seq) -> list :: list version of reject">[`lwithout`](#lwithout)</span> <span title=":: takewhile([pred, ] seq) :: yields elems of seq as long as they pass pred">[`takewhile`](#takewhile)</span> <span title=":: dropwhile([pred, ] seq) :: mirror of takewhile">[`dropwhile`](#dropwhile)</span> <span title=":: filter_split(pred, seq) -> passed, rejected ::">[`filter_split`](#filter_split)</span> <span title=":: lfilter_split(pred,seq) -> passed, rejected :: list version of filter_split">[`lfilter_split`](#lfilter_split)</span> |  |
 |  | cutting and grouping | <span title=":: flatten(coll) :: recursively flattens to the bottom">[`flatten`](#flatten)</span> <span title=":: bisect_at(n, seq) -> start, tail :: len of start will = n, works only with n>=0">[`bisect_at`](#bisect_at)</span> <span title=":: lbisect_at(n, seq) -> start, tail :: list version of bisect_at, but also for n<0, abs(n) will be len of tail">[`lbisect_at`](#lbisect_at)</span> <span title=":: bisect_by(pred, seq) -> taken, dropped :: similar to (takewhile, dropwhile)">[`bisect_by`](#bisect_by)</span> <span title=":: lbisect_by(pred, seq) -> taken, dropped :: list version of lbisect">[`lbisect_by`](#lbisect_by)</span> <span title=":: partition(n, seq, *, step=None, tail=False) -> generator :: splits seq to lists of len n, tail=True will allow including fewer than n items">[`partition`](#partition)</span> <span title=":: lpartition(n, seq, *, step=None, tail=False) -> List :: simply list(partition(...))">[`lpartition`](#lpartition)</span> <span title=":: partition_by(f, seq) -> iterator of iterators :: splits when f(item) change">[`partition_by`](#partition_by)</span> <span title=":: lpartition_by(f,seq) -> list of lists :: list(partition_by(...))">[`lpartition_by`](#lpartition_by)</span> <span title=":: group_by(f, seq) -> defaultdict(list) :: groups elems of seq keyed by the result of f">[`group_by`](#group_by)</span> <span title=":: lmulticut_by(pred, seq, keep_border=True, merge_border=False) -> list :: cut at pred(elem)==True elems">[`lmulticut_by`](#lmulticut_by)</span> |  |
 | FP | control flow |  | <span title="">[`case`](#case)</span> <span title="">[`unless`](#unless)</span> <span title="">[`lif`](#lif)</span> <span title="">[`branch`](#branch)</span> |
+|  | lambdas |  | <span title=":: (fm (* it 3)) :: anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'">[`fm`](#fm)</span> <span title=":: (f> (* it 3) 4) :: anonymous function with fm syntax, immediately applicates args">[`f>`](#LambdaWithAppl)</span> <span title="same as map, but expects fm-syntax for func">[`mapm`](#mapm)</span> <span title="same as lmap, but expects fm-syntax for func">[`lmapm`](#lmapm)</span> <span title=":: (filterm f xs) :: same as filter, but expects fm-syntax for func">[`filterm`](#filterm)</span> <span title=":: (lfilterm f xs) :: list version of lfilterm">[`lfilterm`](#lfilterm)</span> |
 |  | map zip reduce | <span title=":: lzip(*iterables) -> List :: literally just list(zip(*iterables))">[`lzip`](#lzip)</span> <span title=":: lmap(f, *seqs) -> List :: list version of map">[`lmap`](#lmap)</span> <span title=":: starmap(function, iterable) ::">[`starmap`](#starmap)</span> <span title=":: lstarmap(function, iterable) -> list :: list version of starmap">[`lstarmap`](#lstarmap)</span> <span title=":: reduce(function, sequence[, initial]) -> value :: theory: reduce + monoid = binary-function for free becomes n-arg-function">[`reduce`](#reduce)</span> <span title=":: reductions(f, seq [, acc]) -> generator :: returns sequence of intermetidate values of reduce(f, seq, acc)">[`reductions`](#reductions)</span> <span title=":: lreductions(f, seq [, acc]) -> list :: list version of reductions">[`lreductions`](#lreductions)</span> |  |
 |  | function composition | <span title="identity(n) -> n">[`identity`](#identity)</span> <span title=":: constantly(val) :: constantly(30) is FUNCTION that always return val no matter the arguments">[`constantly`](#constantly)</span> <span title=":: compose(f1, f2, ..., fn) :: = f1(f2(..fn(***))) ; applicator">[`compose`](#compose)</span> <span title=":: rcompose(f1, f2, ..., fn) :: = fn(..(f2(f1(***)))) ; applicator">[`rcompose`](#rcompose)</span> <span title=":: ljuxt(*fs) :: = [f1, f2, ...](***) ; applicator">[`ljuxt`](#ljuxt)</span> <span title=":: nested(n, f) :: applicator f(...(f(***)))">[`nested`](#nested)</span> <span title=":: apply_n(n, f, *args, **kwargs) :: f(f(f(...f(*args, **kwargs))">[`apply_n`](#apply_n)</span> <span title="applicator">[`partial`](#partial)</span> <span title="applicator">[`rpartial`](#rpartial)</span> <span title=":: flip(f, a, b) = f(b, a) :: calls f with flipped args">[`flip`](#flip)</span> <span title=":: pflip(f, a) :: applicator for function f(a,b) of 2 args; example: pflip(div, 4)(1) == 0.25">[`pflip`](#pflip)</span> | <span title=":: (do_n   n #* body) -> None :: expands to ~ (do body body body ...)">[`do_n`](#do_n)</span> <span title=":: (list_n n #* body) -> List ::">[`list_n`](#list_n)</span> <span title="">[`->`](#hyruleThreading1)</span> <span title="">[`->>`](#hyruleThreading2)</span> <span title="">[`as->`](#hyruleThreading3)</span> <span title="mutating">[`doto`](#hyruleThreading4)</span> <span title="unification of dot-macro and ->">[`=>`](#FPMXThreading1)</span> <span title="unification of dot-macro and ->>">[`=>>`](#FPMXThreading2)</span> <span title="aplicator, pipe of partials">[`p:`](#PipeOfPartials)</span> |
 |  | logic checks in FP style | <span title=":: fnot(f, *args, **kwargs) :: = not(f(*args, **kwargs))">[`fnot`](#fnot)</span> <span title=":: eq_any(x, values) :: = (or (eq x value1) (eq x value2) ...)">[`eq_any`](#eq_any)</span> <span title=":: on(f, check, x, y) :: example: (on len eq xs ys) -> (eq (len xs) (len yx))">[`on`](#on)</span> <span title=":: all_fs(fs, *args, **kwargs) :: checks if all f(*args, **kwargs) are True">[`all_fs`](#all_fs)</span> <span title=":: any_fs(fs, *args, **kwargs) :: checks if any of f(*args, **kwargs) is True">[`any_fs`](#any_fs)</span> |  |
-|  | lambdas |  | <span title=":: (fm (* it 3)) :: anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'">[`fm`](#fm)</span> <span title=":: (f> (* it 3) 4) :: anonymous function with fm syntax, immediately applicates args">[`f>`](#LambdaWithAppl)</span> <span title="same as map, but expects fm-syntax for func">[`mapm`](#mapm)</span> <span title="same as lmap, but expects fm-syntax for func">[`lmapm`](#lmapm)</span> <span title=":: (filterm f xs) :: same as filter, but expects fm-syntax for func">[`filterm`](#filterm)</span> <span title=":: (lfilterm f xs) :: list version of lfilterm">[`lfilterm`](#lfilterm)</span> |
 | Misc | one-based index getters | <span title=":: get_(seq, *ns) -> elem :: same as get, but with 1-based index (will throw error for n=0)">[`get_`](#get_)</span> <span title=":: nth_(n, seq) -> Optional elem :: same as nth, but with 1-based index; will return None for n=0">[`nth_`](#nth_)</span> <span title=":: slice_(start, end, step=None) :: similar to slice, but with 1-based index; will throw error for start=0 or end=0">[`slice_`](#slice_)</span> <span title=":: cut_(seq, start, end, step=None) -> List :: similar to cut, but with 1-based index; will throw error for start=0 or end=0">[`cut_`](#cut_)</span> <span title=":: range_(start, end=None, step=1) -> range :: same as range, but with 1-based index">[`range_`](#range_)</span> <span title=":: lrange_(start, end, step=1) -> List :: range including both ends when possible, also works on fractionals">[`lrange_`](#lrange_)</span> |  |
 |  | benchmarking | <span title=":: cur_time() :: gets current time in seconds">[`cur_time`](#cur_time)</span> <span title=":: dt_printer(* args, fresh_run=False) :: starts timer on fresh run, prints time passed since previous call">[`dt_print`](#dt_print)</span> | <span title=":: (timing expr1 expr2 ...) -> #(float, Any) :: returns time (in seconds) and result of execution of (fn [] expr1 expr2 ...)">[`timing`](#timing)</span> |
-|  | misc | <span title="standard python pprint function">[`pprint`](#pprint)</span> <span title=":: lprint(seq, sep=None) :: prints every elem of seq on new line">[`lprint`](#lprint)</span> | <span title="">[`comment`](#comment)</span> |
 |  | testing |  | <span title=":: (assertm op arg1 arg2) :: tests if (op arg1 arg2), for example (= 1 1)">[`assertm`](#assertm)</span> <span title="example: (assertm gives_error_typeQ (get [1] 2) IndexError)">[`gives_error_typeQ`](#gives_error_typeQ)</span> |
+|  | misc | <span title="standard python pprint function">[`pprint`](#pprint)</span> <span title=":: lprint(seq, sep=None) :: prints every elem of seq on new line">[`lprint`](#lprint)</span> | <span title="">[`comment`](#comment)</span> |
 
 # Detailed descriptions
 
@@ -4064,6 +4064,70 @@ Name: branch
 Kind: Macro from [fpmx/hyrule]
 ```
 
+## fm
+
+[go up](#fpmx-prelude-cheatsheet)
+
+```hy
+Name: fm
+Kind: Macro from [fpmx]
+Sgnt: (fm (* it 3))
+Info: anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'
+```
+
+## LambdaWithAppl
+
+[go up](#fpmx-prelude-cheatsheet)
+
+```hy
+Name: f>
+Kind: Macro from [fpmx]
+Sgnt: (f> (* it 3) 4)
+Info: anonymous function with fm syntax, immediately applicates args
+```
+
+## mapm
+
+[go up](#fpmx-prelude-cheatsheet)
+
+```hy
+Name: mapm
+Kind: Macro from [fpmx]
+Info: same as map, but expects fm-syntax for func
+```
+
+## lmapm
+
+[go up](#fpmx-prelude-cheatsheet)
+
+```hy
+Name: lmapm
+Kind: Macro from [fpmx]
+Info: same as lmap, but expects fm-syntax for func
+```
+
+## filterm
+
+[go up](#fpmx-prelude-cheatsheet)
+
+```hy
+Name: filterm
+Kind: Macro from [fpmx]
+Sgnt: (filterm f xs)
+Info: same as filter, but expects fm-syntax for func
+```
+
+## lfilterm
+
+[go up](#fpmx-prelude-cheatsheet)
+
+```hy
+Name: lfilterm
+Kind: Macro from [fpmx]
+Sgnt: (lfilterm f xs)
+Info: list version of lfilterm
+```
+
 ## lzip
 
 [go up](#fpmx-prelude-cheatsheet)
@@ -4649,70 +4713,6 @@ any_fs(fs, *args, **kwargs)
     all_fs([f1, f2, ...], *args, **kwargs) = or(f1(*args, **kwargs), f2, ...)
 ```
 
-## fm
-
-[go up](#fpmx-prelude-cheatsheet)
-
-```hy
-Name: fm
-Kind: Macro from [fpmx]
-Sgnt: (fm (* it 3))
-Info: anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'
-```
-
-## LambdaWithAppl
-
-[go up](#fpmx-prelude-cheatsheet)
-
-```hy
-Name: f>
-Kind: Macro from [fpmx]
-Sgnt: (f> (* it 3) 4)
-Info: anonymous function with fm syntax, immediately applicates args
-```
-
-## mapm
-
-[go up](#fpmx-prelude-cheatsheet)
-
-```hy
-Name: mapm
-Kind: Macro from [fpmx]
-Info: same as map, but expects fm-syntax for func
-```
-
-## lmapm
-
-[go up](#fpmx-prelude-cheatsheet)
-
-```hy
-Name: lmapm
-Kind: Macro from [fpmx]
-Info: same as lmap, but expects fm-syntax for func
-```
-
-## filterm
-
-[go up](#fpmx-prelude-cheatsheet)
-
-```hy
-Name: filterm
-Kind: Macro from [fpmx]
-Sgnt: (filterm f xs)
-Info: same as filter, but expects fm-syntax for func
-```
-
-## lfilterm
-
-[go up](#fpmx-prelude-cheatsheet)
-
-```hy
-Name: lfilterm
-Kind: Macro from [fpmx]
-Sgnt: (lfilterm f xs)
-Info: list version of lfilterm
-```
-
 ## get_
 
 [go up](#fpmx-prelude-cheatsheet)
@@ -4885,6 +4885,27 @@ Sgnt: (timing expr1 expr2 ...) -> #(float, Any)
 Info: returns time (in seconds) and result of execution of (fn [] expr1 expr2 ...)
 ```
 
+## assertm
+
+[go up](#fpmx-prelude-cheatsheet)
+
+```hy
+Name: assertm
+Kind: Macro from [fpmx]
+Sgnt: (assertm op arg1 arg2)
+Info: tests if (op arg1 arg2), for example (= 1 1)
+```
+
+## gives_error_typeQ
+
+[go up](#fpmx-prelude-cheatsheet)
+
+```hy
+Name: gives_error_typeQ
+Kind: Macro from [fpmx]
+Info: example: (assertm gives_error_typeQ (get [1] 2) IndexError)
+```
+
 ## pprint
 
 [go up](#fpmx-prelude-cheatsheet)
@@ -4928,25 +4949,4 @@ lprint(seq, sep=None)
 ```hy
 Name: comment
 Kind: Macro from [fpmx/hyrule]
-```
-
-## assertm
-
-[go up](#fpmx-prelude-cheatsheet)
-
-```hy
-Name: assertm
-Kind: Macro from [fpmx]
-Sgnt: (assertm op arg1 arg2)
-Info: tests if (op arg1 arg2), for example (= 1 1)
-```
-
-## gives_error_typeQ
-
-[go up](#fpmx-prelude-cheatsheet)
-
-```hy
-Name: gives_error_typeQ
-Kind: Macro from [fpmx]
-Info: example: (assertm gives_error_typeQ (get [1] 2) IndexError)
 ```

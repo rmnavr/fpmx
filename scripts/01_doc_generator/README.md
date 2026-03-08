@@ -2,25 +2,42 @@
 # FPMX Doc Genrator
 
 **FPMX Doc Generator** auto-generates 2 different documents:
-* **Long-table** — one-liners list for `/_devdocs`
-* **Stort-table** — official doc placed in `/docs`, consists of 2 parts:
-  1. short cheatsheet-table
-  2. help-cards for each entity
-  > Short table does NOT output `(comment "lib | kind | name | sgntr | descr ")` entities.
+* **One-liners-table (OLT)** — in format of *.hy
+* **MD-table (MDT) ** — in format of *.md, consists of 2 parts:
+  1. cheatsheet-table of hoverable fpmx entities
+  2. help-cards for each entity (that contain short info + their «help» description)
+  > Unlike OLT, MDT does NOT output `(comment "lib | kind | name | sgntr | descr ")` entities.
 
 Run `doc_generator.hy` file to generate both documents.
 
 # Required format in source files
 
 Two files are sourced for data:
-- `/src/prelude/funcs.hy` — looking into [GROUP] VimCells for functions and such
+- `/src/prelude/funcs.hy` — looking into `[GROUP] 01 Title: subtitle` VimCells 
 - `/src/prelude/__init__macros.hy` — looking for macros in 2 big require statements
 
-<!-- GROUP ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+<!-- Ordering ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-## Functions — inside [GROUP] VimCells
+## Ordering
 
-VimCells with `[GROUP] cell_header` will be search for:
+Group should have strictly following format:
+```hy
+    ;; for VimCells headers in funcs.hy:
+    [GROUP] 05 Typing: Base
+
+    ;; for macros description in __init__macros.hy:
+    #_ "[GROUP] 05 Typing: Base  | signature | description"
+```
+
+Number (`05` in the example) is used to define groups/subgroups sorting in generated docs.
+Please use the same `order-name-subname` group naming across `funcs.hy` and `__init__macros.hy`.
+
+<!-- __________________________________________________________________________/ }}}1 -->
+<!-- Parsing: funcs.hy ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+
+## Parsing `funcs.hy`
+
+VimCells properly named as `[GROUP] 01 Title: subtitle` will be searched for:
 ```
     (import math) #_ "description"`
     
@@ -39,32 +56,32 @@ VimCells with `[GROUP] cell_header` will be search for:
 
     (comment "source_lib | kind_str | name | signature  | description ")
     (comment "hy         | func     | get  | (get xs n) | basic getter")
-    ;; for kind_str I really only use "base" and "macro", although this is arbitrary string
+    ;; for kind_str I really only use "builtin" and "macro", although this can be arbitrary string
 ```
 
 Rules:
-- comments inside parsed VimCells should start from `;;`, not `;` (this is parser issue I'm too lazy to solve)
-- signature/description use `|` as separator between them; when not found — comment will be seen as description-oly
+- comments inside parsed VimCells should start with `;;`, not `;` (this is parser issue I'm too lazy to solve)
+- signature/description use `|` as separator between them; when not found — comment will be seen as description-only
 - comment `#_ "..."` is overall optional
 
 <!-- __________________________________________________________________________/ }}}1 -->
-<!-- MACRO ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+<!-- Parsing: __init__macros.hy ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-## Inside [MACRO] VimCell
+## Parsing `__init__macros.hy`
 
-Macros are searched for in 2 big require statements (in `__init__macros.hy`).
+Macros are searched for in 2 big require statements in `__init__macros.hy`.
 
 Recognized format (example):
 ```
     (require fpmx.prelude.macros [
-        of  #_ "[GROUP] Typing: Base  | signature | description"
-        ->  #_ "[GROUP] FP: Threading | signature | description"
+        of  #_ "[GROUP] 05 Typing: Base  | signature | description"
+        ->  #_ "[GROUP] 06 FP: Threading | signature | description"
     ])
 
     ;; word [GROUP] is obligatory
 ```
 
-Group names found here are then united with group names found in [GROUP] VimCells.
+Group names found here are then united with group names found in `funcs.hy`.
 
 <!-- __________________________________________________________________________/ }}}1 -->
 
