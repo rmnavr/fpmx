@@ -560,7 +560,8 @@
         dfgroup_to_short_table_line
         [ dfgroup]
         ;
-        (setv column1 (sconcat dfgroup.name ": " dfgroup.subname))
+        (setv column0 (sconcat dfgroup.name))
+        (setv column1 (sconcat dfgroup.subname))
         ;
         (setv fentities dfgroup.fentities)
         (setv column2; functions
@@ -570,7 +571,7 @@
             (str_join :sep " "
                      (lmap fentity_to_hoverable (only_macro_fentities fentities))))
         ;
-        (return f"| {column1} | {column2} | {column3} |"))
+        (return f"| {column0} | {column1} | {column2} | {column3} |"))
 
     ; helper
     (def:: FEntity => str
@@ -702,8 +703,8 @@
 
     (setv $SHORT_TABLE_HEADER
          "
-| Group | Functions/Types | Macros |
-|-------|-----------------|--------|")
+| Group | Subgroup | Functions/Types | Macros |
+|-------|----------|-----------------|--------|")
 
     (setv $HEADER1 "fpmx-prelude-cheatsheet")
     (setv $HEADER2 "Detailed descriptions")
