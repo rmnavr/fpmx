@@ -175,7 +175,7 @@ fpmx offers enhanced getters (and several setters) for making index/attr accessi
 (last xs)   ; returns "d"
 ...
 
-; Sequential getters:
+; Sequential getters
 (drop 2 [1 2 3 4 5])           ; returns [3 4 5]
 (drop -2 [1 2 3 4 5])          ; returns [1 2 3]
 (take 2 [1 2 3 4 5])           ; returns [1 2]
@@ -275,13 +275,13 @@ This solves the problem of combining getters with threaders:
 ; The best we can do in traditional hy syntax is:
 (-> pts (get 0) (getattrm "x") double)  
 ; or:
-(double (. pts [0] x)
+(double (. pts [0] x))
 
-; But fpmx => macro makes it even prettier:
+; now see how fpmx => macro makes it much more prettier:
 (=> pts [0] .x (double))  
 ```
 
-Also, asa special treat for Haskellers — fpmx offers function annotation macro `def::`:
+Also, as a special treat for Haskellers — fpmx offers function annotation macro `def::`:
 ```hy
 ; basic usage:
 (def:: int -> int => float
@@ -360,8 +360,9 @@ Importing every fpmx module:
 (require fpmx.loader [load_fpmx])
 (load_fpmx "prelude"
            "lenses"
-           "strict_types" "strict_maybeM" "strict_resultM"
-           "maybeM" "resultM"
+           "strict_types"
+           "strict_maybeM" "strict_resultM" 
+           "maybeM" "resultM" ; actually, not recommended to be mixed with their strict variants
            "term")
 
 ; which is internally the same as:
@@ -371,12 +372,13 @@ Importing every fpmx module:
 (import  fpmx.lenses *)
 (require fpmx.lenses *)
 
+(import  fpmx.strict.types *)
+
+(import  fpmx.strict.maybeM *)   
+(import  fpmx.strict.resultM *)  
+
 (import  fpmx.monads.maybeM *)
 (import  fpmx.monads.resultM *)
-
-(import  fpmx.strict.types *)
-(import  fpmx.strict.maybeM *)   ; this will actually override non-strict maybeM
-(import  fpmx.strict.resultM *)  ; this will actually override non-strict resultM
 
 (import  fpmx.term.colors *) 
 (import  fpmx.term.dotplot *) 
@@ -390,12 +392,11 @@ Importing every fpmx module:
 
 ## Prelude
 
-All 250 functions/types/macros are layed out in 2 different formats
-(*table form* is preffered for the user, however you might find *one-liners form* more convenient):
-- [Cheatsheet for end user (table form)](docs/00_prelude_cheatsheet_table_view.md) 
-- [Cheatsheet for developer (one-liners form)](docs/01_prelude_cheatsheet_list_view.hy) 
+All Prelude functions/types/macros are layed out in 2 different formats:
+- [Cheatsheet (table form)](docs/00_prelude_cheatsheet_table_view.md) <- full doc, preffered for the end user
+- [Dev cheatsheet (one-liners form)](docs/01_prelude_cheatsheet_list_view.hy) <- concise doc with extra tech info
 
-To dive deeper into fpmx macros see:
+For Prelude macros see:
 - [Prelude macros in more details](docs/02_prelude_macros.md) 
 
 ## Extra modules
