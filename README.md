@@ -318,7 +318,7 @@ Also:
 
 <!-- Extra ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-# Extras
+# Extra modules
 
 fpmx has following evolving extra modules:
 * `fpmx.strict.types`:
@@ -355,7 +355,7 @@ Importing everything from Prelude only:
 (require fpmx.prelude *) ; load macroses
 ```
 
-Importing every fpmx module:
+Importing every fpmx module (although loading both strict and non-strict monads is not recommended):
 ```hy
 (require fpmx.loader [load_fpmx])
 (load_fpmx "prelude"
@@ -394,10 +394,10 @@ Importing every fpmx module:
 
 All Prelude functions/types/macros are layed out in 2 different formats:
 - [Cheatsheet (table form)](docs/00_prelude_cheatsheet_table_view.md) <- full doc, preffered for the end user
-- [Dev cheatsheet (one-liners form)](docs/01_prelude_cheatsheet_list_view.hy) <- concise doc with extra tech info
+- [Dev cheatsheet (one-liners form)](docs/01_prelude_cheatsheet_list_view.hy) <- concise doc with extra tech info (some users may find it more convenient than table form)
 
-For Prelude macros see:
-- [Prelude macros in more details](docs/02_prelude_macros.md) 
+Detailed guide on fpmx-exclusive macros:
+- [fpmx macros](docs/02_prelude_macros.md) 
 
 ## Extra modules
 
@@ -428,7 +428,8 @@ Tested with versions:
 
 # Project status
 
-Prelude functionality is at 90% of reaching stable release (some API-breaking changes may still happen).
+Prelude functionality is at 90% of reaching stable release
+(some API-breaking changes may still happen).
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Installation ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
