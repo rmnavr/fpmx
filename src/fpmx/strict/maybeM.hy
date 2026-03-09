@@ -35,7 +35,7 @@
 
     (defclass Maybe [BaseModel (of Generic J)]
         #^ (of Union (of _Just J) _Nothing) container
-        (defn __str__ [self] (+ "<M." (str self.container) ">"))
+        (defn __str__ [self] (+ "<Mb." (str self.container) ">"))
         (defn __repr__ [self] (self.__str__)))
 
     (defn Just [value] (Maybe :container (_Just :value value)))
@@ -92,3 +92,5 @@
              (return default)))
 
 ; _____________________________________________________________________________/ }}}1
+
+    (print (Just 3))

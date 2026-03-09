@@ -1,13 +1,17 @@
 
-; non-strict as compared to strict:
-; 1) do not import pydantic
-; 2) Classes definition
-; -- utils functions are totally the same 
+; Info: strict/non-strict ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    ;: Since in fpmx strict and non-strict variants of monads are 
+    ;: the same except for several pydantic-related LOC, strict variant is used as a base,
+    ;: and NSMG script (Non-Strict Monad Generator) is used to autocreate non-strict variants.
+    ;: This is what comments like [NSMG: DO_SMTH] are for
+
+; _____________________________________________________________________________/ }}}1
 
 ; Import/Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	import  pydantic [BaseModel]
-
+	import  pydantic [BaseModel]    ; [NSMG_INSTRUCTION: CLEAR_THIS_LINE]
+                                    ; [NSMG_INSTRUCTION: CLEAR_THIS_LINE]
 	import  typing   [TypeVar Generic Union]
     import  funcy    [rcompose lmap partial]
     require fpmx.prelude.from_hyrule [of unless]
@@ -24,18 +28,18 @@
 
     setv J : TypeVar "J"
 
-    defclass _Just [BaseModel (of Generic J)]
+    defclass _Just [BaseModel (of Generic J)] ; [NSMG_INSTRUCTION: REMOVE_BASEMODEL]
         #^ J value
         defn __str__  [self] : + "Just: " (str self.value)
         defn __repr__ [self] : self.__str__
 
-    defclass _Nothing [BaseModel]
+    defclass _Nothing [BaseModel] ; [NSMG_INSTRUCTION: REMOVE_BASEMODEL]
         defn __str__  [self] "Nothing"
         defn __repr__ [self] : self.__str__
 
-    defclass Maybe [BaseModel (of Generic J)]
+    defclass Maybe [BaseModel (of Generic J)] ; [NSMG_INSTRUCTION: REMOVE_BASEMODEL]
         #^ (of Union (of _Just J) _Nothing) container
-        defn __str__  [self] : + "<M." (str self.container) ">"
+        defn __str__  [self] : + "<Mb." (str self.container) ">"
         defn __repr__ [self] : self.__str__
 
     defn Just [value] : Maybe :container (_Just :value value)
@@ -93,3 +97,5 @@
 
 ; _____________________________________________________________________________/ }}}1
 
+    print : Just 3
+    

@@ -180,7 +180,7 @@
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] 14 Math: exponents ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (comment "py | base | pow |  | ")
+    (comment "py | builtin | pow |  | ")
 
     (import math [exp]) #_ "exp(x) |"
 
@@ -404,7 +404,7 @@
     (import funcy [nth])        #_ "nth(n, seq) -> Optional elem | 0-based index; works also with dicts"
 
     ;; idxs:
-    (comment "py     | base  | slice | (slice start end step) | returns empty list when not found ")
+    (comment "py     | builtin  | slice | (slice start end step) | returns empty list when not found ")
     (comment "hy     | macro | cut   | (cut xs start end step) -> (get xs (slice start end step)) -> List | returns empty list when none found")
 
 ;; one elem getters:
@@ -455,7 +455,7 @@
 ; [GROUP] 42 Getters: attrs and bulk ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ;; attrs
-    (comment "py | base | getattr | getattr(object, name[, default]) -> value | arg name should be given as str")
+    (comment "py | builtin | getattr | getattr(object, name[, default]) -> value | arg name should be given as str")
 
     ;; idxs, keys
     (import  funcy  [pluck])            #_ "pluck(key, mappings) -> generator | gets same key (or idx) from every mapping, mappings can be lists of lists/dicts/etc."
@@ -753,7 +753,7 @@
 ; [GROUP] 70 FP: control flow ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (comment "py | builtin | if   | (if check true false)          | ")
-    (comment "hy | base | cond | (cond check1 do1 ... true doT) | ")
+    (comment "hy | builtin | cond | (cond check1 do1 ... true doT) | ")
 
 ; _____________________________________________________________________________/ }}}1
 ;«[GROUP] 71 FP: lambdas» — only in macros
