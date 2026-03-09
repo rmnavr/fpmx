@@ -169,7 +169,7 @@ fpmx also has several usefull utilities for strings:
 fpmx offers enhanced getters (and several setters) for making index/attr accessing more ergonomic:
 ```hy
 ; Named indexed getters, which are common in FP languages:
-(setv xs ["a" "b" "c" "d]
+(setv xs ["a" "b" "c" "d"]
 (first xs)  ; returns "a"
 (fourth xs) ; returns "d"
 (last xs)   ; returns "d"
