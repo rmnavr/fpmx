@@ -1,22 +1,15 @@
-
-; non-strict as compared to strict:
-; 1) do not import pydantic
-; 2) Classes definition
-; -- utils functions are totally the same
+; [NSMG_INSTRUCTION: WRITE_NONSOURCE_WARNING]
 
 ; Import/Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (import pydantic [BaseModel])
+    (import pydantic [BaseModel]); [NSMG_INSTRUCTION: REPLACE_WITH]    import  dataclasses [dataclass]
+                                    ; [NSMG_INSTRUCTION: CLEAR_THIS_LINE]
 
     (import typing [TypeVar Generic Union])
     (import funcy [rcompose lmap partial])
     (require fpmx.prelude.from_hyrule [of unless])
 
-    (export :objects [ Success Failure Result
-                       successQ failureQ
-                       mapR bindR
-                       unwrapR unwrapS unwrapS_or unwrapF unwrapF_or
-                     ])
+    (export :objects [Success Failure Result successQ failureQ mapR bindR unwrapR unwrapS unwrapS_or unwrapF unwrapF_or])
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -25,19 +18,19 @@
     (setv S (TypeVar "S"))
     (setv F (TypeVar "F"))
 
-    (defclass _Failure [BaseModel (of Generic F)]
+    (defclass _Failure [BaseModel (of Generic F)]; [NSMG_INSTRUCTION: REPLACE_WITH]    defclass [dataclass] _Failure [(of Generic F)]
         #^ F value
         ;
         (defn __str__ [self] (+ "Failure: " (str self.value)))
         (defn __repr__ [self] (self.__str__)))
 
-    (defclass _Success [BaseModel (of Generic S)]
+    (defclass _Success [BaseModel (of Generic S)]; [NSMG_INSTRUCTION: REPLACE_WITH]    defclass [dataclass] _Success [(of Generic S)]
         #^ S value
         ;
         (defn __str__ [self] (+ "Success: " (str self.value)))
         (defn __repr__ [self] (self.__str__)))
 
-    (defclass Result [BaseModel (of Generic S F)]
+    (defclass Result [BaseModel (of Generic S F)]; [NSMG_INSTRUCTION: REPLACE_WITH]    defclass [dataclass] Result [(of Generic S F)]
         #^ (of Union (of _Success S) (of _Failure F)) container
         (defn [property] value [self] self.container.value)
         ;

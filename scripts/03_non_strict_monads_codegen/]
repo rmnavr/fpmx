@@ -25,6 +25,7 @@
         ".value is used as a lookup string in source file"
         setv CLEAR_LINE       "[NSMG_INSTRUCTION: CLEAR_THIS_LINE]"
         setv NON_SOURCE_WARN  "[NSMG_INSTRUCTION: WRITE_NONSOURCE_WARNING]"
+        setv REMOVE_BASEMODEL "[NSMG_INSTRUCTION: REMOVE_BASEMODEL]"
         setv REPLACE_WITH     "[NSMG_INSTRUCTION: REPLACE_WITH]"
 
 ; _____________________________________________________________________________/ }}}1
@@ -51,21 +52,27 @@
         return None
 
     defn #^ str process_one_line [#^ str line]
+        when : in Instruction.CLEAR_LINE.value line
+            return
+                sconcat (smul " " 4) "; [NSMG_LOG: Line removed] "
+                        first : line.partition ";" ; .partition splits to #(before separ after)
+                                                   ; this removes nsmg_instruction from orig line
+        ;
+        when : in Instruction.REMOVE_BASEMODEL.value line
+            return
+                sconcat
+                    re_sub "BaseModel" "#_ BaseModel" (first (line.partition ";"))
+                    " ; [NSMG_LOG: BaseModel removed]"
         ;
         when : in Instruction.NON_SOURCE_WARN.value line
             return ";: WARNING! THIS FILE IS CODEGENED! Edit source strict-version of it instead."
-        ;
-        when : in Instruction.CLEAR_LINE.value line
-            return
-                sconcat (smul " " 4) "; [NSMG_LOG: This line war cleared] "
-                        first : line.partition ";" ; .partition splits to #(before separ after)
-                                                   ; this removes nsmg_instruction from orig line
         ;
         when : in Instruction.REPLACE_WITH.value line
             return
                 sconcat
                     third : line.partition Instruction.REPLACE_WITH.value
                     " ; [NSMG_LOG: This line was replaced]"
+
         ;
         return line
 
@@ -88,7 +95,7 @@
 
 ; _____________________________________________________________________________/ }}}1
 
-; ===========================================================================
+    ; ===========================================================================
 
     setv $FILE_MAYBE
         NamingGroup :strict_wy     "../../src/fpmx/_wy_source/strict/maybeM.wy"
@@ -101,7 +108,7 @@
                     :non_strict_wy "../../src/fpmx/_wy_source/monads/resultM.wy"
                     :strict_hy     "../../src/fpmx/strict/resultM.hy"
                     :non_strict_hy "../../src/fpmx/monads/resultM.hy"
-
+                          
     process_ngroup $FILE_MAYBE
     process_ngroup $FILE_RESULT
 

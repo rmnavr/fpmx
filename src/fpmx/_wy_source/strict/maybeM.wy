@@ -1,26 +1,15 @@
-
-; Info: strict/non-strict ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    ;: Since in fpmx strict and non-strict variants of monads are 
-    ;: the same except for several pydantic-related LOC, strict variant is used as a base,
-    ;: and NSMG script (Non-Strict Monad Generator) is used to autocreate non-strict variants.
-    ;: This is what comments like [NSMG: DO_SMTH] are for
-
-; _____________________________________________________________________________/ }}}1
+; [NSMG_INSTRUCTION: WRITE_NONSOURCE_WARNING]
 
 ; Import/Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	import  pydantic [BaseModel]    ; [NSMG_INSTRUCTION: CLEAR_THIS_LINE]
+    import  pydantic [BaseModel]    ; [NSMG_INSTRUCTION: REPLACE_WITH]    import  dataclasses [dataclass]
                                     ; [NSMG_INSTRUCTION: CLEAR_THIS_LINE]
-	import  typing   [TypeVar Generic Union]
+
+    import  typing   [TypeVar Generic Union]
     import  funcy    [rcompose lmap partial]
     require fpmx.prelude.from_hyrule [of unless]
 
-    export :objects  [ Maybe Just Nothing
-                       justQ nothingQ
-                       mapM bindM
-                       unwrapJ unwrapJ_or
-                     ]
+    export :objects  [Maybe Just Nothing justQ nothingQ mapM bindM unwrapJ unwrapJ_or]
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -28,16 +17,16 @@
 
     setv J : TypeVar "J"
 
-    defclass _Just [BaseModel (of Generic J)] ; [NSMG_INSTRUCTION: REMOVE_BASEMODEL]
+    defclass _Just [BaseModel (of Generic J)] ; [NSMG_INSTRUCTION: REPLACE_WITH]    defclass [dataclass] _Just [(of Generic J)]
         #^ J value
         defn __str__  [self] : + "Just: " (str self.value)
         defn __repr__ [self] : self.__str__
 
-    defclass _Nothing [BaseModel] ; [NSMG_INSTRUCTION: REMOVE_BASEMODEL]
+    defclass _Nothing [BaseModel] ; [NSMG_INSTRUCTION: REPLACE_WITH]    defclass [dataclass] _Nothing []
         defn __str__  [self] "Nothing"
         defn __repr__ [self] : self.__str__
 
-    defclass Maybe [BaseModel (of Generic J)] ; [NSMG_INSTRUCTION: REMOVE_BASEMODEL]
+    defclass Maybe [BaseModel (of Generic J)] ; [NSMG_INSTRUCTION: REPLACE_WITH]    defclass [dataclass] Maybe [(of Generic J)]
         #^ (of Union (of _Just J) _Nothing) container
         defn __str__  [self] : + "<Mb." (str self.container) ">"
         defn __repr__ [self] : self.__str__
@@ -49,7 +38,7 @@
 
 ; utils: Typechecks ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    defn _nonM_error [x] : ValueError f"Value <{x}> must be of Maybe type" 
+    defn _nonM_error [x] : ValueError f"Value <{x}> must be of Maybe type"
 
     defn #^ bool justQ [#^ Maybe maybeM]
         unless : isinstance maybeM Maybe :: raise : _nonM_error maybeM
@@ -88,7 +77,7 @@
              return maybeM.container.value
              raise : ValueError f"Can't unwrapJ {maybeM}, since it's Nothing"
 
-    defn #^ J unwrapJ_or 
+    defn #^ J unwrapJ_or
         L #^ (of Maybe J) maybeM
           #^ J default
         if : justQ maybeM
@@ -97,5 +86,3 @@
 
 ; _____________________________________________________________________________/ }}}1
 
-    print : Just 3
-    

@@ -1,22 +1,15 @@
-
-; non-strict as compared to strict:
-; 1) do not import pydantic
-; 2) Classes definition
-; -- utils functions are totally the same 
+; [NSMG_INSTRUCTION: WRITE_NONSOURCE_WARNING]
 
 ; Import/Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	import  pydantic [BaseModel]
+    import  pydantic [BaseModel]    ; [NSMG_INSTRUCTION: REPLACE_WITH]    import  dataclasses [dataclass]
+                                    ; [NSMG_INSTRUCTION: CLEAR_THIS_LINE]
 
 	import  typing   [TypeVar Generic Union]
     import  funcy    [rcompose lmap partial]
     require fpmx.prelude.from_hyrule [of unless]
 
-    export :objects  [ Success Failure Result
-                       successQ failureQ
-                       mapR bindR
-                       unwrapR unwrapS unwrapS_or unwrapF unwrapF_or
-                     ]
+    export :objects  [Success Failure Result successQ failureQ mapR bindR unwrapR unwrapS unwrapS_or unwrapF unwrapF_or]
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -25,20 +18,20 @@
     setv S : TypeVar "S"
     setv F : TypeVar "F"
 
-    defclass _Failure [BaseModel (of Generic F)]
+    defclass _Failure [BaseModel (of Generic F)] ; [NSMG_INSTRUCTION: REPLACE_WITH]    defclass [dataclass] _Failure [(of Generic F)]
         #^ F value
         ;
         defn __str__  [self] : + "Failure: " (str self.value)
         defn __repr__ [self] : self.__str__
 
-    defclass _Success [BaseModel (of Generic S)]
-        #^ S value
+    defclass _Success [BaseModel (of Generic S)] ; [NSMG_INSTRUCTION: REPLACE_WITH]    defclass [dataclass] _Success [(of Generic S)]
+        #^ S value 
         ;
         defn __str__  [self] : + "Success: " (str self.value)
         defn __repr__ [self] : self.__str__
 
-    defclass Result [BaseModel (of Generic S F)]
-        #^ (of Union (of _Success S) (of _Failure F)) container
+    defclass Result [BaseModel (of Generic S F)] ; [NSMG_INSTRUCTION: REPLACE_WITH]    defclass [dataclass] Result [(of Generic S F)]
+        #^ (of Union (of _Success S) (of _Failure F)) container 
         defn [property] value [self] self.container.value
         ;
         defn __str__  [self] : + "<R." (str self.container) ">"
@@ -53,12 +46,12 @@
 
     defn #^ bool failureQ [#^ Result resultM]
         unless : isinstance resultM Result
-            raise : TypeError f"Object <{resultM}> is not of Result type.\nFunction 'failureQ' is not applicable." 
+            raise : TypeError f"Object <{resultM}> is not of Result type.\nFunction 'failureQ' is not applicable."
         isinstance resultM.container _Failure
 
     defn #^ bool successQ [#^ Result resultM]
         unless : isinstance resultM Result
-            raise : TypeError f"Object <{resultM}> is not of Result type.\nFunction 'successQ' is not applicable." 
+            raise : TypeError f"Object <{resultM}> is not of Result type.\nFunction 'successQ' is not applicable."
         isinstance resultM.container _Success
 
 ; _____________________________________________________________________________/ }}}1
@@ -66,14 +59,14 @@
 
     defn #^ Result mapR [#^ Result resultM #* fs]
         unless : isinstance resultM Result
-             raise : TypeError f"Object <{resultM}> is not of Result type.\nFunction 'mapR' is not applicable." 
+             raise : TypeError f"Object <{resultM}> is not of Result type.\nFunction 'mapR' is not applicable."
         if : isinstance resultM.container _Failure
              return resultM
              return : Success : (rcompose #* fs) resultM.container.value
 
     defn #^ Result bindR [#^ Result resultM #* fs]
         unless : isinstance resultM Result
-             raise : TypeError f"Object <{resultM}> is not of Result type.\nFunction 'bindR' is not applicable." 
+             raise : TypeError f"Object <{resultM}> is not of Result type.\nFunction 'bindR' is not applicable."
         setv _fs : lmap (fn [it] (partial _bindR1 it)) fs
         rcompose #* _fs <$ \resultM
 
@@ -106,7 +99,7 @@
              return resultM.value
              raise : TypeError f"Can't unwrapS {resultM}, since it's on Failure track"
 
-    defn #^ S unwrapS_or 
+    defn #^ S unwrapS_or
         L #^ (of Result S F) resultM
           #^ S default
         unless : isinstance resultM Result
@@ -133,4 +126,4 @@
              return default
 
 ; _____________________________________________________________________________/ }}}1
-    
+

@@ -1,17 +1,15 @@
+;: WARNING! THIS FILE IS CODEGENED! Edit source strict-version of it instead.
 
 ; Import/Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	; no pydantic
+    import  dataclasses [dataclass] ; [NSMG_LOG: This line was replaced]
+    ; [NSMG_LOG: This line war cleared]                                     
 
-	import  typing   [TypeVar Generic Union]
+    import  typing   [TypeVar Generic Union]
     import  funcy    [rcompose lmap partial]
     require fpmx.prelude.from_hyrule [of unless]
 
-    export :objects  [ Maybe Just Nothing
-                       justQ nothingQ
-                       mapM bindM
-                       unwrapJ unwrapJ_or
-                     ]
+    export :objects  [Maybe Just Nothing justQ nothingQ mapM bindM unwrapJ unwrapJ_or]
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -19,18 +17,18 @@
 
     setv J : TypeVar "J"
 
-    defclass _Just [(of Generic J)]
-        defn __init__ [self value] : setv #^ J self.value value
+    defclass [dataclass] _Just [(of Generic J)] ; [NSMG_LOG: This line was replaced]
+        #^ J value
         defn __str__  [self] : + "Just: " (str self.value)
         defn __repr__ [self] : self.__str__
 
-    defclass _Nothing []
+    defclass [dataclass] _Nothing [] ; [NSMG_LOG: This line was replaced]
         defn __str__  [self] "Nothing"
         defn __repr__ [self] : self.__str__
 
-    defclass Maybe [(of Generic J)]
-        defn __init__ [self container] : setv #^ (of Union (of _Just J) _Nothing) self.container container
-        defn __str__  [self] : + "<M." (str self.container) ">"
+    defclass [dataclass] Maybe [(of Generic J)] ; [NSMG_LOG: This line was replaced]
+        #^ (of Union (of _Just J) _Nothing) container
+        defn __str__  [self] : + "<Mb." (str self.container) ">"
         defn __repr__ [self] : self.__str__
 
     defn Just [value] : Maybe :container (_Just :value value)
@@ -40,7 +38,7 @@
 
 ; utils: Typechecks ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    defn _nonM_error [x] : ValueError f"Object <{x}> must be of Maybe type" 
+    defn _nonM_error [x] : ValueError f"Value <{x}> must be of Maybe type"
 
     defn #^ bool justQ [#^ Maybe maybeM]
         unless : isinstance maybeM Maybe :: raise : _nonM_error maybeM
@@ -71,7 +69,7 @@
                   return new_maybe
 
 ; _____________________________________________________________________________/ }}}1
-; utils: Routing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; utils: routing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     defn #^ J unwrapJ [#^ (of Maybe J) maybeM]
         "throws error on Nothing"
@@ -79,7 +77,7 @@
              return maybeM.container.value
              raise : ValueError f"Can't unwrapJ {maybeM}, since it's Nothing"
 
-    defn #^ J unwrapJ_or 
+    defn #^ J unwrapJ_or
         L #^ (of Maybe J) maybeM
           #^ J default
         if : justQ maybeM
@@ -87,4 +85,3 @@
              return default
 
 ; _____________________________________________________________________________/ }}}1
-

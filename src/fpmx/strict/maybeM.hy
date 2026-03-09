@@ -1,22 +1,15 @@
-
-; non-strict as compared to strict:
-; 1) do not import pydantic
-; 2) Classes definition
-; -- utils functions are totally the same
+; [NSMG_INSTRUCTION: WRITE_NONSOURCE_WARNING]
 
 ; Import/Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (import pydantic [BaseModel])
+    (import pydantic [BaseModel]); [NSMG_INSTRUCTION: REPLACE_WITH]    import  dataclasses [dataclass]
+                                    ; [NSMG_INSTRUCTION: CLEAR_THIS_LINE]
 
     (import typing [TypeVar Generic Union])
     (import funcy [rcompose lmap partial])
     (require fpmx.prelude.from_hyrule [of unless])
 
-    (export :objects [ Maybe Just Nothing
-                       justQ nothingQ
-                       mapM bindM
-                       unwrapJ unwrapJ_or
-                     ])
+    (export :objects [Maybe Just Nothing justQ nothingQ mapM bindM unwrapJ unwrapJ_or])
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -24,16 +17,16 @@
 
     (setv J (TypeVar "J"))
 
-    (defclass _Just [BaseModel (of Generic J)]
+    (defclass _Just [BaseModel (of Generic J)]; [NSMG_INSTRUCTION: REPLACE_WITH]    defclass [dataclass] _Just [(of Generic J)]
         #^ J value
         (defn __str__ [self] (+ "Just: " (str self.value)))
         (defn __repr__ [self] (self.__str__)))
 
-    (defclass _Nothing [BaseModel]
+    (defclass _Nothing [BaseModel]; [NSMG_INSTRUCTION: REPLACE_WITH]    defclass [dataclass] _Nothing []
         (defn __str__ [self] "Nothing")
         (defn __repr__ [self] (self.__str__)))
 
-    (defclass Maybe [BaseModel (of Generic J)]
+    (defclass Maybe [BaseModel (of Generic J)]; [NSMG_INSTRUCTION: REPLACE_WITH]    defclass [dataclass] Maybe [(of Generic J)]
         #^ (of Union (of _Just J) _Nothing) container
         (defn __str__ [self] (+ "<Mb." (str self.container) ">"))
         (defn __repr__ [self] (self.__str__)))
@@ -92,5 +85,3 @@
              (return default)))
 
 ; _____________________________________________________________________________/ }}}1
-
-    (print (Just 3))

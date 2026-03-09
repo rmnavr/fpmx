@@ -1,80 +1,90 @@
 	
 	import fpmx.prelude * , require fpmx.prelude *
+
+    import fpmx.strict.types [validateF BaseModel]
     import pydantic [ConfigDict]
 
-    ; non-strict:
-    ; import fpmx.monads.resultM *
-    ; import fpmx.monads.maybeM *
 
-    ; strict:
-    import fpmx.strict.types *
-    import fpmx.strict.resultM *
+; Maybe ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    defn test_maybe [Maybe Just Nothing justQ nothingQ mapM bindM unwrapJ unwrapJ_or]
+        ;
+        defn [validateF] #^ (of Maybe float)
+           \maybe_divide [#^ float x #^ float y]
+            if : neq y 0
+                 return : Just (div x y)
+                 return Nothing
+        ;
+        assertm eq (justQ (Just 3)) True
+        assertm eq (justQ Nothing ) False
+        assertm eq (nothingQ (Just 3)) False
+        assertm eq (nothingQ Nothing ) True
+        assertm eq (unwrapJ (Just 3)) 3
+        assertm eq (unwrapJ_or Nothing 4) 4
+        ; 10/(2.5*2) = 2.0
+        assertm eq
+            mapM (Just 2.5) (partial mul 2) (partial div 10)
+            Just 2.0
+        ;
+        assertm eq (maybe_divide 1 2) (Just 0.5)
+        assertm eq (maybe_divide 1 0) Nothing
+
+    ; ==============================================================
+
+    import fpmx.monads.maybeM *
+    test_maybe #* [Maybe Just Nothing justQ nothingQ mapM bindM unwrapJ unwrapJ_or]
+
     import fpmx.strict.maybeM *
-
-; Maybe: basics ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    assertm eq (justQ (Just 3)) True
-    assertm eq (justQ Nothing ) False
-    assertm eq (nothingQ (Just 3)) False
-    assertm eq (nothingQ Nothing ) True
-
-    assertm eq (unwrapJ (Just 3)) 3
-    assertm eq (unwrapJ_or Nothing 4) 4
-
-    ; 10/(2.5*2) = 2.0
-    assertm eq
-        mapM (Just 2.5) (partial mul 2) (partial div 10)
-        Just 2.0
-
-    defn [validateF] #^ (of Maybe float)
-       \maybe_divide [#^ float x #^ float y]
-        if : neq y 0
-             return : Just (div x y)
-             return Nothing
-
-    assertm eq (maybe_divide 1 2) (Just 0.5)
-    assertm eq (maybe_divide 1 0) Nothing
+    test_maybe #* [Maybe Just Nothing justQ nothingQ mapM bindM unwrapJ unwrapJ_or]
 
 ; _____________________________________________________________________________/ }}}1
-; Result: basics ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; Result ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    defn [validateF] #^ (of Result float str)
-       \safe_divide [#^ float x #^ float y]
-        if : neq y 0
-             return : Success (div x y)
-             return : Failure f"{x}/{y}, div by 0, bruh"
+    defn test_result [Success Failure Result successQ failureQ mapR bindR unwrapR unwrapS unwrapS_or unwrapF unwrapF_or]
+        ;
+        defn [validateF] #^ (of Result float str)
+           \safe_divide [#^ float x #^ float y]
+            if : neq y 0
+                 return : Success (div x y)
+                 return : Failure f"{x}/{y}, div by 0, bruh"
+        ;
+        assertm eq (safe_divide 1 2) (Success 0.5)
+        assertm eq (safe_divide 1 0) (Failure f"1.0/0.0, div by 0, bruh")
+        assertm eq (failureQ (safe_divide 1 2)) False
+        assertm eq (failureQ (safe_divide 1 0)) True
+        assertm eq (successQ (Success 3)) True
+        assertm eq (successQ (Failure 3)) False
+        ; 10/(2.5*2) = 2
+        assertm eq
+            mapR (Success 2.5) (partial mul 2) (partial div 10)
+            Success 2.0
+        ;
+        assertm eq
+            mapR (safe_divide 1 0) double (partial mul 7)
+            Failure f"1.0/0.0, div by 0, bruh"
+        ;
+        assertm gives_error_typeQ (mapR 3 double (partial mul 7)) TypeError
+        ;
+        assertm eq ; (8/4)/4 = 0.5
+            bindR (Success 8) (pflip safe_divide 4) (pflip safe_divide 4)
+            Success 0.5
+        ;
+        setv x : Success 14
+        setv y : Failure "pups_err"
+        assertm eq (unwrapS x) 14
+        assertm eq (unwrapF y) "pups_err"
+        assertm eq (unwrapF_or x "def_err") "def_err"
+        assertm eq (unwrapS_or y 0) 0
 
-    assertm eq (safe_divide 1 2) (Success 0.5)
-    assertm eq (safe_divide 1 0) (Failure f"1.0/0.0, div by 0, bruh")
-    assertm eq (failureQ (safe_divide 1 2)) False
-    assertm eq (failureQ (safe_divide 1 0)) True
-    assertm eq (successQ (Success 3)) True
-    assertm eq (successQ (Failure 3)) False
+    ; ==============================================================
 
-    ; 10/(2.5*2) = 2
-    assertm eq
-        mapR (Success 2.5) (partial mul 2) (partial div 10)
-        Success 2.0
+    import fpmx.monads.resultM *
+    test_result #* [Success Failure Result successQ failureQ mapR bindR unwrapR unwrapS unwrapS_or unwrapF unwrapF_or]
 
-    assertm eq
-        mapR (safe_divide 1 0) double (partial mul 7)
-        Failure f"1.0/0.0, div by 0, bruh"
+    import fpmx.strict.resultM *
+    test_result #* [Success Failure Result successQ failureQ mapR bindR unwrapR unwrapS unwrapS_or unwrapF unwrapF_or]
 
-    assertm gives_error_typeQ (mapR 3 double (partial mul 7)) TypeError
-
-    assertm eq ; (8/4)/4 = 0.5
-        bindR (Success 8) (pflip safe_divide 4) (pflip safe_divide 4)
-        Success 0.5
-
-    setv x : Success 14
-    setv y : Failure "pups_err"
-    assertm eq (unwrapS x) 14
-    assertm eq (unwrapF y) "pups_err"
-    assertm eq (unwrapF_or x "def_err") "def_err"
-    assertm eq (unwrapS_or y 0) 0
-
-; _____________________________________________________________________________/ }}}1
-; Result: typing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+    ; Continuing FOR STRICT RESULT ONLY (they are currently loaded):
 
     defclass AppError [BaseModel]
         #^ int       n   
