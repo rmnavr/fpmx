@@ -57,7 +57,7 @@
         ;
         (when (in Instruction.CLEAR_LINE.value line)
             (return
-                (sconcat (smul " " 4) "; [NSMG_LOG: This line war cleared] "
+                (sconcat (smul " " 4) "; [NSMG_LOG: This line was cleared] "
                         (first (line.partition ";"))))); .partition splits to #(before separ after)
                                                    ; this removes nsmg_instruction from orig line
         ;
@@ -77,11 +77,11 @@
           #^ bool [printQ True]
         ]
         (setv result
-              (subprocess.run command
-                              :shell          True
-                              :check          True
-                              :text           True
-                              :capture_output True))
+            (subprocess.run command
+                           :shell True
+                           :check True
+                           :text True
+                           :capture_output True))
         (when printQ
             (print result.stdout)
             (print result.stderr)))

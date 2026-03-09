@@ -3,7 +3,7 @@
 ; Import/Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (import dataclasses [dataclass]); [NSMG_LOG: This line was replaced]
-    ; [NSMG_LOG: This line war cleared]
+    ; [NSMG_LOG: This line was cleared]
 
     (import typing [TypeVar Generic Union])
     (import funcy [rcompose lmap partial])
@@ -46,7 +46,7 @@
 
     (defn #^ bool failureQ [#^ Result resultM]
         (unless (isinstance resultM Result)
-            (raise (TypeError f"Object <{resultM}> is not of Result type.\nFunction 'failureQ' is not applicable.")))
+            (raise (TypeError f"Object <{resultM}> is not of Result type.")))
         (isinstance resultM.container _Failure))
 
     (defn #^ bool successQ [#^ Result resultM]
@@ -126,3 +126,12 @@
              (return default)))
 
 ; _____________________________________________________________________________/ }}}1
+
+    ; import fpmx.prelude *
+    ; import fpmx.strict.types [validateF]
+
+    ; defn [validateF] #^ (of Result float str)
+    ;    \safe_divide [#^ float x #^ float y]
+    ;     if : neq y 0
+    ;          return : Success (div x y)
+    ;          return : Failure f"{x}/{y}, div by 0, bruh"

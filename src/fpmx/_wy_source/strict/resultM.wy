@@ -46,7 +46,7 @@
 
     defn #^ bool failureQ [#^ Result resultM]
         unless : isinstance resultM Result
-            raise : TypeError f"Object <{resultM}> is not of Result type.\nFunction 'failureQ' is not applicable."
+            raise : TypeError f"Object <{resultM}> is not of Result type."
         isinstance resultM.container _Failure
 
     defn #^ bool successQ [#^ Result resultM]
