@@ -126,12 +126,3 @@
              (return default)))
 
 ; _____________________________________________________________________________/ }}}1
-
-    ; import fpmx.prelude *
-    ; import fpmx.strict.types [validateF]
-
-    ; defn [validateF] #^ (of Result float str)
-    ;    \safe_divide [#^ float x #^ float y]
-    ;     if : neq y 0
-    ;          return : Success (div x y)
-    ;          return : Failure f"{x}/{y}, div by 0, bruh"

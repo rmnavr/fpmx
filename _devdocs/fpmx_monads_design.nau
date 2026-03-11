@@ -1,34 +1,20 @@
 
-	Where to upd monads:
-	- non-strict.wy -> hy, strict.wy -> hy | + export statement
-	- docs
-	- tests
-	* code that uses them
-
-	Functions like justQ are used to check if object is indeed a required monad type.
-	Further functions (like bind or unwrap) rely on this check and don't repeat it.
-
-	······························
-
 	Maybe a = Just a | Nothing
-	- justQ
-	- nothingQ
+	- justQ nothingQ
 	- unwrapJ
-	- mapM
-	- bindM
+	- fmapM fmapM2 fmapM3
+	- bindM bindM2 bindM3
 
 	Result a b = Success a | Failure b
-	- successQ
-	- failureQ
-	- unwrapS
-	- unwrapF
-	- mapR
-	- bindR 
+	- successQ failureQ
+	- unwrapS unwrapS_or unwrapF unwrapF_or
+	- fmapR fmapR2 fmapR3
+	- bindR bindR2 bindR3
 
-	MaybeWriter a b = JustW a b | NothingW b
-	- justW_Q
-	- nothingW_Q
-	- unwrapJW    -> value, log_ // throw error if not Just
-	- unwrapJW_or -> value, log_
-	- bindMW
+	MaybeWriter a b = JustWriter a b | NothingWriter b
+	- justW_Q nothingW_Q
+	- unwrapJW unwrapJW_or -> value, log_
+	- tellMW
+	- fmapMW fmapMW2 fmapMW3
+	- bindMW bindMW2 bindMW3
 

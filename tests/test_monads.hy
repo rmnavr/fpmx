@@ -4,9 +4,9 @@
     (import fpmx.strict.types [validateF BaseModel])
     (import pydantic [ConfigDict])
 
-; Maybe ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; Maybe: def test ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (defn test_maybe [Maybe Just Nothing justQ nothingQ liftM liftM2 liftM3 bindM bindM2 bindM3 unwrapJ unwrapJ_or]
+    (defn test_maybe [Maybe Just Nothing justQ nothingQ]
         ;
         (defn [validateF] #^ (of Maybe float)
             maybe_divide [#^ float x #^ float y]
@@ -32,52 +32,54 @@
         (assertm eq (maybe_divide 1 2) (Just 0.5))
         (assertm eq (maybe_divide 1 0) Nothing)
         ; Test unwrappers:
-        (assertm eq (unwrapJ (Just 3)) 3)
-        (assertm gives_error_typeQ (unwrapJ 3) TypeError)
-        (assertm gives_error_typeQ (unwrapJ Nothing) TypeError)
+        (assertm eq (-> (Just 3) (.unwrap)) 3)
         ;
-        (assertm eq (unwrapJ_or Nothing 4) 4)
-        (assertm eq (unwrapJ_or (Just 3) 4) 3)
-        (assertm gives_error_typeQ (unwrapJ_or 3 4) TypeError)
+        (assertm eq (-> Nothing (.unwrap_or 4)) 4)
+        (assertm eq (-> (Just 3) (.unwrap_or 4)) 3)
         ; Test lifts:
-        (assertm eq (liftM  (Just 3) (partial plus 10)) (Just 13))
-        (assertm eq (liftM2 (Just 3) (Just 4) plus) (Just 7))
-        (assertm eq (liftM3 (Just 3) (Just 4) (Just 5) (partial plus 100)) (Just 112))
+        (assertm eq (-> (Just 3) (.fmap (partial plus 10))) (Just 13))
+        (assertm eq (-> (Just 3) (.fmap plus (Just 4))) (Just 7))
+        (assertm eq (-> (Just 3) (.fmap (partial plus 100) (Just 4) (Just 5))) (Just 112))
         ;
-        (assertm gives_error_typeQ (liftM 3 plus) TypeError)
-        (assertm gives_error_typeQ (liftM2 (Just 2) 3 plus) TypeError)
-        (assertm gives_error_typeQ (liftM3 (Just 2) (Just 2) 3 plus) TypeError)
+        (assertm gives_error_typeQ (-> (Just 2) (.fmap plus 3)) TypeError)
+        (assertm gives_error_typeQ (-> (Just 2) (.fmap plus (Just 2) 3)) TypeError)
         ; Test binds:
-        (assertm eq (bindM  (Just 3) (pflip maybe_divide 3)) (Just 1))
-        (assertm eq (bindM  (Just 0) (pflip maybe_divide 0)) Nothing)
-        (assertm eq (bindM2 (Just 3) (Just 3) maybe_divide) (Just 1))
-        (assertm eq (bindM2 (Just 3) (Just 0) maybe_divide) Nothing)
-        (assertm eq (bindM3 (Just 3) (Just 3) (Just 1) maybe_divide_x_on_yz) (Just 1))
-        (assertm eq (bindM3 (Just 3) (Just 3) (Just 0) maybe_divide_x_on_yz) Nothing)
-        (assertm eq (bindM3 (Just 3) (Just 0) (Just 3) maybe_divide_x_on_yz) Nothing)
+        (assertm eq (-> (Just 3) (.bind (pflip maybe_divide 3))) (Just 1))
+        (assertm eq (-> (Just 0) (.bind (pflip maybe_divide 0))) Nothing)
+        (assertm eq (-> (Just 3) (.bind maybe_divide (Just 3))) (Just 1))
+        (assertm eq (-> (Just 3) (.bind maybe_divide (Just 0))) Nothing)
+        (assertm eq (-> (Just 3) (.bind maybe_divide_x_on_yz (Just 3) (Just 1))) (Just 1))
+        (assertm eq (-> (Just 3) (.bind maybe_divide_x_on_yz (Just 3) (Just 0))) Nothing)
+        (assertm eq (-> (Just 3) (.bind maybe_divide_x_on_yz (Just 0) (Just 3))) Nothing)
         ;
-        (assertm gives_error_typeQ (bindM 3 (pflip maybe_divide 3)) TypeError)
-        (assertm gives_error_typeQ (bindM2 (Just 2) 3 maybe_divide) TypeError)
-        (assertm gives_error_typeQ (bindM3 (Just 2) (Just 2) 3 maybe_divide_x_on_yz) TypeError)
-        (assertm gives_error_typeQ (bindM  (Just 1) plus) TypeError)
-        (assertm gives_error_typeQ (bindM2 (Just 1) (Just 1) plus) TypeError)
-        (assertm gives_error_typeQ (bindM3 (Just 1) (Just 1) (Just 1) plus) TypeError)
+        (assertm gives_error_typeQ (-> (Just 2) (.bind maybe_divide 3)) TypeError)
+        (assertm gives_error_typeQ (-> (Just 2) (.bind maybe_divide_x_on_yz (Just 2) 3)) TypeError)
+        (assertm gives_error_typeQ (-> (Just 1) (.bind plus)) TypeError)
+        (assertm gives_error_typeQ (-> (Just 1) (.bind plus (Just 1))) TypeError)
+        (assertm gives_error_typeQ (-> (Just 1) (.bind plus (Just 1) (Just 1))) TypeError)
         ; Test combos:
         (assertm eq
             (-> (Just 3)
-                 (liftM (partial plus 4)); 7
-                 (liftM2 (Just 5) plus); 12
-                 (bindM3 (Just 2) (Just 3) maybe_divide_x_on_yz)
-                 (unwrapJ_or "how"))
+                 (.fmap (partial plus 4)); 7
+                 (.fmap plus (Just 5)); 12
+                 (.bind maybe_divide_x_on_yz (Just 2) (Just 3)); 2
+                 (.unwrap_or "how"))
             2))
-
-    ; ==============================================================
-
-    (import fpmx.monads.maybeM *)
-    (test_maybe #* [Maybe Just Nothing justQ nothingQ liftM liftM2 liftM3 bindM bindM2 bindM3 unwrapJ unwrapJ_or])
 
 
 ; _____________________________________________________________________________/ }}}1
+; Maybe: run test ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (import fpmx.monads.maybeM *)
+    (test_maybe #* [Maybe Just Nothing justQ nothingQ])
+    ;
+    (import fpmx.strict.maybeM *)
+    (test_maybe #* [Maybe Just Nothing justQ nothingQ])
+
+; _____________________________________________________________________________/ }}}1
+
+
+
 ; Result ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (defn test_result [Success Failure Result successQ failureQ mapR bindR unwrapR unwrapS unwrapS_or unwrapF unwrapF_or]
