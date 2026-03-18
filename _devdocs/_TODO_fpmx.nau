@@ -63,5 +63,22 @@
 
 // ____________________________________________________________________________/ }}}1
 
-	+ when incorrect option for load_fpmx -> throw error
+	✓ when incorrect option for load_fpmx -> throw error
+
+	fpmx:
+		- docs: main
+		- docs: monads
+		- publish (pypi, changelog/license, reddit)
+		- MIT: do whatever, just don't sue me
+	monads:
+		- finish resultM
+		- maybeWriter (tell)
+		- .bind = bindM?
+	docs main:
+		- fpmx-exclusive macro, not Prelude
+		- fpmx first header ugly
+		- reorganize all in one Feature Highlight,
+		  all topics should be visible
+		- status: ready, but unpolished
+		+ def:: has decorator
 

@@ -49,7 +49,7 @@ FROM: math            | dist                     :: dist(p, q) -> float  ; ≈ �
 FROM: math            | hypot                    :: hypot(*coordinates)  ; = √(x² + y² + ...)
 DEFN: fpmx            | normalize                :: normalize(xs) -> xs  ; will throw error for zero-len vector
 ;: exponents:
-INFO: py              | pow /base/
+INFO: py              | pow /builtin/
 FROM: math            | exp                      :: exp(x)
 FROM: math            | log                      :: log(x, base=math.e)
 DEFN: fpmx            | ln                       :: ln(x)  ; = math.log(x, math.e) ; coexists with log for clarity
@@ -128,7 +128,7 @@ INFO: hy              | . /macro/                :: (. xs [n1] [n2] ...) -> xs[n
 INFO: hy              | get /macro/              :: (get xs n #* keys) -> xs[n][key1]...  ; throws error when not found
 FROM: fpmx/hyrule     | assoc                    :: assoc(xs, k1, v1, k2, v2, ...) -> None  ; ≈ (setv (get xs k1) v1 (get xs k2) v2) ; also possible: (assoc xs :x 1)
 FROM: funcy           | nth                      :: nth(n, seq) -> Optional elem  ; 0-based index; works also with dicts
-INFO: py              | slice /base/             :: (slice start end step)  ; returns empty list when not found
+INFO: py              | slice /builtin/          :: (slice start end step)  ; returns empty list when not found
 INFO: hy              | cut /macro/              :: (cut xs start end step) -> (get xs (slice start end step)) -> List  ; returns empty list when none found
 FROM: funcy           | first                    :: first(seq) -> Optional elem
 FROM: funcy           | second                   :: second(seq) -> Optional elem
@@ -144,7 +144,7 @@ DEFN: fpmx            | drop                     :: drop(n, seq) -> List  ; drop
 DEFN: fpmx            | take                     :: take(n, seq) -> List  ; takes n elems from start; when n<0, takes from end of the list
 DEFN: fpmx            | pick                     :: pick(ns, seq) -> List  ; throws error if some of ns doesn't exist; ns can be list of ints or dict keys
 ;: attrs and bulk:
-INFO: py              | getattr /base/           :: getattr(object, name[, default]) -> value  ; arg name should be given as str
+INFO: py              | getattr /builtin/        :: getattr(object, name[, default]) -> value  ; arg name should be given as str
 FROM: funcy           | pluck                    :: pluck(key, mappings) -> generator  ; gets same key (or idx) from every mapping, mappings can be lists of lists/dicts/etc.
 FROM: funcy           | lpluck                   :: lpluck(key, mappings) -> list
 FROM: funcy           | pluck_attr               :: pluck_attr(attr, objects) -> generator  ; attr should be given as str
@@ -241,7 +241,7 @@ DEFN: fpmx            | lmulticut_by             :: lmulticut_by(pred, seq, keep
 === FP ===
 ;: control flow:
 INFO: py              | if /builtin/             :: (if check true false)
-INFO: hy              | cond /base/              :: (cond check1 do1 ... true doT)
+INFO: hy              | cond /builtin/           :: (cond check1 do1 ... true doT)
 MACR: fpmx/hyrule     | case
 MACR: fpmx/hyrule     | unless
 MACR: fpmx/hyrule     | lif

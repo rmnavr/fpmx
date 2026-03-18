@@ -18,9 +18,9 @@
 
     defclass ERR [Enum]
         setv NON_MONAD : fn [%obj]    (TypeError f"Maybe-monad checks (justQ/nothingQ) work only on Maybe types. Instead: {%obj} of type {(type %obj)} was provided.")
-        setv FMAP      : fn [%obj]    (TypeError f"fmapM works only on Maybe types. Instead: {%obj} of type {(type %obj)} was provided.")
-        setv BIND_M    : fn [%obj]    (TypeError f"bindM works only on Maybe types. Instead: {%obj} of type {(type %obj)} was provided.")
-        setv BIND_F    : fn [%f %ret] (TypeError f"bindM works only with monadic functions (those that return Maybe). Instead: {%f}, which tried to return {%ret} of type {(type %ret)} was provided.")
+        setv FMAP      : fn [%obj]    (TypeError f"fmap works only on Maybe types. Instead: {%obj} of type {(type %obj)} was provided.")
+        setv BIND_M    : fn [%obj]    (TypeError f"bind works only on Maybe types. Instead: {%obj} of type {(type %obj)} was provided.")
+        setv BIND_F    : fn [%f %ret] (TypeError f"bind works only with monadic functions (those that return Maybe). Instead: {%f}, which tried to return {%ret} of type {(type %ret)} was provided.")
         setv UNWRAP    : fn [%obj]    (TypeError f"Can't unwarp {%obj} since it is Nothing")
 
 ; _____________________________________________________________________________/ }}}1
@@ -44,8 +44,8 @@
         ;
         defn fmap [self func #* monads]
             for [&m monads] : unless : isinstance &m Maybe :: raise : ERR.FMAP &m
-            for [&m monads] : when : isinstance &m.container _Nothing :: return Nothing 
             when : isinstance self.container _Nothing :: return Nothing 
+            for [&m monads] : when : isinstance &m.container _Nothing :: return Nothing 
             return : Just : func self.container.value #* (lfor &m monads &m.container.value)
         ;
         defn bind [self func #* monads] 
@@ -73,11 +73,13 @@
 ; justQ/nothingQ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     defn #^ bool justQ [#^ Maybe maybeM]
-        unless : isinstance maybeM Maybe :: raise : ERR.NON_MONAD maybeM
+        unless : isinstance maybeM Maybe
+            raise : ERR.NON_MONAD maybeM
         isinstance maybeM.container _Just
 
     defn #^ bool nothingQ [#^ Maybe maybeM]
-        unless : isinstance maybeM Maybe :: raise : ERR.NON_MONAD maybeM
+        unless : isinstance maybeM Maybe
+            raise : ERR.NON_MONAD maybeM
         isinstance maybeM.container _Nothing
 
 ; _____________________________________________________________________________/ }}}1

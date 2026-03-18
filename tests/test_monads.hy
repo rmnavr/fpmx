@@ -66,7 +66,6 @@
                  (.unwrap_or "how"))
             2))
 
-
 ; _____________________________________________________________________________/ }}}1
 ; Maybe: run test ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
@@ -80,9 +79,9 @@
 
 
 
-; Result ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; Result: def test ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (defn test_result [Success Failure Result successQ failureQ mapR bindR unwrapR unwrapS unwrapS_or unwrapF unwrapF_or]
+    (defn test_result [Success Failure Result successQ failureQ]
         ;
         (defn [validateF] #^ (of Result float str)
             safe_divide [#^ float x #^ float y]
@@ -98,33 +97,103 @@
         (assertm eq (successQ (Failure 3)) False)
         ; 10/(2.5*2) = 2
         (assertm eq
-            (mapR (Success 2.5) (partial mul 2) (partial div 10))
+            (-> (Success 2.5) (.fmap (partial mul 2)) (.fmap (partial div 10)))
             (Success 2.0))
         ;
         (assertm eq
-            (mapR (safe_divide 1 0) double (partial mul 7))
+            (-> (safe_divide 1 0) (.fmap double) (.fmap (partial mul 7)))
             (Failure f"1.0/0.0, div by 0, bruh"))
         ;
-        (assertm gives_error_typeQ (mapR 3 double (partial mul 7)) TypeError)
-        ;
         (assertm eq; (8/4)/4 = 0.5
-            (bindR (Success 8) (pflip safe_divide 4) (pflip safe_divide 4))
+            (-> (Success 8)
+                 (.bind (pflip safe_divide 4))
+                 (.bind (pflip safe_divide 4)))
             (Success 0.5))
         ;
         (setv x (Success 14))
         (setv y (Failure "pups_err"))
-        (assertm eq (unwrapS x) 14)
-        (assertm eq (unwrapF y) "pups_err")
-        (assertm eq (unwrapF_or x "def_err") "def_err")
-        (assertm eq (unwrapS_or y 0) 0))
+        (assertm eq (x.unwrapS) 14)
+        (assertm eq (y.unwrapF) "pups_err")
+        (assertm eq (x.unwrapF_or "def_err") "def_err")
+        (assertm eq (y.unwrapS_or 0) 0))
 
-    ; ==============================================================
+; _____________________________________________________________________________/ }}}1
+; Result: def test2 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (defn test_result2 [Maybe Just Nothing justQ nothingQ]
+        (setv err "some error")
+        ;
+        (defn [validateF] #^ (of Result float str)
+            result_divide [#^ float x #^ float y]
+            (if (neq y 0)
+                 (return (Success (div x y)))
+                 (return (Failure err))))
+        ;
+        (defn [validateF] #^ (of Result float str)
+            result_divide_x_on_yz [#^ float x #^ float y #^ float z]
+            (if (and (neq y 0) (neq z 0))
+                 (return (Success (div (div x y) z)))
+                 (return (Failure err))))
+        ;
+        ; 1) Test factories and checksQ:
+        (assertm eq (successQ (Success 3)) True)
+        (assertm eq (successQ (Failure err)) False)
+        (assertm gives_error_typeQ (successQ 3.0) TypeError)
+        ;
+        (assertm eq (failureQ (Success 3)) False)
+        (assertm eq (failureQ (Failure err)) True)
+        (assertm gives_error_typeQ (failureQ 3) TypeError)
+        ; Check if comparison (via =) works:
+        (assertm eq (result_divide 1 2) (Success 0.5))
+        (assertm eq (result_divide 1 0) (Failure err))
+        ; Test unwrappers:
+        (assertm eq (-> (Success 3)   (.unwrapS)) 3)
+        (assertm eq (-> (Failure err) (.unwrapS_or 4)) 4)
+        (assertm eq (-> (Success 3)   (.unwrapS_or 4)) 3)
+        ;
+        (assertm eq (-> (Failure err) (.unwrapF)) err)
+        (assertm eq (-> (Success 1)   (.unwrapF_or 4)) 4)
+        (assertm eq (-> (Failure err) (.unwrapF_or 4)) err)
+        ; Test lifts:
+        (assertm eq (-> (Success 3) (.fmap (partial plus 10))) (Success 13))
+        (assertm eq (-> (Success 3) (.fmap plus (Success 4))) (Success 7))
+        (assertm eq (-> (Success 3) (.fmap (partial plus 100) (Success 4) (Success 5))) (Success 112))
+        ;
+        (assertm gives_error_typeQ (-> (Success 2) (.fmap plus 3)) TypeError)
+        (assertm gives_error_typeQ (-> (Success 2) (.fmap plus (Success 2) 3)) TypeError)
+        ; Test binds:
+        (assertm eq (-> (Success 3) (.bind (pflip result_divide 3))) (Success 1))
+        (assertm eq (-> (Success 0) (.bind (pflip result_divide 0))) (Failure err))
+        (assertm eq (-> (Success 3) (.bind result_divide (Success 3))) (Success 1))
+        (assertm eq (-> (Success 3) (.bind result_divide (Success 0))) (Failure err))
+        (assertm eq (-> (Success 3) (.bind result_divide_x_on_yz (Success 3) (Success 1))) (Success 1))
+        (assertm eq (-> (Success 3) (.bind result_divide_x_on_yz (Success 3) (Success 0))) (Failure err))
+        (assertm eq (-> (Success 3) (.bind result_divide_x_on_yz (Success 0) (Success 3))) (Failure err))
+        ;
+        (assertm gives_error_typeQ (-> (Success 2) (.bind result_divide 3)) TypeError)
+        (assertm gives_error_typeQ (-> (Success 2) (.bind result_divide_x_on_yz (Success 2) 3)) TypeError)
+        (assertm gives_error_typeQ (-> (Success 1) (.bind plus)) TypeError)
+        (assertm gives_error_typeQ (-> (Success 1) (.bind plus (Success 1))) TypeError)
+        (assertm gives_error_typeQ (-> (Success 1) (.bind plus (Success 1) (Success 1))) TypeError)
+        ; Test combos:
+        (assertm eq
+            (-> (Success 3)
+                 (.fmap (partial plus 4)); 7
+                 (.fmap plus (Success 5)); 12
+                 (.bind result_divide_x_on_yz (Success 2) (Success 3)); 2
+                 (.unwrapS_or "how"))
+            2))
+
+; _____________________________________________________________________________/ }}}1
+
+; Result: run test ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (import fpmx.monads.resultM *)
-    (test_result #* [Success Failure Result successQ failureQ mapR bindR unwrapR unwrapS unwrapS_or unwrapF unwrapF_or])
+    (test_result #* [Success Failure Result successQ failureQ])
 
     (import fpmx.strict.resultM *)
-    (test_result #* [Success Failure Result successQ failureQ mapR bindR unwrapR unwrapS unwrapS_or unwrapF unwrapF_or])
+    (test_result #* [Success Failure Result successQ failureQ])
+    (test_result2 #* [Success Failure Result successQ failureQ])
 
     ; Continuing FOR STRICT RESULT ONLY (they are currently loaded):
 

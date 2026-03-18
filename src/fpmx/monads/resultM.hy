@@ -5,14 +5,25 @@
     (import dataclasses [dataclass]); [NSMG_LOG: This line was replaced]
     ; [NSMG_LOG: This line was cleared]
 
-    (import typing [TypeVar Generic Union])
-    (import funcy [rcompose lmap partial])
     (require fpmx.prelude.from_hyrule [of unless])
+    (import typing [TypeVar Generic Union])
+    (import enum [Enum])
 
-    (export :objects [Success Failure Result successQ failureQ mapR bindR unwrapR unwrapS unwrapS_or unwrapF unwrapF_or])
+    (export :objects [Success Failure Result successQ failureQ])
 
 ; _____________________________________________________________________________/ }}}1
 
+; Error msgs ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (defclass ERR [Enum]
+        (setv NON_MONAD (fn [%obj] (TypeError f"Result-monad checks (successQ/failureQ) work only on Result types. Instead: {%obj} of type {(type %obj)} was provided.")))
+        (setv FMAP (fn [%obj] (TypeError f"fmap works only on Result types. Instead: {%obj} of type {(type %obj)} was provided.")))
+        (setv BIND_M (fn [%obj] (TypeError f"bind works only on Result types. Instead: {%obj} of type {(type %obj)} was provided.")))
+        (setv BIND_F (fn [%f %ret] (TypeError f"bind works only with monadic functions (those that return Result). Instead: {%f}, which tried to return {%ret} of type {(type %ret)} was provided.")))
+        (setv UNWRAP_S (fn [%obj] (TypeError f"Can't unwarp {%obj} since it is Failure (while Success was expected)")))
+        (setv UNWRAP_F (fn [%obj] (TypeError f"Can't unwarp {%obj} since it is Success (while Failure was expected)"))))
+
+; _____________________________________________________________________________/ }}}1
 ; Classes ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (setv S (TypeVar "S"))
@@ -35,94 +46,56 @@
         (defn [property] value [self] self.container.value)
         ;
         (defn __str__ [self] (+ "<R." (str self.container) ">"))
-        (defn __repr__ [self] (self.__str__)))
+        (defn __repr__ [self] (self.__str__))
+        ;
+        (defn fmap [self func #* monads]
+            (for [&m monads] (unless (isinstance &m Result) (raise (ERR.FMAP &m ))))
+            (when (isinstance self.container _Failure) (return self))
+            (for [&m monads] (when (isinstance &m.container _Failure) (return &m )))
+            (return (Success (func self.container.value #* (lfor &m monads &m.container.value) ))))
+        ;
+        (defn bind [self func #* monads]
+            (for [&m monads] (unless (isinstance &m Result) (raise (ERR.BIND_M &m ))))
+            (when (isinstance self.container _Failure) (return self))
+            (for [&m monads] (when (isinstance &m.container _Failure) (return &m )))
+            (setv new_result (func self.container.value #* (lfor &m monads &m.container.value)))
+            (unless (isinstance new_result Result) (raise (ERR.BIND_F func new_result )))
+            (return new_result))
+        ;
+        (defn unwrapS [self]
+            (if (isinstance self.container _Success)
+                 (return self.container.value)
+                 (raise (ERR.UNWRAP_S self))))
+        ;
+        (defn unwrapS_or [self default]
+            (if (isinstance self.container _Success)
+                 (return self.container.value)
+                 (return default)))
+        ;
+        (defn unwrapF [self]
+            (if (isinstance self.container _Failure)
+                 (return self.container.value)
+                 (raise (ERR.UNWRAP_F self))))
+        ;
+        (defn unwrapF_or [self default]
+            (if (isinstance self.container _Failure)
+                 (return self.container.value)
+                 (return default))))
 
     (defn Failure [value] (Result :container (_Failure :value value)))
     (defn Success [value] (Result :container (_Success :value value)))
 
 ; _____________________________________________________________________________/ }}}1
-
-; utils: failureQ/successQ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; failureQ/successQ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (defn #^ bool failureQ [#^ Result resultM]
         (unless (isinstance resultM Result)
-            (raise (TypeError f"Object <{resultM}> is not of Result type.")))
+            (raise (ERR.NON_MONAD resultM)))
         (isinstance resultM.container _Failure))
 
     (defn #^ bool successQ [#^ Result resultM]
         (unless (isinstance resultM Result)
-            (raise (TypeError f"Object <{resultM}> is not of Result type.\nFunction 'successQ' is not applicable.")))
+            (raise (ERR.NON_MONAD resultM)))
         (isinstance resultM.container _Success))
-
-; _____________________________________________________________________________/ }}}1
-; utils: mapR/bindR ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    (defn #^ Result mapR [#^ Result resultM #* fs]
-        (unless (isinstance resultM Result)
-             (raise (TypeError f"Object <{resultM}> is not of Result type.\nFunction 'mapR' is not applicable.")))
-        (if (isinstance resultM.container _Failure)
-             (return resultM)
-             (return (Success ((rcompose #* fs) resultM.container.value )))))
-
-    (defn #^ Result bindR [#^ Result resultM #* fs]
-        (unless (isinstance resultM Result)
-             (raise (TypeError f"Object <{resultM}> is not of Result type.\nFunction 'bindR' is not applicable.")))
-        (setv _fs (lmap (fn [it] (partial _bindR1 it)) fs))
-        ( (rcompose #* _fs) resultM))
-
-    (defn #^ Result _bindR1 [f #^ Result resultM]
-        ; we don't check if resultM is of Result type here, because bindR guarantees it
-        (when (isinstance resultM.container _Failure)
-               (return resultM))
-        (do (setv new_result (f resultM.container.value ))
-             (unless (isinstance new_result Result)
-                      (raise (TypeError f"Trying to bindR function {f} that returns {new_result}. Binding won't work unless return type is Result.")))
-             (return new_result)))
-
-; _____________________________________________________________________________/ }}}1
-; utils: unwrapping ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    (setv _unwrappingError
-        (fn [resultM]
-            (TypeError f"Object <{resultM}> is not of Result type.\nUnwrapping is not applicable.")))
-
-    (defn #^ S unwrapR [#^ (of Result S F) resultM]
-        (unless (isinstance resultM Result)
-             (raise (_unwrappingError resultM)))
-        (return resultM.value))
-
-    (defn #^ S unwrapS [#^ (of Result S F) resultM]
-        "throws error when on Failure track"
-        (unless (isinstance resultM Result)
-             (raise (_unwrappingError resultM)))
-        (if (isinstance resultM.container _Success)
-             (return resultM.value)
-             (raise (TypeError f"Can't unwrapS {resultM}, since it's on Failure track"))))
-
-    (defn #^ S unwrapS_or
-        [ #^ (of Result S F) resultM
-          #^ S default]
-        (unless (isinstance resultM Result)
-             (raise (_unwrappingError resultM)))
-        (if (isinstance resultM.container _Success)
-             (return resultM.value)
-             (return default)))
-
-    (defn #^ F unwrapF [#^ (of Result S F) resultM]
-        "throws error when on Success track"
-        (unless (isinstance resultM Result)
-             (raise (_unwrappingError resultM)))
-        (if (isinstance resultM.container _Failure)
-             (return resultM.value)
-             (raise (TypeError f"Can't unwrapF {resultM}, since it's on Success track"))))
-
-    (defn #^ F unwrapF_or
-        [ #^ (of Result S F) resultM
-          #^ F default]
-        (unless (isinstance resultM Result)
-             (raise (_unwrappingError resultM)))
-        (if (isinstance resultM.container _Failure)
-             (return resultM.value)
-             (return default)))
 
 ; _____________________________________________________________________________/ }}}1

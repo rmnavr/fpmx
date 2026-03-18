@@ -533,7 +533,7 @@ Help on built-in function floor in module math:
 
 floor(x, /)
     Return the floor of x as an Integral.
-    
+
     This is the largest integer <= x.
 ```
 
@@ -552,7 +552,7 @@ Help on built-in function ceil in module math:
 
 ceil(x, /)
     Return the ceiling of x as an Integral.
-    
+
     This is the smallest integer >= x.
 ```
 
@@ -605,20 +605,20 @@ Info: approx_eq(a, b, *, rel_tol=1e-09, abs_tol=0.0)
 Help on built-in function isclose in module math:
 
 isclose(a, b, *, rel_tol=1e-09, abs_tol=0.0)
-    Determine whether two floating point numbers are close in value.
-    
+    Determine whether two floating-point numbers are close in value.
+
       rel_tol
         maximum difference for being considered "close", relative to the
         magnitude of the input values
       abs_tol
         maximum difference for being considered "close", regardless of the
         magnitude of the input values
-    
+
     Return True if a is close in value to b, and False otherwise.
-    
+
     For the values to be considered close, the difference between them
     must be smaller than at least one of the tolerances.
-    
+
     -inf, inf and NaN behave similarly to the IEEE 754 Standard.  That
     is, NaN is not close to anything, even itself.  inf and -inf are
     only close to themselves.
@@ -676,10 +676,10 @@ Help on built-in function dist in module math:
 
 dist(p, q, /)
     Return the Euclidean distance between two points p and q.
-    
+
     The points should be specified as sequences (or iterables) of
     coordinates.  Both inputs must have the same dimension.
-    
+
     Roughly equivalent to:
         sqrt(sum((px - qx) ** 2.0 for px, qx in zip(p, q)))
 ```
@@ -700,17 +700,17 @@ Help on built-in function hypot in module math:
 
 hypot(...)
     hypot(*coordinates) -> value
-    
+
     Multidimensional Euclidean distance from the origin to a point.
-    
+
     Roughly equivalent to:
         sqrt(sum(x**2 for x in coordinates))
-    
+
     For a two dimensional point (x, y), gives the hypotenuse
     using the Pythagorean theorem:  sqrt(x*x + y*y).
-    
+
     For example, the hypotenuse of a 3/4/5 right triangle is:
-    
+
         >>> hypot(3.0, 4.0)
         5.0
 ```
@@ -770,8 +770,8 @@ Help on built-in function log in module math:
 log(...)
     log(x, [base=math.e])
     Return the logarithm of x to the given base.
-    
-    If the base not specified, returns the natural logarithm (base e) of x.
+
+    If the base is not specified, returns the natural logarithm (base e) of x.
 ```
 
 ## ln
@@ -823,202 +823,182 @@ Help on float object:
 
 class float(object)
  |  float(x=0, /)
- |  
- |  Convert a string or number to a floating point number, if possible.
- |  
+ |
+ |  Convert a string or number to a floating-point number, if possible.
+ |
  |  Methods defined here:
- |  
+ |
  |  __abs__(self, /)
  |      abs(self)
- |  
+ |
  |  __add__(self, value, /)
  |      Return self+value.
- |  
+ |
  |  __bool__(self, /)
  |      True if self else False
- |  
+ |
  |  __ceil__(self, /)
  |      Return the ceiling as an Integral.
- |  
+ |
  |  __divmod__(self, value, /)
  |      Return divmod(self, value).
- |  
+ |
  |  __eq__(self, value, /)
  |      Return self==value.
- |  
+ |
  |  __float__(self, /)
  |      float(self)
- |  
+ |
  |  __floor__(self, /)
  |      Return the floor as an Integral.
- |  
+ |
  |  __floordiv__(self, value, /)
  |      Return self//value.
- |  
+ |
  |  __format__(self, format_spec, /)
  |      Formats the float according to format_spec.
- |  
+ |
  |  __ge__(self, value, /)
  |      Return self>=value.
- |  
- |  __getattribute__(self, name, /)
- |      Return getattr(self, name).
- |  
+ |
  |  __getnewargs__(self, /)
- |  
+ |
  |  __gt__(self, value, /)
  |      Return self>value.
- |  
+ |
  |  __hash__(self, /)
  |      Return hash(self).
- |  
+ |
  |  __int__(self, /)
  |      int(self)
- |  
+ |
  |  __le__(self, value, /)
  |      Return self<=value.
- |  
+ |
  |  __lt__(self, value, /)
  |      Return self<value.
- |  
+ |
  |  __mod__(self, value, /)
  |      Return self%value.
- |  
+ |
  |  __mul__(self, value, /)
  |      Return self*value.
- |  
+ |
  |  __ne__(self, value, /)
  |      Return self!=value.
- |  
+ |
  |  __neg__(self, /)
  |      -self
- |  
+ |
  |  __pos__(self, /)
  |      +self
- |  
+ |
  |  __pow__(self, value, mod=None, /)
  |      Return pow(self, value, mod).
- |  
+ |
  |  __radd__(self, value, /)
  |      Return value+self.
- |  
+ |
  |  __rdivmod__(self, value, /)
  |      Return divmod(value, self).
- |  
+ |
  |  __repr__(self, /)
  |      Return repr(self).
- |  
+ |
  |  __rfloordiv__(self, value, /)
  |      Return value//self.
- |  
+ |
  |  __rmod__(self, value, /)
  |      Return value%self.
- |  
+ |
  |  __rmul__(self, value, /)
  |      Return value*self.
- |  
+ |
  |  __round__(self, ndigits=None, /)
  |      Return the Integral closest to x, rounding half toward even.
- |      
+ |
  |      When an argument is passed, work like built-in round(x, ndigits).
- |  
+ |
  |  __rpow__(self, value, mod=None, /)
  |      Return pow(value, self, mod).
- |  
+ |
  |  __rsub__(self, value, /)
  |      Return value-self.
- |  
+ |
  |  __rtruediv__(self, value, /)
  |      Return value/self.
- |  
+ |
  |  __sub__(self, value, /)
  |      Return self-value.
- |  
+ |
  |  __truediv__(self, value, /)
  |      Return self/value.
- |  
+ |
  |  __trunc__(self, /)
  |      Return the Integral closest to x between 0 and x.
- |  
+ |
  |  as_integer_ratio(self, /)
- |      Return integer ratio.
- |      
- |      Return a pair of integers, whose ratio is exactly equal to the original float
- |      and with a positive denominator.
- |      
- |      Raise OverflowError on infinities and a ValueError on NaNs.
- |      
+ |      Return a pair of integers, whose ratio is exactly equal to the original float.
+ |
+ |      The ratio is in lowest terms and has a positive denominator.  Raise
+ |      OverflowError on infinities and a ValueError on NaNs.
+ |
  |      >>> (10.0).as_integer_ratio()
  |      (10, 1)
  |      >>> (0.0).as_integer_ratio()
  |      (0, 1)
  |      >>> (-.25).as_integer_ratio()
  |      (-1, 4)
- |  
+ |
  |  conjugate(self, /)
  |      Return self, the complex conjugate of any float.
- |  
+ |
  |  hex(self, /)
  |      Return a hexadecimal representation of a floating-point number.
- |      
+ |
  |      >>> (-0.1).hex()
  |      '-0x1.999999999999ap-4'
  |      >>> 3.14159.hex()
  |      '0x1.921f9f01b866ep+1'
- |  
+ |
  |  is_integer(self, /)
  |      Return True if the float is an integer.
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Class methods defined here:
- |  
- |  __getformat__(typestr, /) from builtins.type
+ |
+ |  __getformat__(typestr, /)
  |      You probably don't want to use this function.
- |      
+ |
  |        typestr
  |          Must be 'double' or 'float'.
- |      
+ |
  |      It exists mainly to be used in Python's test suite.
- |      
+ |
  |      This function returns whichever of 'unknown', 'IEEE, big-endian' or 'IEEE,
- |      little-endian' best describes the format of floating point numbers used by the
+ |      little-endian' best describes the format of floating-point numbers used by the
  |      C type named by typestr.
- |  
- |  __setformat__(typestr, fmt, /) from builtins.type
- |      You probably don't want to use this function.
- |      
- |        typestr
- |          Must be 'double' or 'float'.
- |        fmt
- |          Must be one of 'unknown', 'IEEE, big-endian' or 'IEEE, little-endian',
- |          and in addition can only be one of the latter two if it appears to
- |          match the underlying C reality.
- |      
- |      It exists mainly to be used in Python's test suite.
- |      
- |      Override the automatic determination of C-level floating point type.
- |      This affects how floats are converted to and from binary strings.
- |  
- |  fromhex(string, /) from builtins.type
+ |
+ |  fromhex(string, /)
  |      Create a floating-point number from a hexadecimal string.
- |      
+ |
  |      >>> float.fromhex('0x1.ffffp10')
  |      2047.984375
  |      >>> float.fromhex('-0x1p-1074')
  |      -5e-324
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Static methods defined here:
- |  
- |  __new__(*args, **kwargs) from builtins.type
+ |
+ |  __new__(*args, **kwargs)
  |      Create and return a new object.  See help(type) for accurate signature.
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Data descriptors defined here:
- |  
+ |
  |  imag
  |      the imaginary part of a complex number
- |  
+ |
  |  real
  |      the real part of a complex number
 ```
@@ -1129,7 +1109,7 @@ Help on built-in function acos in module math:
 
 acos(x, /)
     Return the arc cosine (measured in radians) of x.
-    
+
     The result is between 0 and pi.
 ```
 
@@ -1149,7 +1129,7 @@ Help on built-in function asin in module math:
 
 asin(x, /)
     Return the arc sine (measured in radians) of x.
-    
+
     The result is between -pi/2 and pi/2.
 ```
 
@@ -1169,7 +1149,7 @@ Help on built-in function atan in module math:
 
 atan(x, /)
     Return the arc tangent (measured in radians) of x.
-    
+
     The result is between -pi/2 and pi/2.
 ```
 
@@ -1189,7 +1169,7 @@ Help on built-in function atan2 in module math:
 
 atan2(y, x, /)
     Return the arc tangent (measured in radians) of y/x.
-    
+
     Unlike atan(y/x), the signs of both x and y are considered.
 ```
 
@@ -1245,6 +1225,11 @@ Help on method uniform in module random:
 
 uniform(a, b) method of random.Random instance
     Get a random number in the range [a, b) or [a, b] depending on rounding.
+
+    The mean (expected value) and variance of the random variable are:
+
+        E[X] = (a + b) / 2
+        Var[X] = (b - a) ** 2 / 12
 ```
 
 ## rand01
@@ -1317,9 +1302,9 @@ Help on built-in function prod in module math:
 
 prod(iterable, /, *, start=1)
     Calculate the product of all the elements in the input iterable.
-    
+
     The default start value for the product is 1.
-    
+
     When the iterable is empty, return the start value.  This function is
     intended specifically for use with numeric values and may reject
     non-numeric types.
@@ -1818,9 +1803,15 @@ Info: adds char to string until target_len reached
 ```hy
 Help on function enlengthen in module fpmx.prelude.funcs:
 
-enlengthen(target_len: int, string: str, char: str = ' ', on_tail: bool = True, force_len: bool = False) -> str
+enlengthen(
+    target_len: int,
+    string: str,
+    char: str = ' ',
+    on_tail: bool = True,
+    force_len: bool = False
+) -> str
     appends char to string until target_len reached
-    
+
     - if len(string) > target_len, will return string with no change
     - with on_tail=False will prepend chars rather than append
     - with force_len=True will cut string to target_len if required (taking on_tail option into account)
@@ -2358,30 +2349,30 @@ Help on class compress in module itertools:
 
 class compress(builtins.object)
  |  compress(data, selectors)
- |  
+ |
  |  Return data elements corresponding to true selector elements.
- |  
+ |
  |  Forms a shorter iterator from selected data elements using the selectors to
  |  choose the data elements.
- |  
+ |
  |  Methods defined here:
- |  
+ |
  |  __getattribute__(self, name, /)
  |      Return getattr(self, name).
- |  
+ |
  |  __iter__(self, /)
  |      Implement iter(self).
- |  
+ |
  |  __next__(self, /)
  |      Implement next(self).
- |  
- |  __reduce__(...)
+ |
+ |  __reduce__(self, /)
  |      Return state information for pickling.
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Static methods defined here:
- |  
- |  __new__(*args, **kwargs) from builtins.type
+ |
+ |  __new__(*args, **kwargs)
  |      Create and return a new object.  See help(type) for accurate signature.
 ```
 
@@ -2468,12 +2459,14 @@ Kind: Reimport from [typing]
 Help on _TupleType in module typing:
 
 Tuple = typing.Tuple
-    Tuple type; Tuple[X, Y] is the cross-product type of X and Y.
-    
+    Deprecated alias to builtins.tuple.
+
+    Tuple[X, Y] is the cross-product type of X and Y.
+
     Example: Tuple[T1, T2] is a tuple of two elements corresponding
     to type variables T1 and T2.  Tuple[int, float, str] is a tuple
     of an int, a float and a string.
-    
+
     To specify a variable-length tuple of homogeneous type, use Tuple[T, ...].
 ```
 
@@ -2507,27 +2500,31 @@ Help on _SpecialForm in module typing:
 
 Union = typing.Union
     Union type; Union[X, Y] means either X or Y.
-    
-    To define a union, use e.g. Union[int, str].  Details:
+
+    On Python 3.10 and higher, the | operator
+    can also be used to denote unions;
+    X | Y means the same thing to the type checker as Union[X, Y].
+
+    To define a union, use e.g. Union[int, str]. Details:
     - The arguments must be types and there must be at least one.
     - None as an argument is a special case and is replaced by
       type(None).
     - Unions of unions are flattened, e.g.::
-    
-        Union[Union[int, str], float] == Union[int, str, float]
-    
+
+        assert Union[Union[int, str], float] == Union[int, str, float]
+
     - Unions of a single argument vanish, e.g.::
-    
-        Union[int] == int  # The constructor actually returns int
-    
+
+        assert Union[int] == int  # The constructor actually returns int
+
     - Redundant arguments are skipped, e.g.::
-    
-        Union[int, str, int] == Union[int, str]
-    
+
+        assert Union[int, str, int] == Union[int, str]
+
     - When comparing unions, the argument order is ignored, e.g.::
-    
-        Union[int, str] == Union[str, int]
-    
+
+        assert Union[int, str] == Union[str, int]
+
     - You cannot subclass or instantiate a union.
     - You can use Optional[X] as a shorthand for Union[X, None].
 ```
@@ -2544,47 +2541,59 @@ Kind: Reimport from [typing]
 ```hy
 Help on function TypedDict in module typing:
 
-TypedDict(typename, fields=None, /, *, total=True, **kwargs)
+TypedDict(typename, fields=<sentinel>, /, *, total=True)
     A simple typed namespace. At runtime it is equivalent to a plain dict.
-    
-    TypedDict creates a dictionary type that expects all of its
+
+    TypedDict creates a dictionary type such that a type checker will expect all
     instances to have a certain set of keys, where each key is
     associated with a value of a consistent type. This expectation
-    is not checked at runtime but is only enforced by type checkers.
+    is not checked at runtime.
+
     Usage::
-    
-        class Point2D(TypedDict):
-            x: int
-            y: int
-            label: str
-    
-        a: Point2D = {'x': 1, 'y': 2, 'label': 'good'}  # OK
-        b: Point2D = {'z': 3, 'label': 'bad'}           # Fails type check
-    
-        assert Point2D(x=1, y=2, label='first') == dict(x=1, y=2, label='first')
-    
+
+        >>> class Point2D(TypedDict):
+        ...     x: int
+        ...     y: int
+        ...     label: str
+        ...
+        >>> a: Point2D = {'x': 1, 'y': 2, 'label': 'good'}  # OK
+        >>> b: Point2D = {'z': 3, 'label': 'bad'}           # Fails type check
+        >>> Point2D(x=1, y=2, label='first') == dict(x=1, y=2, label='first')
+        True
+
     The type info can be accessed via the Point2D.__annotations__ dict, and
     the Point2D.__required_keys__ and Point2D.__optional_keys__ frozensets.
-    TypedDict supports two additional equivalent forms::
-    
-        Point2D = TypedDict('Point2D', x=int, y=int, label=str)
+    TypedDict supports an additional equivalent form::
+
         Point2D = TypedDict('Point2D', {'x': int, 'y': int, 'label': str})
-    
+
     By default, all keys must be present in a TypedDict. It is possible
-    to override this by specifying totality.
-    Usage::
-    
-        class point2D(TypedDict, total=False):
+    to override this by specifying totality::
+
+        class Point2D(TypedDict, total=False):
             x: int
             y: int
-    
-    This means that a point2D TypedDict can have any of the keys omitted.A type
+
+    This means that a Point2D TypedDict can have any of the keys omitted. A type
     checker is only expected to support a literal False or True as the value of
     the total argument. True is the default, and makes all items defined in the
     class body be required.
-    
-    The class syntax is only supported in Python 3.6+, while two other
-    syntax forms work for Python 2.7 and 3.2+
+
+    The Required and NotRequired special forms can also be used to mark
+    individual keys as being required or not required::
+
+        class Point2D(TypedDict):
+            x: int               # the "x" key must always be present (Required is the default)
+            y: NotRequired[int]  # the "y" key can be omitted
+
+    See PEP 655 for more details on Required and NotRequired.
+
+    The ReadOnly special form can be used
+    to mark individual keys as immutable for type checkers::
+
+        class DatabaseUser(TypedDict):
+            id: ReadOnly[int]  # the "id" key must not be modified
+            username: str      # the "username" key can be changed
 ```
 
 ## NamedTuple
@@ -2599,28 +2608,24 @@ Kind: Reimport from [typing]
 ```hy
 Help on function NamedTuple in module typing:
 
-NamedTuple(typename, fields=None, /, **kwargs)
+NamedTuple(typename, fields=<sentinel>, /, **kwargs)
     Typed version of namedtuple.
-    
-    Usage in Python versions >= 3.6::
-    
+
+    Usage::
+
         class Employee(NamedTuple):
             name: str
             id: int
-    
+
     This is equivalent to::
-    
+
         Employee = collections.namedtuple('Employee', ['name', 'id'])
-    
+
     The resulting class has an extra __annotations__ attribute, giving a
     dict that maps field names to types.  (The field names are also in
     the _fields attribute, which is part of the namedtuple API.)
-    Alternative equivalent keyword syntax is also accepted::
-    
-        Employee = NamedTuple('Employee', name=str, id=int)
-    
-    In Python versions <= 3.5 use::
-    
+    An alternative equivalent functional syntax is also accepted::
+
         Employee = NamedTuple('Employee', [('name', str), ('id', int)])
 ```
 
@@ -2637,8 +2642,6 @@ Kind: Reimport from [typing]
 Help on _SpecialForm in module typing:
 
 Optional = typing.Optional
-    Optional type.
-    
     Optional[X] is equivalent to Union[X, None].
 ```
 
@@ -2668,18 +2671,34 @@ Kind: Reimport from [typing]
 ```
 
 ```hy
-Help on _SpecialForm in module typing:
+Help on class Any in module typing:
 
-Any = typing.Any
-    Special type indicating an unconstrained type.
-    
-    - Any is compatible with every type.
-    - Any assumed to have all methods.
-    - All values assumed to be instances of Any.
-    
-    Note that all the above statements are true from the point of view of
-    static type checkers. At runtime, Any should not be used with instance
-    or class checks.
+class Any(builtins.object)
+ |  Any(*args, **kwargs)
+ |
+ |  Special type indicating an unconstrained type.
+ |
+ |  - Any is compatible with every type.
+ |  - Any assumed to have all methods.
+ |  - All values assumed to be instances of Any.
+ |
+ |  Note that all the above statements are true from the point of view of
+ |  static type checkers. At runtime, Any should not be used with instance
+ |  checks.
+ |
+ |  Static methods defined here:
+ |
+ |  __new__(cls, *args, **kwargs)
+ |      Create and return a new object.  See help(type) for accurate signature.
+ |
+ |  ----------------------------------------------------------------------
+ |  Data descriptors defined here:
+ |
+ |  __dict__
+ |      dictionary for instance variables
+ |
+ |  __weakref__
+ |      list of weak references to the object
 ```
 
 ## Callable
@@ -2695,13 +2714,17 @@ Kind: Reimport from [typing]
 Help on _CallableType in module typing:
 
 Callable = typing.Callable
-    Callable type; Callable[[int], str] is a function of (int) -> str.
-    
+    Deprecated alias to collections.abc.Callable.
+
+    Callable[[int], str] signifies a function that takes a single
+    parameter of type int and returns a str.
+
     The subscription syntax must always be used with exactly two
-    values: the argument list and the return type.  The argument list
-    must be a list of types or ellipsis; the return type must be a single type.
-    
-    There is no syntax to indicate optional or keyword arguments,
+    values: the argument list and the return type.
+    The argument list must be a list of types, a ParamSpec,
+    Concatenate or ellipsis. The return type must be a single type.
+
+    There is no syntax to indicate optional or keyword arguments;
     such function types are rarely used as callback types.
 ```
 
@@ -2715,25 +2738,25 @@ Kind: Reimport from [typing]
 ```
 
 ```hy
-Help on _LiteralSpecialForm in module typing:
+Help on _TypedCacheSpecialForm in module typing:
 
 Literal = typing.Literal
     Special typing form to define literal types (a.k.a. value types).
-    
+
     This form can be used to indicate to type checkers that the corresponding
     variable or function parameter has a value equivalent to the provided
-    literal (or one of several literals):
-    
-      def validate_simple(data: Any) -> Literal[True]:  # always returns True
-          ...
-    
-      MODE = Literal['r', 'rb', 'w', 'wb']
-      def open_helper(file: str, mode: MODE) -> str:
-          ...
-    
-      open_helper('/some/path', 'r')  # Passes type check
-      open_helper('/other/path', 'typo')  # Error in type checker
-    
+    literal (or one of several literals)::
+
+        def validate_simple(data: Any) -> Literal[True]:  # always returns True
+            ...
+
+        MODE = Literal['r', 'rb', 'w', 'wb']
+        def open_helper(file: str, mode: MODE) -> str:
+            ...
+
+        open_helper('/some/path', 'r')  # Passes type check
+        open_helper('/other/path', 'typo')  # Error in type checker
+
     Literal[...] cannot be subclassed. At runtime, an arbitrary value
     is allowed as type argument to Literal[...], but type checkers may
     impose restrictions.
@@ -2752,26 +2775,26 @@ Kind: Reimport from [typing]
 Help on _SpecialGenericAlias in module typing:
 
 Type = typing.Type
-    A special construct usable to annotate class objects.
-    
+    Deprecated alias to builtins.type.
+
+    builtins.type or typing.Type can be used to annotate class objects.
     For example, suppose we have the following classes::
-    
-      class User: ...  # Abstract base for User classes
-      class BasicUser(User): ...
-      class ProUser(User): ...
-      class TeamUser(User): ...
-    
+
+        class User: ...  # Abstract base for User classes
+        class BasicUser(User): ...
+        class ProUser(User): ...
+        class TeamUser(User): ...
+
     And a function that takes a class argument that's a subclass of
     User and returns an instance of the corresponding class::
-    
-      U = TypeVar('U', bound=User)
-      def new_user(user_class: Type[U]) -> U:
-          user = user_class()
-          # (Here we could write the user object to a database)
-          return user
-    
-      joe = new_user(BasicUser)
-    
+
+        def new_user[U](user_class: Type[U]) -> U:
+            user = user_class()
+            # (Here we could write the user object to a database)
+            return user
+
+        joe = new_user(BasicUser)
+
     At this point the type checker knows that joe has type BasicUser.
 ```
 
@@ -2787,113 +2810,93 @@ Kind: Reimport from [typing]
 ```hy
 Help on class TypeVar in module typing:
 
-class TypeVar(_Final, _Immutable, _TypeVarLike)
- |  TypeVar(name, *constraints, bound=None, covariant=False, contravariant=False)
- |  
+class TypeVar(builtins.object)
  |  Type variable.
- |  
- |  Usage::
- |  
- |    T = TypeVar('T')  # Can be anything
- |    A = TypeVar('A', str, bytes)  # Must be str or bytes
- |  
+ |
+ |  The preferred way to construct a type variable is via the dedicated
+ |  syntax for generic functions, classes, and type aliases::
+ |
+ |      class Sequence[T]:  # T is a TypeVar
+ |          ...
+ |
+ |  This syntax can also be used to create bound and constrained type
+ |  variables::
+ |
+ |      # S is a TypeVar bound to str
+ |      class StrSequence[S: str]:
+ |          ...
+ |
+ |      # A is a TypeVar constrained to str or bytes
+ |      class StrOrBytesSequence[A: (str, bytes)]:
+ |          ...
+ |
+ |  Type variables can also have defaults:
+ |
+ |      class IntDefault[T = int]:
+ |          ...
+ |
+ |  However, if desired, reusable type variables can also be constructed
+ |  manually, like so::
+ |
+ |     T = TypeVar('T')  # Can be anything
+ |     S = TypeVar('S', bound=str)  # Can be any subtype of str
+ |     A = TypeVar('A', str, bytes)  # Must be exactly str or bytes
+ |     D = TypeVar('D', default=int)  # Defaults to int
+ |
  |  Type variables exist primarily for the benefit of static type
  |  checkers.  They serve as the parameters for generic types as well
- |  as for generic function definitions.  See class Generic for more
- |  information on generic types.  Generic functions work as follows:
- |  
- |    def repeat(x: T, n: int) -> List[T]:
- |        '''Return a list containing n references to x.'''
- |        return [x]*n
- |  
- |    def longest(x: A, y: A) -> A:
- |        '''Return the longest of two strings.'''
- |        return x if len(x) >= len(y) else y
- |  
- |  The latter example's signature is essentially the overloading
- |  of (str, str) -> str and (bytes, bytes) -> bytes.  Also note
- |  that if the arguments are instances of some subclass of str,
- |  the return type is still plain str.
- |  
- |  At runtime, isinstance(x, T) and issubclass(C, T) will raise TypeError.
- |  
- |  Type variables defined with covariant=True or contravariant=True
- |  can be used to declare covariant or contravariant generic types.
- |  See PEP 484 for more details. By default generic types are invariant
- |  in all type variables.
- |  
- |  Type variables can be introspected. e.g.:
- |  
- |    T.__name__ == 'T'
- |    T.__constraints__ == ()
- |    T.__covariant__ == False
- |    T.__contravariant__ = False
- |    A.__constraints__ == (str, bytes)
- |  
- |  Note that only type variables defined in global scope can be pickled.
- |  
- |  Method resolution order:
- |      TypeVar
- |      _Final
- |      _Immutable
- |      _TypeVarLike
- |      builtins.object
- |  
+ |  as for generic function and type alias definitions.
+ |
+ |  The variance of type variables is inferred by type checkers when they
+ |  are created through the type parameter syntax and when
+ |  ``infer_variance=True`` is passed. Manually created type variables may
+ |  be explicitly marked covariant or contravariant by passing
+ |  ``covariant=True`` or ``contravariant=True``. By default, manually
+ |  created type variables are invariant. See PEP 484 and PEP 695 for more
+ |  details.
+ |
  |  Methods defined here:
- |  
- |  __init__(self, name, *constraints, bound=None, covariant=False, contravariant=False)
- |      Initialize self.  See help(type(self)) for accurate signature.
- |  
+ |
+ |  __mro_entries__(self, object, /)
+ |
+ |  __or__(self, value, /)
+ |      Return self|value.
+ |
+ |  __reduce__(self, /)
+ |      Helper for pickle.
+ |
+ |  __repr__(self, /)
+ |      Return repr(self).
+ |
+ |  __ror__(self, value, /)
+ |      Return value|self.
+ |
+ |  __typing_prepare_subst__(self, alias, args, /)
+ |
+ |  __typing_subst__(self, arg, /)
+ |
+ |  has_default(self, /)
+ |
+ |  ----------------------------------------------------------------------
+ |  Static methods defined here:
+ |
+ |  __new__(*args, **kwargs)
+ |      Create and return a new object.  See help(type) for accurate signature.
+ |
  |  ----------------------------------------------------------------------
  |  Data descriptors defined here:
- |  
+ |
  |  __bound__
- |  
+ |
  |  __constraints__
- |  
+ |
  |  __contravariant__
- |  
+ |
  |  __covariant__
- |  
- |  __dict__
- |      dictionary for instance variables (if defined)
- |  
- |  ----------------------------------------------------------------------
- |  Class methods inherited from _Final:
- |  
- |  __init_subclass__(*args, **kwds) from builtins.type
- |      This method is called when a class is subclassed.
- |      
- |      The default implementation does nothing. It may be
- |      overridden to extend subclasses.
- |  
- |  ----------------------------------------------------------------------
- |  Data descriptors inherited from _Final:
- |  
- |  __weakref__
- |      list of weak references to the object (if defined)
- |  
- |  ----------------------------------------------------------------------
- |  Methods inherited from _Immutable:
- |  
- |  __copy__(self)
- |  
- |  __deepcopy__(self, memo)
- |  
- |  ----------------------------------------------------------------------
- |  Methods inherited from _TypeVarLike:
- |  
- |  __or__(self, right)
- |      Return self|value.
- |  
- |  __reduce__(self)
- |      Helper for pickle.
- |  
- |  __repr__(self)
- |      Return repr(self).
- |  
- |  __ror__(self, left)
- |      Return value|self.
+ |
+ |  __default__
+ |
+ |  __infer_variance__
 ```
 
 ## Generic
@@ -2910,33 +2913,41 @@ Help on class Generic in module typing:
 
 class Generic(builtins.object)
  |  Abstract base class for generic types.
- |  
- |  A generic type is typically declared by inheriting from
- |  this class parameterized with one or more type variables.
- |  For example, a generic mapping type might be defined as::
- |  
- |    class Mapping(Generic[KT, VT]):
- |        def __getitem__(self, key: KT) -> VT:
- |            ...
- |        # Etc.
- |  
- |  This class can then be used as follows::
- |  
- |    def lookup_name(mapping: Mapping[KT, VT], key: KT, default: VT) -> VT:
- |        try:
- |            return mapping[key]
- |        except KeyError:
- |            return default
- |  
+ |
+ |  On Python 3.12 and newer, generic classes implicitly inherit from
+ |  Generic when they declare a parameter list after the class's name::
+ |
+ |      class Mapping[KT, VT]:
+ |          def __getitem__(self, key: KT) -> VT:
+ |              ...
+ |          # Etc.
+ |
+ |  On older versions of Python, however, generic classes have to
+ |  explicitly inherit from Generic.
+ |
+ |  After a class has been declared to be generic, it can then be used as
+ |  follows::
+ |
+ |      def lookup_name[KT, VT](mapping: Mapping[KT, VT], key: KT, default: VT) -> VT:
+ |          try:
+ |              return mapping[key]
+ |          except KeyError:
+ |              return default
+ |
  |  Class methods defined here:
- |  
- |  __class_getitem__(params) from builtins.type
- |  
- |  __init_subclass__(*args, **kwargs) from builtins.type
- |      This method is called when a class is subclassed.
- |      
- |      The default implementation does nothing. It may be
- |      overridden to extend subclasses.
+ |
+ |  __class_getitem__(...)
+ |      Parameterizes a generic class.
+ |
+ |      At least, parameterizing a generic class is the *main* thing this
+ |      method does. For example, for some generic class `Foo`, this is called
+ |      when we do `Foo[int]` - there, with `cls=Foo` and `params=int`.
+ |
+ |      However, note that this method is also called when defining generic
+ |      classes in the first place with `class Foo[T]: ...`.
+ |
+ |  __init_subclass__(...)
+ |      Function to initialize subclasses.
 ```
 
 ## Enum
@@ -2952,26 +2963,95 @@ Kind: Reimport from [enum]
 Help on class Enum in module enum:
 
 class Enum(builtins.object)
- |  Enum(value, names=None, *, module=None, qualname=None, type=None, start=1)
- |  
- |  Generic enumeration.
- |  
- |  Derive from this class to define new enumerations.
- |  
+ |  Enum(
+ |      new_class_name,
+ |      /,
+ |      names,
+ |      *,
+ |      module=None,
+ |      qualname=None,
+ |      type=None,
+ |      start=1,
+ |      boundary=None
+ |  )
+ |
+ |  Create a collection of name/value pairs.
+ |
+ |  Example enumeration:
+ |
+ |  >>> class Color(Enum):
+ |  ...     RED = 1
+ |  ...     BLUE = 2
+ |  ...     GREEN = 3
+ |
+ |  Access them by:
+ |
+ |  - attribute access:
+ |
+ |    >>> Color.RED
+ |    <Color.RED: 1>
+ |
+ |  - value lookup:
+ |
+ |    >>> Color(1)
+ |    <Color.RED: 1>
+ |
+ |  - name lookup:
+ |
+ |    >>> Color['RED']
+ |    <Color.RED: 1>
+ |
+ |  Enumerations can be iterated over, and know how many members they have:
+ |
+ |  >>> len(Color)
+ |  3
+ |
+ |  >>> list(Color)
+ |  [<Color.RED: 1>, <Color.BLUE: 2>, <Color.GREEN: 3>]
+ |
+ |  Methods can be added to enumerations, and members can have their own
+ |  attributes -- see the documentation for details.
+ |
+ |  Static methods defined here:
+ |
+ |  __new__(cls, value)
+ |      Create and return a new object.  See help(type) for accurate signature.
+ |
+ |  ----------------------------------------------------------------------
  |  Data descriptors defined here:
- |  
+ |
  |  name
  |      The name of the Enum member.
- |  
+ |
  |  value
  |      The value of the Enum member.
- |  
+ |
  |  ----------------------------------------------------------------------
- |  Readonly properties inherited from EnumMeta:
- |  
+ |  Static methods inherited from EnumType:
+ |
+ |  __contains__(value)
+ |      Return True if `value` is in `cls`.
+ |
+ |      `value` is in `cls` if:
+ |      1) `value` is a member of `cls`, or
+ |      2) `value` is the value of one of the `cls`'s members.
+ |      3) `value` is a pseudo-member (flags)
+ |
+ |  __getitem__(name)
+ |      Return the member matching `name`.
+ |
+ |  __iter__()
+ |      Return members in definition order.
+ |
+ |  __len__()
+ |      Return the number of members (no aliases)
+ |
+ |  ----------------------------------------------------------------------
+ |  Readonly properties inherited from EnumType:
+ |
  |  __members__
  |      Returns a mapping of member name->value.
- |      
+ |
  |      This mapping lists all enum members, including aliases. Note that this
  |      is a read-only view of the internal mapping.
 ```
@@ -2998,20 +3078,33 @@ Kind: Reimport from [dataclasses]
 ```hy
 Help on function dataclass in module dataclasses:
 
-dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_hash=False, frozen=False, match_args=True, kw_only=False, slots=False)
-    Returns the same class as was passed in, with dunder methods
-    added based on the fields defined in the class.
-    
+dataclass(
+    cls=None,
+    /,
+    *,
+    init=True,
+    repr=True,
+    eq=True,
+    order=False,
+    unsafe_hash=False,
+    frozen=False,
+    match_args=True,
+    kw_only=False,
+    slots=False,
+    weakref_slot=False
+)
+    Add dunder methods based on the fields defined in the class.
+
     Examines PEP 526 __annotations__ to determine fields.
-    
-    If init is true, an __init__() method is added to the class. If
-    repr is true, a __repr__() method is added. If order is true, rich
+
+    If init is true, an __init__() method is added to the class. If repr
+    is true, a __repr__() method is added. If order is true, rich
     comparison dunder methods are added. If unsafe_hash is true, a
-    __hash__() method function is added. If frozen is true, fields may
-    not be assigned to after instance creation. If match_args is true,
-    the __match_args__ tuple is added. If kw_only is true, then by
-    default all fields are keyword-only. If slots is true, an
-    __slots__ attribute is added.
+    __hash__() method is added. If frozen is true, fields may not be
+    assigned to after instance creation. If match_args is true, the
+    __match_args__ tuple is added. If kw_only is true, then by default
+    all fields are keyword-only. If slots is true, a new class with a
+    __slots__ attribute is returned.
 ```
 
 ## upd_field
@@ -3029,14 +3122,14 @@ Help on function replace in module dataclasses:
 
 replace(obj, /, **changes)
     Return a new object replacing specified fields with new values.
-    
-    This is especially useful for frozen classes.  Example usage:
-    
+
+    This is especially useful for frozen classes.  Example usage::
+
       @dataclass(frozen=True)
       class C:
           x: int
           y: int
-    
+
       c = C(1, 2)
       c1 = replace(c, x=3)
       assert c1.x == 3 and c1.y == 2
@@ -3084,10 +3177,10 @@ Info: also works on folders
 ```
 
 ```hy
-Help on function exists in module genericpath:
+Help on built-in function _path_exists in module nt:
 
-exists(path)
-    Test whether a path exists.  Returns False for broken symbolic links
+_path_exists(path)
+    Test whether a path exists.  Returns False for broken symbolic links.
 ```
 
 ## fileQ
@@ -3101,9 +3194,9 @@ Sgnt: fileQ(filename)
 ```
 
 ```hy
-Help on function isfile in module genericpath:
+Help on built-in function _path_isfile in module nt:
 
-isfile(path)
+_path_isfile(path)
     Test whether a path is a regular file
 ```
 
@@ -3118,9 +3211,9 @@ Sgnt: dirQ(filename)
 ```
 
 ```hy
-Help on function isdir in module genericpath:
+Help on built-in function _path_isdir in module nt:
 
-isdir(s)
+_path_isdir(s)
     Return true if the pathname refers to an existing directory.
 ```
 
@@ -3156,7 +3249,12 @@ Info: modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation
 ```hy
 Help on function write_to_file in module fpmx.prelude.funcs:
 
-write_to_file(text: str, file_name: str, mode: str = 'w', encoding: str = 'utf-8')
+write_to_file(
+    text: str,
+    file_name: str,
+    mode: str = 'w',
+    encoding: str = 'utf-8'
+)
     writes text to file_name;
     modes:
     - 'w' - (over)write
@@ -3182,37 +3280,37 @@ Help on class count in module itertools:
 
 class count(builtins.object)
  |  count(start=0, step=1)
- |  
+ |
  |  Return a count object whose .__next__() method returns consecutive values.
- |  
+ |
  |  Equivalent to:
  |      def count(firstval=0, step=1):
  |          x = firstval
  |          while 1:
  |              yield x
  |              x += step
- |  
+ |
  |  Methods defined here:
- |  
+ |
  |  __getattribute__(self, name, /)
  |      Return getattr(self, name).
- |  
+ |
  |  __iter__(self, /)
  |      Implement iter(self).
- |  
+ |
  |  __next__(self, /)
  |      Implement next(self).
- |  
- |  __reduce__(...)
+ |
+ |  __reduce__(self, /)
  |      Return state information for pickling.
- |  
+ |
  |  __repr__(self, /)
  |      Return repr(self).
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Static methods defined here:
- |  
- |  __new__(*args, **kwargs) from builtins.type
+ |
+ |  __new__(*args, **kwargs)
  |      Create and return a new object.  See help(type) for accurate signature.
 ```
 
@@ -3232,30 +3330,30 @@ Help on class cycle in module itertools:
 
 class cycle(builtins.object)
  |  cycle(iterable, /)
- |  
+ |
  |  Return elements from the iterable until it is exhausted. Then repeat the sequence indefinitely.
- |  
+ |
  |  Methods defined here:
- |  
+ |
  |  __getattribute__(self, name, /)
  |      Return getattr(self, name).
- |  
+ |
  |  __iter__(self, /)
  |      Implement iter(self).
- |  
+ |
  |  __next__(self, /)
  |      Implement next(self).
- |  
- |  __reduce__(...)
+ |
+ |  __reduce__(self, /)
  |      Return state information for pickling.
- |  
- |  __setstate__(...)
+ |
+ |  __setstate__(self, object, /)
  |      Set state information for unpickling.
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Static methods defined here:
- |  
- |  __new__(*args, **kwargs) from builtins.type
+ |
+ |  __new__(*args, **kwargs)
  |      Create and return a new object.  See help(type) for accurate signature.
 ```
 
@@ -3295,31 +3393,31 @@ class repeat(builtins.object)
  |  repeat(object [,times]) -> create an iterator which returns the object
  |  for the specified number of times.  If not specified, returns the object
  |  endlessly.
- |  
+ |
  |  Methods defined here:
- |  
+ |
  |  __getattribute__(self, name, /)
  |      Return getattr(self, name).
- |  
+ |
  |  __iter__(self, /)
  |      Implement iter(self).
- |  
- |  __length_hint__(...)
+ |
+ |  __length_hint__(self, /)
  |      Private method returning an estimate of len(list(it)).
- |  
+ |
  |  __next__(self, /)
  |      Implement next(self).
- |  
- |  __reduce__(...)
+ |
+ |  __reduce__(self, /)
  |      Return state information for pickling.
- |  
+ |
  |  __repr__(self, /)
  |      Return repr(self).
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Static methods defined here:
- |  
- |  __new__(*args, **kwargs) from builtins.type
+ |
+ |  __new__(*args, **kwargs)
  |      Create and return a new object.  See help(type) for accurate signature.
 ```
 
@@ -3412,35 +3510,35 @@ Help on class islice in module itertools:
 class islice(builtins.object)
  |  islice(iterable, stop) --> islice object
  |  islice(iterable, start, stop[, step]) --> islice object
- |  
+ |
  |  Return an iterator whose next() method returns selected values from an
  |  iterable.  If start is specified, will skip all preceding elements;
  |  otherwise, start defaults to zero.  Step defaults to one.  If
  |  specified as another value, step determines how many values are
  |  skipped between successive calls.  Works like a slice() on a list
  |  but returns an iterator.
- |  
+ |
  |  Methods defined here:
- |  
+ |
  |  __getattribute__(self, name, /)
  |      Return getattr(self, name).
- |  
+ |
  |  __iter__(self, /)
  |      Implement iter(self).
- |  
+ |
  |  __next__(self, /)
  |      Implement next(self).
- |  
- |  __reduce__(...)
+ |
+ |  __reduce__(self, /)
  |      Return state information for pickling.
- |  
- |  __setstate__(...)
+ |
+ |  __setstate__(self, object, /)
  |      Set state information for unpickling.
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Static methods defined here:
- |  
- |  __new__(*args, **kwargs) from builtins.type
+ |
+ |  __new__(*args, **kwargs)
  |      Create and return a new object.  See help(type) for accurate signature.
 ```
 
@@ -3475,7 +3573,7 @@ Info: non-variadic version of concat
 ```hy
 Help on built-in function from_iterable:
 
-from_iterable(iterable, /) method of builtins.type instance
+from_iterable(iterable, /) class method of itertools.chain
     Alternative chain() constructor taking a single iterable argument that evaluates lazily.
 ```
 
@@ -3512,42 +3610,42 @@ Info: variadic vertion of cat
 Help on class chain in module itertools:
 
 class chain(builtins.object)
- |  chain(*iterables) --> chain object
- |  
+ |  chain(*iterables)
+ |
  |  Return a chain object whose .__next__() method returns elements from the
  |  first iterable until it is exhausted, then elements from the next
  |  iterable, until all of the iterables are exhausted.
- |  
+ |
  |  Methods defined here:
- |  
+ |
  |  __getattribute__(self, name, /)
  |      Return getattr(self, name).
- |  
+ |
  |  __iter__(self, /)
  |      Implement iter(self).
- |  
+ |
  |  __next__(self, /)
  |      Implement next(self).
- |  
- |  __reduce__(...)
+ |
+ |  __reduce__(self, /)
  |      Return state information for pickling.
- |  
- |  __setstate__(...)
+ |
+ |  __setstate__(self, object, /)
  |      Set state information for unpickling.
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Class methods defined here:
- |  
- |  __class_getitem__(...) from builtins.type
+ |
+ |  __class_getitem__(object, /)
  |      See PEP 585
- |  
- |  from_iterable(iterable, /) from builtins.type
+ |
+ |  from_iterable(iterable, /)
  |      Alternative chain() constructor taking a single iterable argument that evaluates lazily.
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Static methods defined here:
- |  
- |  __new__(*args, **kwargs) from builtins.type
+ |
+ |  __new__(*args, **kwargs)
  |      Create and return a new object.  See help(type) for accurate signature.
 ```
 
@@ -4179,27 +4277,27 @@ Help on class starmap in module itertools:
 
 class starmap(builtins.object)
  |  starmap(function, iterable, /)
- |  
+ |
  |  Return an iterator whose values are returned from the function evaluated with an argument tuple taken from the given sequence.
- |  
+ |
  |  Methods defined here:
- |  
+ |
  |  __getattribute__(self, name, /)
  |      Return getattr(self, name).
- |  
+ |
  |  __iter__(self, /)
  |      Implement iter(self).
- |  
+ |
  |  __next__(self, /)
  |      Implement next(self).
- |  
- |  __reduce__(...)
+ |
+ |  __reduce__(self, /)
  |      Return state information for pickling.
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Static methods defined here:
- |  
- |  __new__(*args, **kwargs) from builtins.type
+ |
+ |  __new__(*args, **kwargs)
  |      Create and return a new object.  See help(type) for accurate signature.
 ```
 
@@ -4236,14 +4334,16 @@ Info: theory: reduce + monoid = binary-function for free becomes n-arg-function
 Help on built-in function reduce in module _functools:
 
 reduce(...)
-    reduce(function, iterable[, initial]) -> value
-    
-    Apply a function of two arguments cumulatively to the items of a sequence
-    or iterable, from left to right, so as to reduce the iterable to a single
-    value.  For example, reduce(lambda x, y: x+y, [1, 2, 3, 4, 5]) calculates
-    ((((1+2)+3)+4)+5).  If initial is present, it is placed before the items
-    of the iterable in the calculation, and serves as a default when the
-    iterable is empty.
+    reduce(function, iterable[, initial], /) -> value
+
+    Apply a function of two arguments cumulatively to the items of an iterable, from left to right.
+
+    This effectively reduces the iterable to a single value.  If initial is present,
+    it is placed before the items of the iterable in the calculation, and serves as
+    a default when the iterable is empty.
+
+    For example, reduce(lambda x, y: x+y, [1, 2, 3, 4, 5])
+    calculates ((((1 + 2) + 3) + 4) + 5).
 ```
 
 ## reductions
@@ -4407,7 +4507,7 @@ apply_n(n, f, *args, **kwargs)
     applies f to args and kwargs,
     than applies f to result of prev application,
     and this is repeated in total for n times,
-    
+
     n=1 is simply f(args, kwargs)
 ```
 
@@ -4425,56 +4525,61 @@ Info: applicator
 Help on class partial in module functools:
 
 class partial(builtins.object)
- |  partial(func, *args, **keywords) - new function with partial application
- |  of the given arguments and keywords.
- |  
+ |  partial(func, /, *args, **keywords)
+ |
+ |  Create a new function with partial application of the given arguments
+ |  and keywords.
+ |
  |  Methods defined here:
- |  
+ |
  |  __call__(self, /, *args, **kwargs)
  |      Call self as a function.
- |  
+ |
  |  __delattr__(self, name, /)
  |      Implement delattr(self, name).
- |  
+ |
+ |  __get__(self, instance, owner=None, /)
+ |      Return an attribute of instance, which is of type owner.
+ |
  |  __getattribute__(self, name, /)
  |      Return getattr(self, name).
- |  
- |  __reduce__(...)
+ |
+ |  __reduce__(self, /)
  |      Helper for pickle.
- |  
+ |
  |  __repr__(self, /)
  |      Return repr(self).
- |  
+ |
  |  __setattr__(self, name, value, /)
  |      Implement setattr(self, name, value).
- |  
- |  __setstate__(...)
- |  
+ |
+ |  __setstate__(self, object, /)
+ |
  |  ----------------------------------------------------------------------
  |  Class methods defined here:
- |  
- |  __class_getitem__(...) from builtins.type
+ |
+ |  __class_getitem__(object, /)
  |      See PEP 585
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Static methods defined here:
- |  
- |  __new__(*args, **kwargs) from builtins.type
+ |
+ |  __new__(*args, **kwargs)
  |      Create and return a new object.  See help(type) for accurate signature.
- |  
+ |
  |  ----------------------------------------------------------------------
  |  Data descriptors defined here:
- |  
+ |
  |  __dict__
- |  
+ |
  |  __vectorcalloffset__
- |  
+ |
  |  args
  |      tuple of arguments to future partial calls
- |  
+ |
  |  func
  |      function object to use in future partial calls
- |  
+ |
  |  keywords
  |      dictionary of keyword arguments to future partial calls
 ```
@@ -4843,9 +4948,9 @@ Info: gets current time in seconds
 ```hy
 Help on built-in function time in module time:
 
-time(...)
-    time() -> floating point number
-    
+time()
+    time() -> floating-point number
+
     Return the current time in seconds since the Epoch.
     Fractions of a second may be present if the system clock provides them.
 ```
@@ -4919,7 +5024,17 @@ Info: standard python pprint function
 ```hy
 Help on function pprint in module pprint:
 
-pprint(object, stream=None, indent=1, width=80, depth=None, *, compact=False, sort_dicts=True, underscore_numbers=False)
+pprint(
+    object,
+    stream=None,
+    indent=1,
+    width=80,
+    depth=None,
+    *,
+    compact=False,
+    sort_dicts=True,
+    underscore_numbers=False
+)
     Pretty-print a Python object to a stream [default is sys.stdout].
 ```
 
