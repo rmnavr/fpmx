@@ -1,7 +1,7 @@
     
     (import  os)
     (import  subprocess)
-    (import  _fptk_local *)
+    (import _fptk_local *)
     (require _fptk_local *)
 
 ; [F] run shell command ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -34,13 +34,13 @@
 
 ; _____________________________________________________________________________/ }}}1
 
-; Color ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; util: color ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ; 7 = inverse, 4 = underline, 1 = bold
     (defn colorize [n string] (sconcat "[" (str n) "m" string "[0m"))
 
 ; _____________________________________________________________________________/ }}}1
-; Run tests ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; [F] Run tests ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ; && chains cmd commands (2nd is run only if 1st was successful)
 
@@ -90,31 +90,42 @@
     (setv $FPMXLOCAL_DIR    "../02_generator_of_fpmx_local")
     (setv $FPMXLOCAL        "generator_of_fpmx_local.hy")
 
+    (setv $NSMG_DIR         "../03_non_strict_monads_codegen")
+    (setv $NSMG             "nsmg.hy")
+
 ; _____________________________________________________________________________/ }}}1
     
     (print "")
     (print "Version found in setup.py:" (colorize 4 (extract_version $VERSION_HEADER (read_file $SETUP_PY))))
     (print "")
 
-    ; STEP 1 (tests)
+    ; STEP 1 (monad codegen)
 
-        (print (colorize 7 "[Step 1/3] Running tests:"))
+        (print (colorize 7 "[Step 1/4] Generating non-strict monads code (NSMG):"))
+        (try (run_shell_command f"cd {$NSMG_DIR} && {$HYCMD} {$NSMG}")
+             (print (colorize 4 "NSMG - finished"))
+             (except [Exception] (print "ERROR: failed trying to run NSMG")
+                                 (sys.exit 1)))
+
+    ; STEP 2 (tests)
+
+        (print (colorize 7 "[Step 2/4] Running tests:"))
         (lmap run_test $FPMX_TESTS) 
 
-    ; STEP 2 (docgen)
+    ; STEP 3 (docgen)
 
         (print "")
-        (print (colorize 7 "[Step 2/3] Doc generation for functions:"))
+        (print (colorize 7 "[Step 3/4] Doc generation for functions:"))
 
         (try (run_shell_command f"cd {$DOCGEN_DIR} && {$HYCMD} {$DOCGEN}")
              (print (colorize 4 "Docgen - finished"))
              (except [Exception] (print "ERROR: failed trying to run docgen")
                                  (sys.exit 1)))
 
-    ; STEP 3 (fpmx local)
+    ; STEP 4 (fpmx local)
 
         (print "")
-        (print (colorize 7 "[Step 3/3] Generating fpmx_local:"))
+        (print (colorize 7 "[Step 4/4] Generating fpmx_local:"))
 
         (try (run_shell_command f"cd {$FPMXLOCAL_DIR} && {$HYCMD} {$FPMXLOCAL}")
              (print (colorize 4 "Generating _fpmx_local - finished"))

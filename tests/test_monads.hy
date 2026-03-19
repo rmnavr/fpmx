@@ -41,6 +41,9 @@
         (assertm eq (-> (Just 3) (.fmap plus (Just 4))) (Just 7))
         (assertm eq (-> (Just 3) (.fmap (partial plus 100) (Just 4) (Just 5))) (Just 112))
         ;
+        (assertm eq (-> (Just 3) (.fmap (partial plus 100) (Just 4) Nothing)) Nothing)
+        (assertm eq (-> Nothing (.fmap (partial plus 100) (Just 4) (Just 5))) Nothing)
+        ;
         (assertm gives_error_typeQ (-> (Just 2) (.fmap plus 3)) TypeError)
         (assertm gives_error_typeQ (-> (Just 2) (.fmap plus (Just 2) 3)) TypeError)
         ; Test binds:
@@ -77,9 +80,7 @@
 
 ; _____________________________________________________________________________/ }}}1
 
-
-
-; Result: def test ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; Result: def test1 (older version) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (defn test_result [Success Failure Result successQ failureQ]
         ;
@@ -159,6 +160,9 @@
         (assertm eq (-> (Success 3) (.fmap plus (Success 4))) (Success 7))
         (assertm eq (-> (Success 3) (.fmap (partial plus 100) (Success 4) (Success 5))) (Success 112))
         ;
+        (assertm eq (-> (Success 3) (.fmap (partial plus 100) (Success 4) (Failure 1))) (Failure 1))
+        (assertm eq (-> (Failure 1) (.fmap (partial plus 100) (Just 4) (Just 5))) (Failure 1))
+        ;
         (assertm gives_error_typeQ (-> (Success 2) (.fmap plus 3)) TypeError)
         (assertm gives_error_typeQ (-> (Success 2) (.fmap plus (Success 2) 3)) TypeError)
         ; Test binds:
@@ -185,7 +189,6 @@
             2))
 
 ; _____________________________________________________________________________/ }}}1
-
 ; Result: run test ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (import fpmx.monads.resultM *)
@@ -220,4 +223,96 @@
 
 ; _____________________________________________________________________________/ }}}1
 
+; MaybeWriter: def test ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (defn test_mw [MaybeWriter WJust WNothing wJustQ wNothingQ]
+        (setv msg2 "x*2")
+        (defn [validateF] doubleMW [x] (return (WJust (* x 2) [msg2] )))
+        ;
+        (setv msgXY "x/y")
+        (setv msgXYn "noth")
+        (defn [validateF] #^ (of MaybeWriter float str)
+            mw_divide [#^ float x #^ float y]
+            (if (neq y 0)
+                 (return (WJust (div x y) [msgXY]))
+                 (return (WNothing [msgXYn]))))
+        ;
+        (setv msgXYZ "x/y/z")
+        (setv msgXYZn "noth_")
+        (defn [validateF] #^ (of MaybeWriter float str)
+            mw_divide_x_on_yz [#^ float x #^ float y #^ float z]
+            (if (and (neq y 0) (neq z 0))
+                 (return (WJust (div (div x y) z) [msgXYZ]))
+                 (return (WNothing [msgXYZn]))))
+        ; 0) Test Writer-Specific
+        (assertm eq (-> (WJust 3  ["1"]) (.tell ["2"]) (.ask)) ["1" "2"])
+        (assertm eq (-> (WNothing ["1"]) (.tell ["2"]) (.ask)) ["1"])
+        ;
+        ; 1) Test factories and checksQ:
+        (assertm eq (wJustQ (WJust 3 ["3"])) True)
+        (assertm eq (wJustQ (WNothing [])) False)
+        (assertm gives_error_typeQ (wJustQ 3.0) TypeError)
+        (assertm eq (wNothingQ (WJust 3 ["3"])) False)
+        (assertm eq (wNothingQ (WNothing [])) True)
+        (assertm gives_error_typeQ (wJustQ 3.0) TypeError)
+        ; Check if comparison (via =) works:
+        (assertm eq (doubleMW 2) (WJust 4 [msg2]))
+        ; Test unwrappers:
+        (assertm eq (-> (WJust 3 ["1"]) (.unwrap))
+                   #(3 ["1"]))
+        (assertm gives_error_typeQ (-> (WNothing ["1"]) (.unwrap)) TypeError)
+        (assertm eq (-> (WNothing ["1"]) (.unwrap_or 2))
+                   #(2 ["1"]))
+        ; Test lifts:
+        (assertm eq
+            (-> (WJust 3 ["riba"])
+                 (.fmap (partial plus 10)))
+            (WJust 13 ["riba"]))
+        ;
+        (assertm eq
+            (-> (WJust 3 ["riba"])
+                 (.fmap plus (WJust 4 ["ololo"]) (WJust 5 ["ololo2"])))
+            (WJust 12 ["riba" "ololo" "ololo2"]))
+        ;
+        (assertm eq (-> (WJust 3  ["1"]) (.fmap (partial plus 100) (WNothing ["2"]))) (WNothing ["1"]))
+        (assertm eq (-> (WNothing ["1"]) (.fmap (partial plus 100) (WNothing ["2"]))) (WNothing ["1"]))
+        ;
+        (assertm gives_error_typeQ (-> (WJust 2 []) (.fmap plus 3)) TypeError)
+        (assertm gives_error_typeQ (-> (WJust 2 []) (.fmap plus (WJust 2 []) 3)) TypeError)
+        ; Test binds:
+        (assertm eq (-> (WJust 3 ["1"]) (.bind (pflip mw_divide 3))) (WJust 1 ["1" msgXY]))
+        (assertm eq (-> (WJust 0 ["1"]) (.bind (pflip mw_divide 0))) (WNothing ["1" msgXYn]))
+        (assertm eq (-> (WJust 0 ["1"]) (.bind (pflip mw_divide 0)) (.bind (pflip mw_divide 0))) (WNothing ["1" msgXYn]))
+        (assertm eq (-> (WJust 3 ["1"]) (.bind mw_divide (WJust 3 ["2"]))) (WJust 1 ["1" "2" msgXY]))
+        (assertm eq (-> (WJust 3 ["1"]) (.bind mw_divide (WJust 0 ["2"]))) (WNothing ["1" "2" msgXYn]))
+        (assertm eq (-> (WJust 3 ["1"]) (.bind mw_divide (WJust 0 ["2"])) ) (WNothing ["1" "2" msgXYn]))
+        (assertm eq (-> (WJust 3 ["1"]) (.bind mw_divide_x_on_yz (WJust 3 ["2"]) (WJust 1 ["3"]))) (WJust 1  ["1" "2" "3" msgXYZ]))
+        (assertm eq (-> (WJust 3 ["1"]) (.bind mw_divide_x_on_yz (WJust 3 ["2"]) (WJust 0 ["3"]))) (WNothing ["1" "2" "3" msgXYZn]))
+        (assertm eq (-> (WJust 3 ["1"]) (.bind mw_divide_x_on_yz (WJust 0 ["2"]) (WJust 3 ["3"]))) (WNothing ["1" "2" "3" msgXYZn]))
+        ;
+        (assertm gives_error_typeQ (-> (WJust 2 []) (.bind mw_divide 3)) TypeError)
+        (assertm gives_error_typeQ (-> (WJust 2 []) (.bind mw_divide_x_on_yz (WJust 2 []) 3)) TypeError)
+        (assertm gives_error_typeQ (-> (WJust 1 []) (.bind plus)) TypeError)
+        (assertm gives_error_typeQ (-> (WJust 1 []) (.bind plus (WJust 1 []))) TypeError)
+        (assertm gives_error_typeQ (-> (WJust 1 []) (.bind plus (WJust 1 []) (WJust 1 []))) TypeError)
+        ; Test combos:
+        (assertm eq
+            (-> (WJust 3 ["1"])
+                 (.fmap (partial plus 4)); 7
+                 (.fmap plus (WJust 5 [])); 12
+                 (.bind mw_divide_x_on_yz (WJust 2 ["2"]) (WJust 3 ["3"])); 2
+                 (.unwrap_or "how")
+                 (first))
+            2))
+
+; _____________________________________________________________________________/ }}}1
+; MaybeWriter: run test ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (import fpmx.monads.maybeWriterT *)
+    (test_mw #* [MaybeWriter WJust WNothing wJustQ wNothingQ])
+
+    (import fpmx.strict.maybeWriterT *)
+    (test_mw #* [MaybeWriter WJust WNothing wJustQ wNothingQ])
+
+; _____________________________________________________________________________/ }}}1
 

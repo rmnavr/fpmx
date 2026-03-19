@@ -82,3 +82,7 @@
 		- status: ready, but unpolished
 		+ def:: has decorator
 
+	* monads: make optional [] in (WNothing []) and (WJust 3 [])
+	* upd docs: monads
+	* upd docs: scripts (new script: nsmg)
+

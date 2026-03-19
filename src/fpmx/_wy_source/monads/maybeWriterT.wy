@@ -1,12 +1,12 @@
-; [NSMG_INSTRUCTION: WRITE_NONSOURCE_WARNING]
+;: WARNING! THIS FILE IS CODEGENED! Edit source strict-version of it instead.
 
 ; Import/Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    import  pydantic [BaseModel]    ; [NSMG_INSTRUCTION: REPLACE_WITH]    import  dataclasses [dataclass]
-                                    ; [NSMG_INSTRUCTION: CLEAR_THIS_LINE]
+    import  dataclasses [dataclass] ; [NSMG_LOG: This line was replaced]
+    ; [NSMG_LOG: This line was cleared]                                     
 
     require fpmx.prelude.from_hyrule [of unless]
-	import  typing   [TypeVar Generic Union Tuple List]
+    import  typing   [TypeVar Generic Union Tuple List]
     import  enum     [Enum]
 
     export :objects  [MaybeWriter WJust WNothing wJustQ wNothingQ]
@@ -29,19 +29,19 @@
     setv W : TypeVar "W"    
     ; example: (of MaybeWriter int str) for log of form ["smth1" "smth2"]
 
-    defclass _WJust [BaseModel (of Generic J W)] ; [NSMG_INSTRUCTION: REPLACE_WITH]    defclass [dataclass] _WJust [(of Generic J W)]
+    defclass [dataclass] _WJust [(of Generic J W)] ; [NSMG_LOG: This line was replaced]
         #^ J           value
         #^ (of List W) log_
         ;
         defn __str__  [self] f"Just: val = {self.value}, log = {self.log_}"
         defn __repr__ [self] : self.__str__
 
-    defclass _WNothing [BaseModel (of Generic W)] ; [NSMG_INSTRUCTION: REPLACE_WITH]    defclass [dataclass] _WNothing [(of Generic W)]
+    defclass [dataclass] _WNothing [(of Generic W)] ; [NSMG_LOG: This line was replaced]
         #^ (of List W) log_
         defn __str__  [self] f"Nothing: log = {self.log_}"
         defn __repr__ [self] : self.__str__
 
-    defclass MaybeWriter [BaseModel (of Generic J W)] ; [NSMG_INSTRUCTION: REPLACE_WITH]    defclass [dataclass] MaybeWriter [(of Generic J W)]
+    defclass [dataclass] MaybeWriter [(of Generic J W)] ; [NSMG_LOG: This line was replaced]
         #^ (of Union (of _WJust J W) (of _WNothing W)) container
         defn __str__  [self] f"<MaybeWriter.{self.container}>"
         defn __repr__ [self] : self.__str__
@@ -113,4 +113,3 @@
         isinstance mw.container _WNothing
 
 ; _____________________________________________________________________________/ }}}1
-

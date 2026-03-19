@@ -102,5 +102,12 @@
                     :strict_hy "../../src/fpmx/strict/resultM.hy"
                     :non_strict_hy "../../src/fpmx/monads/resultM.hy"))
 
+    (setv $FILE_MAYBE_WRITER
+        (NamingGroup :strict_wy "../../src/fpmx/_wy_source/strict/maybeWriterT.wy"
+                    :non_strict_wy "../../src/fpmx/_wy_source/monads/maybeWriterT.wy"
+                    :strict_hy "../../src/fpmx/strict/maybeWriterT.hy"
+                    :non_strict_hy "../../src/fpmx/monads/maybeWriterT.hy"))
+
     (process_ngroup $FILE_MAYBE)
     (process_ngroup $FILE_RESULT)
+    (process_ngroup $FILE_MAYBE_WRITER)
