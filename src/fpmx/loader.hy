@@ -2,8 +2,9 @@
     (defmacro load_fpmx [#* args]
         (setv actions [])
         ;
-        (setv _all_options [ '"prelude" '"lenses" '"maybeM" '"resultM"
-                             '"strict_types" '"strict_maybeM" '"strict_resultM"
+        (setv _all_options [ '"prelude" '"lenses"
+                                                    '"maybeM"        '"resultM"        '"maybeWriterT"
+                             '"strict_types" '"strict_maybeM" '"strict_resultM" '"strict_maybeWriterT"
                              '"term"])
         (setv _unrecognized_options (list (- (set args) (set _all_options))))
         (setv _msg `(+ "fpmx loader didn't recognize following modules: " (str ~_unrecognized_options) "\n\n"
@@ -23,6 +24,8 @@
               (actions.append `(import  fpmx.monads.maybeM *)))
         (when (in '"resultM" args)
               (actions.append `(import  fpmx.monads.resultM *)))
+        (when (in '"maybeWriterT" args)
+              (actions.append `(import  fpmx.monads.maybeWriterT *)))
         ;
         (when (in '"strict_types" args)
               (actions.append `(import  fpmx.strict.types *)))
@@ -30,6 +33,8 @@
               (actions.append `(import  fpmx.strict.maybeM *)))
         (when (in '"strict_resultM" args)
               (actions.append `(import  fpmx.strict.resultM *)))
+        (when (in '"strict_maybeWriterT" args)
+              (actions.append `(import  fpmx.strict.maybeWriterT *)))
         ;
         (when (in '"term" args)
               (actions.append `(import  fpmx.term.colors *))

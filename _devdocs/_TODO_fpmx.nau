@@ -86,3 +86,7 @@
 	* upd docs: monads
 	* upd docs: scripts (new script: nsmg)
 
+	monads:
+	- .bind should returns NEW monad objects (so .bind is just syntax-chaining, not state change)
+	- possible .log_ mut/immut issues
+
