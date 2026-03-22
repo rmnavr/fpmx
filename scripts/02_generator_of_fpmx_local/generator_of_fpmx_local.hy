@@ -81,11 +81,11 @@
                                   "prelude/macros.hy"
                                   "monads/maybeM.hy"
                                   "monads/resultM.hy"
-                                  "monads/maybeWriterT.hy"
+                                  "monads/writerMaybeT.hy"
                                   "strict/types.hy"
                                   "strict/maybeM.hy"
                                   "strict/resultM.hy"
-                                  "strict/maybeWriterT.hy"
+                                  "strict/writerMaybeT.hy"
                                   "term/colors.hy"
                                   "term/dotplot.hy"
                                 ])

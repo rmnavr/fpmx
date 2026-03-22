@@ -1,0 +1,137 @@
+;: WARNING! THIS FILE IS CODEGENED! Edit source strict-version of it instead.
+
+; Import/Export ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    import  dataclasses [dataclass] ; [NSMG_LOG: This line was replaced]
+    ; [NSMG_LOG: This line was cleared]                                     
+
+    require fpmx.prelude.from_hyrule [of unless]
+    import  typing   [TypeVar Generic Union Tuple List]
+    import  enum     [Enum]
+
+    export :objects  [ WriterMaybe WJust WNothing wJustQ wNothingQ
+                       fmapWM bindWM askWM tellWM unwrapWJ unwrapWJ_or ]
+
+
+; _____________________________________________________________________________/ }}}1
+
+; Error msgs ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    defclass ERR [Enum]
+        setv NON_WM   : fn [%obj]    (TypeError f"Transformer checks (wJustQ/wNothingQ) work only on WriterMaybe types. Instead: {%obj} of type {(type %obj)} was provided.")
+        setv NON_WMWr : fn [%obj]    (TypeError f"Writer operations of WriterMaybeT (askWM/tellWM) work only on WriterMaybeT types. Instead: {%obj} of type {(type %obj)} was provided.")
+        setv FMAP     : fn [%obj]    (TypeError f"fmap works only on WriterMaybe types. Instead: {%obj} of type {(type %obj)} was provided.")
+        setv BIND_T   : fn [%obj]    (TypeError f"bind works only on WriterMaybe types. Instead: {%obj} of type {(type %obj)} was provided.")
+        setv BIND_F   : fn [%f %ret] (TypeError f"bind works only with transformer functions (those that return WriterMaybe). Instead: {%f}, which tried to return {%ret} of type {(type %ret)} was provided.")
+        setv UNWRAP   : fn [%obj]    (TypeError f"Can't unwarp {%obj} since it is WNothing (while WJust was expected)")
+
+; _____________________________________________________________________________/ }}}1
+; Classes ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    setv J : TypeVar "J"    
+    setv W : TypeVar "W"    
+    ; example: (of WriterMaybe int str) for log of form ["smth1" "smth2"]
+
+    defclass [dataclass] _WJust [(of Generic J W)] ; [NSMG_LOG: This line was replaced]
+        #^ J           value
+        #^ (of List W) log_
+        ;
+        defn __str__  [self] f"Just: val = {self.value}, log = {self.log_}"
+        defn __repr__ [self] : self.__str__
+
+    defclass [dataclass] _WNothing [(of Generic W)] ; [NSMG_LOG: This line was replaced]
+        #^ (of List W) log_
+        defn __str__  [self] f"Nothing: log = {self.log_}"
+        defn __repr__ [self] : self.__str__
+
+    defclass [dataclass] WriterMaybe [(of Generic J W)] ; [NSMG_LOG: This line was replaced]
+        #^ (of Union (of _WJust J W) (of _WNothing W)) container
+        defn __str__  [self] f"<WriterMaybe.{self.container}>"
+        defn __repr__ [self] : self.__str__
+
+    defn WJust    [value #^ List log_] : WriterMaybe :container (_WJust    :value value :log_ log_)
+    defn WNothing [      #^ List log_] : WriterMaybe :container (_WNothing              :log_ log_)
+
+; _____________________________________________________________________________/ }}}1
+; Functions ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    defn #^ bool wJustQ [#^ WriterMaybe wmT] ; writer-monad-Transformer
+        unless : isinstance wmT WriterMaybe :: raise : ERR.NON_WM wmT
+        isinstance wmT.container _WJust
+
+    defn #^ bool wNothingQ [#^ WriterMaybe wmT]
+        unless : isinstance wmT WriterMaybe :: raise : ERR.NON_WM wmT
+        isinstance wmT.container _WNothing
+
+    defn askWM [#^ WriterMaybe wmT] 
+        unless : isinstance wmT WriterMaybe :: raise : ERR.NON_WMWr wmT
+        return wmT.container.log_
+    
+    defn tellWM [#^ WriterMaybe wmT log_]
+        unless : isinstance wmT WriterMaybe :: raise : ERR.NON_WMWr wmT
+        ; do NOT add log for WNothing:
+        when : isinstance wmT.container _WNothing :: return wmT
+        ; add log otherwise:
+        setv new_mw wmT
+        setv new_mw.container.log_ : + new_mw.container.log_ log_
+        return new_mw
+   
+    defn fmapWM [wmT0 func #* transformers] 
+        "won't add logs if Nothing monad is encountered anywhere"
+        ; check arg type correctness:
+        for [&t (+ #(wmT0) transformers)]
+            unless : isinstance &t WriterMaybe
+                     raise : ERR.FMAP &t
+        ; when wmT0 is WNothing, return itself:
+        when : isinstance wmT0.container _WNothing
+               return : WNothing wmT0.container.log_
+        ; --- when wmT0 is WJust, but some (first found) wmTi is WNothing, return log: wmT0, wmTi
+        for [&t transformers]
+            when : isinstance &t.container _WNothing
+                   return : WNothing (+ wmT0.container.log_ &t.container.log_)
+        ;
+        setv new_val : func wmT0.container.value #* (lfor &t transformers &t.container.value)
+        setv new_log : + [] wmT0.container.log_  #* (lfor &t transformers &t.container.log_)
+        ; ↑ extra [] to avoid unary usage of '+'
+        return : WJust new_val new_log
+    
+    defn bindWM [wmT0 func #* transformers] 
+        "if any of transformers is Nothing, logs are NOT concatenated;
+         but if 'func' returns Nothing, all logs ARE concatenated
+        "
+        ; check arg type correctness:
+        for [&t (+ #(wmT0) transformers)]
+            unless : isinstance &t WriterMaybe
+                     raise : ERR.BIND_T &t
+        ; when wmT0 is WNothing, return itself:
+        when : isinstance wmT0.container _WNothing
+               return : WNothing wmT0.container.log_
+        ; --- when wmT0 is WJust, but some (first found) wmTi is WNothing, return log: wmT0, wmTi
+        for [&t transformers]
+            when : isinstance &t.container _WNothing
+                   return : WNothing (+ wmT0.container.log_ &t.container.log_)
+        ;
+        setv new_wmT
+            func wmT0.container.value #* (lfor &t transformers &t.container.value)
+        ; check return-type of 'func':
+        unless : isinstance new_wmT WriterMaybe
+                 raise : ERR.BIND_F func new_wmT
+        ; concatenate all logs:
+        setv new_wmT.container.log_
+            + wmT0.container.log_
+              #* (lfor &t transformers &t.container.log_)
+             \new_wmT.container.log_
+        ;
+        return new_wmT
+    
+    defn unwrapWJ [wmT] 
+        if : isinstance wmT.container _WJust
+             return #: wmT.container.value wmT.container.log_
+             raise : ERR.UNWRAP wmT
+   
+    defn unwrapWJ_or [wmT default] 
+        if : isinstance wmT.container _WJust
+             return #: wmT.container.value wmT.container.log_
+             return #: default             wmT.container.log_
+
+; _____________________________________________________________________________/ }}}1

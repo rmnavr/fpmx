@@ -13,6 +13,24 @@
 
 ; _____________________________________________________________________________/ }}}1
 
+; term-helper: run_shell_command ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    defn run_shell_command
+        [ #^ str  command
+          #^ bool [printQ True]
+        ]
+        setv result
+            subprocess.run command
+                           :shell          True
+                           :check          True
+                           :text           True
+                           :capture_output True
+        when printQ
+            print result.stdout
+            print result.stderr
+
+; _____________________________________________________________________________/ }}}1
+
 ; Classes ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     defclass [dataclass] NamingGroup []
@@ -70,23 +88,6 @@
         return line
 
 ; _____________________________________________________________________________/ }}}1
-; term-helper: run_shell_command ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    defn run_shell_command
-        [ #^ str  command
-          #^ bool [printQ True]
-        ]
-        setv result
-            subprocess.run command
-                           :shell          True
-                           :check          True
-                           :text           True
-                           :capture_output True
-        when printQ
-            print result.stdout
-            print result.stderr
-
-; _____________________________________________________________________________/ }}}1
 
 ; ===========================================================================
 
@@ -103,10 +104,10 @@
                     :non_strict_hy "../../src/fpmx/monads/resultM.hy"
 
     setv $FILE_MAYBE_WRITER
-        NamingGroup :strict_wy     "../../src/fpmx/_wy_source/strict/maybeWriterT.wy"
-                    :non_strict_wy "../../src/fpmx/_wy_source/monads/maybeWriterT.wy"
-                    :strict_hy     "../../src/fpmx/strict/maybeWriterT.hy"
-                    :non_strict_hy "../../src/fpmx/monads/maybeWriterT.hy"
+        NamingGroup :strict_wy     "../../src/fpmx/_wy_source/strict/writerMaybeT.wy"
+                    :non_strict_wy "../../src/fpmx/_wy_source/monads/writerMaybeT.wy"
+                    :strict_hy     "../../src/fpmx/strict/writerMaybeT.hy"
+                    :non_strict_hy "../../src/fpmx/monads/writerMaybeT.hy"
 
     process_ngroup $FILE_MAYBE
     process_ngroup $FILE_RESULT

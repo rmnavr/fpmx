@@ -1,20 +1,20 @@
 
 	Maybe a = Just a | Nothing
 	- justQ nothingQ
-	- unwrapJ
-	- fmapM fmapM2 fmapM3
-	- bindM bindM2 bindM3
+	- unwrapJ unwrapJ_or
+	- fmapM 
+	- bindM 
 
 	Result a b = Success a | Failure b
 	- successQ failureQ
 	- unwrapS unwrapS_or unwrapF unwrapF_or
-	- fmapR fmapR2 fmapR3
-	- bindR bindR2 bindR3
+	- fmapR
+	- bindR
 
-	MaybeWriter a b = JustWriter a b | NothingWriter b
-	- justW_Q nothingW_Q
-	- unwrapJW unwrapJW_or -> value, log_
-	- tellMW
-	- fmapMW fmapMW2 fmapMW3
-	- bindMW bindMW2 bindMW3
+	WriterMaybe a b = WJust a b | WNothing b
+	- wJustQ wNothingQ
+	- unwrapWJ unwrapWJ_or -> value, log_
+	- askWM tellWM
+	- fmapWM
+	- bindWM
 

@@ -9,7 +9,9 @@
     (import typing [TypeVar Generic Union])
     (import enum [Enum])
 
-    (export :objects [Success Failure Result successQ failureQ])
+    (export :objects [ Result Success Failure successQ failureQ
+                       fmapR bindR unwrapS unwrapS_or unwrapF unwrapF_or ])
+
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -46,47 +48,13 @@
         (defn [property] value [self] self.container.value)
         ;
         (defn __str__ [self] (+ "<R." (str self.container) ">"))
-        (defn __repr__ [self] (self.__str__))
-        ;
-        (defn fmap [self func #* monads]
-            (for [&m monads] (unless (isinstance &m Result) (raise (ERR.FMAP &m ))))
-            (when (isinstance self.container _Failure) (return self))
-            (for [&m monads] (when (isinstance &m.container _Failure) (return &m )))
-            (return (Success (func self.container.value #* (lfor &m monads &m.container.value) ))))
-        ;
-        (defn bind [self func #* monads]
-            (for [&m monads] (unless (isinstance &m Result) (raise (ERR.BIND_M &m ))))
-            (when (isinstance self.container _Failure) (return self))
-            (for [&m monads] (when (isinstance &m.container _Failure) (return &m )))
-            (setv new_result (func self.container.value #* (lfor &m monads &m.container.value)))
-            (unless (isinstance new_result Result) (raise (ERR.BIND_F func new_result )))
-            (return new_result))
-        ;
-        (defn unwrapS [self]
-            (if (isinstance self.container _Success)
-                 (return self.container.value)
-                 (raise (ERR.UNWRAP_S self))))
-        ;
-        (defn unwrapS_or [self default]
-            (if (isinstance self.container _Success)
-                 (return self.container.value)
-                 (return default)))
-        ;
-        (defn unwrapF [self]
-            (if (isinstance self.container _Failure)
-                 (return self.container.value)
-                 (raise (ERR.UNWRAP_F self))))
-        ;
-        (defn unwrapF_or [self default]
-            (if (isinstance self.container _Failure)
-                 (return self.container.value)
-                 (return default))))
+        (defn __repr__ [self] (self.__str__)))
 
     (defn Failure [value] (Result :container (_Failure :value value)))
     (defn Success [value] (Result :container (_Success :value value)))
 
 ; _____________________________________________________________________________/ }}}1
-; failureQ/successQ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; Functions ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (defn #^ bool failureQ [#^ Result resultM]
         (unless (isinstance resultM Result)
@@ -97,5 +65,55 @@
         (unless (isinstance resultM Result)
             (raise (ERR.NON_MONAD resultM)))
         (isinstance resultM.container _Success))
+
+    (defn fmapR [monad0 func #* monads]
+        ; check arg type correctness:
+        (for [&m (+ #(monad0) monads)]
+            (unless (isinstance &m Result)
+                     (raise (ERR.FMAP &m))))
+        ; short-circuit:
+        (for [&m (+ #(monad0) monads)]
+            (when (isinstance &m.container _Failure)
+                   (return &m)))
+        (return
+            (Success (func monad0.container.value #* (lfor &m monads &m.container.value)))))
+
+    (defn bindR [monad0 func #* monads]
+        ; check arg type corretness:
+        (for [&m (+ #(monad0) monads)]
+            (unless (isinstance &m Result)
+                     (raise (ERR.BIND_M &m))))
+        ; short-circuit:
+        (for [&m (+ #(monad0) monads)]
+            (when (isinstance &m.container _Failure)
+                   (return &m)))
+        ;
+        (setv new_result
+            (func monad0.container.value #* (lfor &m monads &m.container.value)))
+        ; check return-type of 'func':
+        (unless (isinstance new_result Result)
+                 (raise (ERR.BIND_F func new_result)))
+        ;
+        (return new_result))
+
+    (defn unwrapS [resultM]
+        (if (isinstance resultM.container _Success)
+             (return resultM.container.value)
+             (raise (ERR.UNWRAP_S resultM))))
+
+    (defn unwrapS_or [resultM default]
+        (if (isinstance resultM.container _Success)
+             (return resultM.container.value)
+             (return default)))
+
+    (defn unwrapF [resultM]
+        (if (isinstance resultM.container _Failure)
+             (return resultM.container.value)
+             (raise (ERR.UNWRAP_F resultM))))
+
+    (defn unwrapF_or [resultM default]
+        (if (isinstance resultM.container _Failure)
+             (return resultM.container.value)
+             (return default)))
 
 ; _____________________________________________________________________________/ }}}1

@@ -82,6 +82,8 @@
 		- status: ready, but unpolished
 		+ def:: has decorator
 
+	······························
+
 	* monads: make optional [] in (WNothing []) and (WJust 3 [])
 	* upd docs: monads
 	* upd docs: scripts (new script: nsmg)
@@ -90,3 +92,8 @@
 	- .bind should returns NEW monad objects (so .bind is just syntax-chaining, not state change)
 	- possible .log_ mut/immut issues
 
+	! clrz [instructions] text
+
+	fmap issue:
+		for f(x,y) will short-circuit before number of actual args is checked:
+		like (fmap f (Just 3) (Just 4) Nothing) will work ok, even if f is function of 1 arg -> THIS IS BAD!
