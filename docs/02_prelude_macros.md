@@ -118,15 +118,15 @@ Macro `=>` (`=>>`) combines functions of `.` and `->` (`=>>`) macros by:
      )
 
 (=>> obj
-     -2                   ; same as for =>
-     "key"                ; same as for =>
-     [0 "key"]            ; same as for =>
-     .attr                ; same as for =>
-     (.mth a1 a2 ...)     ; [MOD] | expanded to: (.mth SLOT a1 a2 ...) | *see note below
-     function             ;       | expanded to: (function SLOT)
-     (function a1 a2)     ;       | expanded to: (function a1 a2 SLOT)
-     ((fn [x] (* x 2)))   ;       | expanded to: ((fn [x] (* x 2)) SLOT)
-     (f> (* it 2))        ;       | expanded to: ((fn [it] (* it 2)) SLOT)
+     -2                   ; [NEW] integer | expanded to: (get SLOT -2)
+     "key"                ; [NEW] string  | expanded to: (get SLOT "key")
+     [0 "key"]            ; [NEW] list    | expanded to: (get SLOT 0 "key")
+     .attr                ; [MOD]         | expanded to: SLOT.attr
+     (.mth a1 a2 ...)     ; [MOD]         | expanded to: (.mth SLOT a1 a2 ...) | *see note below
+     function             ;               | expanded to: (function SLOT)
+     (function a1 a2)     ;               | expanded to: (function a1 a2 SLOT)
+     ((fn [x] (* x 2)))   ;               | expanded to: ((fn [x] (* x 2)) SLOT)
+     (f> (* it 2))        ;               | expanded to: ((fn [it] (* it 2)) SLOT)
      )
 ```
 
