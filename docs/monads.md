@@ -88,7 +88,7 @@ Nothing     ; create Nothing
 ```
 
 Multiple args example:
-```
+```hy
 (fmapM (Just 3) (fn [x y] (+ x y)) (Just 4)) ; returns (Just 7)
 (fmapM (Just 3) (fn [x y] (+ x y)) Nothing)  ; returns Nothing
 ```
@@ -140,7 +140,7 @@ Result          ; class
 ```
 
 Multiple args example:
-```
+```hy
 (fmapR (Success 3) (fn [x y] (+ x y)) (Success 4))     ; returns (Success 7)
 (fmapR (Success 3) (fn [x y] (+ x y)) (Failure "err")) ; returns (Failure "err")
 ```
@@ -172,21 +172,21 @@ Notice that `WJust` and `WNothing` are functions, not classes.
 
 User API:
 ```hy
-WriterMaybe ; class
+WriterMaybe        ; class
 (WJust 3 [])       ; create WJust with value 3 and empty log
 (WNothing ["err"]) ; create WNothing with log ["err"]
 
 (wJustQ    t) ; check if object t is WJust    (will give error if used not on WriterMaybe type)
 (wNothingQ t) ; check if object t is WNothing (will give error if used not on WriterMaybe type)
 
-(askWM  t)       ; returns log of t
-(tellWM t log_)  ; adds log_ to existing log of t
+(askWM  t)       ; returns log_ of t
+(tellWM t log_)  ; adds log_ to existing log_ of t
 
 (fmapWM t0 pureF t1 t2 ...)    ; Apply pure function to values stored in WJust,
                                ; or return WNothing if WNothing is encountered.
                                ;
                                ; How logs are appended:
-                               ; 1) When t0 is WNothing, use log from t0
+                               ; 1) When t0 is WNothing, use log_ from t0
                                ; 2) When t0 is WJust, but some (first found) ti is WNothing,
                                ;    append logs: t0, ti
                                ; 3) When all ti are WJust, append logs: t0, t1, t2, ...
@@ -198,7 +198,7 @@ WriterMaybe ; class
                                ; Or return WNothing if WNothing is encountered.
                                ;
                                ; How logs are appended:
-                               ; 1) When t0 is WNothing, use log from t0
+                               ; 1) When t0 is WNothing, use log_ from t0
                                ; 2) When t0 is WJust, but some (first found) ti is WNothing,
                                ;    append logs: t0, ti
                                ; 3) When all ti are WJust, append logs: t0, t1, t2, ..., log_from_monadicF
@@ -206,14 +206,14 @@ WriterMaybe ; class
                                ; When result of monadicF is WNothing, it does NOT change
                                ; logs append logic stated above.
 
-(unwrapWJ    m)          ; returns #(value log_) of WJust (throws error when not WJust)
-(unwrapWJ_or m default)  ; returns #(value log_) of WJust or #(default log_) for WNothing
+(unwrapWJ    m)          ; returns #(value log_) for WJust (throws error when not WJust)
+(unwrapWJ_or m default)  ; returns #(value log_) for WJust or #(default log_) for WNothing
 ```
 
 Multiple args example:
-```
-(fmapWM (WJust 3 ["hey"]) (fn [x y] (+ x y)) (WJust 4 []))   ; returns (WJust 7 "hey")
-(fmapWM (WJust 3 ["hey"]) (fn [x y] (+ x y)) (WNothing []))  ; returns (WNothing "hey")
+```hy
+(fmapWM (WJust 3 ["hey"]) (fn [x y] (+ x y)) (WJust 4 ["there"]))   ; returns (WJust 7  ["hey" "there"])
+(fmapWM (WJust 3 ["hey"]) (fn [x y] (+ x y)) (WNothing ["there"]))  ; returns (WNothing ["hey" "there"])
 ```
 <!-- __________________________________________________________________________/ }}}1 -->
 
