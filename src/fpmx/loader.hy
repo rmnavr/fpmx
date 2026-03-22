@@ -28,14 +28,14 @@
         (when (in '"strict_resultM" args)
               (actions.append `(import  fpmx.strict.resultM *)))
         (when (in '"strict_writerMaybeT" args)
-              (actions.append `(import  fpmx.strict.maybeWriterT *)))
+              (actions.append `(import  fpmx.strict.writerMaybeT *)))
         ; non-strict monads:
         (when (in '"maybeM" args)
               (actions.append `(import  fpmx.monads.maybeM *)))
         (when (in '"resultM" args)
               (actions.append `(import  fpmx.monads.resultM *)))
         (when (in '"writerMaybeT" args)
-              (actions.append `(import  fpmx.monads.maybeWriterT *)))
+              (actions.append `(import  fpmx.monads.writerMaybeT *)))
         ; terminal:
         (when (in '"term" args)
               (actions.append `(import  fpmx.term.colors *))
