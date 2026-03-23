@@ -5,15 +5,15 @@
 
 ; clrz ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (assertm eq (clrz "Pups" ["red"])
+    (assertm eq (clrz ["red"] "Pups")
                (colored "Pups" "red"))
 
-    (assertm eq (clrz "Pups" ["on_blue" "red"])
+    (assertm eq (clrz ["on_blue" "red"] "Pups")
                (colored "Pups" "red" "on_blue"))
 
-    (assertm eq (clrz "Pups" ["reverse"])
+    (assertm eq (clrz ["reverse"] "Pups")
                (colored "Pups" None None ["reverse"]))
 
-    (assertm gives_error_typeQ (clrz "Pups" "bad_color") ValueError)
+    (assertm gives_error_typeQ (clrz ["bad_color"] "Pups") ValueError)
 
 ; _____________________________________________________________________________/ }}}1

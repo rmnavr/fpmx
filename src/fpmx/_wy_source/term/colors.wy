@@ -40,8 +40,8 @@
 ; [F] clrz ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     defn #^ str clrz
-        L #^ str text
-          #^ (of List str) instructions
+        L #^ (of List str) instructions
+          #^ str           text
         " Example:
           >> clrz('text', ['blue', 'on_red', 'reverse'])
 
@@ -77,13 +77,13 @@
 
     defn clrz_term_test []
         setv fores
-            map : fn [it] : + (clrz it [it]) " "  
+            map : fn [it] : + (clrz [it] it) " "  
                  \$FORES
         setv backs
-            map : fn [it] : + (clrz it [it]) " "  
+            map : fn [it] : + (clrz [it] it) " "  
                  \$BACKS                 
         setv attrs
-            map : fn [it] : + (clrz it [it]) " "  
+            map : fn [it] : + (clrz [it] it) " "  
                  \$ATTRS
         print "=== Foreground colors ==="
         print : + #* : list fores

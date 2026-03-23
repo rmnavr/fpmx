@@ -28,9 +28,9 @@ You can also color-check your terminal using `clrz_term_test`.
 ```python
 # Examples:
 
-clrz('text', ['blue', 'on_red', 'reverse'])
-clrz('text', ['blue'])
-clrz('text', ['on_red'])
+clrz(['blue', 'on_red', 'reverse'], 'text')
+clrz(['blue'], 'text')
+clrz(['on_red'], 'text')
 
 clrz_term_test()
 ```
