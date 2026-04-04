@@ -23,12 +23,14 @@ With regard to monad implementation fpmx places code clarity over math correctne
 This entails following design decisions:
 * `fmap`, `bind` and similar are implemented as a stand-alone functions rather than methods,
   with each monad having unique function name (`fmapM` for `Maybe`, `fmapR` for `Result`, etc.).
-* unwrapper functions like `unwrapJ` (for `Just`) are used instead of attribute access like `monad.value`
-* instead of implementing `fmap2`, `fmap3` and similar, all `fmap`s and `bind`s are variadic
+* Unwrapper functions like `unwrapJ` (for `Just`) are used instead of attribute access like `monad.value`
+* Instead of implementing `fmap2`, `fmap3` and similar, all `fmap`s and `bind`s are variadic;
+  user API of `fmap`/`bind` is of form `(fmap m1 f m2 m3 ...)` to be composable via threading macro `->` 
 * Most functions perform type-check internally — they will throw errors when incorrect monad/transformer is provided
 * Transformers are NOT compositions of their underlying monads.
   For example, `WriterMaybe` is a self-contained object, rather than a 'sum' of `Writer` and `Maybe` monad.
-  This is why transformer's `fmap` and `bind` has some serious deviation from their canonical implementation.
+  This is why transformer's `fmap` and `bind` has deviation from their canonical implementation
+  (see their API below).
 
 This way you cannot for example `fmapM` or `unwrapJ` on Result monad, thus enforcing type correctness.
 

@@ -2,7 +2,8 @@
     ; TODO:
     ; - xmin < xmax check
     ; - xmin=1, xmax=None, when xmin > max.x of all pts
-    ; - :sep linux/windows
+    ; - xsize=1 gives error
+    ; * :sep linux/windows
 
 ; Imports ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
@@ -24,7 +25,6 @@
 ; [Classes] Pts and such ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (setv number (of Union int float))
-
     (setv Point (of Tuple number number))
 
 ; _____________________________________________________________________________/ }}}1
@@ -107,9 +107,9 @@
                  (!= int (type ysize)))
             (raise (TypeError "Type for plotsizes should be ints")))
         (when
-            (or (<= xsize 0)
+            (or (<= xsize 1)
                  (<= ysize 0))
-            (raise (ValueError "Plotsize can't be <=0")))
+            (raise (ValueError "Minimal allowable plot size is xsize=2, ysize=1")))
         (when
             (or (not (or (isinstance xmin number) (= xmin None) ))
                  (not (or (isinstance xmax number) (= xmax None)))
@@ -183,10 +183,37 @@
        (setv outp [])
        ;
        (outp.append (+ $SPACE_CHAR (* xsize "_") $SPACE_CHAR))
-       (for [&str drawing_area] (outp.append (+ "⎟" &str "⎜" )))
+       (for [&str drawing_area] (outp.append (+ "|" &str "|" )))
        (outp.append (+ $SPACE_CHAR (* xsize "‾") $SPACE_CHAR))
        ;
        (return outp))
+
+    (defn #^ (of List str)
+        addLims
+        [ #^ (of List str) framed_plot
+          #^ number xmin
+          #^ number xmax
+          #^ number ymin
+          #^ number ymax]
+        ;
+        ; add y ticks:
+        (setv top_line (+ (get framed_plot  0) "_" (if (> ymax 0) " " "") f"{ymax :.3f}"))
+        (setv prebot_line (+ (get framed_plot -2) " " (if (> ymin 0) " " "") f"{ymin :.3f}"))
+        (setv bot_line (+ (get framed_plot -1) "‾"))
+        (setv bot_line (bot_line.replace " " "|")); add x verti marks
+        (setv _y_ticks_added [top_line #* (cut framed_plot 1 -2) prebot_line bot_line])
+        ;
+        ; add x ticks:
+        (setv x_min_tick f"{xmin :.3f}")
+        (setv extra_len
+            (max
+                1
+                (- (len (get framed_plot 0)) (len x_min_tick) 1)))
+        (setv x_max_tick f"{xmax :.3f}")
+        ;
+        (setv xbot_line (+ x_min_tick (* extra_len " ") x_max_tick))
+        ;
+        (return [#* _y_ticks_added xbot_line]))
 
 ; _____________________________________________________________________________/ }}}1
 ; [Functions] Plot: assembly ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -216,20 +243,22 @@
         ;
         ; drawing:
         (setv lines (constructDrawingArea pts xsize ysize xmin_ xmax_ ymin_ ymax_))
-        (when frame (setv lines (addFrame lines)))
+        (when frame
+            (setv lines (addFrame lines))
+            (setv lines (addLims lines xmin_ xmax_ ymin_ ymax_)))
         ;
         (return (str_join "\n" lines)))
 
 ; _____________________________________________________________________________/ }}}1
 
-; /test/ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; /test/ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    ; import math [sin]
+    (import math [sin])
 
-    ; setv xs : list : map (fn [it] (/ it 10)) (range 0 100)
-    ; setv ys : list : map sin xs
-    ; setv series : list : zip xs ys
+    (setv xs (list (map (fn [it] (/ it 100)) (range -1000 1010) )))
+    (setv ys (list (map sin xs )))
+    (setv series (list (zip xs ys )))
 
-    ; print : dotPlot series :xsize 10 :ysize 5
+    (print (dotPlot series :xsize 30 :ysize 5))
 
 ; _____________________________________________________________________________/ }}}1

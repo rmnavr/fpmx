@@ -126,13 +126,13 @@
     
     defn unwrapWJ [wmT] 
         if : isinstance wmT.container _WJust
-             return #: wmT.container.value wmT.container.log_
+             return #: wmT.container.log_ wmT.container.value
              raise : ERR.UNWRAP wmT
    
     defn unwrapWJ_or [wmT default] 
         if : isinstance wmT.container _WJust
-             return #: wmT.container.value wmT.container.log_
-             return #: default             wmT.container.log_
+             return #: wmT.container.log_ wmT.container.value
+             return #: wmT.container.log_ default
 
 ; _____________________________________________________________________________/ }}}1
 

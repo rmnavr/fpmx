@@ -65,6 +65,7 @@ Example usage:
     (dotPlot [[1 2] [3 4] [3 7]]
              :xsize 10 ; size is measured in term chars
              :ysize 5  ; size is measured in term chars
+             :frame True ; adds rectangle frame with min-max ranges
              :xmin  None ; None means it will be auto-calculated
              :xmax  None
              :ymin  0.

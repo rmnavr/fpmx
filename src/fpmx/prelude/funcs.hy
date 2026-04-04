@@ -210,10 +210,10 @@
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] 16 Math: random ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (import random    [choice])                 #_ "choice(seq) -> Elem | throws error for empty list"
-    (import random    [randint])                #_ "randint(a, b) -> int | returns random integer in range [a, b] including both end points"
-    (import random    [uniform :as randfloat])  #_ "randfloat(a, b) -> float | range is [a, b) or [a, b] depending on rounding"
-    (import random    [random :as rand01])      #_ "rand01() -> float | generates random number in interval [0, 1) "
+    (import random    [choice])                  #_ "choice(seq) -> Elem | throws error for empty list"
+    (import random    [randint :as rand_int])    #_ "rand_int(a, b) -> int | returns random integer in range [a, b] including both end points"
+    (import random    [uniform :as rand_float])  #_ "rand_float(a, b) -> float | range is [a, b) or [a, b] depending on rounding"
+    (import random    [random :as rand01])       #_ "rand01() -> float | generates random number in interval [0, 1) "
     ;; shuffle — is mutating
 
 ; _____________________________________________________________________________/ }}}1
@@ -418,6 +418,9 @@
     #_ "fourth(seq) -> Optional elem |"
     (defn fourth [seq] (if (<= (len seq) 3) (return None) (return (get seq 3))))
 
+    #_ "fifth(seq) -> Optional elem |"
+    (defn fifth [seq] (if (<= (len seq) 4) (return None) (return (get seq 4))))
+
     #_ "beforelast(seq) -> Optional elem |"
     (defn beforelast [seq] (if (<= (len seq) 1) (return None) (return (get seq -2))))
 
@@ -526,6 +529,7 @@
 
     (import dataclasses [dataclass])
     (import dataclasses [replace :as upd_field ]) #_ "| non-mutating"
+    (import dataclasses [field   :as dc_field ])  #_ "| dataclasses.field"
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -647,6 +651,11 @@
 
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] 65 APL: cutting and grouping ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+    
+    (import itertools [combinations]) #_ "combinations([1,2,3], 2) = [(1,2), (1,3), (2,3)] |"
+
+    #_ " | list version of 'combinations'"
+    (defn lcombinations [iterable r] (list (combinations iterable r)))
 
     (import fpmx.prelude.from_hyrule [flatten]) #_ "flatten(coll) | recursively flattens to the bottom"
 

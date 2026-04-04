@@ -63,6 +63,8 @@
 
 // ____________________________________________________________________________/ }}}1
 
+// 1 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
 	✓ when incorrect option for load_fpmx -> throw error
 
 	fpmx:
@@ -97,3 +99,19 @@
 	fmap issue:
 		for f(x,y) will short-circuit before number of actual args is checked:
 		like (fmap f (Just 3) (Just 4) Nothing) will work ok, even if f is function of 1 arg -> THIS IS BAD!
+
+// ____________________________________________________________________________/ }}}1
+
+	mod:
+		- fm without it or % is fn [], no?
+		- cut/cut_, range/range_/through
+
+	add tests:
+		- dc_field
+		- rand_int
+		- rand_float
+		- (l)combinations
+
+	docs:
+		- dotPlot: Frame=True
+

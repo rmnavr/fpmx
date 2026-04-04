@@ -269,10 +269,10 @@
         (assertm eq (doubleMW 2) (WJust 4 [msg2]))
         ; Test unwrappers:
         (assertm eq (-> (WJust 3 ["1"]) (unwrapWJ))
-                   #(3 ["1"]))
+                   #(["1"] 3))
         (assertm gives_error_typeQ (-> (WNothing ["1"]) (unwrapWJ)) TypeError)
         (assertm eq (-> (WNothing ["1"]) (unwrapWJ_or 2))
-                   #(2 ["1"]))
+                   #(["1"] 2))
         ; Test lifts:
         (assertm eq
             (-> (WJust 3 ["riba"])
@@ -312,7 +312,7 @@
                  (fmapWM plus (WJust 5 [])); 12
                  (bindWM mw_divide_x_on_yz (WJust 2 ["2"]) (WJust 3 ["3"])); 2
                  (unwrapWJ_or "how")
-                 (first))
+                 (second))
             2))
 
 ; _____________________________________________________________________________/ }}}1

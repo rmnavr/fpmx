@@ -3,6 +3,11 @@
 - rebranding from `fptk` to `fpmx` (all the older naming is replaced everywhere, even in changelog)
 - reorganized functions classification groups
 - added `approx_eq` function
+- added `dc_field` (dataclass.field)
+- renamed `randint` and `randfloat` to `rand_int` and `rand_float`
+- big reorganization of monads, `WriterMaybe` transformer introduced
+- added `(l)combinations` from itertools
+- added `fifth`
 
 0.5.1.dev5:
 - `term` module added, including `clrz` and `dotPlot` functions
