@@ -2,7 +2,7 @@
     ; TODO:
     ; - xmin < xmax check
     ; - xmin=1, xmax=None, when xmin > max.x of all pts
-    ; - xsize=1 gives error
+    ; - xsize=1 gives error (currently forbiden although)
     ; * :sep linux/windows
 
 ; Imports ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -253,12 +253,12 @@
 
 ; /test/ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (import math [sin])
+    ;   import math [sin]
 
-    (setv xs (list (map (fn [it] (/ it 100)) (range -1000 1010) )))
-    (setv ys (list (map sin xs )))
-    (setv series (list (zip xs ys )))
+    ;   setv xs : list : map (fn [it] (/ it 100)) (range -1000 1010)
+    ;   setv ys : list : map sin xs
+    ;   setv series : list : zip xs ys
 
-    (print (dotPlot series :xsize 30 :ysize 5))
+    ;   print : dotPlot series :xsize 30 :ysize 5
 
 ; _____________________________________________________________________________/ }}}1
