@@ -1,4 +1,3 @@
-
 # Version 0.6.0 (Apr 2026)
 - rebranding from `fptk` to `fpmx` (all the older naming is replaced everywhere, even in changelog)
 - reorganized functions classification groups

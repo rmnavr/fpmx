@@ -99,7 +99,7 @@
     (print "Version found in setup.py:" (colorize 4 (extract_version $VERSION_HEADER (read_file $SETUP_PY))))
     (print "")
 
-    ; STEP 1 (monad codegen)
+    ; STEP 1 (monad codegen, requires `wy` in cmd)
 
         (print (colorize 7 "[Step 1/4] Generating non-strict monads code (NSMG):"))
         (try (run_shell_command f"cd {$NSMG_DIR} && {$HYCMD} {$NSMG}")

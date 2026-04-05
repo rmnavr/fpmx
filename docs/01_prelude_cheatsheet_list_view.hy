@@ -67,8 +67,8 @@ FROM: math            | atan                     :: asin(x)  ; x is in radians, 
 FROM: math            | atan2                    :: atan2(y, x)  ; both signs are considered
 ;: random:
 FROM: random          | choice                   :: choice(seq) -> Elem  ; throws error for empty list
-FROM: random          | randint                  :: randint(a, b) -> int  ; returns random integer in range [a, b] including both end points
-FROM: random          | randfloat (<-uniform)    :: randfloat(a, b) -> float  ; range is [a, b) or [a, b] depending on rounding
+FROM: random          | rand_int (<-randint)     :: rand_int(a, b) -> int  ; returns random integer in range [a, b] including both end points
+FROM: random          | rand_float (<-uniform)   :: rand_float(a, b) -> float  ; range is [a, b) or [a, b] depending on rounding
 FROM: random          | rand01 (<-random)        :: rand01() -> float  ; generates random number in interval [0, 1)
 ;: reductions:
 FROM: funcy           | sums                     :: sums(seq [, acc]) -> generator  ; reductions with addition function
@@ -134,6 +134,7 @@ FROM: funcy           | first                    :: first(seq) -> Optional elem
 FROM: funcy           | second                   :: second(seq) -> Optional elem
 DEFN: fpmx            | third                    :: third(seq) -> Optional elem
 DEFN: fpmx            | fourth                   :: fourth(seq) -> Optional elem
+DEFN: fpmx            | fifth                    :: fifth(seq) -> Optional elem
 DEFN: fpmx            | beforelast               :: beforelast(seq) -> Optional elem
 FROM: funcy           | last                     :: last(seq) -> Optional elem
 MACR: fpmx/hyrule     | ncut
@@ -178,6 +179,7 @@ FROM: enum            | Enum
 SETV: fpmx            | number                   ; simply Union(int, float)
 FROM: dataclasses     | dataclass
 FROM: dataclasses     | upd_field (<-replace)    ; non-mutating
+FROM: dataclasses     | dc_field (<-field)       ; dataclasses.field
 MACR: fpmx/hyrule     | of                       ; example: (of List int) which is equiv to py-code: List[int]
 MACR: fpmx            | def::                    ; example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]
 MACR: fpmx            | f::                      ; define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))
@@ -226,6 +228,8 @@ FROM: funcy           | dropwhile                :: dropwhile([pred, ] seq)  ; m
 FROM: funcy           | filter_split (<-split)   :: filter_split(pred, seq) -> passed, rejected
 FROM: funcy           | lfilter_split (<-lsplit) :: lfilter_split(pred,seq) -> passed, rejected  ; list version of filter_split
 ;: cutting and grouping:
+FROM: itertools       | combinations             :: combinations([1,2,3], 2) = [(1,2), (1,3), (2,3)]
+DEFN: fpmx            | lcombinations            ; list version of 'combinations'
 FROM: fpmx/hyrule     | flatten                  :: flatten(coll)  ; recursively flattens to the bottom
 FROM: funcy           | bisect_at (<-split_at)   :: bisect_at(n, seq) -> start, tail  ; len of start will = n, works only with n>=0
 DEFN: fpmx            | lbisect_at               :: lbisect_at(n, seq) -> start, tail  ; list version of bisect_at, but also for n<0, abs(n) will be len of tail

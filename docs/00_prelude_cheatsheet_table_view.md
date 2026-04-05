@@ -12,7 +12,7 @@
 |  | squaring | <span title=":: sqrt(n) :: = √n">[`sqrt`](#sqrt)</span> <span title=":: squared(x) :: = pow(x,2)">[`squared`](#squared)</span> <span title=":: dist(p, q) -> float :: ≈ √((px-qx)² + (py-qy)² ...)">[`dist`](#dist)</span> <span title=":: hypot(*coordinates) :: = √(x² + y² + ...)">[`hypot`](#hypot)</span> <span title=":: normalize(xs) -> xs :: will throw error for zero-len vector">[`normalize`](#normalize)</span> |  |
 |  | exponents | <span title=":: exp(x) ::">[`exp`](#exp)</span> <span title=":: log(x, base=math.e) ::">[`log`](#log)</span> <span title=":: ln(x) :: = math.log(x, math.e) ; coexists with log for clarity">[`ln`](#ln)</span> <span title=":: log10(x) ::">[`log10`](#log10)</span> |  |
 |  | trigonometry | <span title="literally just float pi=3.14...">[`pi`](#pi)</span> <span title=":: sin(x) :: x is in radians">[`sin`](#sin)</span> <span title=":: cos(x) :: x is in radians">[`cos`](#cos)</span> <span title=":: tan(x) :: x is in radians, will give smth like 1.6E+16 for x = pi">[`tan`](#tan)</span> <span title=":: degrees(x) :: x in radians is converted to degrees">[`degrees`](#degrees)</span> <span title=":: radians(x) :: x in degrees is converted to radians">[`radians`](#radians)</span> <span title=":: acos(x) :: x is in radians, result is between 0 and pi">[`acos`](#acos)</span> <span title=":: asin(x) :: x is in radians, result is between -pi/2 and pi/2">[`asin`](#asin)</span> <span title=":: asin(x) :: x is in radians, result is between -pi/2 and pi/2">[`atan`](#atan)</span> <span title=":: atan2(y, x) :: both signs are considered">[`atan2`](#atan2)</span> |  |
-|  | random | <span title=":: choice(seq) -> Elem :: throws error for empty list">[`choice`](#choice)</span> <span title=":: randint(a, b) -> int :: returns random integer in range [a, b] including both end points">[`randint`](#randint)</span> <span title=":: randfloat(a, b) -> float :: range is [a, b) or [a, b] depending on rounding">[`randfloat`](#randfloat)</span> <span title=":: rand01() -> float :: generates random number in interval [0, 1)">[`rand01`](#rand01)</span> |  |
+|  | random | <span title=":: choice(seq) -> Elem :: throws error for empty list">[`choice`](#choice)</span> <span title=":: rand_int(a, b) -> int :: returns random integer in range [a, b] including both end points">[`rand_int`](#rand_int)</span> <span title=":: rand_float(a, b) -> float :: range is [a, b) or [a, b] depending on rounding">[`rand_float`](#rand_float)</span> <span title=":: rand01() -> float :: generates random number in interval [0, 1)">[`rand01`](#rand01)</span> |  |
 |  | reductions | <span title=":: sums(seq [, acc]) -> generator :: reductions with addition function">[`sums`](#sums)</span> <span title=":: lsums(seq [, acc]) -> list :: list version of sums">[`lsums`](#lsums)</span> <span title=":: product(iterable, /, *, start=1) :: product([2, 3, 5]) = 30">[`product`](#product)</span> |  |
 | Operator to functions | math | <span title=":: minus(x, y) = x - y ::">[`minus`](#minus)</span> <span title=":: neg(n) :: = -1 * n">[`neg`](#neg)</span> <span title=":: mod(5, 2) :: = 1">[`mod`](#mod)</span> <span title="'@' as function">[`matmul`](#matmul)</span> <span title=":: div(a, b) ::">[`div`](#div)</span> |  |
 |  | logics | <span title="'and' as function">[`and_`](#and_)</span> <span title="'or' as function">[`or_`](#or_)</span> <span title="'not' as function">[`not_`](#not_)</span> <span title="'is' as function">[`is_`](#is_)</span> <span title="">[`xor`](#xor)</span> <span title="equal">[`eq`](#eq)</span> <span title="non-equal">[`neq`](#neq)</span> <span title="greater than">[`gt`](#gt)</span> <span title="less than">[`lt`](#lt)</span> <span title="greater or equal">[`geq`](#geq)</span> <span title="less or equal">[`leq`](#leq)</span> <span title=":: gt0(x) :: checks for x > 0">[`gt0`](#gt0)</span> <span title=":: geq0(x) :: x >= 0">[`geq0`](#geq0)</span> <span title=":: lt0(x) :: checks for x < 0">[`lt0`](#lt0)</span> <span title=":: leq0(x) :: x <= 0">[`leq0`](#leq0)</span> |  |
@@ -20,18 +20,18 @@
 | Strings | basics | <span title=":: strlen(text) :: rename of len, underlines usage on strings">[`strlen`](#strlen)</span> <span title=":: str_join(ss, sep='') :: rearrangement of funcy.str_join, ss is seq of strings">[`str_join`](#str_join)</span> <span title=":: enlengthen(target_len, string, char=' ', on_tail=True) :: adds char to string until target_len reached">[`enlengthen`](#enlengthen)</span> |  |
 |  | methods to functions | <span title=":: lowercase(string) :: str.lower method as a function">[`lowercase`](#lowercase)</span> <span title=":: strip(string, chars=None) :: str.strip method as a function">[`strip`](#strip)</span> <span title=":: lstrip(string, chars=None) :: str.lstrip method as a function">[`lstrip`](#lstrip)</span> <span title=":: rstrip(string, chars=None) :: str.rstrip method as a function">[`rstrip`](#rstrip)</span> |  |
 |  | regex | <span title=":: re_sub(rpattern, replacement, string, count=0, flags=0) ::">[`re_sub`](#re_sub)</span> <span title=":: re_split(rpattern, string) ::">[`re_split`](#re_split)</span> <span title=":: re_find(rpattern, string, flags=0) -> str :: returns first found">[`re_find`](#re_find)</span> <span title=":: re_test(rpattern, string, ...) -> bool :: tests if string has match (not neccessarily whole string)">[`re_test`](#re_test)</span> <span title=":: re_all(rpattern, string, ...) -> List :: returns tuples if groups requested like via r'a(b)(c)d'">[`re_all`](#re_all)</span> |  |
-| Getters | basic | <span title=":: assoc(xs, k1, v1, k2, v2, ...) -> None :: ≈ (setv (get xs k1) v1 (get xs k2) v2) ; also possible: (assoc xs :x 1)">[`assoc`](#assoc)</span> <span title=":: nth(n, seq) -> Optional elem :: 0-based index; works also with dicts">[`nth`](#nth)</span> <span title=":: first(seq) -> Optional elem ::">[`first`](#first)</span> <span title=":: second(seq) -> Optional elem ::">[`second`](#second)</span> <span title=":: third(seq) -> Optional elem ::">[`third`](#third)</span> <span title=":: fourth(seq) -> Optional elem ::">[`fourth`](#fourth)</span> <span title=":: beforelast(seq) -> Optional elem ::">[`beforelast`](#beforelast)</span> <span title=":: last(seq) -> Optional elem ::">[`last`](#last)</span> | <span title="">[`ncut`](#ncut)</span> |
+| Getters | basic | <span title=":: assoc(xs, k1, v1, k2, v2, ...) -> None :: ≈ (setv (get xs k1) v1 (get xs k2) v2) ; also possible: (assoc xs :x 1)">[`assoc`](#assoc)</span> <span title=":: nth(n, seq) -> Optional elem :: 0-based index; works also with dicts">[`nth`](#nth)</span> <span title=":: first(seq) -> Optional elem ::">[`first`](#first)</span> <span title=":: second(seq) -> Optional elem ::">[`second`](#second)</span> <span title=":: third(seq) -> Optional elem ::">[`third`](#third)</span> <span title=":: fourth(seq) -> Optional elem ::">[`fourth`](#fourth)</span> <span title=":: fifth(seq) -> Optional elem ::">[`fifth`](#fifth)</span> <span title=":: beforelast(seq) -> Optional elem ::">[`beforelast`](#beforelast)</span> <span title=":: last(seq) -> Optional elem ::">[`last`](#last)</span> | <span title="">[`ncut`](#ncut)</span> |
 |  | list | <span title=":: rest(seq) -> List :: drops 1st elem of list">[`rest`](#rest)</span> <span title=":: butlast(seq) -> List :: drops last elem of list">[`butlast`](#butlast)</span> <span title=":: drop(n, seq) -> List :: drops n>=0 elems from start of the list; when n<0, drops from end of the list">[`drop`](#drop)</span> <span title=":: take(n, seq) -> List :: takes n elems from start; when n<0, takes from end of the list">[`take`](#take)</span> <span title=":: pick(ns, seq) -> List :: throws error if some of ns doesn't exist; ns can be list of ints or dict keys">[`pick`](#pick)</span> |  |
 |  | attrs and bulk | <span title=":: pluck(key, mappings) -> generator :: gets same key (or idx) from every mapping, mappings can be lists of lists/dicts/etc.">[`pluck`](#pluck)</span> <span title=":: lpluck(key, mappings) -> list ::">[`lpluck`](#lpluck)</span> <span title=":: pluck_attr(attr, objects) -> generator :: attr should be given as str">[`pluck_attr`](#pluck_attr)</span> <span title=":: lpluck_attr(attr, objects) -> list :: list version of pluck_attr">[`lpluck_attr`](#lpluck_attr)</span> | <span title=":: (pluckm n xs) (pluckm key ys) (pluckm .attr zs) :: accepts fpmx-style .arg syntax">[`pluckm`](#pluckm)</span> <span title="list version of pluckm">[`lpluckm`](#lpluckm)</span> <span title=":: (getattrm Object 'attr') (getattrm Object .attr) :: accepts fpmx-style .attr syntax">[`getattrm`](#getattrm)</span> |
 |  | mask | <span title=":: mask_sel('abc', [1,0,1]) -> iterator: 'a', 'c' ::">[`mask_sel`](#mask_sel)</span> <span title=":: lmask_sel(data, selectors) -> list ::">[`lmask_sel`](#lmask_sel)</span> <span title=":: mask2idxs(mask) -> list :: mask is list like [1 0 1 0] or [True False True False], which will be converted to [0 2]">[`mask2idxs`](#mask2idxs)</span> <span title=":: idxs2mask(idxs) -> list :: idxs is non-sorted list of integers like [0 3 2], which will be converted to [1 0 1 1]">[`idxs2mask`](#idxs2mask)</span> |  |
-| Typing | all | <span title="">[`List`](#List)</span> <span title="">[`Tuple`](#Tuple)</span> <span title="">[`Dict`](#Dict)</span> <span title="">[`Union`](#Union)</span> <span title="">[`TypedDict`](#TypedDict)</span> <span title="">[`NamedTuple`](#NamedTuple)</span> <span title="">[`Optional`](#Optional)</span> <span title="">[`Generator`](#Generator)</span> <span title="">[`Any`](#Any)</span> <span title="">[`Callable`](#Callable)</span> <span title="">[`Literal`](#Literal)</span> <span title="">[`Type`](#Type)</span> <span title="">[`TypeVar`](#TypeVar)</span> <span title="">[`Generic`](#Generic)</span> <span title="">[`Enum`](#Enum)</span> <span title="simply Union(int, float)">[`number`](#number)</span> <span title="">[`dataclass`](#dataclass)</span> <span title="non-mutating">[`upd_field`](#upd_field)</span> | <span title="example: (of List int) which is equiv to py-code: List[int]">[`of`](#of)</span> <span title="example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]">[`def::`](#Annotator2)</span> <span title="define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))">[`f::`](#Annotator1)</span> |
+| Typing | all | <span title="">[`List`](#List)</span> <span title="">[`Tuple`](#Tuple)</span> <span title="">[`Dict`](#Dict)</span> <span title="">[`Union`](#Union)</span> <span title="">[`TypedDict`](#TypedDict)</span> <span title="">[`NamedTuple`](#NamedTuple)</span> <span title="">[`Optional`](#Optional)</span> <span title="">[`Generator`](#Generator)</span> <span title="">[`Any`](#Any)</span> <span title="">[`Callable`](#Callable)</span> <span title="">[`Literal`](#Literal)</span> <span title="">[`Type`](#Type)</span> <span title="">[`TypeVar`](#TypeVar)</span> <span title="">[`Generic`](#Generic)</span> <span title="">[`Enum`](#Enum)</span> <span title="simply Union(int, float)">[`number`](#number)</span> <span title="">[`dataclass`](#dataclass)</span> <span title="non-mutating">[`upd_field`](#upd_field)</span> <span title="dataclasses.field">[`dc_field`](#dc_field)</span> | <span title="example: (of List int) which is equiv to py-code: List[int]">[`of`](#of)</span> <span title="example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]">[`def::`](#Annotator2)</span> <span title="define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))">[`f::`](#Annotator1)</span> |
 | IO | all | <span title=":: file_existsQ(filename) :: also works on folders">[`file_existsQ`](#file_existsQ)</span> <span title=":: fileQ(filename) ::">[`fileQ`](#fileQ)</span> <span title=":: dirQ(filename) ::">[`dirQ`](#dirQ)</span> <span title=":: read_file(file_name, encoding='utf-8') -> str :: returns whole file content">[`read_file`](#read_file)</span> <span title=":: write_file(text, file_name, mode='w', encoding='utf-8') :: modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation">[`write_to_file`](#write_to_file)</span> |  |
 | APL | generating ranges | <span title=":: inf_range(start [, step]) :: inf_range(10) -> generator: 10, 11, 12, ...">[`inf_range`](#inf_range)</span> <span title=":: cycle(p) :: cycle('AB') -> A B A B ...">[`cycle`](#cycle)</span> <span title=":: lcycle(p, n) -> list :: takes first n elems from cycle(p)">[`lcycle`](#lcycle)</span> <span title=":: repeat(elem [, n]) :: repeat(10,3) -> 10 10 10">[`repeat`](#repeat)</span> <span title=":: lrepeat(elem, n) -> list :: unlike in repeat, n has to be provided">[`lrepeat`](#lrepeat)</span> <span title=":: pairwise(seq) -> iterator :: supposed to be used in loops, will produce no elems for seq with len <= 1">[`pairwise`](#pairwise)</span> <span title=":: with_prev(seq, fill=None) -> iterator :: supposed to be used in loops">[`with_prev`](#with_prev)</span> <span title=":: with_next(seq, fill=None) -> iterator :: supposed to be used in loops">[`with_next`](#with_next)</span> |  |
 |  | iterators utils | <span title=":: islice(iterable, start, stop[, step]) :: list(islice(inf_range(10), 2)) == [10, 11]">[`islice`](#islice)</span> <span title="list version of islice: lislice">[`lislice`](#lislice)</span> |  |
 |  | list concatenation | <span title=":: cat(seqs) :: non-variadic version of concat">[`cat`](#cat)</span> <span title=":: lcat(seqs) :: non-variadic version of concat">[`lcat`](#lcat)</span> <span title=":: concat(*seqs) -> iterator :: variadic vertion of cat">[`concat`](#concat)</span> <span title=":: lconcat(*seqs) -> list :: literally just list(concat(*seqs))">[`lconcat`](#lconcat)</span> <span title=":: mapcat(f, *seqs) :: maps, then concatenates">[`mapcat`](#mapcat)</span> <span title=":: lmapcat(f, *seqs) :: maps, then concatenates">[`lmapcat`](#lmapcat)</span> |  |
 |  | sorting | <span title=":: lreversed(sequence) :: list version of reversed">[`lreversed`](#lreversed)</span> |  |
 |  | filtering | <span title=":: lfilter(pred, seq) -> List :: funcy list version of extended filter">[`lfilter`](#lfilter)</span> <span title=":: fltr1st(f, seq) -> Optional elem :: returns first found element (or None)">[`fltr1st`](#fltr1st)</span> <span title=":: reject(pred, seq)-> iterator :: same as filter, but checks for False">[`reject`](#reject)</span> <span title=":: lreject(pred, seq) -> List :: list version of reject">[`lreject`](#lreject)</span> <span title=":: without(items, seq) -> generator :: subtracts items from seq (as a sets)">[`without`](#without)</span> <span title=":: lwithout(items, seq) -> list :: list version of reject">[`lwithout`](#lwithout)</span> <span title=":: takewhile([pred, ] seq) :: yields elems of seq as long as they pass pred">[`takewhile`](#takewhile)</span> <span title=":: dropwhile([pred, ] seq) :: mirror of takewhile">[`dropwhile`](#dropwhile)</span> <span title=":: filter_split(pred, seq) -> passed, rejected ::">[`filter_split`](#filter_split)</span> <span title=":: lfilter_split(pred,seq) -> passed, rejected :: list version of filter_split">[`lfilter_split`](#lfilter_split)</span> |  |
-|  | cutting and grouping | <span title=":: flatten(coll) :: recursively flattens to the bottom">[`flatten`](#flatten)</span> <span title=":: bisect_at(n, seq) -> start, tail :: len of start will = n, works only with n>=0">[`bisect_at`](#bisect_at)</span> <span title=":: lbisect_at(n, seq) -> start, tail :: list version of bisect_at, but also for n<0, abs(n) will be len of tail">[`lbisect_at`](#lbisect_at)</span> <span title=":: bisect_by(pred, seq) -> taken, dropped :: similar to (takewhile, dropwhile)">[`bisect_by`](#bisect_by)</span> <span title=":: lbisect_by(pred, seq) -> taken, dropped :: list version of lbisect">[`lbisect_by`](#lbisect_by)</span> <span title=":: partition(n, seq, *, step=None, tail=False) -> generator :: splits seq to lists of len n, tail=True will allow including fewer than n items">[`partition`](#partition)</span> <span title=":: lpartition(n, seq, *, step=None, tail=False) -> List :: simply list(partition(...))">[`lpartition`](#lpartition)</span> <span title=":: partition_by(f, seq) -> iterator of iterators :: splits when f(item) change">[`partition_by`](#partition_by)</span> <span title=":: lpartition_by(f,seq) -> list of lists :: list(partition_by(...))">[`lpartition_by`](#lpartition_by)</span> <span title=":: group_by(f, seq) -> defaultdict(list) :: groups elems of seq keyed by the result of f">[`group_by`](#group_by)</span> <span title=":: lmulticut_by(pred, seq, keep_border=True, merge_border=False) -> list :: cut at pred(elem)==True elems">[`lmulticut_by`](#lmulticut_by)</span> |  |
+|  | cutting and grouping | <span title=":: combinations([1,2,3], 2) = [(1,2), (1,3), (2,3)] ::">[`combinations`](#combinations)</span> <span title="list version of 'combinations'">[`lcombinations`](#lcombinations)</span> <span title=":: flatten(coll) :: recursively flattens to the bottom">[`flatten`](#flatten)</span> <span title=":: bisect_at(n, seq) -> start, tail :: len of start will = n, works only with n>=0">[`bisect_at`](#bisect_at)</span> <span title=":: lbisect_at(n, seq) -> start, tail :: list version of bisect_at, but also for n<0, abs(n) will be len of tail">[`lbisect_at`](#lbisect_at)</span> <span title=":: bisect_by(pred, seq) -> taken, dropped :: similar to (takewhile, dropwhile)">[`bisect_by`](#bisect_by)</span> <span title=":: lbisect_by(pred, seq) -> taken, dropped :: list version of lbisect">[`lbisect_by`](#lbisect_by)</span> <span title=":: partition(n, seq, *, step=None, tail=False) -> generator :: splits seq to lists of len n, tail=True will allow including fewer than n items">[`partition`](#partition)</span> <span title=":: lpartition(n, seq, *, step=None, tail=False) -> List :: simply list(partition(...))">[`lpartition`](#lpartition)</span> <span title=":: partition_by(f, seq) -> iterator of iterators :: splits when f(item) change">[`partition_by`](#partition_by)</span> <span title=":: lpartition_by(f,seq) -> list of lists :: list(partition_by(...))">[`lpartition_by`](#lpartition_by)</span> <span title=":: group_by(f, seq) -> defaultdict(list) :: groups elems of seq keyed by the result of f">[`group_by`](#group_by)</span> <span title=":: lmulticut_by(pred, seq, keep_border=True, merge_border=False) -> list :: cut at pred(elem)==True elems">[`lmulticut_by`](#lmulticut_by)</span> |  |
 | FP | control flow |  | <span title="">[`case`](#case)</span> <span title="">[`unless`](#unless)</span> <span title="">[`lif`](#lif)</span> <span title="">[`branch`](#branch)</span> |
 |  | lambdas |  | <span title=":: (fm (* it 3)) :: anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'">[`fm`](#fm)</span> <span title=":: (f> (* it 3) 4) :: anonymous function with fm syntax, immediately applicates args">[`f>`](#LambdaWithAppl)</span> <span title="same as map, but expects fm-syntax for func">[`mapm`](#mapm)</span> <span title="same as lmap, but expects fm-syntax for func">[`lmapm`](#lmapm)</span> <span title=":: (filterm f xs) :: same as filter, but expects fm-syntax for func">[`filterm`](#filterm)</span> <span title=":: (lfilterm f xs) :: list version of lfilterm">[`lfilterm`](#lfilterm)</span> |
 |  | map zip reduce | <span title=":: lzip(*iterables) -> List :: literally just list(zip(*iterables))">[`lzip`](#lzip)</span> <span title=":: lmap(f, *seqs) -> List :: list version of map">[`lmap`](#lmap)</span> <span title=":: starmap(function, iterable) ::">[`starmap`](#starmap)</span> <span title=":: lstarmap(function, iterable) -> list :: list version of starmap">[`lstarmap`](#lstarmap)</span> <span title=":: reduce(function, sequence[, initial]) -> value :: theory: reduce + monoid = binary-function for free becomes n-arg-function">[`reduce`](#reduce)</span> <span title=":: reductions(f, seq [, acc]) -> generator :: returns sequence of intermetidate values of reduce(f, seq, acc)">[`reductions`](#reductions)</span> <span title=":: lreductions(f, seq [, acc]) -> list :: list version of reductions">[`lreductions`](#lreductions)</span> |  |
@@ -1191,14 +1191,14 @@ choice(seq) method of random.Random instance
     Choose a random element from a non-empty sequence.
 ```
 
-## randint
+## rand_int
 
 [go up](#fpmx-prelude-cheatsheet)
 
 ```hy
-Name: randint
-Kind: Reimport from [random]
-Sgnt: randint(a, b) -> int
+Name: rand_int (= random.randint)
+Kind: Reimport
+Sgnt: rand_int(a, b) -> int
 Info: returns random integer in range [a, b] including both end points
 ```
 
@@ -1209,14 +1209,14 @@ randint(a, b) method of random.Random instance
     Return random integer in range [a, b], including both end points.
 ```
 
-## randfloat
+## rand_float
 
 [go up](#fpmx-prelude-cheatsheet)
 
 ```hy
-Name: randfloat (= random.uniform)
+Name: rand_float (= random.uniform)
 Kind: Reimport
-Sgnt: randfloat(a, b) -> float
+Sgnt: rand_float(a, b) -> float
 Info: range is [a, b) or [a, b] depending on rounding
 ```
 
@@ -2094,6 +2094,22 @@ Sgnt: fourth(seq) -> Optional elem
 Help on function fourth in module fpmx.prelude.funcs:
 
 fourth(seq)
+```
+
+## fifth
+
+[go up](#fpmx-prelude-cheatsheet)
+
+```hy
+Name: fifth
+Kind: FPMX original
+Sgnt: fifth(seq) -> Optional elem
+```
+
+```hy
+Help on function fifth in module fpmx.prelude.funcs:
+
+fifth(seq)
 ```
 
 ## beforelast
@@ -3135,6 +3151,46 @@ replace(obj, /, **changes)
       assert c1.x == 3 and c1.y == 2
 ```
 
+## dc_field
+
+[go up](#fpmx-prelude-cheatsheet)
+
+```hy
+Name: dc_field (= dataclasses.field)
+Kind: Reimport
+Info: dataclasses.field
+```
+
+```hy
+Help on function field in module dataclasses:
+
+field(
+    *,
+    default=<dataclasses._MISSING_TYPE object at 0x00000291320BB620>,
+    default_factory=<dataclasses._MISSING_TYPE object at 0x00000291320BB620>,
+    init=True,
+    repr=True,
+    hash=None,
+    compare=True,
+    metadata=None,
+    kw_only=<dataclasses._MISSING_TYPE object at 0x00000291320BB620>
+)
+    Return an object to identify dataclass fields.
+
+    default is the default value of the field.  default_factory is a
+    0-argument function called to initialize a field's value.  If init
+    is true, the field will be a parameter to the class's __init__()
+    function.  If repr is true, the field will be included in the
+    object's repr().  If hash is true, the field will be included in the
+    object's hash().  If compare is true, the field will be used in
+    comparison functions.  metadata, if specified, must be a mapping
+    which is stored but not otherwise examined by dataclass.  If kw_only
+    is true, the field will become a keyword-only parameter to
+    __init__().
+
+    It is an error to specify both default and default_factory.
+```
+
 ## of
 
 [go up](#fpmx-prelude-cheatsheet)
@@ -3902,6 +3958,69 @@ Help on function lsplit in module funcy.seqs:
 lsplit(pred, seq)
     Splits items which pass the predicate from the ones that don't.
     Returns a pair (passed, failed) of respective lists.
+```
+
+## combinations
+
+[go up](#fpmx-prelude-cheatsheet)
+
+```hy
+Name: combinations
+Kind: Reimport from [itertools]
+Sgnt: combinations([1,2,3], 2) = [(1,2), (1,3), (2,3)]
+```
+
+```hy
+Help on class combinations in module itertools:
+
+class combinations(builtins.object)
+ |  combinations(iterable, r)
+ |
+ |  Return successive r-length combinations of elements in the iterable.
+ |
+ |  combinations(range(4), 3) --> (0,1,2), (0,1,3), (0,2,3), (1,2,3)
+ |
+ |  Methods defined here:
+ |
+ |  __getattribute__(self, name, /)
+ |      Return getattr(self, name).
+ |
+ |  __iter__(self, /)
+ |      Implement iter(self).
+ |
+ |  __next__(self, /)
+ |      Implement next(self).
+ |
+ |  __reduce__(self, /)
+ |      Return state information for pickling.
+ |
+ |  __setstate__(self, object, /)
+ |      Set state information for unpickling.
+ |
+ |  __sizeof__(self, /)
+ |      Returns size in memory, in bytes.
+ |
+ |  ----------------------------------------------------------------------
+ |  Static methods defined here:
+ |
+ |  __new__(*args, **kwargs)
+ |      Create and return a new object.  See help(type) for accurate signature.
+```
+
+## lcombinations
+
+[go up](#fpmx-prelude-cheatsheet)
+
+```hy
+Name: lcombinations
+Kind: FPMX original
+Info: list version of 'combinations'
+```
+
+```hy
+Help on function lcombinations in module fpmx.prelude.funcs:
+
+lcombinations(iterable, r)
 ```
 
 ## flatten
