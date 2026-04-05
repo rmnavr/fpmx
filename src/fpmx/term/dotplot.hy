@@ -1,34 +1,59 @@
 
-    ; TODO:
-    ; - xmin < xmax check
-    ; - xmin=1, xmax=None, when xmin > max.x of all pts
-    ; - xsize=1 gives error (currently forbiden although)
-    ; * :sep linux/windows
+; TODO ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
+    ;:  TODO:
+    ;:  - xmin < xmax check
+    ;:  - xmin=1, xmax=None, when xmin > max.x of all pts
+    ;:  - xsize=1 gives error (currently forbiden although)
+
+    ;:  Later:
+    ;:  * :sep linux/windows
+
+; _____________________________________________________________________________/ }}}1
 ; Imports ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (require fpmx.prelude.from_hyrule [of])
+    (require fpmx.prelude.from_hyrule [of ->])
     (import typing [Tuple Union List Optional])
     (import funcy [lpluck partition str_join])
-    (import dataclasses [dataclass])
+    (import dataclasses [dataclass replace :as upd_field])
+    (import termcolor [colored])
 
     (export :objects [dotPlot])
 
 ; _____________________________________________________________________________/ }}}1
 ; Info ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    ; Cell — 8 braile mini-dots [True, False, ...]
-    ; DrawingArea — canvas where plot is drawn (excludes frame)
+    ;:  Validation:
+    ;:      All data sanitizing happens at dotPlot level.
+    ;:      So all subfunctions expect correct data.
 
 ; _____________________________________________________________________________/ }}}1
 
-; [Classes] Pts and such ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; [C] Classes ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (setv number (of Union int float))
     (setv Point (of Tuple number number))
+    (setv TermcolorForeColor (of Optional str))
 
-; _____________________________________________________________________________/ }}}1
-; [Classes] Cell (8-mini-dots) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+    (setv $FORES
+        [ "black" "red" "green" "yellow" "blue"
+          "magenta" "cyan" "white" "light_grey"
+          "dark_grey" "light_red" "light_green"
+          "light_yellow" "light_blue" "light_magenta" "light_cyan"])
+
+    ; Plot:
+
+    (defclass [dataclass] Plot []
+        "represents 8 mini-dots of Braille-char"
+        ( #^ (of List str) lines); with or without addendum like frames/ticks/legend, etc.
+        ( #^ float xmin); \
+        ( #^ float ymin); | lims of drawing area
+        ( #^ float xmax); |
+        ( #^ float ymax); /
+        ( #^ int naked_xsize); required, because naked_plot lines may contain color-term-codes
+        ( #^ int naked_ysize))
+
+    ; Cell:
 
     (setv $SPACE_CHAR " ")
 
@@ -51,8 +76,9 @@
              (return (chr code))))
 
 ; _____________________________________________________________________________/ }}}1
+; [F] Cell-related ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-; [Functions] Cell-related ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+    ; TODO: optimize this algorythm
 
     (defn #^ Cell
         markCell
@@ -77,6 +103,7 @@
         (setv h (anyPtsInsideLimsQ pts x1 x2 y3 y4))
         (return (Cell :a a :b b :c c :d d :e e :f f :g g :h h)))
 
+    ; helper
     (defn #^ bool
         anyPtsInsideLimsQ
         [ #^ (of List Point) pts
@@ -84,6 +111,7 @@
           #^ number xmax
           #^ number ymin
           #^ number ymax]
+        "returns True on 1st found"
         (for [&pt pts]
             (setv [x y] &pt)
             (when (and (> x xmin) (<= x xmax) (> y ymin) (<= y ymax))
@@ -91,7 +119,123 @@
         (return False))
 
 ; _____________________________________________________________________________/ }}}1
-; [Functions] Plot: validating params ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+; Plot:
+
+; [F] Drawing 1: construct naked ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (defn #^ Plot
+        construct_NakedPlot
+        [ #^ (of List Point) pts
+          #^ int xsize
+          #^ int ysize
+          #^ number xmin
+          #^ number xmax
+          #^ number ymin
+          #^ number ymax]
+        "returns top most string first (with max Y), then Y-1 and so on"
+        (setv [[x0 xN] [y0 yN]] [[xmin xmax] [ymin ymax]])
+        ;
+        (setv xs (list (map (fn [it] (py "x0 + it*(xN - x0)/xsize")) (range 0 (+ 1 xsize)) ))); from x0 to xN, both included
+        (setv ys (list (map (fn [it] (py "y0 + it*(yN - y0)/ysize")) (range 0 (+ 1 ysize)) ))); from x0 to xN, both included
+        ;
+        (setv cells [])
+        (for [&iy (range 0 (- (len ys) 1))]
+            (for [&ix (range 0 (- (len xs) 1))]
+                (cells.append
+                    (cell2Char (markCell pts (get xs &ix) (get xs (+ 1 &ix)) (get ys &iy) (get ys (+ 1 &iy)))))))
+        (setv lines (list (partition xsize cells )))
+        (setv lines_ (list (reversed (list (map (fn [%it] (+ #* %it)) lines )))))
+        ;
+        (Plot :lines lines_
+             :naked_xsize xsize :naked_ysize ysize :xmin xmin :xmax xmax :ymin ymin :ymax ymax))
+
+; _____________________________________________________________________________/ }}}1
+; [F] Drawing 2: colorize series ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (defn #^ Plot
+        addColor
+        [ #^ Plot plot
+          #^ TermcolorForeColor color]
+        ;
+        (when (= color None) (return plot))
+        ;
+        (setv colored_lines
+            (list (map (fn [%line] (colored %line color)) plot.lines)))
+        ;
+        (upd_field plot :lines colored_lines))
+
+; _____________________________________________________________________________/ }}}1
+; [F] Drawing 3: add Frame/Lims ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (defn #^ Plot
+       addFrame
+       [ #^ Plot naked_plot]
+       ;
+       (setv framed_lines [])
+       ;
+       (framed_lines.append (+ $SPACE_CHAR (* naked_plot.naked_xsize "_") $SPACE_CHAR))
+       (for [&str naked_plot.lines] (framed_lines.append (+ "|" &str "|" )))
+       (framed_lines.append (+ $SPACE_CHAR (* naked_plot.naked_xsize "‾") $SPACE_CHAR))
+       ;
+       (return (upd_field naked_plot :lines framed_lines)))
+
+    (defn #^ Plot
+        addLims
+        [ #^ Plot framed_plot]
+        ; add y ticks:
+        (setv _org_lines framed_plot.lines)
+        (setv top_line (+ (get _org_lines  0) "_" (if (> framed_plot.ymax 0) " " "") f"{framed_plot.ymax :.3f}"))
+        (setv prebot_line (+ (get _org_lines -2) " " (if (> framed_plot.ymin 0) " " "") f"{framed_plot.ymin :.3f}"))
+        (setv bot_line (+ (get _org_lines -1) "‾"))
+        (setv bot_line (bot_line.replace " " "|")); add x verti marks
+        (setv _y_ticks_added [top_line #* (cut _org_lines 1 -2) prebot_line bot_line])
+        ; add x ticks:
+        (setv x_min_tick f"{framed_plot.xmin :.3f}")
+        (setv extra_len
+            (max
+                1
+                (- framed_plot.naked_xsize (len x_min_tick) 1)))
+        (setv x_max_tick f"{framed_plot.xmax :.3f}")
+        ;
+        (setv xbot_line (+ x_min_tick (* extra_len " ") x_max_tick))
+        ;
+        (return (upd_field framed_plot :lines [#* _y_ticks_added xbot_line])))
+
+; _____________________________________________________________________________/ }}}1
+; [F] Assembly drawing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    ; values xsize/ymax/... are supposed to be already sanitized
+    ; before sending them into construct_plot
+
+    (defn #^ Plot
+        construct_plot
+        [ #^ (of List Point) pts
+          #^ int xsize
+          #^ int ysize
+          #^ number xmin
+          #^ number xmax
+          #^ number ymin
+          #^ number ymax
+          #^ TermcolorForeColor color
+          #^ bool FLAG_show_frame
+          #^ bool FLAG_minmax_labels]
+        ; strategy pattern for frame/minmax_labels:
+        (setv _add_frame_and_minmax_labels_if_requested
+            (cond (and FLAG_show_frame FLAG_minmax_labels)
+                   (fn [%plot] (-> %plot addFrame addLims))
+                   (and FLAG_show_frame (not FLAG_minmax_labels))
+                   (fn [%plot] (-> %plot addFrame))
+                   True
+                   (fn [%plot] %plot)))
+        ;
+        (-> (construct_NakedPlot pts xsize ysize xmin xmax ymin ymax)
+             (addColor color)
+             (_add_frame_and_minmax_labels_if_requested)))
+
+; _____________________________________________________________________________/ }}}1
+
+; [F] Plot: validate params ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (defn validatePlotParams
         [ #^ int xsize
@@ -117,8 +261,12 @@
                  (not (or (isinstance ymax number) (= ymax None))))
             (raise (TypeError "Type for x/y lims should be int, float or None"))))
 
+
+; _____________________________________________________________________________/ }}}1
+; [F] Plot: set lims ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
     (defn #^ (of Tuple number number number number); xmin xmax ymin ymax
-        calculate_plot_lims
+        auto_plot_lims
         [ #^ (of List Point) pts
           #^ (of Optional number) xmin
           #^ (of Optional number) xmax
@@ -150,79 +298,13 @@
         (return [out_x0 out_x1 out_y0 out_y1]))
 
 ; _____________________________________________________________________________/ }}}1
-; [Functions] Plot: plotting ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    (defn #^ (of List str)
-        constructDrawingArea
-        [ #^ (of List Point) pts
-          #^ int xsize
-          #^ int ysize
-          #^ number xmin
-          #^ number xmax
-          #^ number ymin
-          #^ number ymax]
-        "returns top most string first (with max Y), then Y-1 and so on"
-        (setv [[x0 xN] [y0 yN]] [[xmin xmax] [ymin ymax]])
-        ;
-        (setv xs (list (map (fn [it] (py "x0 + it*(xN - x0)/xsize")) (range 0 (+ 1 xsize)) ))); from x0 to xN, both included
-        (setv ys (list (map (fn [it] (py "y0 + it*(yN - y0)/ysize")) (range 0 (+ 1 ysize)) ))); from x0 to xN, both included
-        ;
-        (setv cells [])
-        (for [&iy (range 0 (- (len ys) 1))]
-            (for [&ix (range 0 (- (len xs) 1))]
-                (cells.append
-                    (cell2Char (markCell pts (get xs &ix) (get xs (+ 1 &ix)) (get ys &iy) (get ys (+ 1 &iy)))))))
-        (setv lines (list (partition xsize cells )))
-        (list (reversed (list (map (fn [%it] (+ #* %it)) lines )))))
-
-    (defn #^ (of List str)
-       addFrame
-       [ #^ (of List str) drawing_area]
-       (setv xsize (len (get drawing_area 0)))
-       (setv ysize (len drawing_area))
-       (setv outp [])
-       ;
-       (outp.append (+ $SPACE_CHAR (* xsize "_") $SPACE_CHAR))
-       (for [&str drawing_area] (outp.append (+ "|" &str "|" )))
-       (outp.append (+ $SPACE_CHAR (* xsize "‾") $SPACE_CHAR))
-       ;
-       (return outp))
-
-    (defn #^ (of List str)
-        addLims
-        [ #^ (of List str) framed_plot
-          #^ number xmin
-          #^ number xmax
-          #^ number ymin
-          #^ number ymax]
-        ;
-        ; add y ticks:
-        (setv top_line (+ (get framed_plot  0) "_" (if (> ymax 0) " " "") f"{ymax :.3f}"))
-        (setv prebot_line (+ (get framed_plot -2) " " (if (> ymin 0) " " "") f"{ymin :.3f}"))
-        (setv bot_line (+ (get framed_plot -1) "‾"))
-        (setv bot_line (bot_line.replace " " "|")); add x verti marks
-        (setv _y_ticks_added [top_line #* (cut framed_plot 1 -2) prebot_line bot_line])
-        ;
-        ; add x ticks:
-        (setv x_min_tick f"{xmin :.3f}")
-        (setv extra_len
-            (max
-                1
-                (- (len (get framed_plot 0)) (len x_min_tick) 1)))
-        (setv x_max_tick f"{xmax :.3f}")
-        ;
-        (setv xbot_line (+ x_min_tick (* extra_len " ") x_max_tick))
-        ;
-        (return [#* _y_ticks_added xbot_line]))
-
-; _____________________________________________________________________________/ }}}1
-; [Functions] Plot: assembly ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; [F] Plot: assembly (validation + construction), user API ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ; All data sanitizing happens at dotPlot level.
     ; So all subfunctions expect correct data.
 
     (defn #^ str dotPlot
-        [ #^ (of List (of Tuple number number)) pts
+        [ #^ (of List Point) pts
           *
           #^ int [xsize 60]
           #^ int [ysize 30]
@@ -230,35 +312,40 @@
           #^ (of Optional number) [xmax None]
           #^ (of Optional number) [ymin None]
           #^ (of Optional number) [ymax None]
-          #^ bool [frame True]]
+          #^ TermcolorForeColor [color "red"]
+          #^ bool [frame True]
+          #^ bool [minmax_labels True]]; when frame=True, has no effect
         ;
-        ; validation:
+        ; validate size/lims:
         (validatePlotParams xsize ysize xmin xmax ymin ymax)
         (setv [xmin_ xmax_ ymin_ ymax_]; here Nones are resolved
-            (calculate_plot_lims pts xmin xmax ymin ymax))
-        (when
-            (or (>= xmin_ xmax_)
-                 (>= ymin_ ymax_))
+            (auto_plot_lims pts xmin xmax ymin ymax))
+        (when (or (>= xmin_ xmax_) (>= ymin_ ymax_))
             (raise (ValueError "Plotlims should be min < max")))
+        ; validate colors:
+        (when (!= color None)
+            (when (not (in color $FORES))
+                (raise (ValueError (+ "Incorrect dotPlot color. Allowable colors: " (str $FORES))))))
         ;
         ; drawing:
-        (setv lines (constructDrawingArea pts xsize ysize xmin_ xmax_ ymin_ ymax_))
-        (when frame
-            (setv lines (addFrame lines))
-            (setv lines (addLims lines xmin_ xmax_ ymin_ ymax_)))
+        (setv _plot
+            (construct_plot pts
+                           xsize ysize
+                           xmin_ xmax_ ymin_ ymax_
+                           color frame minmax_labels))
         ;
-        (return (str_join "\n" lines)))
+        (return (str_join "\n" _plot.lines)))
 
 ; _____________________________________________________________________________/ }}}1
 
-; /test/ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+    ;   defn _test_plot []
+    ;       import math [sin]
+    ;       setv xs : list : map (fn [it] (/ it 100)) (range -1000 1010)
+    ;       setv ys : list : map sin xs
+    ;       setv series : list : zip xs ys
+    ;       print "=== Plot 1 ==="
+    ;       print : dotPlot series :xsize 30 :ysize 3 :minmax_labels False :color None
+    ;       print "=== Plot 2 ==="
+    ;       print : dotPlot series
 
-    ;   import math [sin]
-
-    ;   setv xs : list : map (fn [it] (/ it 100)) (range -1000 1010)
-    ;   setv ys : list : map sin xs
-    ;   setv series : list : zip xs ys
-
-    ;   print : dotPlot series :xsize 30 :ysize 5
-
-; _____________________________________________________________________________/ }}}1
+    ;   _test_plot

@@ -63,9 +63,9 @@
 
 // ____________________________________________________________________________/ }}}1
 
-// 1 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+// unsorted ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	✓ when incorrect option for load_fpmx -> throw error
+	when incorrect option for load_fpmx -> throw error
 
 	fpmx:
 		- docs: main
@@ -111,7 +111,8 @@
 		- rand_int
 		- rand_float
 		- (l)combinations
+		- dotPlot
 
 	docs:
-		- dotPlot: Frame=True
+		- dotPlot: frame minmax_labels color (from termcolor)
 

@@ -1,5 +1,5 @@
 
-# Version 0.6.0 (10 Mar 2026)
+# Version 0.6.0 (Apr 2026)
 - rebranding from `fptk` to `fpmx` (all the older naming is replaced everywhere, even in changelog)
 - reorganized functions classification groups
 - added `approx_eq` function
@@ -7,14 +7,15 @@
 - renamed `randint` and `randfloat` to `rand_int` and `rand_float`
 - big reorganization of monads, `WriterMaybe` transformer introduced
 - added `(l)combinations` from itertools
-- added `fifth`
+- added `fifth` function
+- added `color` option for dotPlot
 
-0.5.1.dev5:
+## 0.5.1.dev5
 - `term` module added, including `clrz` and `dotPlot` functions
 - functions `dmul` and `dadd` are removed as redundant (just use `plus` and `mul`)
 - function `round_to` added
 
-0.5.1.dev4:
+## 0.5.1.dev4
 - Renamed monads unwrappers:
   - Maybe: unwrapM -> unwrapJ 
   - Result: unwrapE -> unwrapF 
@@ -24,7 +25,7 @@
   - removed hyrule dependency
   - split into 2 big parts: core (prelude) and extra (strict/monads, lenses)
 
-0.4.5.dev:
+## 0.4.5.dev:
 - added Maybe monad (works similar to Result monad)
 - fixed incorrectly reversed application order of funcs in resultM
 - `f>` is back lol and `=>`/`p:` has special recognition for it (while `=>>` basic recognition works ok)
