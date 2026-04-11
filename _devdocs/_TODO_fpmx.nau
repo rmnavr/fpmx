@@ -104,7 +104,7 @@
 
 	mod:
 		- fm without it or % is fn [], no?
-		- cut/cut_, range/range_/through
+		- consp: cut/cut_, range/range_/through, get/ncut
 
 	add tests:
 		- dc_field
