@@ -568,22 +568,6 @@
 
 ; [GROUP] 60 APL: generating ranges ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (import itertools [count :as inf_range]) #_ "inf_range(start [, step]) | inf_range(10) -> generator: 10, 11, 12, ..."
-
-    (import itertools [cycle])               #_ "cycle(p) | cycle('AB') -> A B A B ..."
-
-    #_ "lcycle(p, n) -> list | takes first n elems from cycle(p)"
-    (defn lcycle [p n] "takes first n elems from cycle(p)" (lislice (cycle p) n))
-
-    (import itertools [repeat])              #_ "repeat(elem [, n]) | repeat(10,3) -> 10 10 10"
-
-    #_ "lrepeat(elem, n) -> list | unlike in repeat, n has to be provided"
-    (defn lrepeat [elem n] "literally just list(repeat(elem, n))" (list (repeat elem n)))
-
-    (import funcy [pairwise])   #_ "pairwise(seq) -> iterator | supposed to be used in loops, will produce no elems for seq with len <= 1"
-    (import funcy [with_prev])  #_ "with_prev(seq, fill=None) -> iterator | supposed to be used in loops"
-    (import funcy [with_next])  #_ "with_next(seq, fill=None) -> iterator | supposed to be used in loops"
-
     #_ "range_(start, end=None, step=1) -> range | same as range, but both ends included"
     (defn range_ [start [end None] [step 1]]
         "range with both ends included"
@@ -620,6 +604,23 @@
                   :setv candidate (+ start (* &i step))
                   :if   (>= candidate _end)
                   candidate)))
+
+    (import itertools [count :as inf_range]) #_ "inf_range(start [, step]) | inf_range(10) -> generator: 10, 11, 12, ..."
+
+    (import itertools [cycle])               #_ "cycle(p) | cycle('AB') -> A B A B ..."
+
+    #_ "lcycle(p, n) -> list | takes first n elems from cycle(p)"
+    (defn lcycle [p n] "takes first n elems from cycle(p)" (lislice (cycle p) n))
+
+    (import itertools [repeat])              #_ "repeat(elem [, n]) | repeat(10,3) -> 10 10 10"
+
+    #_ "lrepeat(elem, n) -> list | unlike in repeat, n has to be provided"
+    (defn lrepeat [elem n] "literally just list(repeat(elem, n))" (list (repeat elem n)))
+
+    (import funcy [pairwise])   #_ "pairwise(seq) -> iterator | supposed to be used in loops, will produce no elems for seq with len <= 1"
+    (import funcy [with_prev])  #_ "with_prev(seq, fill=None) -> iterator | supposed to be used in loops"
+    (import funcy [with_next])  #_ "with_next(seq, fill=None) -> iterator | supposed to be used in loops"
+
 
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] 61 APL: iterators utils ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -799,7 +800,6 @@
 
     (comment "py | builtin | if   | (if check true false)          | ")
     (comment "hy | builtin | cond | (cond check1 do1 check2 do2 True doT) | ")
-    (comment "hy | builtin | case | (case 10 10 True 20 False else None) | ")
 
 ; _____________________________________________________________________________/ }}}1
 ;«[GROUP] 71 FP: lambdas» — only in macros

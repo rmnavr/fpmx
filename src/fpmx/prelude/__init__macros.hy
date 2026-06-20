@@ -3,7 +3,7 @@
         of                  #_ "[GROUP] 50 Typing: all              | | example: (of List int) which is equiv to py-code: List[int]"
         comment             #_ "[GROUP] 93 Misc: misc               | |"
         ncut                #_ "[GROUP] 40 Getters: basic           | |"
-        case                #_ "[GROUP] 70 FP: control flow         | |"
+        case                #_ "[GROUP] 70 FP: control flow         | (case 10 10 True 20 False else None) | "
         unless              #_ "[GROUP] 70 FP: control flow         | |"
         lif                 #_ "[GROUP] 70 FP: control flow         | |"
         branch              #_ "[GROUP] 70 FP: control flow         | |"

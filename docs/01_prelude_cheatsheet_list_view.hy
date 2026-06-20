@@ -194,6 +194,8 @@ DEFN: fpmx            | write_to_file            :: write_file(text, file_name, 
 
 === APL ===
 ;: generating ranges:
+DEFN: fpmx            | range_                   :: range_(start, end=None, step=1) -> range  ; same as range, but both ends included
+DEFN: fpmx            | lrange_                  :: lrange_(start, end, step=1) -> List  ; range including both ends when possible, also works on fractionals
 FROM: itertools       | inf_range (<-count)      :: inf_range(start [, step])  ; inf_range(10) -> generator: 10, 11, 12, ...
 FROM: itertools       | cycle                    :: cycle(p)  ; cycle('AB') -> A B A B ...
 DEFN: fpmx            | lcycle                   :: lcycle(p, n) -> list  ; takes first n elems from cycle(p)
@@ -202,8 +204,6 @@ DEFN: fpmx            | lrepeat                  :: lrepeat(elem, n) -> list  ; 
 FROM: funcy           | pairwise                 :: pairwise(seq) -> iterator  ; supposed to be used in loops, will produce no elems for seq with len <= 1
 FROM: funcy           | with_prev                :: with_prev(seq, fill=None) -> iterator  ; supposed to be used in loops
 FROM: funcy           | with_next                :: with_next(seq, fill=None) -> iterator  ; supposed to be used in loops
-DEFN: fpmx            | range_                   :: range_(start, end=None, step=1) -> range  ; same as range, but both ends included
-DEFN: fpmx            | lrange_                  :: lrange_(start, end, step=1) -> List  ; range including both ends when possible, also works on fractionals
 ;: iterators utils:
 FROM: itertools       | islice                   :: islice(iterable, start, stop[, step])  ; list(islice(inf_range(10), 2)) == [10, 11]
 DEFN: fpmx            | lislice                  ; list version of islice: lislice
@@ -249,8 +249,7 @@ DEFN: fpmx            | lmulticut_by             :: lmulticut_by(pred, seq, keep
 ;: control flow:
 INFO: py              | if /builtin/             :: (if check true false)
 INFO: hy              | cond /builtin/           :: (cond check1 do1 check2 do2 True doT)
-INFO: hy              | case /builtin/           :: (case 10 10 True 20 False else None)
-MACR: fpmx/hyrule     | case
+MACR: fpmx/hyrule     | case                     :: (case 10 10 True 20 False else None)
 MACR: fpmx/hyrule     | unless
 MACR: fpmx/hyrule     | lif
 MACR: fpmx/hyrule     | branch

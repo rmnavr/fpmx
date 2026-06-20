@@ -721,7 +721,7 @@
 | Group | Subgroup | Functions/Types | Macros |
 |-------|----------|-----------------|--------|")
 
-    (setv $HEADER1 "fpmx-prelude-cheatsheet")
+    (setv $HEADER1 "fpmx Prelude cheatsheet")
     (setv $HEADER2 "Detailed descriptions")
     (setv $BACKLINK f"[go up](#{$HEADER1})")
 

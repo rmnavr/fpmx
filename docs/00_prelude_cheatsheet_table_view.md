@@ -1,4 +1,4 @@
-# fpmx-prelude-cheatsheet
+# fpmx Prelude cheatsheet
 
 
 | Group | Subgroup | Functions/Types | Macros |
@@ -26,13 +26,13 @@
 |  | mask | <span title=":: mask_sel('abc', [1,0,1]) -> iterator: 'a', 'c' ::">[`mask_sel`](#mask_sel)</span> <span title=":: lmask_sel(data, selectors) -> list ::">[`lmask_sel`](#lmask_sel)</span> <span title=":: mask2idxs(mask) -> list :: mask is list like [1 0 1 0] or [True False True False], which will be converted to [0 2]">[`mask2idxs`](#mask2idxs)</span> <span title=":: idxs2mask(idxs) -> list :: idxs is non-sorted list of integers like [0 3 2], which will be converted to [1 0 1 1]">[`idxs2mask`](#idxs2mask)</span> |  |
 | Typing | all | <span title="">[`List`](#List)</span> <span title="">[`Tuple`](#Tuple)</span> <span title="">[`Dict`](#Dict)</span> <span title="">[`Union`](#Union)</span> <span title="">[`TypedDict`](#TypedDict)</span> <span title="">[`NamedTuple`](#NamedTuple)</span> <span title="">[`Optional`](#Optional)</span> <span title="">[`Generator`](#Generator)</span> <span title="">[`Any`](#Any)</span> <span title="">[`Callable`](#Callable)</span> <span title="">[`Literal`](#Literal)</span> <span title="">[`Type`](#Type)</span> <span title="">[`TypeVar`](#TypeVar)</span> <span title="">[`Generic`](#Generic)</span> <span title="">[`Enum`](#Enum)</span> <span title="simply Union(int, float)">[`number`](#number)</span> <span title="">[`dataclass`](#dataclass)</span> <span title="non-mutating">[`upd_field`](#upd_field)</span> <span title="dataclasses.field">[`dc_field`](#dc_field)</span> | <span title="example: (of List int) which is equiv to py-code: List[int]">[`of`](#of)</span> <span title="define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))">[`def::`](#Annotator2)</span> <span title="example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]">[`f::`](#Annotator1)</span> |
 | IO | all | <span title=":: file_existsQ(filename) :: also works on folders">[`file_existsQ`](#file_existsQ)</span> <span title=":: fileQ(filename) ::">[`fileQ`](#fileQ)</span> <span title=":: dirQ(filename) ::">[`dirQ`](#dirQ)</span> <span title=":: read_file(file_name, encoding='utf-8') -> str :: returns whole file content">[`read_file`](#read_file)</span> <span title=":: write_file(text, file_name, mode='w', encoding='utf-8') :: modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation">[`write_to_file`](#write_to_file)</span> |  |
-| APL | generating ranges | <span title=":: inf_range(start [, step]) :: inf_range(10) -> generator: 10, 11, 12, ...">[`inf_range`](#inf_range)</span> <span title=":: cycle(p) :: cycle('AB') -> A B A B ...">[`cycle`](#cycle)</span> <span title=":: lcycle(p, n) -> list :: takes first n elems from cycle(p)">[`lcycle`](#lcycle)</span> <span title=":: repeat(elem [, n]) :: repeat(10,3) -> 10 10 10">[`repeat`](#repeat)</span> <span title=":: lrepeat(elem, n) -> list :: unlike in repeat, n has to be provided">[`lrepeat`](#lrepeat)</span> <span title=":: pairwise(seq) -> iterator :: supposed to be used in loops, will produce no elems for seq with len <= 1">[`pairwise`](#pairwise)</span> <span title=":: with_prev(seq, fill=None) -> iterator :: supposed to be used in loops">[`with_prev`](#with_prev)</span> <span title=":: with_next(seq, fill=None) -> iterator :: supposed to be used in loops">[`with_next`](#with_next)</span> <span title=":: range_(start, end=None, step=1) -> range :: same as range, but both ends included">[`range_`](#range_)</span> <span title=":: lrange_(start, end, step=1) -> List :: range including both ends when possible, also works on fractionals">[`lrange_`](#lrange_)</span> |  |
+| APL | generating ranges | <span title=":: range_(start, end=None, step=1) -> range :: same as range, but both ends included">[`range_`](#range_)</span> <span title=":: lrange_(start, end, step=1) -> List :: range including both ends when possible, also works on fractionals">[`lrange_`](#lrange_)</span> <span title=":: inf_range(start [, step]) :: inf_range(10) -> generator: 10, 11, 12, ...">[`inf_range`](#inf_range)</span> <span title=":: cycle(p) :: cycle('AB') -> A B A B ...">[`cycle`](#cycle)</span> <span title=":: lcycle(p, n) -> list :: takes first n elems from cycle(p)">[`lcycle`](#lcycle)</span> <span title=":: repeat(elem [, n]) :: repeat(10,3) -> 10 10 10">[`repeat`](#repeat)</span> <span title=":: lrepeat(elem, n) -> list :: unlike in repeat, n has to be provided">[`lrepeat`](#lrepeat)</span> <span title=":: pairwise(seq) -> iterator :: supposed to be used in loops, will produce no elems for seq with len <= 1">[`pairwise`](#pairwise)</span> <span title=":: with_prev(seq, fill=None) -> iterator :: supposed to be used in loops">[`with_prev`](#with_prev)</span> <span title=":: with_next(seq, fill=None) -> iterator :: supposed to be used in loops">[`with_next`](#with_next)</span> |  |
 |  | iterators utils | <span title=":: islice(iterable, start, stop[, step]) :: list(islice(inf_range(10), 2)) == [10, 11]">[`islice`](#islice)</span> <span title="list version of islice: lislice">[`lislice`](#lislice)</span> |  |
 |  | list concatenation | <span title=":: cat(seqs) :: non-variadic version of concat">[`cat`](#cat)</span> <span title=":: lcat(seqs) :: non-variadic version of concat">[`lcat`](#lcat)</span> <span title=":: concat(*seqs) -> iterator :: variadic vertion of cat">[`concat`](#concat)</span> <span title=":: lconcat(*seqs) -> list :: literally just list(concat(*seqs))">[`lconcat`](#lconcat)</span> <span title=":: mapcat(f, *seqs) :: maps, then concatenates">[`mapcat`](#mapcat)</span> <span title=":: lmapcat(f, *seqs) :: maps, then concatenates">[`lmapcat`](#lmapcat)</span> |  |
 |  | sorting | <span title=":: lreversed(sequence) :: list version of reversed">[`lreversed`](#lreversed)</span> |  |
 |  | filtering | <span title=":: lfilter(pred, seq) -> List :: funcy list version of extended filter">[`lfilter`](#lfilter)</span> <span title=":: fltr1st(f, seq) -> Optional elem :: returns first found element (or None)">[`fltr1st`](#fltr1st)</span> <span title=":: reject(pred, seq)-> iterator :: same as filter, but checks for False">[`reject`](#reject)</span> <span title=":: lreject(pred, seq) -> List :: list version of reject">[`lreject`](#lreject)</span> <span title=":: without(items, seq) -> generator :: subtracts items from seq (as a sets)">[`without`](#without)</span> <span title=":: lwithout(items, seq) -> list :: list version of reject">[`lwithout`](#lwithout)</span> <span title=":: takewhile([pred, ] seq) :: yields elems of seq as long as they pass pred">[`takewhile`](#takewhile)</span> <span title=":: dropwhile([pred, ] seq) :: mirror of takewhile">[`dropwhile`](#dropwhile)</span> <span title=":: filter_split(pred, seq) -> passed, rejected ::">[`filter_split`](#filter_split)</span> <span title=":: lfilter_split(pred,seq) -> passed, rejected :: list version of filter_split">[`lfilter_split`](#lfilter_split)</span> |  |
 |  | cutting and grouping | <span title=":: combinations([1,2,3], 2) = [(1,2), (1,3), (2,3)] ::">[`combinations`](#combinations)</span> <span title="list version of 'combinations'">[`lcombinations`](#lcombinations)</span> <span title=":: flatten(coll) :: recursively flattens to the bottom">[`flatten`](#flatten)</span> <span title=":: bisect_at(n, seq) -> start, tail :: len of start will = n, works only with n>=0">[`bisect_at`](#bisect_at)</span> <span title=":: lbisect_at(n, seq) -> start, tail :: list version of bisect_at, but also for n<0, abs(n) will be len of tail">[`lbisect_at`](#lbisect_at)</span> <span title=":: bisect_by(pred, seq) -> taken, dropped :: similar to (takewhile, dropwhile)">[`bisect_by`](#bisect_by)</span> <span title=":: lbisect_by(pred, seq) -> taken, dropped :: list version of lbisect">[`lbisect_by`](#lbisect_by)</span> <span title=":: partition(n, seq, *, step=None, tail=False) -> generator :: splits seq to lists of len n, tail=True will allow including fewer than n items">[`partition`](#partition)</span> <span title=":: lpartition(n, seq, *, step=None, tail=False) -> List :: simply list(partition(...))">[`lpartition`](#lpartition)</span> <span title=":: partition_by(f, seq) -> iterator of iterators :: splits when f(item) change">[`partition_by`](#partition_by)</span> <span title=":: lpartition_by(f,seq) -> list of lists :: list(partition_by(...))">[`lpartition_by`](#lpartition_by)</span> <span title=":: group_by(f, seq) -> defaultdict(list) :: groups elems of seq keyed by the result of f">[`group_by`](#group_by)</span> <span title=":: lmulticut_by(pred, seq, keep_border=True, merge_border=False) -> list :: cut at pred(elem)==True elems">[`lmulticut_by`](#lmulticut_by)</span> |  |
-| FP | control flow |  | <span title="">[`case`](#case)</span> <span title="">[`unless`](#unless)</span> <span title="">[`lif`](#lif)</span> <span title="">[`branch`](#branch)</span> |
+| FP | control flow |  | <span title=":: (case 10 10 True 20 False else None) ::">[`case`](#case)</span> <span title="">[`unless`](#unless)</span> <span title="">[`lif`](#lif)</span> <span title="">[`branch`](#branch)</span> |
 |  | lambdas |  | <span title=":: (fm (* it 3)) :: anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'">[`fm`](#fm)</span> <span title=":: (f> (* it 3) 4) :: anonymous function with fm syntax, immediately applicates args">[`f>`](#LambdaWithAppl)</span> <span title="same as map, but expects fm-syntax for func">[`mapm`](#mapm)</span> <span title="same as lmap, but expects fm-syntax for func">[`lmapm`](#lmapm)</span> <span title=":: (filterm f xs) :: same as filter, but expects fm-syntax for func">[`filterm`](#filterm)</span> <span title=":: (lfilterm f xs) :: list version of lfilterm">[`lfilterm`](#lfilterm)</span> |
 |  | map zip reduce | <span title=":: lzip(*iterables) -> List :: literally just list(zip(*iterables))">[`lzip`](#lzip)</span> <span title=":: lmap(f, *seqs) -> List :: list version of map">[`lmap`](#lmap)</span> <span title=":: starmap(function, iterable) ::">[`starmap`](#starmap)</span> <span title=":: lstarmap(function, iterable) -> list :: list version of starmap">[`lstarmap`](#lstarmap)</span> <span title=":: reduce(function, sequence[, initial]) -> value :: theory: reduce + monoid = binary-function for free becomes n-arg-function">[`reduce`](#reduce)</span> <span title=":: reductions(f, seq [, acc]) -> generator :: returns sequence of intermetidate values of reduce(f, seq, acc)">[`reductions`](#reductions)</span> <span title=":: lreductions(f, seq [, acc]) -> list :: list version of reductions">[`lreductions`](#lreductions)</span> |  |
 |  | function composition | <span title="identity(n) -> n">[`identity`](#identity)</span> <span title=":: constantly(val) :: constantly(30) is FUNCTION that always return val no matter the arguments">[`constantly`](#constantly)</span> <span title=":: compose(f1, f2, ..., fn) :: = f1(f2(..fn(***))) ; applicator">[`compose`](#compose)</span> <span title=":: rcompose(f1, f2, ..., fn) :: = fn(..(f2(f1(***)))) ; applicator">[`rcompose`](#rcompose)</span> <span title=":: ljuxt(*fs) :: = [f1, f2, ...](***) ; applicator">[`ljuxt`](#ljuxt)</span> <span title=":: nested(n, f) :: applicator f(...(f(***)))">[`nested`](#nested)</span> <span title=":: apply_n(n, f, *args, **kwargs) :: f(f(f(...f(*args, **kwargs))">[`apply_n`](#apply_n)</span> <span title="applicator">[`partial`](#partial)</span> <span title="applicator">[`rpartial`](#rpartial)</span> <span title=":: flip(f, a, b) = f(b, a) :: calls f with flipped args">[`flip`](#flip)</span> <span title=":: pflip(f, a) :: applicator for function f(a,b) of 2 args; example: pflip(div, 4)(1) == 0.25">[`pflip`](#pflip)</span> | <span title=":: (do_n   n #* body) -> None :: expands to ~ (do body body body ...)">[`do_n`](#do_n)</span> <span title=":: (list_n n #* body) -> List ::">[`list_n`](#list_n)</span> <span title="">[`->`](#hyruleThreading1)</span> <span title="">[`->>`](#hyruleThreading2)</span> <span title="">[`as->`](#hyruleThreading3)</span> <span title="mutating">[`doto`](#hyruleThreading4)</span> <span title="unification of dot-macro and ->">[`=>`](#FPMXThreading1)</span> <span title="unification of dot-macro and ->>">[`=>>`](#FPMXThreading2)</span> <span title="aplicator, pipe of partials">[`p:`](#PipeOfPartials)</span> |
@@ -46,7 +46,7 @@
 
 ## evenQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: evenQ (= funcy.even)
@@ -62,7 +62,7 @@ even(x)
 
 ## oddQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: oddQ (= funcy.odd)
@@ -78,7 +78,7 @@ odd(x)
 
 ## zeroQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: zeroQ
@@ -96,7 +96,7 @@ zeroQ(x)
 
 ## negativeQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: negativeQ
@@ -114,7 +114,7 @@ negativeQ(x)
 
 ## positiveQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: positiveQ
@@ -132,7 +132,7 @@ positiveQ(x)
 
 ## noneQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: noneQ (= funcy.isnone)
@@ -147,7 +147,7 @@ isnone(x)
 
 ## notnoneQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: notnoneQ (= funcy.notnone)
@@ -162,7 +162,7 @@ notnone(x)
 
 ## oftypeQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: oftypeQ
@@ -180,7 +180,7 @@ oftypeQ(tp, x)
 
 ## ofinstQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: ofinstQ
@@ -198,7 +198,7 @@ ofinstQ(tp, x)
 
 ## intQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: intQ
@@ -216,7 +216,7 @@ intQ(x)
 
 ## floatQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: floatQ
@@ -234,7 +234,7 @@ floatQ(x)
 
 ## numberQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: numberQ
@@ -252,7 +252,7 @@ numberQ(x)
 
 ## strQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: strQ
@@ -270,7 +270,7 @@ strQ(x)
 
 ## dictQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: dictQ
@@ -288,7 +288,7 @@ dictQ(x)
 
 ## listQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: listQ (= funcy.is_list)
@@ -299,7 +299,7 @@ Info: checks if value is list
 
 ## tupleQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: tupleQ (= funcy.is_tuple)
@@ -310,7 +310,7 @@ Info: checks if value is tuple
 
 ## setQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: setQ (= funcy.is_set)
@@ -321,7 +321,7 @@ Info: checks if value is set
 
 ## iteratorQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: iteratorQ (= funcy.is_iter)
@@ -332,7 +332,7 @@ Info: checks if value is iterator
 
 ## iterableQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: iterableQ (= funcy.iterable)
@@ -343,7 +343,7 @@ Info: checks if value is iterable
 
 ## trueQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: trueQ
@@ -361,7 +361,7 @@ trueQ(x)
 
 ## falseQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: falseQ
@@ -379,7 +379,7 @@ falseQ(x)
 
 ## oflenQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: oflenQ
@@ -397,7 +397,7 @@ oflenQ(n, xs)
 
 ## zerolenQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: zerolenQ
@@ -415,7 +415,7 @@ zerolenQ(xs)
 
 ## dec
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: dec
@@ -432,7 +432,7 @@ dec(n)
 
 ## inc
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: inc
@@ -449,7 +449,7 @@ inc(n)
 
 ## sign
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: sign
@@ -466,7 +466,7 @@ sign(x)
 
 ## half
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: half
@@ -484,7 +484,7 @@ half(x)
 
 ## double
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: double
@@ -502,7 +502,7 @@ double(x)
 
 ## reciprocal
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: reciprocal
@@ -520,7 +520,7 @@ reciprocal(x)
 
 ## floor
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: floor
@@ -539,7 +539,7 @@ floor(x, /)
 
 ## ceil
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: ceil
@@ -558,7 +558,7 @@ ceil(x, /)
 
 ## round_to
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: round_to
@@ -575,7 +575,7 @@ round_to(n, step)
 
 ## clip
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: clip
@@ -593,7 +593,7 @@ clip(x, lower, upper)
 
 ## approx_eq
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: approx_eq (= math.isclose)
@@ -626,7 +626,7 @@ isclose(a, b, *, rel_tol=1e-09, abs_tol=0.0)
 
 ## sqrt
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: sqrt
@@ -644,7 +644,7 @@ sqrt(x, /)
 
 ## squared
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: squared
@@ -662,7 +662,7 @@ squared(x)
 
 ## dist
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: dist
@@ -686,7 +686,7 @@ dist(p, q, /)
 
 ## hypot
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: hypot
@@ -717,7 +717,7 @@ hypot(...)
 
 ## normalize
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: normalize
@@ -739,7 +739,7 @@ normalize(xs)
 
 ## exp
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: exp
@@ -756,7 +756,7 @@ exp(x, /)
 
 ## log
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: log
@@ -776,7 +776,7 @@ log(...)
 
 ## ln
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: ln
@@ -793,7 +793,7 @@ ln(x)
 
 ## log10
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: log10
@@ -810,7 +810,7 @@ log10(x, /)
 
 ## pi
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: pi
@@ -1025,7 +1025,7 @@ class float(object)
 
 ## sin
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: sin
@@ -1043,7 +1043,7 @@ sin(x, /)
 
 ## cos
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: cos
@@ -1061,7 +1061,7 @@ cos(x, /)
 
 ## tan
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: tan
@@ -1079,7 +1079,7 @@ tan(x, /)
 
 ## degrees
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: degrees
@@ -1097,7 +1097,7 @@ degrees(x, /)
 
 ## radians
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: radians
@@ -1115,7 +1115,7 @@ radians(x, /)
 
 ## acos
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: acos
@@ -1135,7 +1135,7 @@ acos(x, /)
 
 ## asin
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: asin
@@ -1155,7 +1155,7 @@ asin(x, /)
 
 ## atan
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: atan
@@ -1175,7 +1175,7 @@ atan(x, /)
 
 ## atan2
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: atan2
@@ -1195,7 +1195,7 @@ atan2(y, x, /)
 
 ## choice
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: choice
@@ -1213,7 +1213,7 @@ choice(seq) method of random.Random instance
 
 ## rand_int
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: rand_int (= random.randint)
@@ -1231,7 +1231,7 @@ randint(a, b) method of random.Random instance
 
 ## rand_float
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: rand_float (= random.uniform)
@@ -1249,7 +1249,7 @@ uniform(a, b) method of random.Random instance
 
 ## rand01
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: rand01 (= random.random)
@@ -1267,7 +1267,7 @@ random() method of random.Random instance
 
 ## sums
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: sums
@@ -1285,7 +1285,7 @@ sums(seq, acc=EMPTY)
 
 ## lsums
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lsums
@@ -1303,7 +1303,7 @@ lsums(seq, acc=EMPTY)
 
 ## product
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: product (= math.prod)
@@ -1327,7 +1327,7 @@ prod(iterable, /, *, start=1)
 
 ## minus
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: minus
@@ -1344,7 +1344,7 @@ minus(x, y)
 
 ## neg
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: neg
@@ -1362,7 +1362,7 @@ neg(a, /)
 
 ## mod
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: mod
@@ -1380,7 +1380,7 @@ mod(a, b, /)
 
 ## matmul
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: matmul
@@ -1397,7 +1397,7 @@ matmul(a, b, /)
 
 ## div
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: div (= operator.truediv)
@@ -1414,7 +1414,7 @@ truediv(a, b, /)
 
 ## and_
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: and_
@@ -1431,7 +1431,7 @@ and_(a, b, /)
 
 ## or_
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: or_
@@ -1448,7 +1448,7 @@ or_(a, b, /)
 
 ## not_
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: not_
@@ -1465,7 +1465,7 @@ not_(a, /)
 
 ## is_
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: is_
@@ -1482,7 +1482,7 @@ is_(a, b, /)
 
 ## xor
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: xor
@@ -1498,7 +1498,7 @@ xor(a, b, /)
 
 ## eq
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: eq
@@ -1515,7 +1515,7 @@ eq(a, b, /)
 
 ## neq
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: neq (= operator.ne)
@@ -1532,7 +1532,7 @@ ne(a, b, /)
 
 ## gt
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: gt
@@ -1549,7 +1549,7 @@ gt(a, b, /)
 
 ## lt
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lt
@@ -1566,7 +1566,7 @@ lt(a, b, /)
 
 ## geq
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: geq (= operator.ge)
@@ -1583,7 +1583,7 @@ ge(a, b, /)
 
 ## leq
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: leq (= operator.le)
@@ -1600,7 +1600,7 @@ le(a, b, /)
 
 ## gt0
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: gt0
@@ -1618,7 +1618,7 @@ gt0(x)
 
 ## geq0
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: geq0
@@ -1636,7 +1636,7 @@ geq0(x)
 
 ## lt0
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lt0
@@ -1654,7 +1654,7 @@ lt0(x)
 
 ## leq0
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: leq0
@@ -1672,7 +1672,7 @@ leq0(x)
 
 ## mul
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: mul
@@ -1691,7 +1691,7 @@ mul(*args)
 
 ## smul
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: smul
@@ -1711,7 +1711,7 @@ smul(*args)
 
 ## lmul
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lmul
@@ -1731,7 +1731,7 @@ lmul(*args)
 
 ## plus
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: plus
@@ -1750,7 +1750,7 @@ plus(*args)
 
 ## sconcat
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: sconcat
@@ -1770,7 +1770,7 @@ sconcat(*args)
 
 ## strlen
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: strlen
@@ -1788,7 +1788,7 @@ strlen(text)
 
 ## str_join
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: str_join
@@ -1806,7 +1806,7 @@ str_join(ss, sep='')
 
 ## enlengthen
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: enlengthen
@@ -1829,7 +1829,7 @@ enlengthen(target_len: int, string: str, char: str = ' ', on_tail: bool = True, 
 
 ## lowercase
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lowercase
@@ -1847,7 +1847,7 @@ lowercase(string: str) -> str
 
 ## strip
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: strip
@@ -1866,7 +1866,7 @@ strip(string: str, chars=None) -> str
 
 ## lstrip
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lstrip
@@ -1884,7 +1884,7 @@ lstrip(string: str, chars=None) -> str
 
 ## rstrip
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: rstrip
@@ -1902,7 +1902,7 @@ rstrip(string: str, chars=None) -> str
 
 ## re_sub
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: re_sub (= re.sub)
@@ -1924,7 +1924,7 @@ sub(pattern, repl, string, count=0, flags=0)
 
 ## re_split
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: re_split (= re.split)
@@ -1947,7 +1947,7 @@ split(pattern, string, maxsplit=0, flags=0)
 
 ## re_find
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: re_find
@@ -1966,7 +1966,7 @@ re_find(regex, s, flags=0)
 
 ## re_test
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: re_test
@@ -1984,7 +1984,7 @@ re_test(regex, s, flags=0)
 
 ## re_all
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: re_all
@@ -2002,7 +2002,7 @@ re_all(regex, s, flags=0)
 
 ## assoc
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: assoc
@@ -2021,7 +2021,7 @@ assoc(coll, *kvs, **kwargs)
 
 ## nth
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: nth
@@ -2039,7 +2039,7 @@ nth(n, seq)
 
 ## first
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: first
@@ -2057,7 +2057,7 @@ first(seq)
 
 ## second
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: second
@@ -2075,7 +2075,7 @@ second(seq)
 
 ## third
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: third
@@ -2091,7 +2091,7 @@ third(seq)
 
 ## fourth
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: fourth
@@ -2107,7 +2107,7 @@ fourth(seq)
 
 ## fifth
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: fifth
@@ -2123,7 +2123,7 @@ fifth(seq)
 
 ## beforelast
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: beforelast
@@ -2139,7 +2139,7 @@ beforelast(seq)
 
 ## last
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: last
@@ -2157,7 +2157,7 @@ last(seq)
 
 ## ncut
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: ncut
@@ -2166,7 +2166,7 @@ Kind: Macro from [fpmx/hyrule]
 
 ## rest
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: rest
@@ -2184,7 +2184,7 @@ rest(seq)
 
 ## butlast
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: butlast
@@ -2202,7 +2202,7 @@ butlast(seq)
 
 ## drop
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: drop
@@ -2220,7 +2220,7 @@ drop(n, seq)
 
 ## take
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: take
@@ -2238,7 +2238,7 @@ take(n, seq)
 
 ## pick
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: pick
@@ -2258,7 +2258,7 @@ pick(ns, seq)
 
 ## pluck
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: pluck
@@ -2276,7 +2276,7 @@ pluck(key, mappings)
 
 ## lpluck
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lpluck
@@ -2293,7 +2293,7 @@ lpluck(key, mappings)
 
 ## pluck_attr
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: pluck_attr
@@ -2311,7 +2311,7 @@ pluck_attr(attr, objects)
 
 ## lpluck_attr
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lpluck_attr
@@ -2329,7 +2329,7 @@ lpluck_attr(attr, objects)
 
 ## pluckm
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: pluckm
@@ -2340,7 +2340,7 @@ Info: accepts fpmx-style .arg syntax
 
 ## lpluckm
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lpluckm
@@ -2350,7 +2350,7 @@ Info: list version of pluckm
 
 ## getattrm
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: getattrm
@@ -2361,7 +2361,7 @@ Info: accepts fpmx-style .attr syntax
 
 ## mask_sel
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: mask_sel (= itertools.compress)
@@ -2403,7 +2403,7 @@ class compress(builtins.object)
 
 ## lmask_sel
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lmask_sel
@@ -2420,7 +2420,7 @@ lmask_sel(data, selectors)
 
 ## mask2idxs
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: mask2idxs
@@ -2438,7 +2438,7 @@ mask2idxs(mask)
 
 ## idxs2mask
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: idxs2mask
@@ -2457,7 +2457,7 @@ idxs2mask(idxs, bools=False)
 
 ## List
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: List
@@ -2473,7 +2473,7 @@ List = typing.List
 
 ## Tuple
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: Tuple
@@ -2495,7 +2495,7 @@ Tuple = typing.Tuple
 
 ## Dict
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: Dict
@@ -2511,7 +2511,7 @@ Dict = typing.Dict
 
 ## Union
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: Union
@@ -2550,7 +2550,7 @@ Union = typing.Union
 
 ## TypedDict
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: TypedDict
@@ -2605,7 +2605,7 @@ TypedDict(typename, fields=None, /, *, total=True, **kwargs)
 
 ## NamedTuple
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: NamedTuple
@@ -2642,7 +2642,7 @@ NamedTuple(typename, fields=None, /, **kwargs)
 
 ## Optional
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: Optional
@@ -2660,7 +2660,7 @@ Optional = typing.Optional
 
 ## Generator
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: Generator
@@ -2676,7 +2676,7 @@ Generator = typing.Generator
 
 ## Any
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: Any
@@ -2700,7 +2700,7 @@ Any = typing.Any
 
 ## Callable
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: Callable
@@ -2723,7 +2723,7 @@ Callable = typing.Callable
 
 ## Literal
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: Literal
@@ -2757,7 +2757,7 @@ Literal = typing.Literal
 
 ## Type
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: Type
@@ -2793,7 +2793,7 @@ Type = typing.Type
 
 ## TypeVar
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: TypeVar
@@ -2914,7 +2914,7 @@ class TypeVar(_Final, _Immutable, _TypeVarLike)
 
 ## Generic
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: Generic
@@ -2957,7 +2957,7 @@ class Generic(builtins.object)
 
 ## Enum
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: Enum
@@ -2994,7 +2994,7 @@ class Enum(builtins.object)
 
 ## number
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: number
@@ -3004,7 +3004,7 @@ Info: simply Union(int, float)
 
 ## dataclass
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: dataclass
@@ -3032,7 +3032,7 @@ dataclass(cls=None, /, *, init=True, repr=True, eq=True, order=False, unsafe_has
 
 ## upd_field
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: upd_field (= dataclasses.replace)
@@ -3060,7 +3060,7 @@ replace(obj, /, **changes)
 
 ## dc_field
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: dc_field (= dataclasses.field)
@@ -3071,7 +3071,7 @@ Info: dataclasses.field
 ```hy
 Help on function field in module dataclasses:
 
-field(*, default=<dataclasses._MISSING_TYPE object at 0x0000027C037F4460>, default_factory=<dataclasses._MISSING_TYPE object at 0x0000027C037F4460>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x0000027C037F4460>)
+field(*, default=<dataclasses._MISSING_TYPE object at 0x0000017A1B4B9480>, default_factory=<dataclasses._MISSING_TYPE object at 0x0000017A1B4B9480>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x0000017A1B4B9480>)
     Return an object to identify dataclass fields.
     
     default is the default value of the field.  default_factory is a
@@ -3090,7 +3090,7 @@ field(*, default=<dataclasses._MISSING_TYPE object at 0x0000027C037F4460>, defau
 
 ## of
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: of
@@ -3100,7 +3100,7 @@ Info: example: (of List int) which is equiv to py-code: List[int]
 
 ## Annotator2
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: def::
@@ -3110,7 +3110,7 @@ Info: define func with Haskell-style signature; example: (def:: int -> int => fl
 
 ## Annotator1
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: f::
@@ -3120,7 +3120,7 @@ Info: example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[in
 
 ## file_existsQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: file_existsQ (= os.path.exists)
@@ -3138,7 +3138,7 @@ exists(path)
 
 ## fileQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: fileQ (= os.path.isfile)
@@ -3155,7 +3155,7 @@ isfile(path)
 
 ## dirQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: dirQ (= os.path.isdir)
@@ -3172,7 +3172,7 @@ isdir(s)
 
 ## read_file
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: read_file
@@ -3190,7 +3190,7 @@ read_file(file_name: str, encoding: str = 'utf-8')
 
 ## write_to_file
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: write_to_file
@@ -3212,9 +3212,46 @@ write_to_file(text: str, file_name: str, mode: str = 'w', encoding: str = 'utf-8
     - see more at help(open)
 ```
 
+## range_
+
+[go up](#fpmx Prelude cheatsheet)
+
+```hy
+Name: range_
+Kind: FPMX original
+Sgnt: range_(start, end=None, step=1) -> range
+Info: same as range, but both ends included
+```
+
+```hy
+Help on function range_ in module fpmx.prelude.funcs:
+
+range_(start, end=None, step=1)
+    range with both ends included
+```
+
+## lrange_
+
+[go up](#fpmx Prelude cheatsheet)
+
+```hy
+Name: lrange_
+Kind: FPMX original
+Sgnt: lrange_(start, end, step=1) -> List
+Info: range including both ends when possible, also works on fractionals
+```
+
+```hy
+Help on function lrange_ in module fpmx.prelude.funcs:
+
+lrange_(start, end, step=1)
+    range including both ends when possible,
+    also works on fractionals
+```
+
 ## inf_range
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: inf_range (= itertools.count)
@@ -3264,7 +3301,7 @@ class count(builtins.object)
 
 ## cycle
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: cycle
@@ -3307,7 +3344,7 @@ class cycle(builtins.object)
 
 ## lcycle
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lcycle
@@ -3325,7 +3362,7 @@ lcycle(p, n)
 
 ## repeat
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: repeat
@@ -3371,7 +3408,7 @@ class repeat(builtins.object)
 
 ## lrepeat
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lrepeat
@@ -3389,7 +3426,7 @@ lrepeat(elem, n)
 
 ## pairwise
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: pairwise
@@ -3407,7 +3444,7 @@ pairwise(seq)
 
 ## with_prev
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: with_prev
@@ -3425,7 +3462,7 @@ with_prev(seq, fill=None)
 
 ## with_next
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: with_next
@@ -3441,46 +3478,9 @@ with_next(seq, fill=None)
     Yields each item paired with its following: (item, next).
 ```
 
-## range_
-
-[go up](#fpmx-prelude-cheatsheet)
-
-```hy
-Name: range_
-Kind: FPMX original
-Sgnt: range_(start, end=None, step=1) -> range
-Info: same as range, but both ends included
-```
-
-```hy
-Help on function range_ in module fpmx.prelude.funcs:
-
-range_(start, end=None, step=1)
-    range with both ends included
-```
-
-## lrange_
-
-[go up](#fpmx-prelude-cheatsheet)
-
-```hy
-Name: lrange_
-Kind: FPMX original
-Sgnt: lrange_(start, end, step=1) -> List
-Info: range including both ends when possible, also works on fractionals
-```
-
-```hy
-Help on function lrange_ in module fpmx.prelude.funcs:
-
-lrange_(start, end, step=1)
-    range including both ends when possible,
-    also works on fractionals
-```
-
 ## islice
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: islice
@@ -3529,7 +3529,7 @@ class islice(builtins.object)
 
 ## lislice
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lislice
@@ -3546,7 +3546,7 @@ lislice(*kwargs)
 
 ## cat
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: cat
@@ -3564,7 +3564,7 @@ from_iterable(iterable, /) method of builtins.type instance
 
 ## lcat
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lcat
@@ -3582,7 +3582,7 @@ lcat(seqs)
 
 ## concat
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: concat (= itertools.chain)
@@ -3636,7 +3636,7 @@ class chain(builtins.object)
 
 ## lconcat
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lconcat
@@ -3654,7 +3654,7 @@ lconcat(*seqs)
 
 ## mapcat
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: mapcat
@@ -3672,7 +3672,7 @@ mapcat(f, *seqs)
 
 ## lmapcat
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lmapcat
@@ -3690,7 +3690,7 @@ lmapcat(f, *seqs)
 
 ## lreversed
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lreversed
@@ -3707,7 +3707,7 @@ lreversed(sequence)
 
 ## lfilter
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lfilter
@@ -3726,7 +3726,7 @@ lfilter(pred, seq)
 
 ## fltr1st
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: fltr1st
@@ -3744,7 +3744,7 @@ fltr1st(function, iterable)
 
 ## reject
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: reject (= funcy.remove)
@@ -3762,7 +3762,7 @@ remove(pred, seq)
 
 ## lreject
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lreject (= funcy.lremove)
@@ -3780,7 +3780,7 @@ lremove(pred, seq)
 
 ## without
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: without
@@ -3798,7 +3798,7 @@ without(items, seq)
 
 ## lwithout
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lwithout
@@ -3816,7 +3816,7 @@ lwithout(items, seq)
 
 ## takewhile
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: takewhile
@@ -3835,7 +3835,7 @@ takewhile(pred, seq=EMPTY)
 
 ## dropwhile
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: dropwhile
@@ -3854,7 +3854,7 @@ dropwhile(pred, seq=EMPTY)
 
 ## filter_split
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: filter_split (= funcy.split)
@@ -3872,7 +3872,7 @@ split(pred, seq)
 
 ## lfilter_split
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lfilter_split (= funcy.lsplit)
@@ -3891,7 +3891,7 @@ lsplit(pred, seq)
 
 ## combinations
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: combinations
@@ -3938,7 +3938,7 @@ class combinations(builtins.object)
 
 ## lcombinations
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lcombinations
@@ -3954,7 +3954,7 @@ lcombinations(iterable, r)
 
 ## flatten
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: flatten
@@ -3972,7 +3972,7 @@ flatten(coll)
 
 ## bisect_at
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: bisect_at (= funcy.split_at)
@@ -3991,7 +3991,7 @@ split_at(n, seq)
 
 ## lbisect_at
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lbisect_at
@@ -4011,7 +4011,7 @@ lbisect_at(n, seq)
 
 ## bisect_by
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: bisect_by (= funcy.split_by)
@@ -4030,7 +4030,7 @@ split_by(pred, seq)
 
 ## lbisect_by
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lbisect_by (= funcy.lsplit_by)
@@ -4049,7 +4049,7 @@ lsplit_by(pred, seq)
 
 ## partition
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: partition
@@ -4070,7 +4070,7 @@ partition(n, seq, *, step=None, tail=False)
 
 ## lpartition
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lpartition
@@ -4091,7 +4091,7 @@ lpartition(n, seq, *, step=None, tail=False)
 
 ## partition_by
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: partition_by
@@ -4109,7 +4109,7 @@ partition_by(f, seq)
 
 ## lpartition_by
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lpartition_by
@@ -4127,7 +4127,7 @@ lpartition_by(f, seq)
 
 ## group_by
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: group_by
@@ -4145,7 +4145,7 @@ group_by(f, seq)
 
 ## lmulticut_by
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lmulticut_by
@@ -4176,16 +4176,17 @@ lmulticut_by(pred, seq: list, keep_border=True, merge_border=False) -> List[list
 
 ## case
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: case
 Kind: Macro from [fpmx/hyrule]
+Sgnt: (case 10 10 True 20 False else None)
 ```
 
 ## unless
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: unless
@@ -4194,7 +4195,7 @@ Kind: Macro from [fpmx/hyrule]
 
 ## lif
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lif
@@ -4203,7 +4204,7 @@ Kind: Macro from [fpmx/hyrule]
 
 ## branch
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: branch
@@ -4212,7 +4213,7 @@ Kind: Macro from [fpmx/hyrule]
 
 ## fm
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: fm
@@ -4223,7 +4224,7 @@ Info: anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%
 
 ## LambdaWithAppl
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: f>
@@ -4234,7 +4235,7 @@ Info: anonymous function with fm syntax, immediately applicates args
 
 ## mapm
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: mapm
@@ -4244,7 +4245,7 @@ Info: same as map, but expects fm-syntax for func
 
 ## lmapm
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lmapm
@@ -4254,7 +4255,7 @@ Info: same as lmap, but expects fm-syntax for func
 
 ## filterm
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: filterm
@@ -4265,7 +4266,7 @@ Info: same as filter, but expects fm-syntax for func
 
 ## lfilterm
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lfilterm
@@ -4276,7 +4277,7 @@ Info: list version of lfilterm
 
 ## lzip
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lzip
@@ -4293,7 +4294,7 @@ lzip(*iterables)
 
 ## lmap
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lmap
@@ -4312,7 +4313,7 @@ lmap(f, *seqs)
 
 ## starmap
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: starmap
@@ -4351,7 +4352,7 @@ class starmap(builtins.object)
 
 ## lstarmap
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lstarmap
@@ -4369,7 +4370,7 @@ lstarmap(function, iterable)
 
 ## reduce
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: reduce
@@ -4394,7 +4395,7 @@ reduce(...)
 
 ## reductions
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: reductions
@@ -4412,7 +4413,7 @@ reductions(f, seq, acc=EMPTY)
 
 ## lreductions
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lreductions
@@ -4430,7 +4431,7 @@ lreductions(f, seq, acc=EMPTY)
 
 ## identity
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: identity
@@ -4447,7 +4448,7 @@ identity(x)
 
 ## constantly
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: constantly
@@ -4464,7 +4465,7 @@ constantly(value)
 
 ## compose
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: compose
@@ -4482,7 +4483,7 @@ compose(*fs)
 
 ## rcompose
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: rcompose
@@ -4500,7 +4501,7 @@ rcompose(*fs)
 
 ## ljuxt
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: ljuxt
@@ -4519,7 +4520,7 @@ ljuxt(*fs)
 
 ## nested
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: nested
@@ -4537,7 +4538,7 @@ nested(n, f)
 
 ## apply_n
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: apply_n
@@ -4559,7 +4560,7 @@ apply_n(n, f, *args, **kwargs)
 
 ## partial
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: partial
@@ -4627,7 +4628,7 @@ class partial(builtins.object)
 
 ## rpartial
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: rpartial
@@ -4645,7 +4646,7 @@ rpartial(func, *args, **kwargs)
 
 ## flip
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: flip
@@ -4663,7 +4664,7 @@ flip(f, a, b)
 
 ## pflip
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: pflip
@@ -4682,7 +4683,7 @@ pflip(f, a)
 
 ## do_n
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: do_n
@@ -4693,7 +4694,7 @@ Info: expands to ~ (do body body body ...)
 
 ## list_n
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: list_n
@@ -4703,7 +4704,7 @@ Sgnt: (list_n n #* body) -> List
 
 ## hyruleThreading1
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: ->
@@ -4712,7 +4713,7 @@ Kind: Macro from [fpmx/hyrule]
 
 ## hyruleThreading2
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: ->>
@@ -4721,7 +4722,7 @@ Kind: Macro from [fpmx/hyrule]
 
 ## hyruleThreading3
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: as->
@@ -4730,7 +4731,7 @@ Kind: Macro from [fpmx/hyrule]
 
 ## hyruleThreading4
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: doto
@@ -4740,7 +4741,7 @@ Info: mutating
 
 ## FPMXThreading1
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: =>
@@ -4750,7 +4751,7 @@ Info: unification of dot-macro and ->
 
 ## FPMXThreading2
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: =>>
@@ -4760,7 +4761,7 @@ Info: unification of dot-macro and ->>
 
 ## PipeOfPartials
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: p:
@@ -4770,7 +4771,7 @@ Info: aplicator, pipe of partials
 
 ## fnot
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: fnot
@@ -4788,7 +4789,7 @@ fnot(f, *args, **kwargs)
 
 ## eq_any
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: eq_any
@@ -4806,7 +4807,7 @@ eq_any(x, values)
 
 ## on
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: on
@@ -4825,7 +4826,7 @@ on(f, check, x, y)
 
 ## all_fs
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: all_fs
@@ -4843,7 +4844,7 @@ all_fs(fs, *args, **kwargs)
 
 ## any_fs
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: any_fs
@@ -4861,7 +4862,7 @@ any_fs(fs, *args, **kwargs)
 
 ## get_
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: get_
@@ -4882,7 +4883,7 @@ get_(seq, *ns)
 
 ## nth_
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: nth_
@@ -4902,7 +4903,7 @@ nth_(n, seq)
 
 ## slice_
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: slice_
@@ -4922,7 +4923,7 @@ slice_(start, end, step=None)
 
 ## cut_
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: cut_
@@ -4941,7 +4942,7 @@ cut_(seq, start, end, step=None)
 
 ## cur_time
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: cur_time (= time.time)
@@ -4962,7 +4963,7 @@ time(...)
 
 ## dt_print
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: dt_print
@@ -4986,7 +4987,7 @@ dt_print(*args, fresh_run=False, last_T=[None])
 
 ## timing
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: timing
@@ -4997,7 +4998,7 @@ Info: returns time (in seconds) and result of execution of (fn [] expr1 expr2 ..
 
 ## assertm
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: assertm
@@ -5008,7 +5009,7 @@ Info: tests if (op arg1 arg2), for example (= 1 1)
 
 ## gives_error_typeQ
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: gives_error_typeQ
@@ -5018,7 +5019,7 @@ Info: example: (assertm gives_error_typeQ (get [1] 2) IndexError)
 
 ## pprint
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: pprint
@@ -5035,7 +5036,7 @@ pprint(object, stream=None, indent=1, width=80, depth=None, *, compact=False, so
 
 ## lprint
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: lprint
@@ -5054,7 +5055,7 @@ lprint(seq, sep=None)
 
 ## comment
 
-[go up](#fpmx-prelude-cheatsheet)
+[go up](#fpmx Prelude cheatsheet)
 
 ```hy
 Name: comment
