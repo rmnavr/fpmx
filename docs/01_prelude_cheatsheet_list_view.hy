@@ -181,8 +181,8 @@ FROM: dataclasses     | dataclass
 FROM: dataclasses     | upd_field (<-replace)    ; non-mutating
 FROM: dataclasses     | dc_field (<-field)       ; dataclasses.field
 MACR: fpmx/hyrule     | of                       ; example: (of List int) which is equiv to py-code: List[int]
-MACR: fpmx            | def::                    ; example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]
-MACR: fpmx            | f::                      ; define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))
+MACR: fpmx            | def::                    ; define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))
+MACR: fpmx            | f::                      ; example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]
 
 === IO ===
 ;: all:
@@ -202,6 +202,8 @@ DEFN: fpmx            | lrepeat                  :: lrepeat(elem, n) -> list  ; 
 FROM: funcy           | pairwise                 :: pairwise(seq) -> iterator  ; supposed to be used in loops, will produce no elems for seq with len <= 1
 FROM: funcy           | with_prev                :: with_prev(seq, fill=None) -> iterator  ; supposed to be used in loops
 FROM: funcy           | with_next                :: with_next(seq, fill=None) -> iterator  ; supposed to be used in loops
+DEFN: fpmx            | range_                   :: range_(start, end=None, step=1) -> range  ; same as range, but both ends included
+DEFN: fpmx            | lrange_                  :: lrange_(start, end, step=1) -> List  ; range including both ends when possible, also works on fractionals
 ;: iterators utils:
 FROM: itertools       | islice                   :: islice(iterable, start, stop[, step])  ; list(islice(inf_range(10), 2)) == [10, 11]
 DEFN: fpmx            | lislice                  ; list version of islice: lislice
@@ -216,6 +218,7 @@ FROM: funcy           | lmapcat                  :: lmapcat(f, *seqs)  ; maps, t
 INFO: py              | reversed /bultin/        :: reversed(sequence) -> iterator
 DEFN: fpmx            | lreversed                :: lreversed(sequence)  ; list version of reversed
 ;: filtering:
+INFO: py              | in /builtin/             :: (in 1 [0 1 2])
 INFO: py              | filter /builtin/         :: filter(function or None, iterable) -> filter object  ; when f=None, checks if elems are True
 FROM: funcy           | lfilter                  :: lfilter(pred, seq) -> List  ; funcy list version of extended filter
 DEFN: fpmx            | fltr1st                  :: fltr1st(f, seq) -> Optional elem  ; returns first found element (or None)
@@ -245,7 +248,8 @@ DEFN: fpmx            | lmulticut_by             :: lmulticut_by(pred, seq, keep
 === FP ===
 ;: control flow:
 INFO: py              | if /builtin/             :: (if check true false)
-INFO: hy              | cond /builtin/           :: (cond check1 do1 ... true doT)
+INFO: hy              | cond /builtin/           :: (cond check1 do1 check2 do2 True doT)
+INFO: hy              | case /builtin/           :: (case 10 10 True 20 False else None)
 MACR: fpmx/hyrule     | case
 MACR: fpmx/hyrule     | unless
 MACR: fpmx/hyrule     | lif
@@ -301,11 +305,9 @@ DEFN: fpmx            | get_                     :: get_(seq, *ns) -> elem  ; sa
 DEFN: fpmx            | nth_                     :: nth_(n, seq) -> Optional elem  ; same as nth, but with 1-based index; will return None for n=0
 DEFN: fpmx            | slice_                   :: slice_(start, end, step=None)  ; similar to slice, but with 1-based index; will throw error for start=0 or end=0
 DEFN: fpmx            | cut_                     :: cut_(seq, start, end, step=None) -> List  ; similar to cut, but with 1-based index; will throw error for start=0 or end=0
-DEFN: fpmx            | range_                   :: range_(start, end=None, step=1) -> range  ; same as range, but with 1-based index
-DEFN: fpmx            | lrange_                  :: lrange_(start, end, step=1) -> List  ; range including both ends when possible, also works on fractionals
 ;: benchmarking:
 FROM: time            | cur_time (<-time)        :: cur_time()  ; gets current time in seconds
-DEFN: fpmx            | dt_print                 :: dt_printer(* args, fresh_run=False)  ; starts timer on fresh run, prints time passed since previous call
+DEFN: fpmx            | dt_print                 :: dt_print(* args, fresh_run=False)  ; starts timer on fresh run, prints time passed since previous call
 MACR: fpmx            | timing                   :: (timing expr1 expr2 ...) -> #(float, Any)  ; returns time (in seconds) and result of execution of (fn [] expr1 expr2 ...)
 ;: testing:
 MACR: fpmx            | assertm                  :: (assertm op arg1 arg2)  ; tests if (op arg1 arg2), for example (= 1 1)

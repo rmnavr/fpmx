@@ -41,7 +41,8 @@
 
     (defn #^ str clrz
         [ #^ (of List str) instructions
-          #^ str text]
+          #^ str text
+          * #^ bool [force_color False]]
         " Example:
           >> clrz('text', ['blue', 'on_red', 'reverse'])
 
@@ -70,7 +71,7 @@
         (setv fore (last (list (filter (fn [it] (in it $FORES)) instructions )))); may be None
         (setv back (last (list (filter (fn [it] (in it $BACKS)) instructions )))); may be None
         (setv attrs (list (filter (fn [it] (in it $ATTRS)) instructions ))); may be []
-        (return (colored text fore back :attrs attrs)))
+        (return (colored text fore back :attrs attrs :force_color force_color)))
 
 ; _____________________________________________________________________________/ }}}1
 ; [F] crlz_term_test ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -93,4 +94,3 @@
         (print (+ #* (list attrs ))))
 
 ; _____________________________________________________________________________/ }}}1
-

@@ -35,7 +35,7 @@ fpmx is designed as a two-tier system to balance API stability with FP/math expe
 The fpmx prelude provides a functional vocabulary for expressing math and FP ideas
 through a suite of pure functions (with obvious non-pure exceptions like `read_file` and similar).
 
-For quick overview of all full Prelude vocabulary please refer to: 
+For quick overview of full Prelude vocabulary please refer to: 
 [Prelude cheatcheet table](docs/00_prelude_cheatsheet_table_view.md) 
 
 
@@ -150,7 +150,7 @@ fpmx provides their function variants, which do not shaddow builtin Python names
 fpmx offers functional wrappers for regex (to avoid their manual compilation):
 ```hy
 (re_sub r"\d" "-" "smth1smth1smth")   ; returns "smth-smth-smth"
-(re_find r"\s*\d\d\" "here 20 comes") ; returns " 20"
+(re_find r"\s*\d\d" "here 20 comes")  ; returns " 20"
 ...
 ```
 
@@ -169,7 +169,7 @@ fpmx also has several usefull utilities for strings:
 fpmx offers enhanced getters (and several setters) for making index/attr accessing more ergonomic:
 ```hy
 ; Named indexed getters, which are common in FP languages:
-(setv xs ["a" "b" "c" "d"]
+(setv xs ["a" "b" "c" "d"])
 (first xs)  ; returns "a"
 (fourth xs) ; returns "d"
 (last xs)   ; returns "d"

@@ -8,6 +8,7 @@
 - added `(l)combinations` from itertools
 - added `fifth` function
 - added `color` option for dotPlot
+- added `force_color` option for `clrz`
 
 ## 0.5.1.dev5
 - `term` module added, including `clrz` and `dotPlot` functions

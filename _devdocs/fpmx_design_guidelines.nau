@@ -1,29 +1,30 @@
 
 	Getters: return on no such elem?
-	- Default/None
-	- Throw Error
+		- Default/None
+		- Throw Error
 
   	Variadic f(x1, x2, ...) vs f(xs)
 
 	Arg order:
-	- priority for -> 
-	- priority for ->>, partial/flip
-	- (f vrbl * params) — works with both -> and ->>
+		- priority for -> 
+		- priority for ->>, partial/flip
+		- (f vrbl * params) — works with both -> and ->>
+		- (partial oftypeQ int) — works good
 
 	Composers:
-	- omly construct function?      f
-	- construct and apply function? (f x)
+		- only construct function?      f
+		- construct and apply function? (f x)
 
 	? Handle wrong types?
 
 	······························
 
 	Accesses:
-	- index access			[1]
-	- dict access			["x"]
-	- attr/method access	.x (.x)
+		- index access			[1]
+		- dict access			["x"]
+		- attr/method access	.x (.x)
 
     fpmx syntax idea:
-    - .x = attr or func without call (which is the same in Python)
-    - (.x) = func
+		- .x   = attr (or method without a call)
+		- (.x) = calling method
 

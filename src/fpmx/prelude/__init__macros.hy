@@ -16,8 +16,8 @@
     ])
 
     (require fpmx.prelude.macros [
-        def::               #_ "[GROUP] 50 Typing: all              | | example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]"
-        f::                 #_ "[GROUP] 50 Typing: all              | | define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))"
+        def::               #_ "[GROUP] 50 Typing: all              | | define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))"
+        f::                 #_ "[GROUP] 50 Typing: all              | | example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]"
         fm                  #_ "[GROUP] 71 FP: lambdas              | (fm (* it 3)) | anonymous function that accepts args in form of 'it' or '%1', '%2', ... '%9'"
         f>                  #_ "[GROUP] 71 FP: lambdas              | (f> (* it 3) 4) | anonymous function with fm syntax, immediately applicates args"
         mapm                #_ "[GROUP] 71 FP: lambdas              | | same as map, but expects fm-syntax for func"

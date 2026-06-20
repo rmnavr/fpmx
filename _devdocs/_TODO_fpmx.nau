@@ -1,28 +1,28 @@
 
-// TODO: doc_gen ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+// doc_gen ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	Prettify:
-	+ docgen should not find values in ;; (setv ...) JFK
-	+ Remove requirement for `;;` comments to have double-semicolon
-	+ Enhance recognition of if `#_ "comment"` belongs to prev `(import ...)` or next `(defn ...)`
-	* "FPMX original" vs "Macro from: FPMX" 
-	* Somehow remove manual «05 Title: subtitle» sorting requirement? Or at least add warning when both «05 Title» and «06 Title» exist?
+		+ docgen should not find values in ;; (setv ...) JFK
+		+ Remove requirement for `;;` comments to have double-semicolon
+		+ Enhance recognition of if `#_ "comment"` belongs to prev `(import ...)` or next `(defn ...)`
+		* "FPMX original" vs "Macro from: FPMX" 
+		* Somehow remove manual «05 Title: subtitle» sorting requirement? Or at least add warning when both «05 Title» and «06 Title» exist?
 
 	New:
-	+ (help (get_macro def::))
+		+ (help (get_macro def::))
 
 // ____________________________________________________________________________/ }}}1
-// TODO: fpmx ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+// fpmx ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	## Macros
-	+ getattrm not needed?
-	? (=> Point .x.val (.x.val)) what will happen?
+		+ getattrm not needed?
+		? (=> Point .x.val (.x.val)) what will happen?
 
 	## Lens
-	- GetAttr "kind"
-  	- &+ inner implementation: (get x) -> (& (last expr) (. lens (get x)))
-	- hide lens inside macro JFK
-	- lens: (- 7) -> remove
+		- GetAttr "kind"
+		- &+ inner implementation: (get x) -> (& (last expr) (. lens (get x)))
+		- hide lens inside macro JFK
+		- lens: (- 7) -> remove
 
 	## Lists
 		+ funcy.interpose (str_join is for strings), inteleave (x1y2z3), interpose (x-y-z)
@@ -54,16 +54,15 @@
 			  (return wrapper))
 
 	@@ Docs
-	- key approach: .attr
+		- key approach: .attr
 
 	@@ Tests
-	+ tests for strict/non-strict monads
-	+ isinstQ, approx_eq, round_to
-
+		+ tests for strict/non-strict monads
+		+ isinstQ, approx_eq, round_to
 
 // ____________________________________________________________________________/ }}}1
 
-// unsorted ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+// unsorted1 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	when incorrect option for load_fpmx -> throw error
 
@@ -101,10 +100,13 @@
 		like (fmap f (Just 3) (Just 4) Nothing) will work ok, even if f is function of 1 arg -> THIS IS BAD!
 
 // ____________________________________________________________________________/ }}}1
+// unsorted2 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	mod:
 		- fm without it or % is fn [], no?
 		- consp: cut/cut_, range/range_/through, get/ncut
+
+	write-to_file file_name "text" // make this arg order
 
 	add tests:
 		- dc_field
@@ -115,4 +117,26 @@
 
 	docs:
 		- dotPlot: frame minmax_labels color (from termcolor)
+
+	Global:
+		- lists vs iterators mess
+		- arg order (and/or optional args) mess
+
+	······························
+
+	dotPlot:
+		- hstack_plots (horiz)
+		- half_xsize
+		- dotPlot [(Series xys :color None)]
+
+	fpmx new:
+		- avrg/mean
+		- ilen
+
+	fpmx issues:
+		- iterators
+		- variadic/on_list
+		- arg order (for piping, for logic)
+
+// ____________________________________________________________________________/ }}}1
 

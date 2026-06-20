@@ -30,7 +30,7 @@ You can also color-check your terminal using `clrz_term_test`.
 
 clrz(['blue', 'on_red', 'reverse'], 'text')
 clrz(['blue'], 'text')
-clrz(['on_red'], 'text')
+clrz(['on_red'], 'text', force_color=True)
 
 clrz_term_test()
 ```
@@ -50,6 +50,9 @@ Backgrounds:
 Attrs:
     bold dark underline blink reverse concealed strike
 ```
+
+`force_color` option (`False` by default) is inherited from termcolor.
+When `True`, it will spit ANSI chars into text files, when `False` it will write normal text only (no ANSI chars).
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- plotting ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->

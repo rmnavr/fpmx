@@ -584,7 +584,42 @@
     (import funcy [with_prev])  #_ "with_prev(seq, fill=None) -> iterator | supposed to be used in loops"
     (import funcy [with_next])  #_ "with_next(seq, fill=None) -> iterator | supposed to be used in loops"
 
+    #_ "range_(start, end=None, step=1) -> range | same as range, but both ends included"
+    (defn range_ [start [end None] [step 1]]
+        "range with both ends included"
+        (when (is end None)
+              (setv [start end] [0 start]))
+        (range start (+ end (if (> step 0) 1 -1)) step))
 
+    #_ "lrange_(start, end, step=1) -> List | range including both ends when possible, also works on fractionals"
+    (defn lrange_ [start end [step 1]]
+        "range including both ends when possible,
+         also works on fractionals"
+        ;; integers
+        (when (and (= (type start) int)
+                   (= (type end) int)
+                   (= (type step) int))
+              (return (list (range_ start end step))))
+        ;;
+        (when (= step 0) (raise (ZeroDivisionError "step must be != 0")))
+        (setv n (round (py "(end-start)/step + 1")))
+        ;; floats for start<end
+        (when (< start end)
+              (setv _end (+ end (abs (/ start 1E13))))
+              (return
+                  (lfor &i (range_ 0 n)
+                        :setv candidate (+ start (* &i step))
+                        :if   (<= candidate _end)
+                        candidate)))
+        ;; floats for start=end
+        (when (= start end) (return [start]))
+        ;; floats for start>end
+        (setv _end (- end (abs (/ start 1E13))))
+        (return
+            (lfor &i (range_ 0 n) ;; here n<0
+                  :setv candidate (+ start (* &i step))
+                  :if   (>= candidate _end)
+                  candidate)))
 
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] 61 APL: iterators utils ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -621,6 +656,7 @@
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] 64 APL: filtering ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
+    (comment "py | builtin | in | (in 1 [0 1 2]) | ")
     (comment "py | builtin | filter | filter(function or None, iterable) -> filter object | when f=None, checks if elems are True")
     (import funcy [lfilter]) #_ "lfilter(pred, seq) -> List | funcy list version of extended filter"
 
@@ -762,7 +798,8 @@
 ; [GROUP] 70 FP: control flow ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (comment "py | builtin | if   | (if check true false)          | ")
-    (comment "hy | builtin | cond | (cond check1 do1 ... true doT) | ")
+    (comment "hy | builtin | cond | (cond check1 do1 check2 do2 True doT) | ")
+    (comment "hy | builtin | case | (case 10 10 True 20 False else None) | ")
 
 ; _____________________________________________________________________________/ }}}1
 ;«[GROUP] 71 FP: lambdas» — only in macros
@@ -926,48 +963,13 @@
         "
         (get seq (slice_ start end step)))
 
-    #_ "range_(start, end=None, step=1) -> range | same as range, but with 1-based index"
-    (defn range_ [start [end None] [step 1]]
-        (when (is end None)
-              (setv [start end] [0 start]))
-        (range start (+ end (if (> step 0) 1 -1)) step))
-
-    #_ "lrange_(start, end, step=1) -> List | range including both ends when possible, also works on fractionals"
-    (defn lrange_ [start end [step 1]]
-        "range including both ends when possible,
-         also works on fractionals"
-        ;; integers
-        (when (and (= (type start) int)
-                   (= (type end) int)
-                   (= (type step) int))
-              (return (list (range_ start end step))))
-        ;;
-        (when (= step 0) (raise (ZeroDivisionError "step must be != 0")))
-        (setv n (round (py "(end-start)/step + 1")))
-        ;; floats for start<end
-        (when (< start end)
-              (setv _end (+ end (abs (/ start 1E13))))
-              (return
-                  (lfor &i (range_ 0 n)
-                        :setv candidate (+ start (* &i step))
-                        :if   (<= candidate _end)
-                        candidate)))
-        ;; floats for start=end
-        (when (= start end) (return [start]))
-        ;; floats for start>end
-        (setv _end (- end (abs (/ start 1E13))))
-        (return
-            (lfor &i (range_ 0 n) ;; here n<0
-                  :setv candidate (+ start (* &i step))
-                  :if   (>= candidate _end)
-                  candidate)))
 
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] 91 Misc: benchmarking ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (import time [time :as cur_time]) #_ "cur_time() | gets current time in seconds"
 
-    #_ "dt_printer(* args, fresh_run=False) | starts timer on fresh run, prints time passed since previous call"
+    #_ "dt_print(* args, fresh_run=False) | starts timer on fresh run, prints time passed since previous call"
     (defn dt_print
         [ #* args
           [fresh_run False]
