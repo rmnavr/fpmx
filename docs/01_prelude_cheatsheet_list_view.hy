@@ -118,7 +118,7 @@ DEFN: fpmx            | rstrip                   :: rstrip(string, chars=None)  
 ;: regex:
 FROM: re              | re_sub (<-sub)           :: re_sub(rpattern, replacement, string, count=0, flags=0)
 FROM: re              | re_split (<-split)       :: re_split(rpattern, string)
-FROM: funcy           | re_find                  :: re_find(rpattern, string, flags=0) -> str  ; returns first found
+FROM: funcy           | re_find                  :: re_find(rpattern, string, flags=0) -> first found  ; may return: None, str, (of Tuple str ...), ...
 FROM: funcy           | re_test                  :: re_test(rpattern, string, ...) -> bool  ; tests if string has match (not neccessarily whole string)
 FROM: funcy           | re_all                   :: re_all(rpattern, string, ...) -> List  ; returns tuples if groups requested like via r'a(b)(c)d'
 
@@ -189,8 +189,8 @@ MACR: fpmx            | f::                      ; example: (f:: int -> int => (
 FROM: os.path         | file_existsQ (<-exists)  :: file_existsQ(filename)  ; also works on folders
 FROM: os.path         | fileQ (<-isfile)         :: fileQ(filename)
 FROM: os.path         | dirQ (<-isdir)           :: dirQ(filename)
-DEFN: fpmx            | read_file                :: read_file(file_name, encoding='utf-8') -> str  ; returns whole file content
-DEFN: fpmx            | write_to_file            :: write_file(text, file_name, mode='w', encoding='utf-8')  ; modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation
+DEFN: fpmx            | read_file                :: read_file(file_name, encoding='utf-8', discard_terminator=False) -> str  ; returns whole file content, removes last \n if requested
+DEFN: fpmx            | write_to_file            :: write_to_file(text, file_name, mode='w', encoding='utf-8', add_terminator=False)  ; modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation
 
 === APL ===
 ;: generating ranges:

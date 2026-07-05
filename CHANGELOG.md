@@ -1,5 +1,5 @@
-# Version 0.6.0 (Apr 2026)
-- rebranding from `fptk` to `fpmx` (all the older naming is replaced everywhere, even in changelog)
+# Version 0.6.0 (Jul 2026)
+- big rebranding from `fptk` to `fpmx` (all the older naming is replaced everywhere, even in this changelog lol)
 - reorganized functions classification groups
 - added `approx_eq` function
 - added `dc_field` (dataclass.field)
@@ -9,6 +9,7 @@
 - added `fifth` function
 - added `color` option for dotPlot
 - added `force_color` option for `clrz`
+- added `add_terminator` and `discard_terminator` options for `write_to_file` and `read_file`
 
 ## 0.5.1.dev5
 - `term` module added, including `clrz` and `dotPlot` functions

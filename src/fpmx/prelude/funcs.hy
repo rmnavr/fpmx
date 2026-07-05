@@ -384,10 +384,9 @@
 
     (import re      [sub :as re_sub])       #_ "re_sub(rpattern, replacement, string, count=0, flags=0) |"
     (import re      [split :as re_split])   #_ "re_split(rpattern, string) |"
-    (import funcy   [re_find])              #_ "re_find(rpattern, string, flags=0) -> str| returns first found"
+    (import funcy   [re_find])              #_ "re_find(rpattern, string, flags=0) -> first found | may return: None, str, (of Tuple str ...), ..."
     (import funcy   [re_test])              #_ "re_test(rpattern, string, ...) -> bool | tests if string has match (not neccessarily whole string)"
     (import funcy   [re_all])               #_ "re_all(rpattern, string, ...) -> List | returns tuples if groups requested like via r'a(b)(c)d'"
-
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -539,21 +538,28 @@
     (import os.path [isfile :as fileQ])        #_ "fileQ(filename) |"
     (import os.path [isdir  :as dirQ])         #_ "dirQ(filename) |"
 
-    #_ "read_file(file_name, encoding='utf-8') -> str | returns whole file content"
+    #_ "read_file(file_name, encoding='utf-8', discard_terminator=False) -> str | returns whole file content, removes last \n if requested"
     (defn read_file
-        [ #^ str file_name
-          #^ str [encoding "utf-8"]
+        [ #^ str  file_name
+          #^ str  [encoding "utf-8"]
+          #^ bool [discard_terminator False]
         ]
         "returns whole file content"
-        (with [file (open file_name "r" :encoding encoding)] (setv outp (file.read)))
+        (with [file (open file_name "r" :encoding encoding)]
+              (setv outp (file.read)))
+        (when (and discard_terminator
+                   (> (len outp) 0)
+                   (= (get outp -1) "\n"))
+              (return (cut outp 0 -1)))
         (return outp))
 
-    #_ "write_file(text, file_name, mode='w', encoding='utf-8') | modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation"
+    #_ "write_to_file(text, file_name, mode='w', encoding='utf-8', add_terminator=False) | modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation"
     (defn write_to_file
-        [ #^ str text
-          #^ str file_name
-          #^ str [mode "w"]
-          #^ str [encoding "utf-8"]
+        [ #^ str  text
+          #^ str  file_name
+          #^ str  [mode "w"]
+          #^ str  [encoding "utf-8"]
+          #^ bool [add_terminator False]
         ]
         " writes text to file_name;
           modes:
@@ -562,7 +568,8 @@
           - 'x' - exclusive creation
           - ...
           - see more at help(open)"
-        (with [file (open file_name mode :encoding encoding)] (file.write text)))
+        (with [file (open file_name mode :encoding encoding)]
+              (file.write (if add_terminator (+ text "\n") text))))
 
 ; _____________________________________________________________________________/ }}}1
 

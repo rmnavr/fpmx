@@ -19,13 +19,13 @@
 |  | dunders | <span title=":: mul(*args) :: literally just mul(a,b,c,...)=a*b*c*...; can also be used with 0 or 1 arg">[`mul`](#mul)</span> <span title=":: smul(*args) :: synonim of mul (with underlined usage on strings)">[`smul`](#smul)</span> <span title=":: lmul(*args) :: synonim of mul (with underlined usage on lists)">[`lmul`](#lmul)</span> <span title=":: plus(*args) :: literally just plus(a,b,c,...)=a+b+c...; can also be used with 0 or 1 arg">[`plus`](#plus)</span> <span title=":: sconcat(*args) :: string concantenation as a monoid (will not give error when used with 0 or 1 args)">[`sconcat`](#sconcat)</span> |  |
 | Strings | basics | <span title=":: strlen(text) :: rename of len, underlines usage on strings">[`strlen`](#strlen)</span> <span title=":: str_join(ss, sep='') :: rearrangement of funcy.str_join, ss is seq of strings">[`str_join`](#str_join)</span> <span title=":: enlengthen(target_len, string, char=' ', on_tail=True) :: adds char to string until target_len reached">[`enlengthen`](#enlengthen)</span> |  |
 |  | methods to functions | <span title=":: lowercase(string) :: str.lower method as a function">[`lowercase`](#lowercase)</span> <span title=":: strip(string, chars=None) :: str.strip method as a function">[`strip`](#strip)</span> <span title=":: lstrip(string, chars=None) :: str.lstrip method as a function">[`lstrip`](#lstrip)</span> <span title=":: rstrip(string, chars=None) :: str.rstrip method as a function">[`rstrip`](#rstrip)</span> |  |
-|  | regex | <span title=":: re_sub(rpattern, replacement, string, count=0, flags=0) ::">[`re_sub`](#re_sub)</span> <span title=":: re_split(rpattern, string) ::">[`re_split`](#re_split)</span> <span title=":: re_find(rpattern, string, flags=0) -> str :: returns first found">[`re_find`](#re_find)</span> <span title=":: re_test(rpattern, string, ...) -> bool :: tests if string has match (not neccessarily whole string)">[`re_test`](#re_test)</span> <span title=":: re_all(rpattern, string, ...) -> List :: returns tuples if groups requested like via r'a(b)(c)d'">[`re_all`](#re_all)</span> |  |
+|  | regex | <span title=":: re_sub(rpattern, replacement, string, count=0, flags=0) ::">[`re_sub`](#re_sub)</span> <span title=":: re_split(rpattern, string) ::">[`re_split`](#re_split)</span> <span title=":: re_find(rpattern, string, flags=0) -> first found :: may return: None, str, (of Tuple str ...), ...">[`re_find`](#re_find)</span> <span title=":: re_test(rpattern, string, ...) -> bool :: tests if string has match (not neccessarily whole string)">[`re_test`](#re_test)</span> <span title=":: re_all(rpattern, string, ...) -> List :: returns tuples if groups requested like via r'a(b)(c)d'">[`re_all`](#re_all)</span> |  |
 | Getters | basic | <span title=":: assoc(xs, k1, v1, k2, v2, ...) -> None :: ≈ (setv (get xs k1) v1 (get xs k2) v2) ; also possible: (assoc xs :x 1)">[`assoc`](#assoc)</span> <span title=":: nth(n, seq) -> Optional elem :: 0-based index; works also with dicts">[`nth`](#nth)</span> <span title=":: first(seq) -> Optional elem ::">[`first`](#first)</span> <span title=":: second(seq) -> Optional elem ::">[`second`](#second)</span> <span title=":: third(seq) -> Optional elem ::">[`third`](#third)</span> <span title=":: fourth(seq) -> Optional elem ::">[`fourth`](#fourth)</span> <span title=":: fifth(seq) -> Optional elem ::">[`fifth`](#fifth)</span> <span title=":: beforelast(seq) -> Optional elem ::">[`beforelast`](#beforelast)</span> <span title=":: last(seq) -> Optional elem ::">[`last`](#last)</span> | <span title="">[`ncut`](#ncut)</span> |
 |  | list | <span title=":: rest(seq) -> List :: drops 1st elem of list">[`rest`](#rest)</span> <span title=":: butlast(seq) -> List :: drops last elem of list">[`butlast`](#butlast)</span> <span title=":: drop(n, seq) -> List :: drops n>=0 elems from start of the list; when n<0, drops from end of the list">[`drop`](#drop)</span> <span title=":: take(n, seq) -> List :: takes n elems from start; when n<0, takes from end of the list">[`take`](#take)</span> <span title=":: pick(ns, seq) -> List :: throws error if some of ns doesn't exist; ns can be list of ints or dict keys">[`pick`](#pick)</span> |  |
 |  | attrs and bulk | <span title=":: pluck(key, mappings) -> generator :: gets same key (or idx) from every mapping, mappings can be lists of lists/dicts/etc.">[`pluck`](#pluck)</span> <span title=":: lpluck(key, mappings) -> list ::">[`lpluck`](#lpluck)</span> <span title=":: pluck_attr(attr, objects) -> generator :: attr should be given as str">[`pluck_attr`](#pluck_attr)</span> <span title=":: lpluck_attr(attr, objects) -> list :: list version of pluck_attr">[`lpluck_attr`](#lpluck_attr)</span> | <span title=":: (pluckm n xs) (pluckm key ys) (pluckm .attr zs) :: accepts fpmx-style .arg syntax">[`pluckm`](#pluckm)</span> <span title="list version of pluckm">[`lpluckm`](#lpluckm)</span> <span title=":: (getattrm Object 'attr') (getattrm Object .attr) :: accepts fpmx-style .attr syntax">[`getattrm`](#getattrm)</span> |
 |  | mask | <span title=":: mask_sel('abc', [1,0,1]) -> iterator: 'a', 'c' ::">[`mask_sel`](#mask_sel)</span> <span title=":: lmask_sel(data, selectors) -> list ::">[`lmask_sel`](#lmask_sel)</span> <span title=":: mask2idxs(mask) -> list :: mask is list like [1 0 1 0] or [True False True False], which will be converted to [0 2]">[`mask2idxs`](#mask2idxs)</span> <span title=":: idxs2mask(idxs) -> list :: idxs is non-sorted list of integers like [0 3 2], which will be converted to [1 0 1 1]">[`idxs2mask`](#idxs2mask)</span> |  |
 | Typing | all | <span title="">[`List`](#List)</span> <span title="">[`Tuple`](#Tuple)</span> <span title="">[`Dict`](#Dict)</span> <span title="">[`Union`](#Union)</span> <span title="">[`TypedDict`](#TypedDict)</span> <span title="">[`NamedTuple`](#NamedTuple)</span> <span title="">[`Optional`](#Optional)</span> <span title="">[`Generator`](#Generator)</span> <span title="">[`Any`](#Any)</span> <span title="">[`Callable`](#Callable)</span> <span title="">[`Literal`](#Literal)</span> <span title="">[`Type`](#Type)</span> <span title="">[`TypeVar`](#TypeVar)</span> <span title="">[`Generic`](#Generic)</span> <span title="">[`Enum`](#Enum)</span> <span title="simply Union(int, float)">[`number`](#number)</span> <span title="">[`dataclass`](#dataclass)</span> <span title="non-mutating">[`upd_field`](#upd_field)</span> <span title="dataclasses.field">[`dc_field`](#dc_field)</span> | <span title="example: (of List int) which is equiv to py-code: List[int]">[`of`](#of)</span> <span title="define func with Haskell-style signature; example: (def:: int -> int => float fdivide [x y] (/ x y))">[`def::`](#Annotator2)</span> <span title="example: (f:: int -> int => (of Tuple int str)) will produce: Callable[[int, int], Tuple[int,str]]">[`f::`](#Annotator1)</span> |
-| IO | all | <span title=":: file_existsQ(filename) :: also works on folders">[`file_existsQ`](#file_existsQ)</span> <span title=":: fileQ(filename) ::">[`fileQ`](#fileQ)</span> <span title=":: dirQ(filename) ::">[`dirQ`](#dirQ)</span> <span title=":: read_file(file_name, encoding='utf-8') -> str :: returns whole file content">[`read_file`](#read_file)</span> <span title=":: write_file(text, file_name, mode='w', encoding='utf-8') :: modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation">[`write_to_file`](#write_to_file)</span> |  |
+| IO | all | <span title=":: file_existsQ(filename) :: also works on folders">[`file_existsQ`](#file_existsQ)</span> <span title=":: fileQ(filename) ::">[`fileQ`](#fileQ)</span> <span title=":: dirQ(filename) ::">[`dirQ`](#dirQ)</span> <span title=":: read_file(file_name, encoding='utf-8', discard_terminator=False) -> str :: returns whole file content, removes last \n if requested">[`read_file`](#read_file)</span> <span title=":: write_to_file(text, file_name, mode='w', encoding='utf-8', add_terminator=False) :: modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation">[`write_to_file`](#write_to_file)</span> |  |
 | APL | generating ranges | <span title=":: range_(start, end=None, step=1) -> range :: same as range, but both ends included">[`range_`](#range_)</span> <span title=":: lrange_(start, end, step=1) -> List :: range including both ends when possible, also works on fractionals">[`lrange_`](#lrange_)</span> <span title=":: inf_range(start [, step]) :: inf_range(10) -> generator: 10, 11, 12, ...">[`inf_range`](#inf_range)</span> <span title=":: cycle(p) :: cycle('AB') -> A B A B ...">[`cycle`](#cycle)</span> <span title=":: lcycle(p, n) -> list :: takes first n elems from cycle(p)">[`lcycle`](#lcycle)</span> <span title=":: repeat(elem [, n]) :: repeat(10,3) -> 10 10 10">[`repeat`](#repeat)</span> <span title=":: lrepeat(elem, n) -> list :: unlike in repeat, n has to be provided">[`lrepeat`](#lrepeat)</span> <span title=":: pairwise(seq) -> iterator :: supposed to be used in loops, will produce no elems for seq with len <= 1">[`pairwise`](#pairwise)</span> <span title=":: with_prev(seq, fill=None) -> iterator :: supposed to be used in loops">[`with_prev`](#with_prev)</span> <span title=":: with_next(seq, fill=None) -> iterator :: supposed to be used in loops">[`with_next`](#with_next)</span> |  |
 |  | iterators utils | <span title=":: islice(iterable, start, stop[, step]) :: list(islice(inf_range(10), 2)) == [10, 11]">[`islice`](#islice)</span> <span title="list version of islice: lislice">[`lislice`](#lislice)</span> |  |
 |  | list concatenation | <span title=":: cat(seqs) :: non-variadic version of concat">[`cat`](#cat)</span> <span title=":: lcat(seqs) :: non-variadic version of concat">[`lcat`](#lcat)</span> <span title=":: concat(*seqs) -> iterator :: variadic vertion of cat">[`concat`](#concat)</span> <span title=":: lconcat(*seqs) -> list :: literally just list(concat(*seqs))">[`lconcat`](#lconcat)</span> <span title=":: mapcat(f, *seqs) :: maps, then concatenates">[`mapcat`](#mapcat)</span> <span title=":: lmapcat(f, *seqs) :: maps, then concatenates">[`lmapcat`](#lmapcat)</span> |  |
@@ -1952,8 +1952,8 @@ split(pattern, string, maxsplit=0, flags=0)
 ```hy
 Name: re_find
 Kind: Reimport from [funcy]
-Sgnt: re_find(rpattern, string, flags=0) -> str
-Info: returns first found
+Sgnt: re_find(rpattern, string, flags=0) -> first found
+Info: may return: None, str, (of Tuple str ...), ...
 ```
 
 ```hy
@@ -3071,7 +3071,7 @@ Info: dataclasses.field
 ```hy
 Help on function field in module dataclasses:
 
-field(*, default=<dataclasses._MISSING_TYPE object at 0x0000017A1B4B9480>, default_factory=<dataclasses._MISSING_TYPE object at 0x0000017A1B4B9480>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x0000017A1B4B9480>)
+field(*, default=<dataclasses._MISSING_TYPE object at 0x000001CC1CC9FAC0>, default_factory=<dataclasses._MISSING_TYPE object at 0x000001CC1CC9FAC0>, init=True, repr=True, hash=None, compare=True, metadata=None, kw_only=<dataclasses._MISSING_TYPE object at 0x000001CC1CC9FAC0>)
     Return an object to identify dataclass fields.
     
     default is the default value of the field.  default_factory is a
@@ -3177,14 +3177,14 @@ isdir(s)
 ```hy
 Name: read_file
 Kind: FPMX original
-Sgnt: read_file(file_name, encoding='utf-8') -> str
-Info: returns whole file content
+Sgnt: read_file(file_name, encoding='utf-8', discard_terminator=False) -> str
+Info: returns whole file content, removes last \n if requested
 ```
 
 ```hy
 Help on function read_file in module fpmx.prelude.funcs:
 
-read_file(file_name: str, encoding: str = 'utf-8')
+read_file(file_name: str, encoding: str = 'utf-8', discard_terminator: bool = False)
     returns whole file content
 ```
 
@@ -3195,14 +3195,14 @@ read_file(file_name: str, encoding: str = 'utf-8')
 ```hy
 Name: write_to_file
 Kind: FPMX original
-Sgnt: write_file(text, file_name, mode='w', encoding='utf-8')
+Sgnt: write_to_file(text, file_name, mode='w', encoding='utf-8', add_terminator=False)
 Info: modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation
 ```
 
 ```hy
 Help on function write_to_file in module fpmx.prelude.funcs:
 
-write_to_file(text: str, file_name: str, mode: str = 'w', encoding: str = 'utf-8')
+write_to_file(text: str, file_name: str, mode: str = 'w', encoding: str = 'utf-8', add_terminator: bool = False)
     writes text to file_name;
     modes:
     - 'w' - (over)write

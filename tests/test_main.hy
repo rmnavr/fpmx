@@ -333,13 +333,17 @@
 ; IO ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (setv $F1 "_for_read_write_test.txt")
-    (setv _test_string "this file is written (with this exact text)\nand then being read to test write_to_file/read_file/etc. functions")
+    (setv _test_string1 "this file is written (with this exact text)\nand then being read to test write_to_file/read_file/etc. functions")
+    (setv _test_string2 "this file is written (with this exact text)\nand then being read to test write_to_file/read_file/etc. functions\n")
 
     (assertm = (file_existsQ $F1) True)
     (assertm = (fileQ $F1) True)
     (assertm = (dirQ $F1) False)
 
-    (assertm = (do (write_to_file _test_string $F1) (read_file $F1)) _test_string)
+    (assertm = (do (write_to_file _test_string1 $F1) (read_file $F1 :discard_terminator False)) _test_string1)
+    (assertm = (do (write_to_file _test_string1 $F1) (read_file $F1 :discard_terminator True))  _test_string1)
+    (assertm = (do (write_to_file _test_string2 $F1) (read_file $F1 :discard_terminator True))  _test_string1)
+    (assertm = (do (write_to_file _test_string2 $F1) (read_file $F1 :discard_terminator False)) _test_string2)
 
 ; _____________________________________________________________________________/ }}}1
 ; mathnlogic ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
