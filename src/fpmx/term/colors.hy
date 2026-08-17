@@ -20,16 +20,42 @@
 ; [C] Available fore/back/attr options ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (setv $FORES
-        [ "black" "red" "green" "yellow" "blue"
-          "magenta" "cyan" "white" "light_grey"
-          "dark_grey" "light_red" "light_green"
-          "light_yellow" "light_blue" "light_magenta" "light_cyan"])
+        [ "black"; 00
+          "red"; 01    dark red
+          "green"; 02    dark green
+          "yellow"; 03    brown, dark yellow
+          "blue"; 04    dark blue
+          "magenta"; 05    dark magenta
+          "cyan"; 06    dark cyan
+          "light_grey"; 07
+          ;
+          "dark_grey"; 08
+          "light_red"; 09
+          "light_green"; 10
+          "light_yellow"; 11
+          "light_blue"; 12
+          "light_magenta"; 13
+          "light_cyan"; 14
+          "white"]); 15
 
     (setv $BACKS
-        [ "on_black" "on_red" "on_green" "on_yellow"
-          "on_blue" "on_magenta" "on_cyan" "on_white"
-          "on_light_grey" "on_dark_grey" "on_light_red" "on_light_green"
-          "on_light_yellow" "on_light_blue" "on_light_magenta" "on_light_cyan"])
+        [ "on_black"
+          "on_red"
+          "on_green"
+          "on_yellow"
+          "on_blue"
+          "on_magenta"
+          "on_cyan"
+          "on_light_grey"
+          ;
+          "on_dark_grey"
+          "on_light_red"
+          "on_light_green"
+          "on_light_yellow"
+          "on_light_blue"
+          "on_light_magenta"
+          "on_light_cyan"
+          "on_white"])
 
     (setv $ATTRS
         [ "bold" "dark" "underline" "blink" "reverse" "concealed" "strike"])
@@ -38,6 +64,9 @@
 
 ; _____________________________________________________________________________/ }}}1
 ; [F] clrz ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+
+
 
     (defn #^ str clrz
         [ #^ (of List str) instructions
@@ -51,22 +80,53 @@
           >> clrz(['blue', 'red'], 'some text')
           >> ... will draw with red ...
 
-          Foregrounds:
-            black red green yellow blue magenta cyan white
-            light_grey dark_grey light_red light_green light_yellow
-            light_blue light_magenta light_cyan
+          Table of available colors:
 
-          Backgrounds:
-            on_black on_red on_green on_yellow on_blue on_magenta on_cyan on_white
-            on_light_grey on_dark_grey on_light_red on_light_green
-            on_light_yellow on_light_blue on_light_magenta on_light_cyan
-
-          Attrs:
-            bold dark underline blink reverse concealed strike
+          FG            | BG               | Attrs
+          --------------+------------------+----------
+          black         | on_black         | bold
+          red           | on_red           | dark
+          green         | on_green         | underline
+          yellow        | on_yellow        | blink
+          blue          | on_blue          | reverse
+          magenta       | on_magenta       | concealed
+          cyan          | on_cyan          | strike
+          light_grey    | on_light_grey    |
+          dark_grey     | on_dark_grey     |
+          light_red     | on_light_red     |
+          light_green   | on_light_green   |
+          light_yellow  | on_light_yellow  |
+          light_blue    | on_light_blue    |
+          light_magenta | on_light_magenta |
+          light_cyan    | on_light_cyan    |
+          white         | on_white         |
         "
         (setv bad_instructions (- (set instructions) (set $ALL)))
         (when bad_instructions
-             (raise (ValueError f"Incorrect colors in clrz function: {bad_instructions}\nCall help(clrz) to see correct colors")))
+             (raise (ValueError f"
+Incorrect colors in clrz function: {bad_instructions}
+
+Table of available colors:
+
+FG            | BG               | Attrs
+--------------+------------------+----------
+black         | on_black         | bold
+red           | on_red           | dark
+green         | on_green         | underline
+yellow        | on_yellow        | blink
+blue          | on_blue          | reverse
+magenta       | on_magenta       | concealed
+cyan          | on_cyan          | strike
+light_grey    | on_light_grey    |
+dark_grey     | on_dark_grey     |
+light_red     | on_light_red     |
+light_green   | on_light_green   |
+light_yellow  | on_light_yellow  |
+light_blue    | on_light_blue    |
+light_magenta | on_light_magenta |
+light_cyan    | on_light_cyan    |
+white         | on_white         |
+")))
         ;
         (setv fore (last (list (filter (fn [it] (in it $FORES)) instructions )))); may be None
         (setv back (last (list (filter (fn [it] (in it $BACKS)) instructions )))); may be None

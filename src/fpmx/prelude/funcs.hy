@@ -15,14 +15,18 @@
 
     ;; All (automatically)
     ;;
-    ;; Notice that funcs is not supposed to export macros,
+    ;; Notice that funcs.hy is not supposed to export macros,
     ;; so having (require ... [of comment]) above is OK
 
 ; _____________________________________________________________________________/ }}}1
 ; Archive ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    ;: #_ "count_occurrences(elem, seq) -> int | rename of list.count method"
-    ;: (defn count_occurrences [elem seq] (seq.count elem))
+    ;:  #_ "count_occurrences(elem, seq) -> int | rename of list.count method"
+    ;:  (defn count_occurrences [elem seq] (seq.count elem))
+
+    ;:  (import itertools [combinations]) #_ "combinations([1,2,3], 2) = [(1,2), (1,3), (2,3)] |"
+    ;:  #_ " | list version of 'combinations'"
+    ;:  (defn lcombinations [iterable r] (list (combinations iterable r)))
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -355,32 +359,7 @@
 
 
 ; _____________________________________________________________________________/ }}}1
-; [GROUP] 31 Strings: methods to functions ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-    #_ "lowercase(string) | str.lower method as a function"
-    (defn #^ str lowercase [#^ str string]
-        "str.lower method as a function"
-        (string.lower))
-
-    #_ "strip(string, chars=None) | str.strip method as a function"
-    (defn #^ str strip [#^ str string [chars None]]
-        " str.strip method as a function,
-          removes leading and trailing whitespaces (or chars when given)"
-        (string.strip chars))
-
-    #_ "lstrip(string, chars=None) | str.lstrip method as a function"
-    (defn #^ str lstrip [#^ str string [chars None]]
-        "str.lstrip method as a function"
-        (string.lstrip chars))
-
-    #_ "rstrip(string, chars=None) | str.rstrip method as a function"
-    (defn #^ str rstrip [#^ str string [chars None]]
-        "str.rstrip method as a function"
-        (string.rstrip chars))
-
-
-; _____________________________________________________________________________/ }}}1
-; [GROUP] 32 Strings: regex ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; [GROUP] 31 Strings: regex ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (import re      [sub :as re_sub])       #_ "re_sub(rpattern, replacement, string, count=0, flags=0) |"
     (import re      [split :as re_split])   #_ "re_split(rpattern, string) |"
@@ -534,7 +513,7 @@
 
 ; [GROUP] 55 IO: all ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (import os.path [exists :as file_existsQ]) #_ "file_existsQ(filename) | also works on folders" ;;
+    (import os.path [exists :as path_existsQ]) #_ "path_existsQ(filename) | works on both files and folders" ;;
     (import os.path [isfile :as fileQ])        #_ "fileQ(filename) |"
     (import os.path [isdir  :as dirQ])         #_ "dirQ(filename) |"
 
@@ -555,8 +534,8 @@
 
     #_ "write_to_file(text, file_name, mode='w', encoding='utf-8', add_terminator=False) | modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation"
     (defn write_to_file
-        [ #^ str  text
-          #^ str  file_name
+        [ #^ str  file_name
+          #^ str  text
           #^ str  [mode "w"]
           #^ str  [encoding "utf-8"]
           #^ bool [add_terminator False]
@@ -567,7 +546,10 @@
           - 'a' - append
           - 'x' - exclusive creation
           - ...
-          - see more at help(open)"
+          - see more at help(open)
+
+          add_terminator adds '\n' at file end
+          "
         (with [file (open file_name mode :encoding encoding)]
               (file.write (if add_terminator (+ text "\n") text))))
 
@@ -696,11 +678,6 @@
 ; _____________________________________________________________________________/ }}}1
 ; [GROUP] 65 APL: cutting and grouping ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
     
-    (import itertools [combinations]) #_ "combinations([1,2,3], 2) = [(1,2), (1,3), (2,3)] |"
-
-    #_ " | list version of 'combinations'"
-    (defn lcombinations [iterable r] (list (combinations iterable r)))
-
     (import fpmx.prelude.from_hyrule [flatten]) #_ "flatten(coll) | recursively flattens to the bottom"
 
     (import funcy [split_at :as bisect_at])     #_ "bisect_at(n, seq) -> start, tail | len of start will = n, works only with n>=0"

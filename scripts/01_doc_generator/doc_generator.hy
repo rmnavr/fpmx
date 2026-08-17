@@ -162,7 +162,7 @@
     ; for non-import-info: «module | kind | name | signature | descr»
     (defn #^ FEntity split_descr [#^ FEntity fentity]
         (setv org_descr fentity.descr)
-        (setv result (lmap strip (org_descr.split $SEPARATOR)))
+        (setv result (lmapm (it.strip) (org_descr.split $SEPARATOR)))
         ; normal case:
         (when (= (len result) 2)
               (setv fentity.signature (first  result))
@@ -531,7 +531,7 @@
         dfgroup2str_list [dfgroup]
         (lconcat
             [(sconcat ";: " dfgroup.subname ":")]
-            (lmap (p: fentity2str rstrip) dfgroup.fentities))); rstrip removes possible spaces on the right (to not invoke «next line» in *.md)
+            (lmap (p: fentity2str (.rstrip)) dfgroup.fentities))); rstrip removes possible spaces on the right (to not invoke «next line» in *.md)
 
 ; _____________________________________________________________________________/ }}}1
 
@@ -649,7 +649,7 @@
         (try
             (if (in fentity.name $SUPPRESS_HELP)
                  (setv help_string None)
-                 (setv help_string (=> (globals) [fentity.name] capture_help strip)))
+                 (setv help_string (=> (globals) [fentity.name] capture_help (.strip))))
             (except [e Exception] (setv help_string None)))
         ;
         (if (noneQ help_string)
@@ -777,12 +777,12 @@
 
     ; List of one-liners:
     (setv _oneliners_table (generate_oneliners_table _dfgroups))
-    (write_to_file f"\n{_oneliners_table}" $TARGET_HY_FILE)
+    (write_to_file $TARGET_HY_FILE f"\n{_oneliners_table}")
 
     ; MD-table:
     (setv _cheatsheet_table (generate_chsh_table _dfgroups))
     (setv _md_blocks (generate_md_blocks _dfgroups))
     (setv _mdtable_final f"# {$HEADER1}\n\n{_cheatsheet_table}\n\n# {$HEADER2}\n\n{_md_blocks}")
-    (write_to_file _mdtable_final $TARGET_MD_FILE)
+    (write_to_file $TARGET_MD_FILE _mdtable_final)
 
 ; _____________________________________________________________________________/ }}}1

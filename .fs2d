@@ -1,0 +1,19 @@
+.git
+__pycache__
+regex: "\.egg-info$"
+
+"_etc"    f
+"src" 2   
+"_devdocs"  p  
+"src\fpmx\_wy_source" 2   
+"src\fpmx\prelude"  p  
+"src\fpmx\prelude\macros.hy"  p  
+"src\fpmx\prelude\funcs.hy"  p  
+"tests\_wy_source"  p  
+"tests\profiling"    f
+"scripts\01_doc_generator\for_docgen_tests"    f
+"src\fpmx\_wy_source\monads"    f
+"tests" 3 p  
+"docs"  p  
+"scripts" 4   
+"src\fpmx\monads"    f

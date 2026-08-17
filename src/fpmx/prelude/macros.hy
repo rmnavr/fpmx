@@ -320,18 +320,21 @@
 ; _____________________________________________________________________________/ }}}1
 ; =>, =>> ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    ;'3              ; new       hy.models.Integer 
-    ;'"key"          ; new       hy.models.String
-    ;'[smth]         ; new       hy.models.List
-    ;
-    ;'func           ;           hy.models.Symbol
-    ;'.attr          ; new       _isDottedAttr    _extractDottedAttr
-    ;'(.mth)         ;           _isDottedMth     _extractDottedMth
-    ;'op.neg         ;           _isDottedAccess
-    ;'(op.neg 1 2)   ;           hy.models.Expression
-    ;'(func 1 2)     ;           hy.models.Expression
-    ;
-    ;'(f> (print it)); special recognition: =>> doesn't require special; => places args at the end (i.e. not right after f>)
+    ; '3                ; new   hy.models.Integer 
+    ; '"key"            ; new   hy.models.String
+    ; '[smth]           ; new   hy.models.List
+    ; 
+    ; 'func             ;       hy.models.Symbol
+    ; 'op.neg           ;       _isDottedAccess  (treated same as 'func')
+    ; '.attr            ; new   _isDottedAttr    -> _extractDottedAttr
+    ; '(.mth)           ;       _isDottedMth     -> _extractDottedMth
+    ; '(op.neg 1 2)     ;       hy.models.Expression
+    ; '(func 1 2)       ;       hy.models.Expression
+    ; 
+    ; '(f> (print it))
+    ;   special recognition:
+    ;   - =>  places args after f> body: (f> (* %1 %2 2) #_ SLOT y)
+    ;   - =>> doesn't require special recognition, it acts as required: (f> (* %1 %2 2) x #_ SLOT)
 
     (defmacro => [head #* args]
         (setv outp head)  ; obj
@@ -362,8 +365,9 @@
                     ; (f> (print it))
                     (_isExprWithHeadSymbol &arg "f>")
                     (do (setv nm (get &arg 0))
-                        (setv ag (cut &arg 1 None))
-                        (setv outp `(~nm ~@ag ~outp)))  
+                        (setv fbody (get &arg 1))
+                        (setv fargs (cut &arg 2 None))
+                        (setv outp `(~nm ~fbody ~outp ~@fargs)))  
 					; '(smth arg1 arg2) ; also works for: (op.neg arg1 arg2)
                     (= (type &arg) hy.models.Expression) ; should be checked almost last, because _isDotted... are Exprs too
                     (do (setv nm (get &arg 0))

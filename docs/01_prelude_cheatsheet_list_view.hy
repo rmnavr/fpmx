@@ -110,11 +110,6 @@ DEFN: fpmx            | sconcat                  :: sconcat(*args)  ; string con
 DEFN: fpmx            | strlen                   :: strlen(text)  ; rename of len, underlines usage on strings
 DEFN: fpmx            | str_join                 :: str_join(ss, sep='')  ; rearrangement of funcy.str_join, ss is seq of strings
 DEFN: fpmx            | enlengthen               :: enlengthen(target_len, string, char=' ', on_tail=True)  ; adds char to string until target_len reached
-;: methods to functions:
-DEFN: fpmx            | lowercase                :: lowercase(string)  ; str.lower method as a function
-DEFN: fpmx            | strip                    :: strip(string, chars=None)  ; str.strip method as a function
-DEFN: fpmx            | lstrip                   :: lstrip(string, chars=None)  ; str.lstrip method as a function
-DEFN: fpmx            | rstrip                   :: rstrip(string, chars=None)  ; str.rstrip method as a function
 ;: regex:
 FROM: re              | re_sub (<-sub)           :: re_sub(rpattern, replacement, string, count=0, flags=0)
 FROM: re              | re_split (<-split)       :: re_split(rpattern, string)
@@ -186,7 +181,7 @@ MACR: fpmx            | f::                      ; example: (f:: int -> int => (
 
 === IO ===
 ;: all:
-FROM: os.path         | file_existsQ (<-exists)  :: file_existsQ(filename)  ; also works on folders
+FROM: os.path         | path_existsQ (<-exists)  :: path_existsQ(filename)  ; works on both files and folders
 FROM: os.path         | fileQ (<-isfile)         :: fileQ(filename)
 FROM: os.path         | dirQ (<-isdir)           :: dirQ(filename)
 DEFN: fpmx            | read_file                :: read_file(file_name, encoding='utf-8', discard_terminator=False) -> str  ; returns whole file content, removes last \n if requested
@@ -231,8 +226,6 @@ FROM: funcy           | dropwhile                :: dropwhile([pred, ] seq)  ; m
 FROM: funcy           | filter_split (<-split)   :: filter_split(pred, seq) -> passed, rejected
 FROM: funcy           | lfilter_split (<-lsplit) :: lfilter_split(pred,seq) -> passed, rejected  ; list version of filter_split
 ;: cutting and grouping:
-FROM: itertools       | combinations             :: combinations([1,2,3], 2) = [(1,2), (1,3), (2,3)]
-DEFN: fpmx            | lcombinations            ; list version of 'combinations'
 FROM: fpmx/hyrule     | flatten                  :: flatten(coll)  ; recursively flattens to the bottom
 FROM: funcy           | bisect_at (<-split_at)   :: bisect_at(n, seq) -> start, tail  ; len of start will = n, works only with n>=0
 DEFN: fpmx            | lbisect_at               :: lbisect_at(n, seq) -> start, tail  ; list version of bisect_at, but also for n<0, abs(n) will be len of tail

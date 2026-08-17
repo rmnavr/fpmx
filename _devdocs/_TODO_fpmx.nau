@@ -1,5 +1,5 @@
 
-// doc_gen ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+// * doc_gen ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 	Prettify:
 		+ docgen should not find values in ;; (setv ...) JFK
@@ -12,131 +12,66 @@
 		+ (help (get_macro def::))
 
 // ____________________________________________________________________________/ }}}1
-// fpmx ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	## Macros
-		+ getattrm not needed?
-		? (=> Point .x.val (.x.val)) what will happen?
+// Global polish/consistency ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	## Lens
+	- 1-based and ends-included mess
+	- lists vs iterators 
+	- arg order (and/or optional args) 
+	- variadic/on_list
+
+// ____________________________________________________________________________/ }}}1
+// fpmx (sorted) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+	## New functions (APL/math)
+		+ (append xs 3 4 ...)
+		+ inteleave (x1y2z3), interpose (x-y-z)
+		+ ldistinct
+	    + (flatten xs :level 3)
+		+ enlengthen_list
+		+ avrg/mean
+		+ ilen
+		+ for dicts: dkeys, dvalues, ditems, add/substract
+
+	
+	## New flow
+		- (or_if_none x 0)
+		- (try1st (smth) default1 default2)
+
+	## Upgrade/change API
+		- lbisect_by: option to include/exclude first found; negation in f in unclear
+		- strip/lstrip/rstrip should also pass kwargs and such
+		+ lprint: when on non-iterable, print normally
+
+	## Lens — to fix
 		- GetAttr "kind"
 		- &+ inner implementation: (get x) -> (& (last expr) (. lens (get x)))
 		- hide lens inside macro JFK
 		- lens: (- 7) -> remove
 
-	## Lists
-		+ funcy.interpose (str_join is for strings), inteleave (x1y2z3), interpose (x-y-z)
-	    + (flatten xs :level 3)
-		+ insert
-		+ enlengthen_list
-		+ [1 2 3] [a b c] -> [1 2 3 a] [b c] ; to_left, to_right
-		+ count_occurrences -> count_by, count_reps, count_elem
-
-	## Fix
-		+ lprint: when on non-iterable, print normally
-		- rest returns iterator, drop returns list, wtf
-		- lbisect_by: option to include/exclude first found; negation in f in unclear
-		- strip/lstrip/rstrip should also pass kwargs and such
-		- all the iterator vs sequence and such
-        - looks like cut_ is bad? no?
-
-	## New
-		+ both-ends-included ranges: range_ ? lrange_ ? inf_range_ ?
-
-	## Dicts
-		+ dkeys, dvalues, ditems
-		+ add/substract
-
-	## Typing
-		+ (defn validationOFF [f] 
-			  (defn wrapper [#* args #** kwargs]
-					(return (f #* args #** kwargs)))
-			  (return wrapper))
-
-	@@ Docs
-		- key approach: .attr
-
-	@@ Tests
-		+ tests for strict/non-strict monads
-		+ isinstQ, approx_eq, round_to
+	## Monads
+		- fmap: (fmap f (Just 3) (Just 4) Nothing) will unwantedly work ok, even if f is function of 1 arg -> THIS IS BAD!
 
 // ____________________________________________________________________________/ }}}1
 
-// unsorted1 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+// 0.6.0 publish ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-	when incorrect option for load_fpmx -> throw error
+	devlog:
+		✓ => to work correctly with f> (see hy-cheetsheet), currently =>> is OK
+		✓ clrz [instructions] text — add full list into error
+		✓ tests: choice, rand_int, rand_fload, rand01, approx_eq, ofinstQ, upd_field
+	api-change:
+		✓ rename: file_existsQ -> path_existsQ
+		✓ write_to_file file_name "text" // make this arg order
+		✓ removed: strip/lstrip/rstrip/lowercase
+		✓ (l)combinations: removed
 
-	fpmx:
-		- docs: main
-		- docs: monads
-		- publish (pypi, changelog/license, reddit)
-		- MIT: do whatever, just don't sue me
-	monads:
-		- finish resultM
-		- maybeWriter (tell)
-		- .bind = bindM?
-	docs main:
-		- fpmx-exclusive macro, not Prelude
-		- fpmx first header ugly
-		- reorganize all in one Feature Highlight,
-		  all topics should be visible
-		- status: ready, but unpolished
+	## docs
 		+ def:: has decorator
-
-	······························
-
-	* monads: make optional [] in (WNothing []) and (WJust 3 [])
-	* upd docs: monads
-	* upd docs: scripts (new script: nsmg)
-
-	monads:
-	- .bind should returns NEW monad objects (so .bind is just syntax-chaining, not state change)
-	- possible .log_ mut/immut issues
-
-	! clrz [instructions] text
-
-	fmap issue:
-		for f(x,y) will short-circuit before number of actual args is checked:
-		like (fmap f (Just 3) (Just 4) Nothing) will work ok, even if f is function of 1 arg -> THIS IS BAD!
+		+ fix: fpmx first header ugly
+		+ fix: fpmx-exclusive macro, not Prelude
 
 // ____________________________________________________________________________/ }}}1
-// unsorted2 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+		
 
-	mod:
-		- fm without it or % is fn [], no?
-		- consp: cut/cut_, range/range_/through, get/ncut
-
-	write-to_file file_name "text" // make this arg order
-
-	add tests:
-		- dc_field
-		- rand_int
-		- rand_float
-		- (l)combinations
-		- dotPlot
-
-	docs:
-		- dotPlot: frame minmax_labels color (from termcolor)
-
-	Global:
-		- lists vs iterators mess
-		- arg order (and/or optional args) mess
-
-	······························
-
-	dotPlot:
-		- hstack_plots (horiz)
-		- half_xsize
-		- dotPlot [(Series xys :color None)]
-
-	fpmx new:
-		- avrg/mean
-		- ilen
-
-	fpmx issues:
-		- iterators
-		- variadic/on_list
-		- arg order (for piping, for logic)
-
-// ____________________________________________________________________________/ }}}1
 

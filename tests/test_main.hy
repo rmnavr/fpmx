@@ -239,7 +239,7 @@
     (assertm = (apply_n 1 math.sqrt 256) 16)
 
 ; _____________________________________________________________________________/ }}}1
-; getters ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; getters ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ; nth
 
@@ -330,23 +330,23 @@
     (assertm = (getattrm (Point 1 2) "y") 2)
 
 ; _____________________________________________________________________________/ }}}1
-; IO ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; IO ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (setv $F1 "_for_read_write_test.txt")
     (setv _test_string1 "this file is written (with this exact text)\nand then being read to test write_to_file/read_file/etc. functions")
     (setv _test_string2 "this file is written (with this exact text)\nand then being read to test write_to_file/read_file/etc. functions\n")
 
-    (assertm = (file_existsQ $F1) True)
+    (assertm = (path_existsQ $F1) True)
     (assertm = (fileQ $F1) True)
     (assertm = (dirQ $F1) False)
 
-    (assertm = (do (write_to_file _test_string1 $F1) (read_file $F1 :discard_terminator False)) _test_string1)
-    (assertm = (do (write_to_file _test_string1 $F1) (read_file $F1 :discard_terminator True))  _test_string1)
-    (assertm = (do (write_to_file _test_string2 $F1) (read_file $F1 :discard_terminator True))  _test_string1)
-    (assertm = (do (write_to_file _test_string2 $F1) (read_file $F1 :discard_terminator False)) _test_string2)
+    (assertm = (do (write_to_file $F1 _test_string1) (read_file $F1 :discard_terminator False)) _test_string1)
+    (assertm = (do (write_to_file $F1 _test_string1) (read_file $F1 :discard_terminator True))  _test_string1)
+    (assertm = (do (write_to_file $F1 _test_string2) (read_file $F1 :discard_terminator True))  _test_string1)
+    (assertm = (do (write_to_file $F1 _test_string2) (read_file $F1 :discard_terminator False)) _test_string2)
 
 ; _____________________________________________________________________________/ }}}1
-; mathnlogic ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; mathnlogic ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 ; ■ basic math ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
@@ -408,9 +408,9 @@
     ; trigonometry ...
 
     (assertm = (minus 3 4) -1)
-
     (assertm = (round_to 9.1 1.5) 9.0)
     (assertm < (abs (- (round_to 9.18 0.1) 9.2)) 1E-6)
+    (assertm approx_eq 0.3 (+ 0.2 0.1))
 
     ; basic python */+ act as a monoid on numbers, but can't work on 1-arg "str" or []:
     (assertm = (+ 3) 3)
@@ -484,27 +484,20 @@
     (assertm = (zerolenQ "a") False)
     (assertm = (zerolenQ [None]) False)
 
-    ; choice, randint, randfloat, rand01
+    (assertm = (choice [1]) 1)
+    (assertm = (choice [1 1 1]) 1)
+
+    (assertm = (rand_int 1 1) 1)
+    (assertm < (rand_float 0 1) 1)
+    (assertm < (rand01) 1)
 
 ; _____________________________________________________________________________/ }}}1
-; strings.hy ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; strings ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (assertm = (strlen "123") 3)
 
     (assertm = (str_join ["a" "b" "" "c"]) "abc")
     (assertm = (str_join :sep "-" ["a" "b" "" "c"]) "a-b--c")
-
-    (assertm = (strip " bubr ") "bubr")
-    (assertm = (strip :chars "|" "Ybubr|") "Ybubr")
-    (assertm = (strip :chars "|Ybr" "Ybubr|") "u")
-    (assertm = (lstrip " bubr ") "bubr ")
-    (assertm = (lstrip :chars "|" "Ybubr|") "Ybubr|")
-    (assertm = (lstrip :chars "|Ybr" "Ybubr|") "ubr|")
-    (assertm = (rstrip " bubr ") " bubr")
-    (assertm = (rstrip :chars "|" "Ybubr|") "Ybubr")
-    (assertm = (rstrip :chars "|Ybr" "Ybubr|") "Ybu")
-
-    (assertm = (lowercase "XYZ") "xyz")
 
 ; ■ enlengthen ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
@@ -538,7 +531,7 @@
     (assertm = (re_all   "456" "012301230") [])
 
 ; _____________________________________________________________________________/ }}}1
-; typing.hy ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; typing ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ; funcs
 
@@ -553,6 +546,12 @@
     (assertm = (oftypeQ str "1") True)
     (assertm = (oftypeQ int "1") False)
     (assertm = (oftypeQ type list) True)
+    ;
+    (assertm = (ofinstQ str 1) False)
+    (assertm = (ofinstQ int 1) True)
+    (assertm = (ofinstQ str "1") True)
+    (assertm = (ofinstQ int "1") False)
+    (assertm = (ofinstQ type list) True)
 
     (assertm = (intQ 1.0) False)
     (assertm = (intQ 1) True)
@@ -590,6 +589,16 @@
     (assertm = (iterableQ {"x" 2}) True)
 
 ; _____________________________________________________________________________/ }}}1
+; dataclasses ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (defclass [dataclass] Point [] (#^ int x) (#^ int y))
+
+    (assertm = (upd_field (Point :x 3 :y 4) :x 5) (Point :x 5 :y 4))
+
+    ;; todo: dc_field
+    
+
+; _____________________________________________________________________________/ }}}1
     
 ; MACROS ==========================
 ; p: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -622,8 +631,11 @@
             operator.neg        ; lib.f
             (operator.neg)      ; (lib.f)
             (operator.add 3)
-            ((fn [x] (+ x 3))))
-        16)
+            ((fn [x] (+ x 3)))
+            ((fn [%x %y] (div %x %y)) #_ SLOT_16 4)
+            (f> (div %1 %2) #_ SLOT_4 2) 
+            )
+        2)
 
     (assertm eq (=> (dict :a 1 :b 2) "a") 1)    ; string access
     (assertm eq (=> [[1 2]] 0 0) 1)             ; integer access
@@ -645,8 +657,10 @@
              operator.neg        ; lib.f
              (operator.neg)      ; (lib.f)
              (operator.add 3)
-             ((fn [x] (+ x 3))))
-        16)
+             ((fn [x] (+ x 3)))
+             (f> (div %1 %2) 32 #_ SLOT_16))
+        2)
+
     (assertm eq (=>> (dict :a 1 :b 2) "a") 1)    ; string access
     (assertm eq (=>> [[1 2]] 0 0) 1)             ; integer access
     (assertm eq (=>> (dict :a [0 1] :b 2) ["a" 0]) 0)
@@ -657,8 +671,8 @@
 ; _____________________________________________________________________________/ }}}1
 ; fm, f>, mapm, lmapm, filterm, lfilterm ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (assertm = ((fm ["nothing" %1] (+ %1 %3 1)) 1 2 3) 5)
-    (assertm = ((fm ["nothing" it] (+ it 1)) 3) 4)
+    (assertm = ((fm ["do nothing" %1] (+ %1 %3 1)) 1 2 3) 5)
+    (assertm = ((fm ["do nothing" it] (+ it 1)) 3) 4)
     (assertm = (f> (+ it 1) 3) 4)
 
     (assertm = (list (mapm (+ it 1) [1 2 3])) [2 3 4])
