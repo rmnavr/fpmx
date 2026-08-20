@@ -1,0 +1,29 @@
+
+    __init__.py     // <empty>
+    loader.hy       // DEF: load_fpmx (macro)
+    lenses.hy       // • import lenses [lens]                                                  require [lns ...] ←┐
+                                                                                                                  |
+    /prelude |                                                                                                    |
+             | __init__.py           //  ┌→ import * , require * ←——————————————————————┐                         |
+             | __init__macros.hy     //  |                       ┌→ require (+minidoc) →•← require (+minidoc) ←┐  |
+             | funcs.hy              //  • ⁺FUNCS_fpmx           |                                             |  |
+             | macros.hy             //     (def+minidoc+docstr) • ¹MACRO_fpmx                                 |  • ³MACRO_lns
+             | from_hyrule.hy        //                                                  ²MACRO_hyrule_replica • 
+
+    /strict  | types.hy              // StrictInt, validateF, etc.
+             | maybeM.hy   
+             | resultM.hy  
+
+    /monads  | maybeM.hy   
+             | resultM.hy  
+
+	/term	 | ...
+
+    ·····························································································
+
+    • load_fpmx is in loader.hy (instead of __init__.py) because
+      this way «import fpmx.prelude *» is faster
+
+    • python calls hy.eval(hy.read(...)) are expensive
+    • 1000 same «imports» are free, 1000 same «requires» add up to noticiable startup time
+

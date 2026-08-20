@@ -1,0 +1,110 @@
+
+; Imports ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (import _fptk_local *) (require _fptk_local *)
+    (import subprocess)
+    (import termcolor [colored])
+
+    (setv clr_blue (fm (colored it "blue")))
+
+; _____________________________________________________________________________/ }}}1
+
+; term-helper: run_shell_command ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (defn run_shell_command
+        [ #^ str  command
+          #^ bool [printQ True]
+        ]
+        (setv result
+            (subprocess.run command
+                           :shell True
+                           :check True
+                           :text True
+                           :capture_output True))
+        (when printQ
+            (print result.stdout)
+            (print result.stderr)))
+
+; _____________________________________________________________________________/ }}}1
+
+; Classes ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (defclass [dataclass] NamingGroup []
+        ( #^ str strict_wy); SOURCE file, everything else is produced from it
+        ( #^ str strict_hy); will be overwritten by transpiled wy file
+        ( #^ str non_strict_wy); will be overwritten
+        ( #^ str non_strict_hy)); will be overwritten by transpiled wy file
+
+    (defclass [] Instruction [Enum]
+        ".value is used as a lookup string in source file"
+        (setv CLEAR_LINE "[NSMG_INSTRUCTION: CLEAR_THIS_LINE]")
+        (setv NON_SOURCE_WARN "[NSMG_INSTRUCTION: WRITE_NONSOURCE_WARNING]")
+        (setv REPLACE_WITH "[NSMG_INSTRUCTION: REPLACE_WITH]"))
+
+; _____________________________________________________________________________/ }}}1
+; Codegen functions ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+    (defn process_ngroup [ngroup]
+        ; step 1: create non-strict code:
+        (print "Processing" (clr_blue ngroup.strict_wy) ":")
+        (setv _nonstrict_wy_code
+            (=> ngroup.strict_wy
+                (read_file)
+                (.expandtabs 4)
+                (.splitlines False); False is for NOT including \n in splits
+                (f> (lmap process_one_line it))
+                (str_join :sep "\n")))
+        ; step 2: write code from step1
+        (try (write_to_file _nonstrict_wy_code ngroup.non_strict_wy)
+              (print "- file" (clr_blue ngroup.non_strict_wy) "written")
+              (except [e Exception] (raise Exception)))
+        ; step 3: wy2hy
+        (run_shell_command
+            (sconcat "wy2hy " ngroup.strict_wy " " ngroup.strict_hy " "
+                             ngroup.non_strict_wy " " ngroup.non_strict_hy))
+        (return None))
+
+    (defn #^ str process_one_line [#^ str line]
+        ;
+        (when (in Instruction.NON_SOURCE_WARN.value line)
+            (return ";: WARNING! THIS FILE IS CODEGENED! Edit source strict-version of it instead."))
+        ;
+        (when (in Instruction.CLEAR_LINE.value line)
+            (return
+                (sconcat (smul " " 4) "; [NSMG_LOG: This line was cleared] "
+                        (first (line.partition ";"))))); .partition splits to #(before separ after)
+                                                   ; this removes nsmg_instruction from orig line
+        ;
+        (when (in Instruction.REPLACE_WITH.value line)
+            (return
+                (sconcat
+                    (third (line.partition Instruction.REPLACE_WITH.value))
+                    " ; [NSMG_LOG: This line was replaced]")))
+        ;
+        (return line))
+
+; _____________________________________________________________________________/ }}}1
+
+; ===========================================================================
+
+    (setv $FILE_MAYBE
+        (NamingGroup :strict_wy "../../src/fpmx/_wy_source/strict/maybeM.wy"
+                    :non_strict_wy "../../src/fpmx/_wy_source/monads/maybeM.wy"
+                    :strict_hy "../../src/fpmx/strict/maybeM.hy"
+                    :non_strict_hy "../../src/fpmx/monads/maybeM.hy"))
+
+    (setv $FILE_RESULT
+        (NamingGroup :strict_wy "../../src/fpmx/_wy_source/strict/resultM.wy"
+                    :non_strict_wy "../../src/fpmx/_wy_source/monads/resultM.wy"
+                    :strict_hy "../../src/fpmx/strict/resultM.hy"
+                    :non_strict_hy "../../src/fpmx/monads/resultM.hy"))
+
+    (setv $FILE_MAYBE_WRITER
+        (NamingGroup :strict_wy "../../src/fpmx/_wy_source/strict/writerMaybeT.wy"
+                    :non_strict_wy "../../src/fpmx/_wy_source/monads/writerMaybeT.wy"
+                    :strict_hy "../../src/fpmx/strict/writerMaybeT.hy"
+                    :non_strict_hy "../../src/fpmx/monads/writerMaybeT.hy"))
+
+    (process_ngroup $FILE_MAYBE)
+    (process_ngroup $FILE_RESULT)
+    (process_ngroup $FILE_MAYBE_WRITER)

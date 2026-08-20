@@ -1,9 +1,9 @@
 
-; doc_gen needs to use ACTUAL fptk version, because it needs to extract help strings
+; doc_gen needs to use ACTUAL fpmx version, because it needs to extract help strings
 ; Imports ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (require fptk.loader [load_fptk])
-    (load_fptk "core" "lenses")
+    (require fpmx.loader [load_fpmx])
+    (load_fpmx "prelude" "lenses")
 
     (import pyparsing :as pp)
 
@@ -15,9 +15,11 @@
 
 ; CLASSES ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    ; FPTK Group from VimCells as raw text, like from "[GROUP] APL: Filtering"
+    ; FPMX Group from VimCells as raw text, like from "[GROUP] 04 APL: Filtering"
     (defclass [dataclass] FGroup []
-        ( #^ str name)
+        ( #^ str name); APL
+        ( #^ str subname); Filtering
+        ( #^ int order); 04
         ( #^ str raw_content))
 
     (defclass FEntityKind [Enum]
@@ -31,7 +33,7 @@
         (defn __repr__ [self] (return self.name))
         (defn __str__ [self] (return self.name)))
 
-    ; "FPTK Entity — function, macros, etc."
+    ; "FPMX Entity — function, macros, etc."
     (defclass [dataclass] FEntity []
         ( #^ FEntityKind kind)
         ( #^ str kind_str #_ "used only for non-import-info, typically I use: 'macro' or 'base', but it is arbitrary"); empty string otherwise
@@ -42,10 +44,12 @@
         ( #^ str descr #_ "partially applicates"))
 
     ; used for creating DEFINED_FUNC/DEFINED_SETV as parent module name
-    (setv $FPTK_NAME "fptk")
+    (setv $FPMX_NAME "fpmx")
 
-    (defclass [dataclass] DFGroup []; Deconstructed FPTK Group
+    (defclass [dataclass] DFGroup []; Deconstructed FPMX Group
         ( #^ str name)
+        ( #^ str subname)
+        ( #^ int order)
         ( #^ (of List FEntity) fentities))
 
 ; _____________________________________________________________________________/ }}}1
@@ -158,7 +162,7 @@
     ; for non-import-info: «module | kind | name | signature | descr»
     (defn #^ FEntity split_descr [#^ FEntity fentity]
         (setv org_descr fentity.descr)
-        (setv result (lmap strip (org_descr.split $SEPARATOR)))
+        (setv result (lmapm (it.strip) (org_descr.split $SEPARATOR)))
         ; normal case:
         (when (= (len result) 2)
               (setv fentity.signature (first  result))
@@ -177,16 +181,22 @@
 ; ________________________________________________________________________/ }}}2
 ; ■ find groups (defined by VimCells) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-    (setv FPTK_GROUP (+ "; [GROUP]" (t_orn "_NAME" (pp.OneOrMore WORD)) (pp.OneOrMore "‾") "\\ {" "{{" "1"
+    (setv FPMX_GROUP (+ "; [GROUP]"
+                        (t_orn "_NUMBER" NUMBER)
+                        (t_orn "_NAME" (pp.OneOrMore (pp.Word (+ ALPHAS "_-/")))) ":"
+                        (t_orn "_SUBNAME" (pp.OneOrMore (pp.Word (+ ALPHAS "_-/"))))
+                        (pp.OneOrMore "‾") "\\ {" "{{" "1"
                         (t_orn "_CONTENT" CONTENT)
                         ";" (pp.OneOrMore "_") "/ }}" "}1"))
 
     (defn #^ (of List FGroup)
         find_fgroups [#^ str code]
-        (setv _groups (FPTK_GROUP.search_string code))
+        (setv _groups (FPMX_GROUP.search_string code))
         (lmap
             (fm
               (FGroup :name %1._NAME
+                     :subname %1._SUBNAME
+                     :order %1._NUMBER
                      :raw_content %1._CONTENT))
             _groups))
 
@@ -196,14 +206,14 @@
 ; lmap everywhere is honestly not required, since normally only 1 elem is expected (but hey)
 ; ■ find import_module ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-    (setv FPTK_IM (+ LPAR "import"
+    (setv FPMX_IM (+ LPAR "import"
                      (t_orn "_NAME" WORD)
                      RPAR
                      (pp.Optional (+ (pp.Literal "#_") (t_orn "_DESCR" QSTRING)))))
 
     (defn #^ (of List FEntity)
         process_IMs [#^ str code]
-        (setv _IMs (FPTK_IM.search_string code))
+        (setv _IMs (FPMX_IM.search_string code))
         (lmap (fm (FEntity :kind          FEntityKind.IMPORT_MODULE
                            :kind_str      ""
                            :org_name      ""
@@ -216,7 +226,7 @@
 ; ________________________________________________________________________/ }}}2
 ; ■ find import_from_module ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-    (setv FPTK_IFM (+ LPAR "import"
+    (setv FPMX_IFM (+ LPAR "import"
                       (t_orn "_PARENT_MODULE" WORD)
                       LBRCKT
                       (t_orn "_NAME" WORD)
@@ -226,7 +236,7 @@
 
     (defn #^ (of List FEntity)
         process_IFMs [#^ str code]
-        (setv _IFMs (FPTK_IFM.search_string code))
+        (setv _IFMs (FPMX_IFM.search_string code))
         (setv pipe
             (rcompose (fm (FEntity :kind          FEntityKind.IMPORT_FROM_MODULE
                                    :kind_str      ""
@@ -241,7 +251,7 @@
 ; ________________________________________________________________________/ }}}2
 ; ■ find import_from_module_as ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-    (setv FPTK_IFMA (+ LPAR "import"
+    (setv FPMX_IFMA (+ LPAR "import"
                        (t_orn "_PARENT_MODULE" WORD)
                        LBRCKT
                        (t_orn "_ORG_NAME" WORD)
@@ -253,7 +263,7 @@
 
     (defn #^ (of List FEntity)
         process_IFMAs [#^ str code]
-        (setv _IFMAs (FPTK_IFMA.search_string code))
+        (setv _IFMAs (FPMX_IFMA.search_string code))
         (setv pipe
             (rcompose (fm (FEntity :kind          FEntityKind.IMPORT_FROM_MODULE_AS
                                    :kind_str      ""
@@ -268,7 +278,7 @@
 ; ________________________________________________________________________/ }}}2
 ; ■ find require_macro ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-    (setv FPTK_RM  (+ LPAR "require"
+    (setv FPMX_RM  (+ LPAR "require"
                       (t_orn "_PARENT_MODULE" WORD)
                       LBRCKT
                       (t_orn "_NAME" WORD)
@@ -278,7 +288,7 @@
 
     (defn #^ (of List FEntity)
         process_RMs [#^ str code]
-        (setv _RMs (FPTK_RM.search_string code))
+        (setv _RMs (FPMX_RM.search_string code))
         (setv pipe
             (rcompose (fm (FEntity :kind          FEntityKind.REQUIRE_MACRO
                                    :kind_str      ""
@@ -294,11 +304,11 @@
 ; ________________________________________________________________________/ }}}2
 ; ■ find non_import_info ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-    (setv FPTK_NII (+ LPAR "comment" (t_orn "_DESCR" QSTRING) RPAR))
+    (setv FPMX_NII (+ LPAR "comment" (t_orn "_DESCR" QSTRING) RPAR))
 
     (defn #^ (of List FEntity)
         process_NIIs [#^ str code]
-        (setv _NIIs (FPTK_NII.search_string code))
+        (setv _NIIs (FPMX_NII.search_string code))
         (setv pipe
             (rcompose (fm (FEntity :kind          FEntityKind.NON_IMPORT_INFO
                                    :kind_str      ""
@@ -313,19 +323,19 @@
 ; ________________________________________________________________________/ }}}2
 ; ■ find defined_setv ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-    (setv FPTK_DS   (+ (pp.Optional (+ (pp.Literal "#_") (t_orn "_DESCR" QSTRING)))
+    (setv FPMX_DS   (+ (pp.Optional (+ (pp.Literal "#_") (t_orn "_DESCR" QSTRING)))
                        LPAR "setv"
                        (t_orn "_NAME" WORD)
                        CONTENT))
 
     (defn #^ (of List FEntity)
         process_DSs [#^ str code]
-        (setv _DSs (FPTK_DS.search_string code))
+        (setv _DSs (FPMX_DS.search_string code))
         (lmap (fm (FEntity :kind          FEntityKind.DEFINED_SETV
                            :kind_str      ""
                            :org_name      ""
                            :name          %1._NAME
-                           :parent_module $FPTK_NAME
+                           :parent_module $FPMX_NAME
                            :signature     ""
                            :descr         (remove_quotes %1._DESCR)))
               _DSs))
@@ -333,7 +343,7 @@
 ; ________________________________________________________________________/ }}}2
 ; ■ find defined_func ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-    (setv FPTK_DF   (+ (pp.Optional (+ (pp.Literal "#_") (t_orn "_DESCR" QSTRING)))
+    (setv FPMX_DF   (+ (pp.Optional (+ (pp.Literal "#_") (t_orn "_DESCR" QSTRING)))
                        LPAR "defn"
                        (pp.Optional QEXPR)      ; decorator
                        (pp.Optional ANNOTATION) ; return type
@@ -343,13 +353,13 @@
 
     (defn #^ (of List FEntity)
         process_DFs [#^ str code]
-        (setv _DFs (FPTK_DF.search_string code))
+        (setv _DFs (FPMX_DF.search_string code))
         (setv pipe
             (rcompose (fm (FEntity :kind          FEntityKind.DEFINED_FUNC
                                    :kind_str      ""
                                    :org_name      ""
                                    :name          %1._NAME
-                                   :parent_module $FPTK_NAME
+                                   :parent_module $FPMX_NAME
                                    :signature     ""
                                    :descr         (remove_quotes %1._DESCR)))
                       split_descr))
@@ -358,18 +368,18 @@
 ; ________________________________________________________________________/ }}}2
 ; ■ find fentities (assembly) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{2
 
-    (setv FPTK_ALL (| (t_orn "_IM"   FPTK_IM  )
-                      (t_orn "_IFM"  FPTK_IFM )
-                      (t_orn "_IFMA" FPTK_IFMA)
-                      (t_orn "_RM"   FPTK_RM  )
-                      (t_orn "_NII"  FPTK_NII )
-                      (t_orn "_DF"   FPTK_DF  )
-                      (t_orn "_DS"   FPTK_DS  )))
+    (setv FPMX_ALL (| (t_orn "_IM"   FPMX_IM  )
+                      (t_orn "_IFM"  FPMX_IFM )
+                      (t_orn "_IFMA" FPMX_IFMA)
+                      (t_orn "_RM"   FPMX_RM  )
+                      (t_orn "_NII"  FPMX_NII )
+                      (t_orn "_DF"   FPMX_DF  )
+                      (t_orn "_DS"   FPMX_DS  )))
 
     (defn #^ (of List FEntity)
         find_fentities
         [#^ FGroup fgroup]
-        (setv _ALL (FPTK_ALL.search_string fgroup.raw_content))
+        (setv _ALL (FPMX_ALL.search_string fgroup.raw_content))
         (setv _fentities
             (lfor &elem _ALL
                 ; «first» extracts found string (to send raw code further)
@@ -388,6 +398,8 @@
         deconstruct_fgroup
         [ fgroup]
         (DFGroup :name fgroup.name
+                :subname fgroup.subname
+                :order (int fgroup.order)
                 :fentities (find_fentities fgroup)))
 
 ; _____________________________________________________________________________/ }}}1
@@ -405,63 +417,58 @@
         ;
         (setv _macro_exprs
             (re_all
-                ; --1--                         --2--        --3--        --4--
-                r"(\S+)\s+#_\s+\"\s*\[GROUP\]\s*(.*?)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\""
+                ; --1--                         --2---   --3--    --4--        --5--        --6--
+                r"(\S+)\s+#_\s+\"\s*\[GROUP\]\s*(\d\d)\s*(.*?):\s*(.*?)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\""
                 _whole_expression))
-        ; create dfgroups consisting of one fentity
+        ; create dfgroups consisting of one fentity:
         (setv _dfgs
             (lmapm
-                (DFGroup :name (second it)
+                (DFGroup :name (third it)
+                        :subname (fourth it)
+                        :order (int (second it ))
                         :fentities
                         [ (FEntity :kind FEntityKind.REQUIRE_MACRO
                                   :kind_str ""
                                   :org_name ""
                                   :name (first it)
                                   :parent_module searched_module_name
-                                  :signature (third it)
-                                  :descr (fourth it))])
+                                  :signature (nth_ 5 it)
+                                  :descr (nth_ 6 it))])
                 _macro_exprs))
         ; group them by group-name:
         (unite_dfgroups _dfgs))
 
-; _____________________________________________________________________________/ }}}1
-; helper: unite dfgroups ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
+    ; helper
     (def:: (of List DFGroup) => (of List DFGroup)
         unite_dfgroups [dfgroups]
-        "when found dfgroups with same name, their fentities are unified into one new dfgroup"
+        "when found dfgroups with same [order+name+subname], their fentities are unified into one new dfgroup"
         (setv _exploded_dfgroups
-            (->> dfgroups; [<GR.name, [GR.f1 GR.f2]>, <GR.name, [GR.f1 GR.f2]>, ...]
+            (->> dfgroups
                 (lmapm
                     (lzip
-                        (lmul [it.name] (len it.fentities))
+                        (lmul [it] (len it.fentities))
                         it.fentities))
-                (lcat))); [ (name, f1), (name, f2), (name, f1), ... ]
+                (lcat))); [ (dfgA, f1A), (dfgA, f2A), (dfgB, f1B), ... ]
         ;
         (setv _grouped_by_name
-            (lpartition_by first (sorted _exploded_dfgroups :key first)))
-                                                ; [ [[name1, GR.f1], [name1, GR.f2]], ... ]
+            (lpartition_by
+                (fm (. it [0] order))
+                (sorted _exploded_dfgroups :key (fm (. it [0] order)))))
+                                                ; [ [[dfgA, f1A], [dfgA, f2A]], [[...]], ... ]
         ;
         (lmapm
-            (DFGroup :name (first (first it))
+            (DFGroup :name (. it [0] [0] name)
+                    :subname (. it [0] [0] subname)
+                    :order (. it [0] [0] order)
                     :fentities (lpluck 1 it))
             _grouped_by_name))
 
 ; _____________________________________________________________________________/ }}}1
 
-; Long table:
+; One-liners table:
 ; fentity to str ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (defn #^ str build_postfix [ #^ FEntity fe ]
-        (setv signature (if (= fe.signature "")
-                            ""
-                            (sconcat " :: " fe.signature " ")))
-        (setv descr     (if (= fe.descr "")
-                            ""
-                            (sconcat " ; " fe.descr) ))
-        (return (sconcat signature descr)))
-
-    (defn fentity2str [ #^ FEntity fe ]
+    (defn #^ str fentity2str [ #^ FEntity fe ]
         (setv pad1 (fm (pad_string %1 15)))
         (setv pad2 (fm (pad_string %1 24)))
         ;
@@ -487,28 +494,48 @@
               FEntityKind.DEFINED_FUNC
               (sconcat "DEFN: " (pad1 fe.parent_module) " | " (pad2 fe.name) (build_postfix fe))))
 
+    ; helper
+    (defn #^ str build_postfix [ #^ FEntity fe ]
+        (setv signature (if (= fe.signature "")
+                            ""
+                            (sconcat " :: " fe.signature " ")))
+        (setv descr     (if (= fe.descr "")
+                            ""
+                            (sconcat " ; " fe.descr) ))
+        (return (sconcat signature descr)))
+
 ; _____________________________________________________________________________/ }}}1
 ; assembly ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (def:: DFGroup => (of List str)
-        dfgroup2str_list [dfgroup]
-        (flatten
-            [ (sconcat "=== " dfgroup.name " ===")
-              (lmap (p: fentity2str rstrip) dfgroup.fentities)
-              ""]))
-    ; rstrip removes possible spaces on the right (to not invoke «next line» in *.md)
-
     (def:: (of List DFGroup) => str
-        generate_long_table [dfgroups]
+        generate_oneliners_table [dfgroups]
+        "expects dfgroups to be already order-sorted"
         (->> dfgroups
-            (lmap dfgroup2str_list)
+            (lpartition_by (fm it.name))
+            (lmap dfgroups_with_same_name_2str_list)
             (flatten)
             (str_join :sep "\n")
             (flip sconcat "\n")))
 
+    ; helper
+    (def:: (of List DFGroup) => (of List str)
+        dfgroups_with_same_name_2str_list [dfgroups]
+        "«name» here is exacly .name (e.g. not .subname or smth)"
+        (setv _line0 (sconcat "=== " (. dfgroups [0] name) " ==="))
+        (setv _midlines (lmap dfgroup2str_list dfgroups))
+        (setv _lineFinal "")
+        (return (lconcat [_line0] _midlines [_lineFinal])))
+
+    ; helper of helper
+    (def:: DFGroup => (of List str)
+        dfgroup2str_list [dfgroup]
+        (lconcat
+            [(sconcat ";: " dfgroup.subname ":")]
+            (lmap (p: fentity2str (.rstrip)) dfgroup.fentities))); rstrip removes possible spaces on the right (to not invoke «next line» in *.md)
+
 ; _____________________________________________________________________________/ }}}1
 
-; Short table (consists of: ¹ cheatsheet-table, ² md-blocks group):
+; Md table (consists of: ¹ cheatsheet-table, ² md-blocks group):
 ; helper selectors ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (def:: (of List FEntity) => (of List FEntity)
@@ -529,11 +556,24 @@
 ; _____________________________________________________________________________/ }}}1
 ; constructors ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (def:: DFGroup => str
-        dfgroup_to_short_table_line
-        [ dfgroup]
+    (def:: (of List DFGroup) => (of List str)
+        dfgroups_with_same_name_to_table_lines
+        [ dfgroups]
+        (setv _dfg0 (first dfgroups))
+        (setv _line0 (dfgroup_to_md_table_line _dfg0 _dfg0.name))
+        (setv _linesRest
+            (lmapm
+                (dfgroup_to_md_table_line it "")
+                (rest dfgroups)))
         ;
-        (setv column1 dfgroup.name); group name
+        (return (lconcat [_line0] _linesRest)))
+
+    ; helper
+    (def:: DFGroup -> str => str
+        dfgroup_to_md_table_line
+        [ dfgroup column0]; for column0: use dfgroup.name when group starts and empty_string otherwise
+        ;
+        (setv column1 (sconcat dfgroup.subname))
         ;
         (setv fentities dfgroup.fentities)
         (setv column2; functions
@@ -543,8 +583,9 @@
             (str_join :sep " "
                      (lmap fentity_to_hoverable (only_macro_fentities fentities))))
         ;
-        (return f"| {column1} | {column2} | {column3} |"))
+        (return f"| {column0} | {column1} | {column2} | {column3} |"))
 
+    ; helper
     (def:: FEntity => str
         fentity_to_hoverable
         [ fentity]
@@ -569,14 +610,17 @@
 ; assembly ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     (def:: (of List DFGroup) => str
-        generate_chsh_table
-        [ dfgroups]
+        generate_chsh_table [dfgroups]
         (=>> dfgroups
-            (lmap dfgroup_to_short_table_line)
+            (lpartition_by (fm it.name))
+            (lmap dfgroups_with_same_name_to_table_lines)
+            (flatten)
             (str_join :sep "\n")
-            (sconcat $SHORT_TABLE_HEADER "\n")))
+            (sconcat $MD_TABLE_HEADER "\n")))
 
 ; _____________________________________________________________________________/ }}}1
+
+
 ; MD blocks (each block consists of: ¹ ##title, ² short-card, ³ help-string):
 ; helpers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
@@ -605,7 +649,7 @@
         (try
             (if (in fentity.name $SUPPRESS_HELP)
                  (setv help_string None)
-                 (setv help_string (=> (globals) [fentity.name] capture_help strip)))
+                 (setv help_string (=> (globals) [fentity.name] capture_help (.strip))))
             (except [e Exception] (setv help_string None)))
         ;
         (if (noneQ help_string)
@@ -633,9 +677,9 @@
                  FEntityKind.REQUIRE_MACRO
                  f"Kind: Macro from [{fe.parent_module}]"
                  FEntityKind.DEFINED_SETV
-                 "Kind: FPTK original"
+                 "Kind: FPMX original"
                  FEntityKind.DEFINED_FUNC
-                 "Kind: FPTK original"))
+                 "Kind: FPMX original"))
         (setv tail (build_card_tail fe))
         (return (sconcat line1 "\n" line2 tail)))
 
@@ -670,25 +714,25 @@
 ; _____________________________________________________________________________/ }}}1
 
 ; Run:
-; CONST STRs (for short table) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; CONST STRs (for md table) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (setv $SHORT_TABLE_HEADER
+    (setv $MD_TABLE_HEADER
          "
-| Group | Functions/Types | Macros |
-|-------|-----------------|--------|")
+| Group | Subgroup | Functions/Types | Macros |
+|-------|----------|-----------------|--------|")
 
-    (setv $HEADER1 "fptk-core-cheatsheet")
+    (setv $HEADER1 "fpmx Prelude cheatsheet")
     (setv $HEADER2 "Detailed descriptions")
     (setv $BACKLINK f"[go up](#{$HEADER1})")
 
 ; _____________________________________________________________________________/ }}}1
-; GLOB VARS  (for short table) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+; GLOB VARS  (for md table) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
     ; for this functions help-card will not be printed
     ; (like because for StrictNumber it will give help on Union, which is useless)
     (setv $SUPPRESS_HELP
-        [ "listQ" "tupleQ" "setQ" "iteratorQ" "iterableQ"])
-            ; "StrictNumber" "validateF" "Result" "Maybe" "Nothing" -> those are not anymore in core
+        [ "listQ" "tupleQ" "setQ" "iteratorQ" "iterableQ" "number"])
+            ; "StrictNumber" "validateF" "Result" "Maybe" "Nothing"
 
     ; typically function named 'partial' should be layed out in
     ; the doc under 'partial' header;
@@ -700,8 +744,8 @@
             "->>" #("hyruleThreading2" "hyruleThreading2")
             "as->" #("hyruleThreading3" "hyruleThreading3")
             "doto" #("hyruleThreading4" "hyruleThreading4")
-            "=>" #("FPTKThreading1" "FPTKThreading1")
-            "=>>" #("FPTKThreading2" "FPTKThreading2")
+            "=>" #("FPMXThreading1" "FPMXThreading1")
+            "=>>" #("FPMXThreading2" "FPMXThreading2")
             "f>" #("LambdaWithAppl" "LambdaWithAppl")
             "p:" #("PipeOfPartials" "PipeOfPartials")
             "f::" #("Annotator1" "Annotator1")
@@ -710,10 +754,10 @@
 ; _____________________________________________________________________________/ }}}1
 ; RUN ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
-    (setv $SOURCE1 "../../src/fptk/core/funcs.hy")
-    (setv $SOURCE2 "../../src/fptk/core/__init__macros.hy")
-    (setv $TARGET_LONG_FILE "../../_devdocs/doctable_autogenerated.hy")
-    (setv $TARGET_SHORT_FILE "../../docs/core_cheatsheet_autogenerated.md")
+    (setv $SOURCE1 "../../src/fpmx/prelude/funcs.hy")
+    (setv $SOURCE2 "../../src/fpmx/prelude/__init__macros.hy")
+    (setv $TARGET_HY_FILE "../../docs/01_prelude_cheatsheet_list_view.hy")
+    (setv $TARGET_MD_FILE "../../docs/00_prelude_cheatsheet_table_view.md")
     (setv _code_funcs (read_file $SOURCE1))
     (setv _code_macros (read_file $SOURCE2))
 
@@ -722,23 +766,23 @@
         (unite_dfgroups; this is where sorting of group-names becomes alphabetical -> TODO: don't force this sorting
             (lconcat
                 (=>> _code_funcs find_fgroups (lmap deconstruct_fgroup)); <- can also find macros among other things, yes
-                (find_macros _code_macros "fptk.core.from_hyrule"); \ <- searches for macros in big require statements
-                (find_macros _code_macros "fptk.core.macros")))); /
+                (find_macros _code_macros "fpmx.prelude.from_hyrule"); \ <- searches for macros in big require statements
+                (find_macros _code_macros "fpmx.prelude.macros")))); /
 
     ; perform some pretty renamings
     (setv _dfgroups
         (-> _dfgroups
-           (l> (Each) .fentities (Each) .parent_module (Filter (partial eq "fptk.core.from_hyrule")) (set "fptk/hyrule"))
-           (l> (Each) .fentities (Each) .parent_module (Filter (partial eq "fptk.core.macros")) (set "fptk"))))
+           (l> (Each) .fentities (Each) .parent_module (Filter (partial eq "fpmx.prelude.from_hyrule")) (set "fpmx/hyrule"))
+           (l> (Each) .fentities (Each) .parent_module (Filter (partial eq "fpmx.prelude.macros")) (set "fpmx"))))
 
-    ; Long table:
-    (setv _long_table (generate_long_table _dfgroups))
-    (write_to_file f"\n{_long_table}" $TARGET_LONG_FILE)
+    ; List of one-liners:
+    (setv _oneliners_table (generate_oneliners_table _dfgroups))
+    (write_to_file $TARGET_HY_FILE f"\n{_oneliners_table}")
 
-    ; Short table:
+    ; MD-table:
     (setv _cheatsheet_table (generate_chsh_table _dfgroups))
     (setv _md_blocks (generate_md_blocks _dfgroups))
-    (setv _short_final f"# {$HEADER1}\n\n{_cheatsheet_table}\n\n# {$HEADER2}\n\n{_md_blocks}")
-    (write_to_file _short_final $TARGET_SHORT_FILE)
+    (setv _mdtable_final f"# {$HEADER1}\n\n{_cheatsheet_table}\n\n# {$HEADER2}\n\n{_md_blocks}")
+    (write_to_file $TARGET_MD_FILE _mdtable_final)
 
 ; _____________________________________________________________________________/ }}}1

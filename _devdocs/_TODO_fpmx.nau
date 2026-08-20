@@ -1,0 +1,57 @@
+
+// * doc_gen ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+	Prettify:
+		+ docgen should not find values in ;; (setv ...) JFK
+		+ Remove requirement for `;;` comments to have double-semicolon
+		+ Enhance recognition of if `#_ "comment"` belongs to prev `(import ...)` or next `(defn ...)`
+		* "FPMX original" vs "Macro from: FPMX" 
+		* Somehow remove manual «05 Title: subtitle» sorting requirement? Or at least add warning when both «05 Title» and «06 Title» exist?
+
+	New:
+		+ (help (get_macro def::))
+
+// ____________________________________________________________________________/ }}}1
+
+// Global polish/consistency ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+	- 1-based and ends-included mess
+	- lists vs iterators 
+	- arg order (and/or optional args) 
+	- variadic/on_list
+
+// ____________________________________________________________________________/ }}}1
+// fpmx (sorted) ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+	## New functions (APL/math)
+		+ (append xs 3 4 ...)
+		+ inteleave (x1y2z3), interpose (x-y-z)
+		+ ldistinct
+	    + (flatten xs :level 3)
+		+ enlengthen_list
+		+ avrg/mean
+		+ ilen
+		+ for dicts: dkeys, dvalues, ditems, add/substract
+
+	
+	## New flow
+		- (or_if_none x 0)
+		- (try1st (smth) default1 default2)
+
+	## Upgrade/change API
+		- lbisect_by: option to include/exclude first found; negation in f in unclear
+		- strip/lstrip/rstrip should also pass kwargs and such
+		+ lprint: when on non-iterable, print normally
+
+	## Lens — to fix
+		- GetAttr "kind"
+		- &+ inner implementation: (get x) -> (& (last expr) (. lens (get x)))
+		- hide lens inside macro JFK
+		- lens: (- 7) -> remove
+
+	## Monads
+		- fmap: (fmap f (Just 3) (Just 4) Nothing) will unwantedly work ok, even if f is function of 1 arg -> THIS IS BAD!
+
+// ____________________________________________________________________________/ }}}1
+
+

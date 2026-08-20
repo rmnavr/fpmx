@@ -1,14 +1,14 @@
 from setuptools                 import setup, find_packages
 from setuptools.command.install import install 
 
-proj_version = '0.5.0'
+proj_version = '0.6.0'
 
 libs_required = [
     'hy >= 1',
-    'pydantic >= 2', 
-    'lenses >= 1.2.0',
+    'termcolor >= 3.0',
     'funcy >= 2.0',
-    'termcolor >= 3.0'
+    'lenses >= 1.2.0',
+    'pydantic >= 2'
 ]
 
 # install class ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
@@ -30,7 +30,7 @@ class install(install):
 # setup ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
 
 setup(
-    name              = 'fptk',
+    name              = 'fpmx',
     version           = proj_version,
     setup_requires    = ['wheel'] + libs_required,
     install_requires  = libs_required,
@@ -40,7 +40,7 @@ setup(
     author            = 'Roman Averyanov',
     author_email      = 'averrmn@gmail.com',
     description       = 'Curated list of functional-programming funcs/classes/modules/macros for hy lang',
-    url               = 'https://github.com/rmnavr/fptk',
+    url               = 'https://github.com/rmnavr/fpmx',
     python_requires   = '>=3.9',
     classifiers       = [ 'Programming Language :: Hy',
                           'Operating System :: OS Independent',

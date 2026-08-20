@@ -1,0 +1,20 @@
+
+	Maybe a = Just a | Nothing
+	- justQ nothingQ
+	- unwrapJ unwrapJ_or
+	- fmapM 
+	- bindM 
+
+	Result a b = Success a | Failure b
+	- successQ failureQ
+	- unwrapS unwrapS_or unwrapF unwrapF_or
+	- fmapR
+	- bindR
+
+	WriterMaybe a b = WJust a b | WNothing b
+	- wJustQ wNothingQ
+	- unwrapWJ unwrapWJ_or -> value, log_
+	- askWM tellWM
+	- fmapWM
+	- bindWM
+

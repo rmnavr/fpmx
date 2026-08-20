@@ -14,12 +14,12 @@ subprocess.run("hy empty_hy.hy")
 _r2 = f"{(_get_time() - _t) :.3f} sec | <empty Hy>"
 
 _t = _get_time()
-subprocess.run("hy normal_core.hy")
-_r3 = f"{(_get_time() - _t) :.3f} sec | normal_core"
+subprocess.run("hy normal_prelude.hy")
+_r3 = f"{(_get_time() - _t) :.3f} sec | normal_prelude"
 
 _t = _get_time()
-subprocess.run("hy loader_core.hy")
-_r4 = f"{(_get_time() - _t) :.3f} sec | loader_core"
+subprocess.run("hy loader_prelude.hy")
+_r4 = f"{(_get_time() - _t) :.3f} sec | loader_prelude"
 
 _t = _get_time()
 subprocess.run("hy normal_all.hy")

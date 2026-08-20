@@ -1,0 +1,23 @@
+
+    Suppose you want to have fpmx as a local 3rd-party lib in your "proj" package.
+    Suppose you want to have it placed at: proj/utils/fpmx_local
+
+    Then:
+    1) You'll have to import fpmx as:
+       @@ import proj.utils.fpmx_local.prelude
+       @@ require proj.utils.fpmx_local.prelude *
+    2) Accordingly, in all fpmx files:
+       - all inner reimports must follow the same pattern:
+         @@ require proj.utils.fpmx_local.prelude.from_hyrule [->]
+       - accordingly, macros one-shot-requirements must be:
+         @@ hy.R.proj/utils/fpmx_local/prelude/from_hyrule.->
+         (yes, hy.R uses «/» for submodules)
+
+    This is what fpmx_local_gen (in scripts) does.
+    fpmx_local.loader is modified accordingly too.
+
+    ------------------------------------------------
+        
+    When running simple script (non-package) «script.hy»,
+    just place fpmx_local in same folder, and importing via [³import fpmx_local.prelude⁺] will work.
+

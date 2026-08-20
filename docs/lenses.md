@@ -1,7 +1,7 @@
 
 <!-- Intro ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-# fptk lenses
+# fpmx lenses
 
 Lenses macros should be used together with [lenses](https://github.com/ingolemo/python-lenses) library.
 They simplify lens definition, composition and application.
@@ -11,10 +11,10 @@ They simplify lens definition, composition and application.
 
 Usage:
 ```hy
-(import fptk.lenses [lens])        ; main object (lens) from original lenses library
-(require fptk [lns l> l>= &+ &+>]) ; macros
+(import fpmx.lenses [lens])        ; main object (lens) from original lenses library
+(require fpmx [lns l> l>= &+ &+>]) ; macros
 
-; you won't need to interact with `lens` directly, but fptk-lenses macros require it to be loaded
+; you won't need to interact with `lens` directly, but fpmx-lenses macros require it to be loaded
 ```
 
 <!-- __________________________________________________________________________/ }}}1 -->
@@ -22,8 +22,8 @@ Usage:
 
 # Cheatsheet
 
-In order to see what role fptk-lenses macros play,
-below cheatsheet is given for lenses library as a whole, not just for fptk macros.
+In order to see what role fpmx-lenses macros play,
+below cheatsheet is given for lenses library as a whole, not just for fpmx macros.
 
 ## lenses cheatsheet (for original lenses library)
 
@@ -34,8 +34,8 @@ Also, in examples below, `lens` object is the one you import from lenses library
 ```hy
 (import lenses [lens])
 
-; or use fptk reimport:
-(import fptk.lenses [lens])
+; or use fpmx reimport:
+(import fpmx.lenses [lens])
 ```
 
 UL/SF definition, application and composition:
@@ -107,9 +107,9 @@ Helpers:
 ; into the shaddow of lens inner "kind" method
 ```
 
-## fptk lenses macros
+## fpmx lenses macros
 
-### lns syntax (fptk)
+### lns syntax (fpmx)
 
 `lns` macro offers new syntax for lens object:
 
@@ -135,9 +135,9 @@ Helpers:
 (lns 1 (dndr>> / 3))                ; (/ 3 (. lens [1]))
 ```
 
-### Usage of fptk lenses macros
+### Usage of fpmx lenses macros
 
-All fptk macros recognize `lns` syntax described above.
+All fpmx macros recognize `lns` syntax described above.
 
 ```hy
 ; lns-macro is used to define UL or SF in alternative syntax:

@@ -1,0 +1,30 @@
+
+// Possible options ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
+
+	What getters return when trying to reach non-existing element?
+
+		- None				// this is what funcy getters usually do
+		- Default (get_or)
+		- Throw Error		// this is what py/hy getters usually do
+
+	Variadic multi-val:
+
+		- variadic:     f(x1, x2, ...)
+		- non-variadic: f([x1, x2, ...])
+
+	Arg order:
+		
+		// Clojure (and funcy) usually prioritizes for ->>
+
+		1)	(clip x 0 3)	// good for: ->					(->  x (clip 0 3))
+		2)	(clip 0 3 x)	// good for: ->>, partial		(->> x (clip 0 3))  (map (partial clip 0 3) xs)
+
+		3)	(clip <x₁> :low 0 :high 3 <x₂>)		// good for: ->, ->>, partial	— downside is verbosity
+			(f vrbl * optional_params)			// same
+
+		// examples:
+		((pflip div 3) 4)
+		((partial oftypeQ int) "4")
+
+
+// ____________________________________________________________________________/ }}}1

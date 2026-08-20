@@ -1,11 +1,11 @@
 
-# fptk strict typing
+# fpmx strict typing
 
-fptk strict typing is simple convenience module for pydantic.
+fpmx strict typing is simple convenience module for pydantic.
 
 Usage:
 ```hy
-(import fptk.strict.types *) ; or load only what is required
+(import fpmx.strict.types *) ; or load only what is required
 ```
 
 Basic pydantic workflow:
@@ -24,7 +24,7 @@ On my machine pydantic costs:
 | `StrictInt`     | class (pydantic)   | will be still of int type, but will perform pydantic typecheck when variable is created" 
 | `StrictStr`     | class (pydantic)   | will be still of str type, but will perform pydantic typecheck when variable is created" 
 | `StrictFloat`   | class (pydantic)   | will be still of float type, but will perform pydantic typecheck when variable is created" 
-| `StrictNumber`  | class (fptk)       | defined as Union[StrictInt, StrictFloat], that's it
+| `StrictNumber`  | class (fpmx)       | defined as Union[StrictInt, StrictFloat], that's it
 | `validate_call` | function (pydantic)| decorator for type-checking functions's args
-| `validateF`     | function (fptk)    | simply validate_call(...) with option `validate_return=True` (thus it also validates return type)
+| `validateF`     | function (fpmx)    | simply validate_call(...) with option `validate_return=True` (thus it also validates return type)
 
