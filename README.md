@@ -1,46 +1,45 @@
 
 <!-- Intro ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-# fpmx — [F]unctional [P]rogramming [M]ath e[X]tension for hy-lang
+# fpmx
 
-**fpmx** is a language extension for Hy and Python designed to bridge the gap between
-the expressiveness of functional/math languages and the industrial power of Python ecosystem.
-It brings the ergonomics of *Mathematica*, *APL*, *Haskell*, and similar languages
+[F]unctional [P]rogramming [M]ath e[X]tension for hy-lang.
+
+**fpmx** is a language extension for Hy and Python that brings ergonomics
+of *Mathematica*, *APL*, *Haskell*, and similar FP/math-heavy languages
 directly to the Hy/Python runtime.
 
-With a curated suite of over 250 pure functions, syntactic macros, and basic types,
-fpmx transforms Hy into a native environment for mathematical computation by 
-eliminating the friction of imperative-first languages.
-
-# Architecture and Modules
-
-fpmx is designed as a two-tier system to balance API stability with FP/math experimentation:
+fpmx is implemented as a two-tier system:
 - **fpmx.prelude** — the stable heart of the library optimized for everyday use.
-  It includes functions, macros and types that define the **fpmx** experience.
+  It includes over 250 pure functions, macros and types that define the *fpmx experience*.
   By importing the prelude namespace (`(import fpmx.prelude *) (require fpmx.prelude *)`),
-  you gain immediate access to a "batteries-included" functional vocabulary without constant context switching,
-  thus allowing you to focus on logic and mathematical flow rather than boilerplate.
+  you gain immediate access to a "batteries-included" functional vocabulary.
   > This is the recommended entry point for all projects
 - **fpmx.extras** — a collection of modules that contain specialized,
-  domain-specific, or experimental features.
-  These modules allow for extensions into niche FP/math territories
-  without bloating the prelude or compromising its stability.
+  domain-specific, or experimental FP/math features.
 
 <!-- __________________________________________________________________________/ }}}1 -->
 
-<!-- Prelude: Intro ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+# Prelude
+<!-- intro ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-# Prelude module
-
-The fpmx prelude provides a functional vocabulary for expressing math and FP ideas
-through a suite of pure functions (with obvious non-pure exceptions like `read_file` and similar).
-
-For quick overview of full Prelude vocabulary please refer to: 
-[Prelude cheatcheet table](docs/00_prelude_cheatsheet_table_view.md) 
-
+Intended usage of the Prelude (being language extension) is:
+```
+(import fpmx.prelude *)
+(require fpmx.prelude *)
+```
+Although nothing is forbidding you from importing only required functionality.
 
 <!-- __________________________________________________________________________/ }}}1 -->
-<!-- Prelude: Principles ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+<!-- ## cheatsheet ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+
+## Cheatsheet
+
+To get overall picture of what Prelude offers — see overview of all 250+ fpmx.prelude functions/macros/objects:
+[Cheatsheet (table form)](docs/00_prelude_cheatsheet_table_view.md)
+
+<!-- __________________________________________________________________________/ }}}1 -->
+<!-- ## Principles ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 ## Key principles
 
@@ -66,30 +65,111 @@ Following *funcy* tradition, most sequence functions offer both lazy and eager l
 ...
 ```
 
-To make code more readable by removing ambiguity of standard `*` and `+` dunder operators, 
-fpmx offers duplicated names for them:
+To make usage of standard `*` and `+` dunders more explicit, fpmx offers duplicated names for them:
 ```hy
-(mul a b c ...)  ; «*» operator as function
-(smul a b c ...) ; «*» operator as function, but underlines usage on string like (* 3 "a")
-(lmul a b c ...) ; «*» operator as function, but underlines usage on lists like (* 3 [1])
+(mul  2 3)        ; «*» operator as function
+(smul 3 "a")      ; «*» operator as function, but underlines usage on string like (* 3 "a")
+(lmul 3 [1 2])    ; «*» operator as function, but underlines usage on lists like (* 3 [1])
 
-(plus a b ...)   ; «+» operator as function
-
-; to «plus» strings and lists, specialized functions are advised:
-(sconcat ...)    ; concatenate strings 
-(lconcat ...)    ; eager concatenation of lists
+(plus 2 3)        ; «+» operator as function
+(sconcat "a" "b") ; concatenate strings 
+(lconcat [1] [2]  ; eager concatenation of lists
 ```
 
 To avoid manual writing of `(import typing [List]`) in every module,
 fpmx by default reimports several most commonly used types like
 `List`, `Dict`, `Tuple`, `Union`, `dataclass` and several others.
 
+`case`, `unless`, `->` and other classic utilities are reimported from `hyrule`.
+
+Basic operators (like `+`, `/`, `@`, etc.) are also provided as functions (`plus`, `div`, `matmul`, etc.).
+
 <!-- __________________________________________________________________________/ }}}1 -->
-<!-- Prelude: Math ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+## Features highlight
+<!-- Wrappers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-## Math ergonomics
+### Ergonomic wrappers
 
-Set of basic math utility functions is included in Prelude:
+Functional wrappers for basic IO:
+```hy
+(read_file "1.txt" :encoding "utf-8")   
+(write_to_file "1.txt" text :mode "w")
+(path_existsQ f) ; checks if file or folder f exists
+...
+```
+
+Functional wrappers for regex:
+```hy
+(re_sub r"\d" "-" "smth1smth1smth")   ; returns "smth-smth-smth"
+(re_find r"\s*\d\d" "here 20 comes")  ; returns " 20"
+...
+```
+
+Various helpers like:
+- `lprint` to print each elem of iterable on new line
+- `cur_time` for returning current time
+
+<!-- __________________________________________________________________________/ }}}1 -->
+<!-- Threading macro ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+
+### Threading
+
+Crown jewels of fpmx are threading macros `=>` and `=>>`.
+See them as a combination of `.` and `->`/`->>` macros:
+
+```
+(=>> some_data
+     function                 ; function application like in `->>` macro
+     (function arg1 arg2 ...) ; function application like in `->>` macro
+     (.mth arg1 arg2 ...))    ; method calling (`->>` has it broken)
+     [0 "key"]                ; index/key access like in `.` macro
+     .attr                    ; attribute-access similar to `.` macro
+```
+
+`=>` and `=>>` solves the problem of combining getters with threaders:
+```hy
+; consider list of points (Point is dataclass with :x and :y fields):
+(setv pts [(Point :x 1 :y 2) (Point :x 3 :y 4)])
+
+; We want to extract .x of first point (=1) and double it (return 2)
+
+; The best we can do in traditional hy syntax is:
+(-> pts (get 0) (getattrm "x") double)  
+; or:
+(double (. pts [0] x))
+
+; now see how fpmx => macro makes it much more prettier:
+(=> pts [0] .x (double))  
+```
+
+<!-- __________________________________________________________________________/ }}}1 -->
+<!-- Sequences ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+
+### Sequence processing
+
+fpmx extends Python basic FP-vocabulary:
+
+```hy
+; enhancing zip/map/reduce family:
+(starmap ...)    ; reimport of itertools.starmap
+(reductions ...) ; returns sequence of intermediate results of functools.reduce function
+...
+
+; cutting and grouping:
+(lpartition 2 [0 1 2 3 4 5]) ; returns [[0 1] [2 3] [4 5]]
+(lbisect_by trueQ [True True False False False]) ; returns #([True True] [False False False])
+...
+
+; filtering:
+(fltr1st floatQ [1 2 3.0 4 5]) ; will return 3.0 (or None if float were not present)
+(lfilter_split floatQ [1 2.0 3.0 4]) ; will return #([2.0 3.0] [1 4])
+...
+```
+
+<!-- __________________________________________________________________________/ }}}1 -->
+<!-- Math ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+
+### Math ergonomics
 
 ```hy
 ; shortcuts for common operations:
@@ -118,53 +198,34 @@ pi       ; float pi=3.14...
 ...
 
 ; random:
-(randint 3 7)       ; random integer in range
-(randfloat 1.0 3.5) ; random float in range
+(rand_int 3 7)       ; random integer in range
+(rand_float 1.0 3.5) ; random float in range
 ...
 ```
 
 <!-- __________________________________________________________________________/ }}}1 -->
-<!-- Prelude: Operators as funtctions ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+<!-- Functional composition ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-## Operators as functions
+### Functional composition
 
-To make standard operators like `*` and `+` usable in functional composition (see further),
-fpmx provides their function variants, which do not shaddow builtin Python namespace:
+Set of utility functions that provide true "function-first" experience in Hy/Python:
 ```hy
-(and_ a b c ...)    ; «and» as function
-(xor a b c ...)     ; xor as function
-(matmul a b c ...)  ; @ operator as function
-(div x y)           ; / operator as function
-(plus x y z)        ; + operator as function
-(mul x y z)         ; * operator as function
-(neq a b)           ; «non-equal», same as != operator
-(leq0 a)            ; «less or equal than 0»
-...
+; nested function application:
+(setv nested_fs (compose f1 f2 f3))
+(nested_fs x)  ; will essentially run f1(f2(f3(x)))
+
+; partial application:
+(lmap (partial plus 3) [1 2 3]) ; returns [4 5 6]
+
+; flipping arguments for 2-args functions:
+(lmap (partial div 10) [1 2 3]) ; returns [10.0 5.0 3.33333]
+(lmap (pflip   div 10) [1 2 3]) ; returns [0.1 0.2 0.3]
 ```
 
 <!-- __________________________________________________________________________/ }}}1 -->
-<!-- Prelude: Strings ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+<!-- Getters ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-## Strings manipulation
-
-fpmx offers functional wrappers for regex (to avoid their manual compilation):
-```hy
-(re_sub r"\d" "-" "smth1smth1smth")   ; returns "smth-smth-smth"
-(re_find r"\s*\d\d" "here 20 comes")  ; returns " 20"
-...
-```
-
-fpmx also has several usefull utilities for strings:
-```hy
-(str_join ["a" "b"] :sep "-")    ; returns string "a-b"
-(enlengthen 10 "smth" :char "-") ; returns string "smth------"
-...
-```
-
-<!-- __________________________________________________________________________/ }}}1 -->
-<!-- Prelude: Getters ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
-
-## Buffed getters 
+### Buffed getters
 
 fpmx offers enhanced getters (and several setters) for making index/attr accessing more ergonomic:
 ```hy
@@ -192,96 +253,26 @@ fpmx offers enhanced getters (and several setters) for making index/attr accessi
 ```
 
 <!-- __________________________________________________________________________/ }}}1 -->
-<!-- Prelude: FP IO wrappers ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+<!-- Lambdas ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-## Functional wrappers for IO
+### Lambdas
 
-Instead of imperative context switching with standard Python `with` form,
-fpmx offers functional wrappers for basic IO:
-```hy
-(read_file "1.txt" :encoding "utf-8")
-(write_to_file text "1.txt" :mode "w")
-(file_existsQ f) ; checks if file or folder f exists
-...
-```
-
-<!-- __________________________________________________________________________/ }}}1 -->
-<!-- Prelude: APL ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
-
-## Sequence processing
-
-fpmx greately extends Python basic FP-vocabulary:
-```hy
-; enhancing zip/map/reduce family:
-(starmap ...)    ; reimport of itertools.starmap
-(reductions ...) ; returns sequence of intermediate results of functools.reduce function
-...
-
-; cutting and grouping:
-(lpartition 2 [0 1 2 3 4 5]) ; returns [[0 1] [2 3] [4 5]]
-(lbisect_by trueQ [True True False False False]) ; returns #([True True] [False False False])
-...
-
-; filtering:
-(fltr1st floatQ [1 2 3.0 4 5]) ; will return 3.0 (or None if float were not present)
-(lfilter_split floatQ [1 2.0 3.0 4]) ; will return #([2.0 3.0] [1 4])
-...
-```
-
-<!-- __________________________________________________________________________/ }}}1 -->
-<!-- Prelude: FP ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
-
-## Functional composition
-
-fpmx offers set of utility functions that provide true "function-first" experience in Hy/Python:
-```hy
-; nested function application:
-(setv nested_fs (compose f1 f2 f3))
-(nested_fs x)  ; will essentially run f1(f2(f3(x)))
-
-; partial application:
-(lmap (partial plus 3) [1 2 3]) ; returns [4 5 6]
-
-; flipping arguments for 2-args functions:
-(lmap (partial div 10) [1 2 3]) ; returns [10.0 5.0 3.33333]
-(lmap (pflip   div 10) [1 2 3]) ; returns [0.1 0.2 0.3]
-```
-
-However functional composition truly shines in fpmx threading macros (see below).
-
-<!-- __________________________________________________________________________/ }}}1 -->
-<!-- Prelude: Macros ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
-
-## Prelude Macros
-
-fpmx has special syntax for lambdas, which removes neccessity to manualy name arguments:
+Special syntax for lambdas, which removes neccessity to manualy name arguments:
 ```hy
 (fm (print it))     ; (fn [it] (print it))          ; «it» is recognized as solo-argument 
 (fm (print %1 %2))  ; (fn [%1 %2] (print %1 %2))    ; %1 and %2 are recognized as arguments
 
-; macros mapm/filterm, their list-variants, and several others use same syntax:
+; mapm/filterm, their list-variants, and several others use same syntax:
 (lmapm (* %1 %2) [1 2 3] [4 5 6])
 (filterm (eq it 3) [1 2 3])
 ```
 
-fpmx macros `=>` and `=>>` combine hy `.` and hyrule `->`/`->>` macros.
-This solves the problem of combining getters with threaders:
-```hy
-; consider list of points (Point is dataclass with :x and :y fields):
-(setv pts [(Point :x 1 :y 2) (Point :x 3 :y 4)])
+<!-- __________________________________________________________________________/ }}}1 -->
+<!-- def:: ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-; We want to extract .x of first point (=1) and double it (return 2)
+### Haskell-style function annotation
 
-; The best we can do in traditional hy syntax is:
-(-> pts (get 0) (getattrm "x") double)  
-; or:
-(double (. pts [0] x))
-
-; now see how fpmx => macro makes it much more prettier:
-(=> pts [0] .x (double))  
-```
-
-Also, as a special treat for Haskellers — fpmx offers function annotation macro `def::`:
+A special treat for Haskellers — fpmx offers function annotation macro `def::`:
 ```hy
 ; basic usage:
 (def:: int -> int => float
@@ -293,26 +284,6 @@ Also, as a special treat for Haskellers — fpmx offers function annotation macr
        f6 [a b / c #* args #** kwargs] (+ a b c))
        ; «a»-arg will have no annotation due to «@»
 ```
-
-And as for basic ergonomics, fpmx reimports some of general-usage macros from hyrule (like `case`, `unless`, `->` and others).
-
-<!-- __________________________________________________________________________/ }}}1 -->
-<!-- Prelude: Other ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
-
-## Misc Prelude functionality
-
-1-based indexing variants of basic getters and ranges for mathematical alignment
-(fpmx does not expect 1-based indexing approach anywhere except those few specific functions):
-```hy
-(get_ x 1)    ; gets x[0]
-(range_ 1 3)  ; generator: 1, 2, 3
-(lrange_ 1 3) ; [1 2 3]
-...
-```
-
-Also:
-- `lprint` to print each elem of list on the new line
-- `cur_time` for returning current time
 
 <!-- __________________________________________________________________________/ }}}1 -->
 
@@ -335,8 +306,7 @@ fpmx has following evolving extra modules:
 * `fpmx.term`
   * terminal utils: plotting, coloring, etc.
 
-Modules that require pydantic may be slower to load,
-this is one of the reasons for excluding them from Prelude.
+Modules that require pydantic may be slower to load, this is one of the reasons for excluding them from Prelude.
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Loading ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
@@ -385,7 +355,6 @@ Importing every fpmx module (although loading both strict and non-strict monads 
 ```
 
 <!-- __________________________________________________________________________/ }}}1 -->
-
 <!-- Documentation ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 # Documentation
@@ -430,6 +399,9 @@ Tested with versions:
 
 Prelude functionality is at 90% of reaching stable release
 (some API-breaking changes may still happen).
+
+Extra modules are considered experimental.
+They may be totally rewamped in the future.
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Installation ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->

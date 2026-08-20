@@ -54,24 +54,4 @@
 
 // ____________________________________________________________________________/ }}}1
 
-// 0.6.0 publish ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1
-
-	devlog:
-		✓ => to work correctly with f> (see hy-cheetsheet), currently =>> is OK
-		✓ clrz [instructions] text — add full list into error
-		✓ tests: choice, rand_int, rand_fload, rand01, approx_eq, ofinstQ, upd_field
-	api-change:
-		✓ rename: file_existsQ -> path_existsQ
-		✓ write_to_file file_name "text" // make this arg order
-		✓ removed: strip/lstrip/rstrip/lowercase
-		✓ (l)combinations: removed
-
-	## docs
-		+ def:: has decorator
-		+ fix: fpmx first header ugly
-		+ fix: fpmx-exclusive macro, not Prelude
-
-// ____________________________________________________________________________/ }}}1
-		
-
 

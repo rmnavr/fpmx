@@ -1,15 +1,24 @@
 # Version 0.6.0 (Jul 2026)
 - big rebranding from `fptk` to `fpmx` (all the older naming is replaced everywhere, even in this changelog lol)
-- reorganized functions classification groups
-- added `approx_eq` function
-- added `dc_field` (dataclass.field)
-- renamed `randint` and `randfloat` to `rand_int` and `rand_float`
-- big reorganization of monads, `WriterMaybe` transformer introduced
-- added `(l)combinations` from itertools
-- added `fifth` function
-- added `color` option for dotPlot
-- added `force_color` option for `clrz`
-- added `add_terminator` and `discard_terminator` options for `write_to_file` and `read_file`
+- prelude updates:
+  - reorganized functions classification groups
+  - added `approx_eq` function
+  - added `dc_field` (dataclass.field)
+  - added `fifth` function
+  - added `add_terminator` and `discard_terminator` options for `write_to_file` and `read_file`
+  - `=>` macro now places args in correct place when used with `f>` (before — it worked as `=>>` with `f>`)
+- prelude API changes:
+  - removed `strip`, `lstrip`, `rsrip` and `lowercase` functions
+  - renamed `randint` and `randfloat` to `rand_int` and `rand_float`
+  - renamed `file_existsQ` to more apropriate name `path_existsQ`
+  - swapped args order in `write_to_file` to write_to_file(file, text, ...)
+- monads:
+  - big reorganization of monads
+  - `WriterMaybe` transformer introduced
+- term module:
+  - added `color` option for dotPlot
+  - `clrz` now throws full list of allowable colors when incorrect color was given
+  - added `force_color` option for `clrz`
 
 ## 0.5.1.dev5
 - `term` module added, including `clrz` and `dotPlot` functions
