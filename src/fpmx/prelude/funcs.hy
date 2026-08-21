@@ -532,7 +532,7 @@
               (return (cut outp 0 -1)))
         (return outp))
 
-    #_ "write_to_file(text, file_name, mode='w', encoding='utf-8', add_terminator=False) | modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation"
+    #_ "write_to_file(file_name, text, mode='w', encoding='utf-8', add_terminator=False) | modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation"
     (defn write_to_file
         [ #^ str  file_name
           #^ str  text

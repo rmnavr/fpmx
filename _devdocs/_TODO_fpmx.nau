@@ -43,6 +43,7 @@
 		+ lprint: when on non-iterable, print normally
 		* fileQ should throw error when non-existing (or return None?)
 		* "timing" -> "timed"
+		* idxs2mask -> add arg :list_len or smth
 
 	## Lens — to fix
 		- GetAttr "kind"
