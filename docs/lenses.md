@@ -9,8 +9,13 @@ They simplify lens definition, composition and application.
 > Lenses is Haskell-inspired library for working with deeply nested immutable data.
 > Lenses can be seen as buffed getters and setters.
 
-Usage:
+Loading module:
 ```hy
+; via loader:
+(require fpmx.loader [load_fpmx])
+(load_fpmx "prelude")
+
+; or directly:
 (import fpmx.lenses [lens])        ; main object (lens) from original lenses library
 (require fpmx [lns l> l>= &+ &+>]) ; macros
 

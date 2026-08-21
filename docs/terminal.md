@@ -1,17 +1,18 @@
 
 # Utils for terminal
 
-Calling... 
+Loading module:
 ```hy
-(import  fpmx.term.colors *) 
-(import  fpmx.term.dotplot *) 
-
-; or simply:
+; via loader:
 (require fpmx.loader [load_fpmx])
 (load_fpmx "term")
+
+; which is the same as:
+(import fpmx.term.colors *) 
+(import fpmx.term.dotplot *) 
 ```
 
-...will expose following functions:
+This will expose following functions:
 * `clrz`
 * `clrz_term_test`
 * `dotPlot`
@@ -37,18 +38,24 @@ clrz_term_test()
 
 Available instructions are the same as for original `termcolor.colored`:
 ```
-Foregrounds:
-    black red green yellow blue magenta cyan white
-    light_grey dark_grey light_red light_green light_yellow
-    light_blue light_magenta light_cyan
-
-Backgrounds:
-    on_black on_red on_green on_yellow on_blue on_magenta on_cyan on_white
-    on_light_grey on_dark_grey on_light_red on_light_green
-    on_light_yellow on_light_blue on_light_magenta on_light_cyan
-
-Attrs:
-    bold dark underline blink reverse concealed strike
+FG            | BG               | Attrs
+--------------+------------------+----------
+black         | on_black         | bold
+red           | on_red           | dark
+green         | on_green         | underline
+yellow        | on_yellow        | blink
+blue          | on_blue          | reverse
+magenta       | on_magenta       | concealed
+cyan          | on_cyan          | strike
+light_grey    | on_light_grey    |
+dark_grey     | on_dark_grey     |
+light_red     | on_light_red     |
+light_green   | on_light_green   |
+light_yellow  | on_light_yellow  |
+light_blue    | on_light_blue    |
+light_magenta | on_light_magenta |
+light_cyan    | on_light_cyan    |
+white         | on_white         |
 ```
 
 `force_color` option (`False` by default) is inherited from termcolor.

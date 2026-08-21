@@ -24,7 +24,7 @@ fpmx is implemented as a two-tier system:
 fpmx, being *language extension* rather than just collection of utils,
 is encouraged to be imported via loader.
 
-For example, when only prelude module is required:
+For example, to load prelude:
 
 ```hy
 (require fpmx.loader [load_fpmx])
@@ -33,8 +33,8 @@ For example, when only prelude module is required:
 
 Which is internally the same as:
 ```hy
-(import  fpmx.prelude *) ; load prelude funcs/types
-(require fpmx.prelude *) ; load prelude macros
+(import  fpmx.prelude *) ; load all prelude funcs/types
+(require fpmx.prelude *) ; load all prelude macros
 ```
 
 > Still nothing is forbidding you from importing only required functionality
@@ -44,7 +44,7 @@ The reason loader exists is:
   loader removes necessity to remember which one is which
 - you can combine loading of multiple parts of fpmx in one expression (see below)
 
-Whole list of available modules (see below):
+Whole list of available modules:
 ```hy
 (require fpmx.loader [load_fpmx])
 (load_fpmx "prelude"
@@ -320,18 +320,18 @@ A special treat for Haskellers — fpmx offers function annotation macro `def::`
 fpmx has following evolving extra modules:
 * [`fpmx.strict.types`](docs/strict_typing.md):
   * requires [pydantic](https://github.com/pydantic/pydantic) library
-  * offers some helper classes for strict type checking
-* [`fpmx.monads` and their strict versions `fpmx.strict`](docs/monads.md):
-  * contains Maybe and Result monads, together with WriterMaybe transformer
+  * offers some utils for strict type checking
+* [`fpmx.monads` and `fpmx.strict` monads](docs/monads.md):
+  * currently contains Maybe and Result monads, together with WriterMaybe transformer
   * they are implemented with opinionated function-first API (contrast it with "method chaining" API, whcih is more common in similar monad libs)
   * strict monads can be pydantic type-checked with [pydantic](https://github.com/pydantic/pydantic) library
 * [`fpmx lenses`](docs/lenses.md)
   * offers macros for nicer lens syntax (lens is Haskell-style immutabe getters and setters for working with deeply nested structures)
   * requires [lenses](https://github.com/ingolemo/python-lenses) library
 * [`fpmx.term`](docs/terminal.md)
-  * terminal utils: coloring, plotting, etc.
+  * terminal utils: coloring, quick plotting, etc.
 
-Modules that require pydantic may be slower to load, this is one of the reasons for excluding them from Prelude.
+> Modules that require `pydantic` may be slower to load, this is one of the reasons for excluding them from Prelude.
 
 <!-- __________________________________________________________________________/ }}}1 -->
 
@@ -378,12 +378,16 @@ Tested with versions:
 
 # Project status
 
-Prelude functionality is at 90% of reaching stable release (some API-breaking changes may still happen).
+Prelude:
+- functionality is at 90% of reaching stable release
+- some API-breaking changes may still happen, although will probably be very minimal
+- sequence processing functions require polishing in following aspects:
+  - clear distinction between lazy and eager functions
+  - make type annotations more honest (like List vs Iterable issues)
 
-The most rough edges still being polished is distinction between lazy and eager functions.
-Also, some functions work on Lists, some on Iterables. It 
-
-Extra modules are considered experimental. They may be totally rewamped in the future.
+Extra modules:
+- most of them are considered experimental
+- stable API is not guaranteed
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Installation ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->

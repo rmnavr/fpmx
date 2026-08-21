@@ -32,7 +32,6 @@
 		+ avrg/mean
 		+ ilen
 		+ for dicts: dkeys, dvalues, ditems, add/substract
-
 	
 	## New flow
 		- (or_if_none x 0)
@@ -42,6 +41,7 @@
 		- lbisect_by: option to include/exclude first found; negation in f in unclear
 		- strip/lstrip/rstrip should also pass kwargs and such
 		+ lprint: when on non-iterable, print normally
+		* fileQ should throw error when non-existing (or return None?)
 
 	## Lens — to fix
 		- GetAttr "kind"
@@ -53,5 +53,6 @@
 		- fmap: (fmap f (Just 3) (Just 4) Nothing) will unwantedly work ok, even if f is function of 1 arg -> THIS IS BAD!
 
 // ____________________________________________________________________________/ }}}1
+
 
 

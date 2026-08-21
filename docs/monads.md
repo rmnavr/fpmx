@@ -16,7 +16,7 @@ Monads and transformers are implemented in two variants with the same interface 
 - *strict* — compatible with pydantic typecheck (thus importing monads also imports pydantic)
 > The reason both variants exist is due to pydantic requiring extra time to load (~150 ms on 2025-year laptop)
 
-## User API
+## Note on monad implementation and user API
 
 With regard to monad implementation fpmx places code clarity over math correctness.
 
@@ -26,7 +26,8 @@ This entails following design decisions:
 * Unwrapper functions like `unwrapJ` (for `Just`) are used instead of attribute access like `monad.value`
 * Instead of implementing `fmap2`, `fmap3` and similar, all `fmap`s and `bind`s are variadic;
   user API of `fmap`/`bind` is of form `(fmap m1 f m2 m3 ...)` to be composable via threading macro `->` 
-* Most functions perform type-check internally — they will throw errors when incorrect monad/transformer is provided
+* Most functions perform type-check internally — they will throw errors
+  when incorrect monad/transformer is provided
 * Transformers are NOT compositions of their underlying monads.
   For example, `WriterMaybe` is a self-contained object, rather than a 'sum' of `Writer` and `Maybe` monad.
   This is why transformer's `fmap` and `bind` has deviation from their canonical implementation
@@ -34,37 +35,48 @@ This entails following design decisions:
 
 This way you cannot for example `fmapM` or `unwrapJ` on Result monad, thus enforcing type correctness.
 
+
+<!-- __________________________________________________________________________/ }}}1 -->
+<!-- Import ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+
 ## Import
 
-How to import:
+How to loadmonads:
 ```hy
-; normal:
+
+; via loader:
+
+; a) normal monads:
+(require fpmx.loader [load_fpmx])
+(load_fpmx "maybeM" "resultM" "writerMaybeT")
+
+; b) strict monads:
+(require fpmx.loader [load_fpmx])
+(load_fpmx "strict_maybeM" "strict_resultM" "strict_writerMaybeT")
+
+
+; which is the same as:
+
+; a) normal monads:
 (import fpmx.monads.maybeM *)
 (import fpmx.monads.resultM *)
 (import fpmx.monads.writerMaybeT *)
 
-; strict:
+; b) strict monads:
 (import fpmx.strict.maybeM *)
 (import fpmx.strict.resultM *)
 (import fpmx.strict.writerMaybeT *)
-
-; or via loader:
-
-; normal:
-(require fpmx.loader [load_fpmx])
-(load_fpmx "maybeM" "resultM" "writerMaybeT")
-; strict:
-(require fpmx.loader [load_fpmx])
-(load_fpmx "strict_maybeM" "strict_resultM" "strict_writerMaybeT")
 ```
 
 <!-- __________________________________________________________________________/ }}}1 -->
 
+# Monads Zoo
+
 <!-- Maybe ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-# Maybe
+## Maybe
 
-Maybe monad can contain eather (Just value) or Nothing.
+Maybe monad can contain eather `(Just value)` or `Nothing`.
 
 Notice that `Just` and `Nothing` are functions, not classes.
 
@@ -112,9 +124,9 @@ Annotations:
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Result ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-# Result
+## Result
 
-Result monad can contain eather (Success value) or (Failure value) .
+Result monad can contain eather `(Success value)` or `(Failure value)` .
 
 Notice that `Success` and `Failure` are functions, not classes.
 
@@ -164,11 +176,11 @@ Annotations:
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- WriterMaybe ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-# WriterMaybe
+## WriterMaybe
 
-WriterMaybe transformer can contain eather (WJust value log_) or (WNothing log_).
-Where `log_` has to be of list type.
-> `log_` has `_` at the end to avoid collision with fpmx.prelude logarythm `log` function
+WriterMaybe transformer can contain eather `(WJust value log_)` or `(WNothing log_)`.
+Where `log_` has to be of `list` type.
+> `log_` has `_` at the end to avoid collision with `fpmx.prelude.log` — logarythm function
 
 Notice that `WJust` and `WNothing` are functions, not classes.
 
@@ -218,5 +230,4 @@ Multiple args example:
 (fmapWM (WJust 3 ["hey"]) (fn [x y] (+ x y)) (WNothing ["there"]))  ; returns (WNothing ["hey" "there"])
 ```
 <!-- __________________________________________________________________________/ }}}1 -->
-
 
