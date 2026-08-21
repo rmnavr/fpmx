@@ -185,7 +185,7 @@ FROM: os.path         | path_existsQ (<-exists)  :: path_existsQ(filename)  ; wo
 FROM: os.path         | fileQ (<-isfile)         :: fileQ(filename)
 FROM: os.path         | dirQ (<-isdir)           :: dirQ(filename)
 DEFN: fpmx            | read_file                :: read_file(file_name, encoding='utf-8', discard_terminator=False) -> str  ; returns whole file content, removes last \n if requested
-DEFN: fpmx            | write_to_file            :: write_to_file(text, file_name, mode='w', encoding='utf-8', add_terminator=False)  ; modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation
+DEFN: fpmx            | write_to_file            :: write_to_file(file_name, text, mode='w', encoding='utf-8', add_terminator=False)  ; modes: 'w' - (over)write, 'a' - append, 'x' - exclusive creation
 
 === APL ===
 ;: generating ranges:
