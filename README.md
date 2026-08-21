@@ -10,28 +10,55 @@ of *Mathematica*, *APL*, *Haskell*, and similar FP/math-heavy languages
 directly to the Hy/Python runtime.
 
 fpmx is implemented as a two-tier system:
-- **fpmx.prelude** — the stable heart of the library optimized for everyday use.
-  It includes over 250 pure functions, macros and types that define the *fpmx experience*.
-  By importing the prelude namespace (`(import fpmx.prelude *) (require fpmx.prelude *)`),
-  you gain immediate access to a "batteries-included" functional vocabulary.
-  > This is the recommended entry point for all projects
-- **fpmx.extras** — a collection of modules that contain specialized,
-  domain-specific, or experimental FP/math features.
+1. **fpmx.prelude** — the stable heart of the library optimized for everyday use.
+   It includes over 250 pure functions, macros and types that define the *fpmx experience*.
+   By importing whole prelude namespace you gain immediate access to a "batteries-included" functional vocabulary.
+   > This is the recommended entry point for all projects
+2. **fpmx.extras** — a collection of modules that contain specialized, domain-specific, or experimental FP/math features.
+
+<!-- __________________________________________________________________________/ }}}1 -->
+<!-- Loader ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+
+# Using fpmx
+
+fpmx, being *language extension* rather than just collection of utils,
+is encouraged to be imported via loader.
+
+For example, when only prelude module is required:
+
+```hy
+(require fpmx.loader [load_fpmx])
+(load_fpmx "prelude")
+```
+
+Which is internally the same as:
+```hy
+(import  fpmx.prelude *) ; load prelude funcs/types
+(require fpmx.prelude *) ; load prelude macros
+```
+
+> Still nothing is forbidding you from importing only required functionality
+
+The reason loader exists is:
+- hy-lang has different syntax for importing functions (via `import`) and macros (via `require`) —
+  loader removes necessity to remember which one is which
+- you can combine loading of multiple parts of fpmx in one expression (see below)
+
+Whole list of available modules (see below):
+```hy
+(require fpmx.loader [load_fpmx])
+(load_fpmx "prelude"
+           "term"
+           "lenses"
+           "strict_types"
+           "maybeM" "resultM" "writerMaybeT"                        ; monad modules
+           "strict_maybeM" "strict_resultM" "strict_writerMaybeT")  ; strict monad modules
+```
 
 <!-- __________________________________________________________________________/ }}}1 -->
 
-# Prelude
-<!-- intro ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
-
-Intended usage of the Prelude (being language extension) is:
-```
-(import fpmx.prelude *)
-(require fpmx.prelude *)
-```
-Although nothing is forbidding you from importing only required functionality.
-
-<!-- __________________________________________________________________________/ }}}1 -->
-<!-- ## cheatsheet ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
+# [1/2] Prelude module
+<!-- ## Cheatsheet ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 ## Cheatsheet
 
@@ -117,7 +144,7 @@ Various helpers like:
 Crown jewels of fpmx are threading macros `=>` and `=>>`.
 See them as a combination of `.` and `->`/`->>` macros:
 
-```
+```hy
 (=>> some_data
      function                 ; function application like in `->>` macro
      (function arg1 arg2 ...) ; function application like in `->>` macro
@@ -287,74 +314,27 @@ A special treat for Haskellers — fpmx offers function annotation macro `def::`
 
 <!-- __________________________________________________________________________/ }}}1 -->
 
-<!-- Extra ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
-
-# Extra modules
+# [2/2] Extra modules
+<!-- description ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 fpmx has following evolving extra modules:
-* `fpmx.strict.types`:
+* [`fpmx.strict.types`](docs/strict_typing.md):
   * requires [pydantic](https://github.com/pydantic/pydantic) library
   * offers some helper classes for strict type checking
-* `fpmx.monads` and their `fpmx.strict` equivalents
-  * contains Maybe and Result monads 
-  * strict monads can be pydantic type-checked
-  * strict monads require [pydantic](https://github.com/pydantic/pydantic) library
-* `fpmx.lenses`
-  * offers macros for nicer lens syntax
+* [`fpmx.monads` and their strict versions `fpmx.strict`](docs/monads.md):
+  * contains Maybe and Result monads, together with WriterMaybe transformer
+  * they are implemented with opinionated function-first API (contrast it with "method chaining" API, whcih is more common in similar monad libs)
+  * strict monads can be pydantic type-checked with [pydantic](https://github.com/pydantic/pydantic) library
+* [`fpmx lenses`](docs/lenses.md)
+  * offers macros for nicer lens syntax (lens is Haskell-style immutabe getters and setters for working with deeply nested structures)
   * requires [lenses](https://github.com/ingolemo/python-lenses) library
-    (which is Haskell-inspired lib for working with deeply nested structures)
-* `fpmx.term`
-  * terminal utils: plotting, coloring, etc.
+* [`fpmx.term`](docs/terminal.md)
+  * terminal utils: coloring, plotting, etc.
 
 Modules that require pydantic may be slower to load, this is one of the reasons for excluding them from Prelude.
 
 <!-- __________________________________________________________________________/ }}}1 -->
-<!-- Loading ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
-# Using fpmx
-
-fpmx has special loader that loads everything from requested modules.
-
-Importing everything from Prelude only:
-```hy
-(require fpmx.loader [load_fpmx])
-(load_fpmx "prelude")
-
-; which is internally the same as:
-(import  fpmx.prelude *) ; load funcs/types
-(require fpmx.prelude *) ; load macroses
-```
-
-Importing every fpmx module (although loading both strict and non-strict monads is not recommended):
-```hy
-(require fpmx.loader [load_fpmx])
-(load_fpmx "prelude"
-           "lenses"
-           "strict_types"
-           "strict_maybeM" "strict_resultM" 
-           "maybeM" "resultM" ; actually, not recommended to be mixed with their strict variants
-           "term")
-
-; which is internally the same as:
-(import  fpmx.prelude *)
-(require fpmx.prelude *)
-
-(import  fpmx.lenses *)
-(require fpmx.lenses *)
-
-(import  fpmx.strict.types *)
-
-(import  fpmx.strict.maybeM *)   
-(import  fpmx.strict.resultM *)  
-
-(import  fpmx.monads.maybeM *)
-(import  fpmx.monads.resultM *)
-
-(import  fpmx.term.colors *) 
-(import  fpmx.term.dotplot *) 
-```
-
-<!-- __________________________________________________________________________/ }}}1 -->
 <!-- Documentation ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 # Documentation
@@ -370,10 +350,10 @@ Detailed guide on fpmx-exclusive macros:
 
 ## Extra modules
 
-- [strict typing](docs/strict_typing.md)
-- [monads (strict and non-strict variants)](docs/monads.md)
-- [fpmx lenses](docs/lenses.md)
 - [utils for terminal](docs/terminal.md)
+- [strict typing](docs/strict_typing.md)
+- [monads](docs/monads.md)
+- [lenses](docs/lenses.md)
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Dependencies ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
@@ -389,19 +369,21 @@ Tested with versions:
   * [lenses](https://github.com/ingolemo/python-lenses) 1.2
   * [pydantic](https://github.com/pydantic/pydantic) 2.12.3
 
-> fpmx does NOT directly depend on hyrule lib, since it internally replicates some of it's macros (like `->`, `case` and others).
-> This was done to increase fpmx startup speed.
+> `hyrule` lib is not in the dependencies list,
+> since fpmx internally replicates some of it's macros (like `->`, `case` and others).
+> This is done to increase fpmx startup speed.
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Project status ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
 
 # Project status
 
-Prelude functionality is at 90% of reaching stable release
-(some API-breaking changes may still happen).
+Prelude functionality is at 90% of reaching stable release (some API-breaking changes may still happen).
 
-Extra modules are considered experimental.
-They may be totally rewamped in the future.
+The most rough edges still being polished is distinction between lazy and eager functions.
+Also, some functions work on Lists, some on Iterables. It 
+
+Extra modules are considered experimental. They may be totally rewamped in the future.
 
 <!-- __________________________________________________________________________/ }}}1 -->
 <!-- Installation ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\ {{{1 -->
